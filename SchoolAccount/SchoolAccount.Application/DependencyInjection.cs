@@ -19,7 +19,7 @@ public static class DependencyInjection
             .AsImplementedInterfaces()
             .WithScopedLifetime());
         
-        services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
+        //services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
 
         return services;
     }
