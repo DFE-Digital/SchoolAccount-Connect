@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
+      <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
