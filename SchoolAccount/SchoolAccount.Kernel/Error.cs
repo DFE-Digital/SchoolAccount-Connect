@@ -1,15 +1,25 @@
 ﻿namespace SchoolAccount.Kernel;
 
-public record Error(string Code, string Description, string? Property = null);
+public record Error(string Code, string Description, ErrorType Type, string? Property = null)
+{
+    public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
+    public static readonly Error NullValue = new(
+        "General.Null",
+        "Null value was provided",
+        ErrorType.Failure);
 
-public record Failure(string Code, string Description, string? Property = null) 
-    : Error(Code, Description, Property);
+    public static Error Failure(string code, string description) =>
+        new(code, description, ErrorType.Failure);
 
-public record Validation(string Code, string Description, string? Property = null) 
-    : Error(Code, Description, Property);
+    public static Error NotFound(string code, string description) =>
+        new(code, description, ErrorType.NotFound);
 
-public record NotFound(string Code, string Description, string? Property = null) 
-    : Error(Code, Description, Property);
+    public static Error Problem(string code, string description) =>
+        new(code, description, ErrorType.Problem);
 
-public record Conflict(string Code, string Description, string? Property = null) 
-    : Error(Code, Description, Property);
+    public static Error Conflict(string code, string description) =>
+        new(code, description, ErrorType.Conflict);
+    
+    public static Error Validation(string code, string description, string? property = null) =>
+        new(code, description, ErrorType.Validation, property);
+}

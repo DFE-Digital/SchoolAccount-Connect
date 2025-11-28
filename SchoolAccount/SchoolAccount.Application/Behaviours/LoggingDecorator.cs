@@ -27,7 +27,7 @@ internal static class LoggingDecorator
             }
             else
             {
-                if (result.Error is Validation)
+                if (result.Error.Type is ErrorType.Validation)
                 {
                     logger.LogDebug("Completed command {CommandName} with validation error", commandName);
                     
