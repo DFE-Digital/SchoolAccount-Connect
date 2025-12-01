@@ -1,1 +1,9 @@
 GET http://localhost:5231/team/1
+###
+GET http://localhost:5231/team/2
+###
+GET http://localhost:5231/team/3
+###
+GET http://localhost:5231/team/4
+###
+GET http://localhost:5231/team/5

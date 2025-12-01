@@ -1,18 +1,19 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Domain.Teams;
+using SchoolAccount.Application.Persistence.Teams;
 
 namespace SchoolAccount.Infrastructure;
 
 internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
     : DbContext(options), IApplicationDbContext
 {
-    public DbSet<Team> Teams { get; set; }
+    public DbSet<TeamDao> Teams { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 

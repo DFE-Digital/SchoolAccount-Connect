@@ -20,7 +20,8 @@ public class GetTeamByIdHandler : IQueryHandler<GetTeamById, TeamResponse>
             .Where(t => t.Id == query.Id)
             .Select(team => new TeamResponse
             {
-                Id = team.Id
+                Id = team.Id,
+                Name = team.ServiceName
             })
             .FirstOrDefaultAsync(cancellationToken);
 
