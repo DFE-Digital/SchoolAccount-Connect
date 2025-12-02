@@ -1,6 +1,3 @@
 ﻿namespace SchoolAccount.Web.Manage;
 
-public class DependencyInjection
-{
-    
-}
+public class DependencyInjection { }

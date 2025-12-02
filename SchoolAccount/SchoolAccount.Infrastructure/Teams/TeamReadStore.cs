@@ -12,16 +12,16 @@ internal class TeamReadStore : ITeamReadStore
     {
         _context = context;
     }
-    
+
     public async Task<TeamResponse?> GetTeamById(long id, CancellationToken cancellationToken)
     {
-        return await _context.Teams
-            .Where(t => t.Id == id)
+        return await _context
+            .Teams.Where(t => t.Id == id)
             .Select(team => new TeamResponse
             {
                 Id = team.Id,
                 Name = team.ServiceName,
-                DirectorateName = team.Directorate != null ? team.Directorate.Name : string.Empty
+                DirectorateName = team.Directorate != null ? team.Directorate.Name : string.Empty,
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
