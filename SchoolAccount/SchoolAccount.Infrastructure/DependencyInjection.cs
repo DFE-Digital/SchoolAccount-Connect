@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Infrastructure.Teams;
 
 namespace SchoolAccount.Infrastructure;
 
@@ -27,7 +28,9 @@ public static class DependencyInjection
             .AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-            });
+            })
+            .AddTransient<IReadStore, ReadStore>();
+            
 
         return services;
     }

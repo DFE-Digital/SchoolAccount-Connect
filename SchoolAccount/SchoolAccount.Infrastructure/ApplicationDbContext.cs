@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Persistence.Teams;
+using SchoolAccount.Infrastructure.Teams;
 
 namespace SchoolAccount.Infrastructure;
 

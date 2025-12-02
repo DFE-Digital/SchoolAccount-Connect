@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolAccount.Application.Persistence.Teams;
 
 
 namespace SchoolAccount.Infrastructure.Teams;

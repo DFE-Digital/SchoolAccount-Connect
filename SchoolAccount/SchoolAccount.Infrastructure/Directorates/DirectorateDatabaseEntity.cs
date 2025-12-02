@@ -1,6 +1,6 @@
-﻿using SchoolAccount.Application.Persistence.Teams;
+﻿using SchoolAccount.Infrastructure.Teams;
 
-namespace SchoolAccount.Application.Persistence.Directorates;
+namespace SchoolAccount.Infrastructure.Directorates;
 
 public class DirectorateDatabaseEntity
 {

@@ -1,4 +1,4 @@
-﻿namespace SchoolAccount.Application.Persistence.Resources;
+﻿namespace SchoolAccount.Infrastructure.Resources;
 
 public class ResourceDatabaseEntity
 {

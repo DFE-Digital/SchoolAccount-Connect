@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolAccount.Application.Persistence.Directorates;
 
 namespace SchoolAccount.Infrastructure.Directorates;
 

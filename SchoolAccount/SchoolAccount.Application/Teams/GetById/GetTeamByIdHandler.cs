@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Abstractions.Data;
+﻿using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Kernel;
 
@@ -7,25 +6,15 @@ namespace SchoolAccount.Application.Teams.GetById;
 
 public class GetTeamByIdHandler : IQueryHandler<GetTeamById, TeamResponse>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IReadStore _readStore;
 
-    public GetTeamByIdHandler(IApplicationDbContext context)
+    public GetTeamByIdHandler(IReadStore readStore)
     {
-        _context = context;
+        _readStore = readStore;
     }
     
     public async Task<Result<TeamResponse>> Handle(GetTeamById query, CancellationToken cancellationToken)
     {
-        var team = await _context.Teams
-            .Where(t => t.Id == query.Id)
-            .Select(team => new TeamResponse
-            {
-                Id = team.Id,
-                Name = team.ServiceName,
-                DirectorateName = team.Directorate != null ? team.Directorate.Name : string.Empty
-            })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return team;
+        return await _readStore.GetTeamById(query.Id, cancellationToken);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Persistence.Teams;
+using SchoolAccount.Infrastructure.Teams;
 
-namespace SchoolAccount.Application.Abstractions.Data;
+namespace SchoolAccount.Infrastructure;
 
 public interface IApplicationDbContext
 {
