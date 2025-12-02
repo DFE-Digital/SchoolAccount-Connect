@@ -6,15 +6,15 @@ namespace SchoolAccount.Application.Teams.GetById;
 
 public class GetTeamByIdHandler : IQueryHandler<GetTeamById, TeamResponse>
 {
-    private readonly IReadStore _readStore;
+    private readonly ITeamReadStore _teamReadStore;
 
-    public GetTeamByIdHandler(IReadStore readStore)
+    public GetTeamByIdHandler(ITeamReadStore teamReadStore)
     {
-        _readStore = readStore;
+        _teamReadStore = teamReadStore;
     }
     
     public async Task<Result<TeamResponse>> Handle(GetTeamById query, CancellationToken cancellationToken)
     {
-        return await _readStore.GetTeamById(query.Id, cancellationToken);
+        return await _teamReadStore.GetTeamById(query.Id, cancellationToken);
     }
 }

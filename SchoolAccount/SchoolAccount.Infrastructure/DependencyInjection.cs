@@ -29,7 +29,7 @@ public static class DependencyInjection
             {
                 options.UseSqlServer(connectionString);
             })
-            .AddTransient<IReadStore, ReadStore>();
+            .AddTransient<ITeamReadStore, TeamReadStore>();
             
 
         return services;

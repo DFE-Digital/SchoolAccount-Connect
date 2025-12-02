@@ -4,11 +4,11 @@ using SchoolAccount.Application.Teams.GetById;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class ReadStore : IReadStore
+internal class TeamReadStore : ITeamReadStore
 {
     private readonly ApplicationDbContext _context;
 
-    public ReadStore(ApplicationDbContext context)
+    public TeamReadStore(ApplicationDbContext context)
     {
         _context = context;
     }
