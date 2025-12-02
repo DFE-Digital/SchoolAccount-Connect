@@ -5,9 +5,9 @@ using SchoolAccount.Application.Persistence.Teams;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class TeamDaoTypeConfiguration : IEntityTypeConfiguration<TeamDao>
+internal class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<TeamDatabaseEntity>
 {
-    public void Configure(EntityTypeBuilder<TeamDao> builder)
+    public void Configure(EntityTypeBuilder<TeamDatabaseEntity> builder)
     {
         builder.ToTable("Services", "dbo").HasKey(x => x.Id);
         

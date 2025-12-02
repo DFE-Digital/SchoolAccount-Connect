@@ -8,7 +8,7 @@ namespace SchoolAccount.Infrastructure;
 internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
     : DbContext(options), IApplicationDbContext
 {
-    public DbSet<TeamDao> Teams { get; set; }
+    public DbSet<TeamDatabaseEntity> Teams { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

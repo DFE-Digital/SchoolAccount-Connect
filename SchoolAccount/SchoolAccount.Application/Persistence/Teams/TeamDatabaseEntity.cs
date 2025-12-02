@@ -1,6 +1,6 @@
 ﻿namespace SchoolAccount.Application.Persistence.Teams;
 
-public class TeamDao
+public class TeamDatabaseEntity
 {
     public long Id { get; set; }
     public string ServiceName { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SchoolAccount.Application.Persistence.Resources;
 
-public class ResourceDao
+public class ResourceDatabaseEntity
 {
     public long Id { get; set; }
     public string ServiceName { get; set; }
