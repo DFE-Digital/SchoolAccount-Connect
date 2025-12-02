@@ -21,7 +21,8 @@ public class GetTeamByIdHandler : IQueryHandler<GetTeamById, TeamResponse>
             .Select(team => new TeamResponse
             {
                 Id = team.Id,
-                Name = team.ServiceName
+                Name = team.ServiceName,
+                DirectorateName = team.Directorate != null ? team.Directorate.Name : string.Empty
             })
             .FirstOrDefaultAsync(cancellationToken);
 

@@ -11,15 +11,12 @@ internal class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<Te
     {
         builder.ToTable("Services", "dbo").HasKey(x => x.Id);
         
-        // builder
-        //     .ToTable("Services")
-        //     .HasOne(x => x.Resource)
-        //     .WithMany(x => x.Teams)
-        //     .HasForeignKey(x => x.ResourceId);
-        //     
-        // builder
-        //     .Navigation(e => e.Resource)
-        //     .UsePropertyAccessMode(PropertyAccessMode.Property);
+        builder
+            .HasOne(x => x.Directorate)
+            .WithMany(x => x.Teams)
+            .HasForeignKey(x => x.DirectorateId);
 
+        // builder
+        //     .Navigation(e => e.Directorate);
     }
 }
