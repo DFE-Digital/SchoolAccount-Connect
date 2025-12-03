@@ -1,6 +1,6 @@
 namespace SchoolAccount.Web.Manage.Models;
 
-internal sealed class ErrorViewModel
+public sealed class ErrorViewModel
 {
     public string? RequestId { get; set; }
 

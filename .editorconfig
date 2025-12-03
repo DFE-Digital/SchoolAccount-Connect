@@ -10,6 +10,9 @@ max_line_length = 120
 
 # .NET Code Analyzers rules
 
+# CA1515: Consider making public types internal
+dotnet_diagnostic.CA1515.severity = none
+
 # CA1040: Avoid empty interfaces
 dotnet_diagnostic.CA1040.severity = none
 
