@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Requests/">
+    <File Path="Requests/SchoolAccount.http" />
+  </Folder>
+  <Folder Name="/Solution/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="SchoolAccount/SchoolAccount.Application/SchoolAccount.Application.csproj" />
+  <Project Path="SchoolAccount/SchoolAccount.Domain/SchoolAccount.Domain.csproj" />
+  <Project Path="SchoolAccount/SchoolAccount.Infrastructure/SchoolAccount.Infrastructure.csproj" />
+  <Project Path="SchoolAccount/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
+  <Project Path="SchoolAccount/SchoolAccount.Web.Manage/SchoolAccount.Web.Manage.csproj" />
+</Solution>
