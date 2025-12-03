@@ -4,5 +4,5 @@ namespace SchoolAccount.Application.Teams.GetById;
 
 public class GetTeamById : IQuery<TeamResponse>
 {
-    public long Id { get; init; } 
+    public long Id { get; init; }
 }

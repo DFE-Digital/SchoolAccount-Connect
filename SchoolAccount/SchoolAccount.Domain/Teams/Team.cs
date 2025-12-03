@@ -9,7 +9,7 @@ public class Team : Entity
     public string Description { get; set; } = string.Empty;
     public string EmailAddress { get; set; } = string.Empty;
     public ServiceStatus ServiceStatus { get; set; }
-    
+
     public static Team Create(string name, string emailAddress, string description, string? acronym)
     {
         return new Team
@@ -18,7 +18,7 @@ public class Team : Entity
             Acronym = acronym,
             Description = description,
             EmailAddress = emailAddress,
-            ServiceStatus = ServiceStatus.Draft
+            ServiceStatus = ServiceStatus.Draft,
         };
     }
 }

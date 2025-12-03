@@ -12,8 +12,11 @@ public class GetTeamByIdHandler : IQueryHandler<GetTeamById, TeamResponse>
     {
         _teamReadStore = teamReadStore;
     }
-    
-    public async Task<Result<TeamResponse>> Handle(GetTeamById query, CancellationToken cancellationToken)
+
+    public async Task<Result<TeamResponse>> Handle(
+        GetTeamById query,
+        CancellationToken cancellationToken
+    )
     {
         return await _teamReadStore.GetTeamById(query.Id, cancellationToken);
     }

@@ -12,15 +12,12 @@ internal static class TeamDomainExtensions
             ServiceName = team.Name,
             Acronym = team.Acronym,
             ServiceDescription = team.Description,
-            ServiceStatusId = team.ServiceStatus.Id
+            ServiceStatusId = team.ServiceStatus.Id,
         };
     }
 
     internal static Team MapToDomainEntity(this TeamDatabaseEntity teamEntity)
     {
-        return new Team()
-        {
-
-        };
+        return new Team() { };
     }
 }

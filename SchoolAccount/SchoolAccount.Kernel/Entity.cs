@@ -4,9 +4,8 @@ public abstract class Entity(long id)
 {
     private readonly List<IDomainEvent> _domainEvents = [];
 
-    protected Entity() : this(0)
-    {
-    }
+    protected Entity()
+        : this(0) { }
 
     public long Id { get; } = id;
     public string CreatedBy { get; init; } = string.Empty;

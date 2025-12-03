@@ -19,9 +19,9 @@ public class TeamController(
 
         return Json(team);
     }
-    
+
     [HttpPost("")]
-    public async Task<IActionResult> Create ([FromBody]CreateTeamCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateTeamCommand command)
     {
         var id = await createTeamCommandHandler.Handle(command, CancellationToken.None);
         return Created(new Uri(""), id);

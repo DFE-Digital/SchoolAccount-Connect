@@ -6,7 +6,8 @@ public record Error(string Code, string Description, ErrorType Type, string? Pro
     public static readonly Error NullValue = new(
         "General.Null",
         "Null value was provided",
-        ErrorType.Failure);
+        ErrorType.Failure
+    );
 
     public static Error Failure(string code, string description) =>
         new(code, description, ErrorType.Failure);
@@ -19,7 +20,7 @@ public record Error(string Code, string Description, ErrorType Type, string? Pro
 
     public static Error Conflict(string code, string description) =>
         new(code, description, ErrorType.Conflict);
-    
+
     public static Error Validation(string code, string description, string? property = null) =>
         new(code, description, ErrorType.Validation, property);
 }

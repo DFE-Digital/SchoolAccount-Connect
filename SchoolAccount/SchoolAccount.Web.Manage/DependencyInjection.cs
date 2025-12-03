@@ -10,7 +10,7 @@ internal static class DependencyInjection
     {
         services.AddFluentValidation();
     }
-    
+
     private static void AddFluentValidation(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation(config =>
@@ -19,11 +19,8 @@ internal static class DependencyInjection
         });
 
         services.AddValidatorsFromAssemblies(
-        [
-            Assembly.GetExecutingAssembly(),
-            typeof(Application.DependencyInjection).Assembly
-        ], includeInternalTypes: true);
+            [Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly],
+            includeInternalTypes: true
+        );
     }
 }
-
-

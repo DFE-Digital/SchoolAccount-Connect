@@ -9,16 +9,20 @@ namespace SchoolAccount.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        services
-            .AddDatabase(configuration)
-            .AddHealthChecks(configuration);
+        services.AddDatabase(configuration).AddHealthChecks(configuration);
 
         return services;
     }
-    
-    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+
+    private static IServiceCollection AddDatabase(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var connectionString = configuration.GetConnectionString("SchoolAccount");
 
@@ -35,7 +39,10 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddHealthChecks(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var connectionString = configuration.GetConnectionString("SchoolAccount");
 
@@ -48,7 +55,8 @@ public static class DependencyInjection
                 healthQuery: "SELECT 1;",
                 name: "sql",
                 failureStatus: HealthStatus.Degraded,
-                tags: ["db", "sql", "sqlserver"]);
+                tags: ["db", "sql", "sqlserver"]
+            );
 
         return services;
     }
