@@ -5,20 +5,12 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Teams.CreateTeam;
 
-public class CreateTeamCommandHandler(ITeamWriteStore teamWriteStore)
-    : ICommandHandler<CreateTeamCommand, long>
+public class CreateTeamCommandHandler(ITeamWriteStore teamWriteStore) : ICommandHandler<CreateTeamCommand, long>
 {
-    public async Task<Result<long>> Handle(
-        CreateTeamCommand command,
-        CancellationToken cancellationToken
-    )
+    public async Task<Result<long>> Handle(CreateTeamCommand command, CancellationToken cancellationToken)
     {
-        var team = Team.Create(
-            command.Name,
-            command.EmailAddress,
-            command.Description,
-            command.Acronym
-        );
+        var team = Team.Create(command.Name, command.EmailAddress, command.Description, command.Acronym);
+
         return await teamWriteStore.CreateTeamAsync(team, cancellationToken);
     }
 }

@@ -13,16 +13,8 @@ public record ServiceStatus
     public string Name { get; private set; }
     public string? Description { get; private set; }
 
-    public static readonly ServiceStatus Active = new(
-        2,
-        "Active",
-        "The service is active and operational."
-    );
-    public static readonly ServiceStatus Draft = new(
-        1,
-        "Draft",
-        "The service is inactive and not in use."
-    );
+    public static readonly ServiceStatus Active = new(2, "Active", "The service is active and operational.");
+    public static readonly ServiceStatus Draft = new(1, "Draft", "The service is inactive and not in use.");
     public static readonly ServiceStatus DueToBeDecommissioned = new(
         3,
         "DueToBeDecommissioned",
