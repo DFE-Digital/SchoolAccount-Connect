@@ -4,7 +4,7 @@ using SchoolAccount.Web.Manage.Models;
 
 namespace SchoolAccount.Web.Manage.Controllers;
 
-public class HomeController : Controller
+internal sealed class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
