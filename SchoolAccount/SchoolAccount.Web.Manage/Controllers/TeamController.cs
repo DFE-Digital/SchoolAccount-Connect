@@ -5,8 +5,7 @@ using SchoolAccount.Application.Teams.GetById;
 namespace SchoolAccount.Web.Manage.Controllers;
 
 [Route("[controller]")]
-internal sealed class TeamController(IQueryHandler<GetTeamById, TeamResponse> getTeamById)
-    : Controller
+internal sealed class TeamController(IQueryHandler<GetTeamById, TeamResponse> getTeamById) : Controller
 {
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(long id, CancellationToken cancellationToken)
