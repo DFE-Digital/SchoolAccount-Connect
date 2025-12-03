@@ -22,15 +22,15 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("SchoolAccount");
 
-        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString, nameof(connectionString));
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
         services
             .AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             })
-            .AddTransient<IReadStore, ReadStore>();
-            
+            .AddTransient<ITeamReadStore, TeamReadStore>()
+            .AddTransient<ITeamWriteStore, TeamWriteStore>();
 
         return services;
     }

@@ -7,3 +7,13 @@ GET http://localhost:5231/team/3
 GET http://localhost:5231/team/4
 ###
 GET http://localhost:5231/team/5
+###
+POST https://localhost:7299/team
+Content-Type: application/json
+
+{
+  "name": "New Team",
+  "description": "This is a newly created team.",
+  "emailAddress": "test@dfe.gov.uk",
+  "acronym": "NT"
+}

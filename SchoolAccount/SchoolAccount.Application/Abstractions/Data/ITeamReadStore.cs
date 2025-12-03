@@ -2,7 +2,7 @@
 
 namespace SchoolAccount.Application.Abstractions.Data;
 
-public interface IReadStore
+public interface ITeamReadStore
 {
     public Task<TeamResponse?> GetTeamById(long id, CancellationToken cancellationToken);
 }

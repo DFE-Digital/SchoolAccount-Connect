@@ -1,9 +1,13 @@
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
+using SchoolAccount.Web.Manage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

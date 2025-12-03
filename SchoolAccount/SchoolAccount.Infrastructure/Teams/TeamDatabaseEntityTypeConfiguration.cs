@@ -8,14 +8,18 @@ internal class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<Te
 {
     public void Configure(EntityTypeBuilder<TeamDatabaseEntity> builder)
     {
-        builder.ToTable("Services", "dbo").HasKey(x => x.Id);
+        builder.ToTable("Services", "dbo")
+            .HasKey(x => x.Id);
         
         builder
             .HasOne(x => x.Directorate)
             .WithMany(x => x.Teams)
             .HasForeignKey(x => x.DirectorateId);
 
-        // builder
-        //     .Navigation(e => e.Directorate);
+        builder
+            .HasOne(t => t.ServiceStatus)
+            .WithMany()
+            .HasForeignKey(t => t.ServiceStatusId)
+            .IsRequired();
     }
 }
