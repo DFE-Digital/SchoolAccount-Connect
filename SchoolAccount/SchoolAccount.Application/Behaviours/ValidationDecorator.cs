@@ -13,10 +13,7 @@ internal static class ValidationDecorator
     ) : ICommandHandler<TCommand, TResponse>
         where TCommand : ICommand<TResponse>
     {
-        public async Task<Result<TResponse>> Handle(
-            TCommand command,
-            CancellationToken cancellationToken
-        )
+        public async Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken)
         {
             ValidationFailure[] validationFailures = await ValidateAsync(command, validators);
 
@@ -75,9 +72,5 @@ internal static class ValidationDecorator
     }
 
     private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
-        new([
-            .. validationFailures.Select(f =>
-                Error.Validation(f.ErrorCode, f.ErrorMessage, f.PropertyName)
-            ),
-        ]);
+        new([.. validationFailures.Select(f => Error.Validation(f.ErrorCode, f.ErrorMessage, f.PropertyName))]);
 }

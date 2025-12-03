@@ -3,23 +3,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal sealed class TeamDatabaseEntityTypeConfiguration
-    : IEntityTypeConfiguration<TeamDatabaseEntity>
+internal sealed class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<TeamDatabaseEntity>
 {
     public void Configure(EntityTypeBuilder<TeamDatabaseEntity> builder)
     {
         builder.ToTable("Services", "dbo").HasKey(x => x.Id);
 
-        builder
-            .HasOne(x => x.Directorate)
-            .WithMany(x => x.Teams)
-            .HasForeignKey(x => x.DirectorateId);
+        builder.HasOne(x => x.Directorate).WithMany(x => x.Teams).HasForeignKey(x => x.DirectorateId);
 
-        builder
-            .HasOne(t => t.ServiceStatus)
-            .WithMany()
-            .HasForeignKey(t => t.ServiceStatusId)
-            .IsRequired();
+        builder.HasOne(t => t.ServiceStatus).WithMany().HasForeignKey(t => t.ServiceStatusId).IsRequired();
 
         builder.Property(x => x.ServiceName).HasMaxLength(250);
 

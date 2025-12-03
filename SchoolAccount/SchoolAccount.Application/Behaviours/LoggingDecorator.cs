@@ -13,10 +13,7 @@ internal static class LoggingDecorator
     ) : ICommandHandler<TCommand, TResponse>
         where TCommand : ICommand<TResponse>
     {
-        public async Task<Result<TResponse>> Handle(
-            TCommand command,
-            CancellationToken cancellationToken
-        )
+        public async Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken)
         {
             var commandName = typeof(TCommand).Name;
 
@@ -32,10 +29,7 @@ internal static class LoggingDecorator
             {
                 if (result.Error.Type is ErrorType.Validation)
                 {
-                    logger.LogDebug(
-                        "Completed command {CommandName} with validation error",
-                        commandName
-                    );
+                    logger.LogDebug("Completed command {CommandName} with validation error", commandName);
 
                     return result;
                 }
