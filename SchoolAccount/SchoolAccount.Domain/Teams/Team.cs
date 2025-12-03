@@ -4,21 +4,23 @@ namespace SchoolAccount.Domain.Teams;
 
 public class Team : Entity
 {
-    public string Name { get; set; } = string.Empty;
-    public string? Acronym { get; set; }
-    public string Description { get; set; } = string.Empty;
-    public string EmailAddress { get; set; } = string.Empty;
-    public ServiceStatus ServiceStatus { get; set; }
+    private Team(string name, string emailAddress, string description, string? acronym)
+    {
+        Name = name;
+        Acronym = acronym;
+        Description = description;
+        EmailAddress = emailAddress;
+        ServiceStatus = ServiceStatus.Draft;
+    }
+
+    public string Name { get; private set; }
+    public string? Acronym { get; private set; }
+    public string Description { get; private set; }
+    public string EmailAddress { get; private set; }
+    public ServiceStatus ServiceStatus { get; private set; }
 
     public static Team Create(string name, string emailAddress, string description, string? acronym)
     {
-        return new Team
-        {
-            Name = name,
-            Acronym = acronym,
-            Description = description,
-            EmailAddress = emailAddress,
-            ServiceStatus = ServiceStatus.Draft,
-        };
+        return new Team(name, emailAddress, description, acronym);
     }
 }

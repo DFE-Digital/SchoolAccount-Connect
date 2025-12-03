@@ -5,22 +5,23 @@ namespace SchoolAccount.Infrastructure.Teams;
 
 public class TeamDatabaseEntity
 {
+    // Properties
     public long Id { get; set; }
 
-    public string ServiceName { get; set; }
+    public required string ServiceName { get; set; }
 
     public string? Acronym { get; set; }
 
-    public string ServiceDescription { get; set; }
+    public string? ServiceDescription { get; set; }
 
-    public string DigitalServiceLink { get; set; }
+    public string? DigitalServiceLink { get; set; }
 
     public long? DirectorateId { get; set; }
 
-    //todo set required?
-    public long ServiceStatusId { get; set; }
+    public required long ServiceStatusId { get; set; }
 
+    // Navigation Properties
     public DirectorateDatabaseEntity? Directorate { get; set; }
 
-    public ServiceStatusDatabaseEntity ServiceStatus { get; set; }
+    public ServiceStatusDatabaseEntity? ServiceStatus { get; set; }
 }

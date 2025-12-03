@@ -4,5 +4,5 @@ namespace SchoolAccount.Infrastructure.ServiceStatus;
 
 public record ServiceStatusDatabaseEntity(long Id, string Name, string Description)
 {
-    public TeamDatabaseEntity ServiceStatus { get; set; }
+    public required TeamDatabaseEntity ServiceStatus { get; set; }
 };

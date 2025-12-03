@@ -5,7 +5,7 @@ using SchoolAccount.Domain.Teams;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class TeamReadStore(ApplicationDbContext context) : ITeamReadStore
+internal sealed class TeamReadStore(ApplicationDbContext context) : ITeamReadStore
 {
     public async Task<TeamResponse?> GetTeamById(long id, CancellationToken cancellationToken)
     {
@@ -21,12 +21,12 @@ internal class TeamReadStore(ApplicationDbContext context) : ITeamReadStore
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Team> GetTeamEntityById(long id, CancellationToken cancellationToken)
-    {
-        var teamEntity = await context
-            .Teams.AsNoTracking()
-            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
-
-        return teamEntity?.MapToDomainEntity() ?? null;
-    }
+    // public async Task<Team?> GetTeamEntityById(long id, CancellationToken cancellationToken)
+    // {
+    //     var teamEntity = await context
+    //         .Teams.AsNoTracking()
+    //         .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    //
+    //     return teamEntity?.MapToDomainEntity();
+    // }
 }

@@ -13,7 +13,7 @@ public abstract class Entity(long id)
     public string UpdatedBy { get; init; } = string.Empty;
     public DateTime DateUpdated { get; set; }
 
-    public List<IDomainEvent> DomainEvents => [.. _domainEvents];
+    public IEnumerable<IDomainEvent> DomainEvents => [.. _domainEvents];
 
     public void ClearDomainEvents()
     {

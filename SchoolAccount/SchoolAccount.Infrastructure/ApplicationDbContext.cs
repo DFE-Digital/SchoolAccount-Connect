@@ -4,7 +4,7 @@ using SchoolAccount.Infrastructure.Teams;
 
 namespace SchoolAccount.Infrastructure;
 
-internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+internal sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options),
         IApplicationDbContext
 {

@@ -2,7 +2,7 @@
 
 namespace SchoolAccount.Application.Teams.CreateTeam;
 
-internal class CreateTeamCommandValidator : AbstractValidator<CreateTeamCommand>
+internal sealed class CreateTeamCommandValidator : AbstractValidator<CreateTeamCommand>
 {
     public CreateTeamCommandValidator()
     {

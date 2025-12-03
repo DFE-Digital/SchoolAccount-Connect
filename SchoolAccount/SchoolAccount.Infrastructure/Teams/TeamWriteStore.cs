@@ -3,7 +3,7 @@ using SchoolAccount.Domain.Teams;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class TeamWriteStore(ApplicationDbContext context) : ITeamWriteStore
+internal sealed class TeamWriteStore(ApplicationDbContext context) : ITeamWriteStore
 {
     public async Task<long> CreateTeamAsync(Team team, CancellationToken token)
     {

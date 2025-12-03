@@ -16,8 +16,8 @@ internal static class TeamDomainExtensions
         };
     }
 
-    internal static Team MapToDomainEntity(this TeamDatabaseEntity teamEntity)
-    {
-        return new Team() { };
-    }
+    // internal static Team MapToDomainEntity(this TeamDatabaseEntity teamEntity)
+    // {
+    //     return new Team() { };
+    // }
 }
