@@ -4,7 +4,7 @@ using SchoolAccount.Application.Teams.GetById;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class TeamReadStore : ITeamReadStore
+internal sealed class TeamReadStore : ITeamReadStore
 {
     private readonly ApplicationDbContext _context;
 

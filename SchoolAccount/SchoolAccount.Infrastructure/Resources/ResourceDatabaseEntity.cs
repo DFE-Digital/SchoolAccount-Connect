@@ -2,11 +2,11 @@
 
 public class ResourceDatabaseEntity
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
 
-    public string ServiceName { get; set; }
+    public string ServiceName { get; init; } = string.Empty;
 
-    public string ServiceDescription { get; set; }
+    public string ServiceDescription { get; init; } = string.Empty;
 
-    public string DigitalLink { get; set; }
+    public string DigitalLink { get; init; } = string.Empty;
 }

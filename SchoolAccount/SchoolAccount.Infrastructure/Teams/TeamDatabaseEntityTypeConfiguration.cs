@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<TeamDatabaseEntity>
+internal sealed class TeamDatabaseEntityTypeConfiguration
+    : IEntityTypeConfiguration<TeamDatabaseEntity>
 {
     public void Configure(EntityTypeBuilder<TeamDatabaseEntity> builder)
     {
@@ -14,7 +15,12 @@ internal class TeamDatabaseEntityTypeConfiguration : IEntityTypeConfiguration<Te
             .WithMany(x => x.Teams)
             .HasForeignKey(x => x.DirectorateId);
 
-        // builder
-        //     .Navigation(e => e.Directorate);
+        builder.Property(x => x.ServiceName).HasMaxLength(250);
+
+        builder.Property(x => x.Acronym).HasMaxLength(50);
+
+        builder.Property(x => x.ServiceDescription).HasMaxLength(1500);
+
+        builder.Property(x => x.DigitalServiceLink).HasMaxLength(1000);
     }
 }

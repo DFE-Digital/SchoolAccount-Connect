@@ -4,17 +4,17 @@ namespace SchoolAccount.Infrastructure.Teams;
 
 public class TeamDatabaseEntity
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
 
-    public string ServiceName { get; set; }
+    public string ServiceName { get; init; } = string.Empty;
 
-    public string Acronym { get; set; }
+    public string Acronym { get; init; } = string.Empty;
 
-    public string ServiceDescription { get; set; }
+    public string ServiceDescription { get; init; } = string.Empty;
 
-    public string DigitalServiceLink { get; set; }
+    public string DigitalServiceLink { get; init; } = string.Empty;
 
-    public long? DirectorateId { get; set; }
+    public long? DirectorateId { get; init; }
 
-    public DirectorateDatabaseEntity? Directorate { get; set; }
+    public DirectorateDatabaseEntity? Directorate { get; init; }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SchoolAccount.Infrastructure.Resources;
 
-internal class ResourceDatabaseEntityTypeConfiguration
+internal sealed class ResourceDatabaseEntityTypeConfiguration
     : IEntityTypeConfiguration<ResourceDatabaseEntity>
 {
     public void Configure(EntityTypeBuilder<ResourceDatabaseEntity> builder)
