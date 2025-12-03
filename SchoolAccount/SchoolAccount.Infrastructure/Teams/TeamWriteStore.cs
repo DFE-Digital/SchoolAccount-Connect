@@ -1,13 +1,20 @@
 ﻿using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Abstractions.Mapping;
 using SchoolAccount.Domain.Teams;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-internal sealed class TeamWriteStore(ApplicationDbContext context) : ITeamWriteStore
+internal sealed class TeamWriteStore(
+    ApplicationDbContext context,
+    IDomainEntityToDatabaseEntityMapper<Team, TeamDatabaseEntity> mapper
+) : ITeamWriteStore
 {
     public async Task<long> CreateTeamAsync(Team team, CancellationToken token)
     {
-        await context.Teams.AddAsync(team.MapToDatabaseEntity(), token);
+        var teamDatabaseEntity = mapper.Map(team);
+
+        await context.Teams.AddAsync(teamDatabaseEntity, token);
+
         return await context.SaveChangesAsync(token);
     }
 }

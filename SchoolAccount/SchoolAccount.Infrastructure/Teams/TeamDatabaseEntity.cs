@@ -1,9 +1,10 @@
-﻿using SchoolAccount.Infrastructure.Directorates;
+﻿using SchoolAccount.Application.Abstractions.Models;
+using SchoolAccount.Infrastructure.Directorates;
 using SchoolAccount.Infrastructure.ServiceStatus;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-public class TeamDatabaseEntity
+public class TeamDatabaseEntity : IDatabaseEntity
 {
     // Properties
     public long Id { get; set; }
