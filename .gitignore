@@ -14,6 +14,7 @@
 .idea/**/db-forest-config.xml
 .idea/**/data_source_mapping.xml
 .idea/**/queries/
+.idea/**/httpRequests/
 
 # AWS User-specific
 .idea/**/aws.xml
