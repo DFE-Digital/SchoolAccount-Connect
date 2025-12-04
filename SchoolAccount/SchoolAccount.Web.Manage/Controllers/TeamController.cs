@@ -6,7 +6,7 @@ using SchoolAccount.Application.Teams.GetById;
 namespace SchoolAccount.Web.Manage.Controllers;
 
 [Route("[controller]")]
-internal sealed class TeamController(
+public sealed class TeamController(
     IQueryHandler<GetTeamById, TeamResponse> getTeamById,
     ICommandHandler<CreateTeamCommand, long> createTeamCommandHandler
 ) : Controller
