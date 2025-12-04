@@ -39,7 +39,7 @@ internal sealed class ApplicationDbContext(
 
                 case EntityState.Modified:
                     entry.Entity.UpdatedBy = userContext.UserId;
-                    entry.Entity.DateUpdated = dateTimeProvider.UtcNow;
+                    entry.Entity.DateUpdated = now;
                     break;
             }
         }
