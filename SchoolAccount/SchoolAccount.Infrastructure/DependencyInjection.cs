@@ -2,8 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SchoolAccount.Application.Abstractions.Authentication;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Infrastructure.Authentication;
+using SchoolAccount.Infrastructure.Mapping;
 using SchoolAccount.Infrastructure.Teams;
+using SchoolAccount.Infrastructure.Time;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure;
 
@@ -11,7 +16,20 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDatabase(configuration).AddHealthChecks(configuration);
+        services
+            .AddDatabase(configuration)
+            .AddHealthChecks(configuration)
+            .AddMappers()
+            .AddAuthenticationInternal()
+            .AddServices();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserContext, UserContext>();
 
         return services;
     }
@@ -48,6 +66,25 @@ public static class DependencyInjection
                 failureStatus: HealthStatus.Degraded,
                 tags: ["db", "sql", "sqlserver"]
             );
+
+        return services;
+    }
+
+    private static IServiceCollection AddMappers(this IServiceCollection services)
+    {
+        services.Scan(scan =>
+            scan.FromAssembliesOf(typeof(DependencyInjection))
+                .AddClasses(classes => classes.AssignableTo(typeof(IDomainEntityToDatabaseEntityMapper<,>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+        );
+
+        return services;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;
     }

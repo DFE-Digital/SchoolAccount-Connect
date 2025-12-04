@@ -1,10 +1,12 @@
-﻿using SchoolAccount.Application.Abstractions.Models;
-using SchoolAccount.Infrastructure.Directorates;
+﻿using SchoolAccount.Infrastructure.Directorates;
+using SchoolAccount.Infrastructure.Models;
 using SchoolAccount.Infrastructure.ServiceStatus;
+
+// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
 
 namespace SchoolAccount.Infrastructure.Teams;
 
-public class TeamDatabaseEntity : IDatabaseEntity
+public class TeamDatabaseEntity : AuditableDatabaseEntity
 {
     public long Id { get; init; }
 

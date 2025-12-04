@@ -1,7 +1,7 @@
-using SchoolAccount.Application.Abstractions.Models;
+using SchoolAccount.Infrastructure.Models;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Abstractions.Mapping;
+namespace SchoolAccount.Infrastructure.Mapping;
 
 public interface IDomainEntityToDatabaseEntityMapper<in TDomainEntity, TDatabaseEntity>
     where TDomainEntity : Entity

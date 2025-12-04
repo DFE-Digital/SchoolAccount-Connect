@@ -37,5 +37,8 @@ dotnet_diagnostic.CA1848.severity = none
 # CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = none
 
+# CA2201: Exception type System.ApplicationException is not sufficiently specific
+dotnet_diagnostic.CA2201.severity = none
+
 # CA2225: Operator overloads have named alternates
 dotnet_diagnostic.CA2225.severity = none

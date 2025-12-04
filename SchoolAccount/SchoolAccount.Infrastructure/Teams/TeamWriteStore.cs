@@ -1,6 +1,6 @@
 ﻿using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Abstractions.Mapping;
 using SchoolAccount.Domain.Teams;
+using SchoolAccount.Infrastructure.Mapping;
 
 namespace SchoolAccount.Infrastructure.Teams;
 
