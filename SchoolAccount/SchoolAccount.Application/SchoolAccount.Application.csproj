@@ -9,4 +9,7 @@
     <PackageReference Include="Scrutor" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>

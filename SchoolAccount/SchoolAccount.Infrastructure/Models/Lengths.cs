@@ -1,4 +1,4 @@
-namespace SchoolAccount.Application.Models;
+namespace SchoolAccount.Infrastructure.Models;
 
 public static class Lengths
 {
