@@ -2,6 +2,8 @@ namespace SchoolAccount.Infrastructure.Models;
 
 public abstract class AuditableDatabaseEntity : IDatabaseEntity
 {
+    public long Id { get; init; }
+
     public string CreatedBy { get; set; } = null!;
 
     public DateTime DateCreated { get; set; }

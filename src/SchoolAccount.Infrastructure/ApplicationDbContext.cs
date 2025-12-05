@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Abstractions.Authentication;
 using SchoolAccount.Infrastructure.Models;
 using SchoolAccount.Infrastructure.Teams;
 using SchoolAccount.Kernel;

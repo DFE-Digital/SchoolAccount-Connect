@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SchoolAccount.Application.Abstractions.Authentication;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure.Authentication;
 using SchoolAccount.Infrastructure.Mapping;
@@ -16,20 +15,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services
-            .AddDatabase(configuration)
-            .AddHealthChecks(configuration)
-            .AddMappers()
-            .AddAuthenticationInternal()
-            .AddServices();
-
-        return services;
-    }
-
-    private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services)
-    {
-        services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();
+        services.AddDatabase(configuration).AddHealthChecks(configuration).AddMappers().AddServices();
 
         return services;
     }

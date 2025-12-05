@@ -8,8 +8,6 @@ namespace SchoolAccount.Infrastructure.Teams;
 
 public class TeamDatabaseEntity : AuditableDatabaseEntity
 {
-    public long Id { get; init; }
-
     public required string ServiceName { get; init; }
 
     public string? Acronym { get; init; }

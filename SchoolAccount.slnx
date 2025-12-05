@@ -1,17 +1,20 @@
 <Solution>
-  <Folder Name="/Requests/">
+  <Folder Name="/requests/">
     <File Path="Requests/SchoolAccount.http" />
   </Folder>
-  <Folder Name="/Solution/">
+  <Folder Name="/solution/">
     <File Path=".csharpierignore" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
-  <Project Path="SchoolAccount/SchoolAccount.Application/SchoolAccount.Application.csproj" />
-  <Project Path="SchoolAccount/SchoolAccount.Domain/SchoolAccount.Domain.csproj" />
-  <Project Path="SchoolAccount/SchoolAccount.Infrastructure/SchoolAccount.Infrastructure.csproj" />
-  <Project Path="SchoolAccount/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
-  <Project Path="SchoolAccount/SchoolAccount.Web.Manage/SchoolAccount.Web.Manage.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/SchoolAccount.Application/SchoolAccount.Application.csproj" />
+    <Project Path="src/SchoolAccount.Domain/SchoolAccount.Domain.csproj" />
+    <Project Path="src/SchoolAccount.Infrastructure/SchoolAccount.Infrastructure.csproj" />
+    <Project Path="src/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
+    <Project Path="src/SchoolAccount.Web.Manage/SchoolAccount.Web.Manage.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
 </Solution>

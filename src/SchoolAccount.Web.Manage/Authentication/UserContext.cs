@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using SchoolAccount.Application.Abstractions.Authentication;
+using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Infrastructure.Authentication;
+namespace SchoolAccount.Web.Manage.Authentication;
 
 internal sealed class UserContext : IUserContext
 {
