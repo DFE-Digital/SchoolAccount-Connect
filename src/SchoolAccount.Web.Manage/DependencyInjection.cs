@@ -1,16 +1,18 @@
-﻿using System.Reflection;
+﻿using Azure.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Manage.Authentication;
 using SchoolAccount.Web.Manage.Models;
+using System.Reflection;
 
 namespace SchoolAccount.Web.Manage;
 
 internal static class DependencyInjection
 {
-    internal static void AddPresentation(this IServiceCollection services)
+    internal static void AddPresentation(this IServiceCollection services, IConfigurationBuilder configurationBuilder)
     {
         services.AddFluentValidation();
         services.AddGovUkFrontend(options =>
@@ -21,6 +23,7 @@ internal static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddControllersWithViews();
         services.AddScoped<IUserContext, UserContext>();
+        services.AddFeatureFlagSupport(configurationBuilder);
     }
     
     internal static void Configure(this WebApplicationBuilder builder)
@@ -56,5 +59,33 @@ internal static class DependencyInjection
     {
         app.UseStatusCodePagesWithReExecute("/error/{0}");
         app.UseExceptionHandler("/error/500");
+    }
+
+    private static void AddFeatureFlagSupport(this IServiceCollection services, IConfigurationBuilder configurationBuilder)
+    {
+        var appConfigEndpoint = services.BuildServiceProvider().GetRequiredService<IConfiguration>()["AppConfigEndpoint"];
+        var managedIdentityClientId = services.BuildServiceProvider().GetRequiredService<IConfiguration>()["MANAGED_IDENTITY_CLIENT_ID"];
+        var tenantId = services.BuildServiceProvider().GetRequiredService<IConfiguration>()["TenantId"];
+        
+        if (string.IsNullOrEmpty(appConfigEndpoint))
+        {
+            throw new ArgumentException("AppConfigEndpoint is required.");
+        }
+
+        var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+        {
+            TenantId = tenantId,
+            ManagedIdentityClientId = managedIdentityClientId
+        });
+
+        configurationBuilder.AddAzureAppConfiguration(options =>
+        {
+            options.Connect(new Uri(appConfigEndpoint), credential)
+                .Select(KeyFilter.Any)
+                .ConfigureRefresh(refresh =>
+                    refresh.RegisterAll()
+                        .SetRefreshInterval(TimeSpan.FromSeconds(30)))
+                .UseFeatureFlags();
+        });
     }
 }
