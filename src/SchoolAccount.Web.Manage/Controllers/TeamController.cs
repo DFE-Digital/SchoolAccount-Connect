@@ -2,10 +2,12 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Teams.CreateTeam;
 using SchoolAccount.Application.Teams.GetById;
+using Microsoft.FeatureManagement.Mvc;
 
 namespace SchoolAccount.Web.Manage.Controllers;
 
 [Route("[controller]")]
+[FeatureGate("TeamsFeature")]
 public sealed class TeamController(
     IQueryHandler<GetTeamById, TeamResponse> getTeamById,
     ICommandHandler<CreateTeamCommand, long> createTeamCommandHandler
