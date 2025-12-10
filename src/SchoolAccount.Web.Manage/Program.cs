@@ -3,22 +3,10 @@ using Microsoft.FeatureManagement.FeatureFilters;
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.Web.Manage;
-using SchoolAccount.Web.Manage.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigEndpoint = builder.Configuration["AppConfigEndpoint"];
-var managedIdentityClientId = builder.Configuration["MANAGED_IDENTITY_CLIENT_ID"];
-var tenantId = builder.Configuration["TenantId"];
-
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation();
-
-if (!string.IsNullOrEmpty(appConfigEndpoint))
-{
-    builder.Configuration.AddAzureConfigurations(appConfigEndpoint, 
-        managedIdentityClientId, 
-        tenantId);
-}
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation(builder.Configuration);
 
 builder.Services.AddAzureAppConfiguration();
 
