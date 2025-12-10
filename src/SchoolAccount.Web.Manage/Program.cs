@@ -7,10 +7,6 @@ using SchoolAccount.Web.Manage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddPresentation();
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation(builder.Configuration);
 
 builder.Services.AddAzureAppConfiguration();
