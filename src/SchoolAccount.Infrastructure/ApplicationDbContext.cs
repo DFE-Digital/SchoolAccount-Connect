@@ -23,6 +23,8 @@ internal sealed class ApplicationDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userContext.EmailAddress);
+        
         var now = dateTimeProvider.UtcNow;
 
         foreach (var entry in ChangeTracker.Entries<AuditableDatabaseEntity>())
@@ -30,14 +32,14 @@ internal sealed class ApplicationDbContext(
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = userContext.UserId;
+                    entry.Entity.CreatedBy = userContext.EmailAddress;
                     entry.Entity.DateCreated = now;
-                    entry.Entity.UpdatedBy = userContext.UserId;
+                    entry.Entity.UpdatedBy = userContext.EmailAddress;
                     entry.Entity.DateUpdated = now;
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = userContext.UserId;
+                    entry.Entity.UpdatedBy = userContext.EmailAddress;
                     entry.Entity.DateUpdated = now;
                     break;
             }

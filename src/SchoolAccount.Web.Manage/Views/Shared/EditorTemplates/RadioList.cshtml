@@ -1,0 +1,46 @@
+@using SchoolAccount.Web.Manage.Extensions
+@using SchoolAccount.Web.Manage.Models
+@model dynamic
+
+@{
+    var field = ViewData.GetFieldMetadata();
+}
+
+<govuk-radios for="@Model" name="@field.FieldName">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+            @field.Label
+            @if (!field.IsRequired)
+            {
+                <span class="govuk-hint">(optional)</span>
+            }
+        </govuk-radios-fieldset-legend>
+        @if (field.HasHint)
+        {
+            <govuk-radios-hint>
+                @field.Hint
+            </govuk-radios-hint>
+        }
+        
+        @if (field.HasValidError)
+        {
+            <govuk-radios-error-message>
+                @field.ErrorMessage
+            </govuk-radios-error-message>
+        }
+            
+        @foreach (var item in (ViewData["Items"] as IEnumerable<RadioListItem> ?? []))
+        {
+            <govuk-radios-item 
+                value="@item.Value" 
+                checked="@(item.Selected || Model.ToString() == item.Value)" 
+                disabled="item.Disabled">
+                @item.Text
+                @if (!string.IsNullOrEmpty(item.Hint))
+                {
+                    <govuk-radios-item-hint>@item.Hint</govuk-radios-item-hint>
+                }
+            </govuk-radios-item>
+        }
+    </govuk-radios-fieldset>
+</govuk-radios>
