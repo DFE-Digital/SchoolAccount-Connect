@@ -1,9 +1,11 @@
 ﻿using Azure.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GovUk.Frontend.AspNetCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Manage.Authentication;
+using SchoolAccount.Web.Manage.Models;
 using System.Reflection;
 
 namespace SchoolAccount.Web.Manage;
@@ -13,9 +15,20 @@ internal static class DependencyInjection
     internal static void AddPresentation(this IServiceCollection services, IConfigurationBuilder configurationBuilder)
     {
         services.AddFluentValidation();
-        services.AddScoped<IUserContext, UserContext>();
+        services.AddGovUkFrontend(options =>
+        {
+            options.Rebrand = true;
+        });
+        services.AddAntiforgery();
         services.AddHttpContextAccessor();
+        services.AddControllersWithViews();
+        services.AddScoped<IUserContext, UserContext>();
         services.AddFeatureFlagSupport(configurationBuilder);
+    }
+    
+    internal static void Configure(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<TopHeaderNavigationOptions>(builder.Configuration.GetSection("TopHeaderNavigation"));
     }
 
     private static void AddFluentValidation(this IServiceCollection services)
@@ -29,6 +42,23 @@ internal static class DependencyInjection
             [Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly],
             includeInternalTypes: true
         );
+    }
+
+    internal static void ConfigureAreas(this WebApplication app)
+    {
+        app.MapControllerRoute(
+            name: "areas",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+    }
+
+    internal static void ExceptionHandlers(this WebApplication app)
+    {
+        app.UseStatusCodePagesWithReExecute("/error/{0}");
+        app.UseExceptionHandler("/error/500");
     }
 
     private static void AddFeatureFlagSupport(this IServiceCollection services, IConfigurationBuilder configurationBuilder)

@@ -1,22 +1,215 @@
+:root {
+    /** Colour Scheme */
+    /* See (16/07/25): https://design-system.service.gov.uk/styles/colour/ */
+    --govuk-colour--red:	        #d4351c;
+    --govuk-colour--yellow:	        #ffdd00;
+    --govuk-colour--green:	        #00703c;
+    --govuk-colour--blue:	        #1d70b8;
+    --govuk-colour--dark-blue:	    #003078;
+    --govuk-colour--light-blue:	    #5694ca;
+    --govuk-colour--purple:	        #4c2c92;
+    --govuk-colour--black:	        #0b0c0c;
+    --govuk-colour--dark-grey:	    #505a5f;
+    --govuk-colour--mid-grey:	    #b1b4b6;
+    --govuk-colour--light-grey:	    #f3f2f1;
+    --govuk-colour--white:	        #ffffff;
+    --govuk-colour--light-purple:	#6f72af;
+    --govuk-colour--bright-purple:	#912b88;
+    --govuk-colour--pink:	        #d53880;
+    --govuk-colour--light-pink:	    #f499be;
+    --govuk-colour--orange:	        #f47738;
+    --govuk-colour--brown:	        #b58840;
+    --govuk-colour--light-green:	#85994b;
+    --govuk-colour--turquoise:	    #28a197;
+    /** Component Colours */
+    /* See (16/07/25): https://design-system.service.gov.uk/styles/colour/ */
+    --govuk-text-colour: var(--govuk-colour--black, #0b0c0c);
+    --govuk-secondary-text-colour: var(--govuk-colour--dark-grey, #505a5f);
+    --govuk-link-colour: var(--govuk-colour--blue, #1d70b8);
+    --govuk-link-hover-colour: var(--govuk-colour--dark-blue, #003078);
+    --govuk-link-visited-colour: var(--govuk-colour--purple, #4c2c92);
+    --govuk-link-active-colour: var(--govuk-colour--black, #0b0c0c);
+    --govuk-border-colour: var(--govuk-colour--mid-grey, #b1b4b6);
+    --govuk-input-border-colour: var(--govuk-colour--black, #0b0c0c);
+    --govuk-focus-colour: var(--govuk-colour--yellow, #ffdd00);
+    --govuk-focus-text-colour: var(--govuk-colour--black, #0b0c0c);
+    --govuk-error-colour: var(--govuk-colour--red, #d4351c);
+    --govuk-success-colour: var(--govuk-colour--green, #00803c);
+    --govuk-brand-colour: var(--govuk-colour--blue, #1d70b8);
+    /** Responsive Spacing */
+    /* See (16/07/25): https://design-system.service.gov.uk/styles/spacing/ */
+    --govuk-spacing-responsive--0 : 0px;
+    --govuk-spacing-responsive--1 : 5px;
+    --govuk-spacing-responsive--2 : 10px;
+    --govuk-spacing-responsive--3 : 15px;
+    --govuk-spacing-responsive--4 : 20px;
+    --govuk-spacing-responsive--5 : 25px;
+    --govuk-spacing-responsive--6 : 30px;
+    --govuk-spacing-responsive--7 : 40px;
+    --govuk-spacing-responsive--8 : 50px;
+    --govuk-spacing-responsive--9 : 60px;
+    /** Static Spacing */
+    /* See (16/07/25): https://design-system.service.gov.uk/styles/spacing/ */
+    --govuk-spacing-static--0: 0px;
+    --govuk-spacing-static--1: 5px;
+    --govuk-spacing-static--2: 10px;
+    --govuk-spacing-static--3: 15px;
+    --govuk-spacing-static--4: 20px;
+    --govuk-spacing-static--5: 25px;
+    --govuk-spacing-static--6: 30px;
+    --govuk-spacing-static--7: 40px;
+    --govuk-spacing-static--8: 50px;
+    --govuk-spacing-static--9: 60px;
+}
+
+@media screen and (max-width: 640px) {
+    :root {
+        --govuk-spacing-responsive--0 : 0px;
+        --govuk-spacing-responsive--1 : 5px;
+        --govuk-spacing-responsive--2 : 10px;
+        --govuk-spacing-responsive--3 : 15px;
+        --govuk-spacing-responsive--4 : 15px;
+        --govuk-spacing-responsive--5 : 15px;
+        --govuk-spacing-responsive--6 : 20px;
+        --govuk-spacing-responsive--7 : 25px;
+        --govuk-spacing-responsive--8 : 30px;
+        --govuk-spacing-responsive--9 : 40px;
+    }
+}
+
 html {
-  font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.govuk-header__link .govuk-header__logotype{
+    height: 30px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.govuk-header__link:focus .govuk-header__logotype{
+    content: url("/lib/dfe-frontend/assets/image/department-for-education_black.png");
+    height: 30px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.govuk-footer__copyright-logo:before {
+    mask-image: url("/lib/dfe-frontend/assets/image/dfe-crest.svg");
+    background: var(--govuk-colour--dark-grey);
 }
 
-body {
-  margin-bottom: 60px;
+.govuk-footer__crown {
+    display: none;
+}
+
+/* Top Navigation */
+
+.dfe-header-container {
+    display: flex;
+    align-items: center;
+}
+
+.dfe-header-container nav.dfe-user-menu {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dfe-header-container nav.dfe-user-menu > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.dfe-header-container nav.dfe-user-menu > ul > li {
+    margin: 0 !important;
+    padding: var(--govuk-spacing-responsive--4);
+    position: relative;
+    font-size: 80%;
+    line-break: strict;
+    word-break: break-all;
+    white-space: nowrap;
+    translate: 0 -1px;
+}
+
+.dfe-header-container nav.dfe-user-menu > ul:last-child > li:last-child {
+    padding-right: 0;
+}
+
+.dfe-header-container nav.dfe-user-menu > ul > li a:visited,
+a.dfe-nav-link {
+    color: var(--govuk-colour--white);
+}
+
+.dfe-header-container nav.dfe-user-menu > ul > li:not(:last-child):after {
+    content: '';
+    width: 2px;
+    height: 40%;
+    background: white;
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    translate: -50% -50%;
+    opacity: .6;
+}
+
+@media (max-width: 1000px) {
+    .dfe-header-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .dfe-header-container nav.dfe-user-menu {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .dfe-header-container nav.dfe-user-menu > ul {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .dfe-header-container nav.dfe-user-menu > ul > li {
+        padding: var(--govuk-spacing-responsive--2);
+    }
+
+    .dfe-header-container nav.dfe-user-menu > ul:first-child > li:first-child {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+}
+
+/* defaultas */
+
+.govuk-link:link {
+    word-break: break-word;
+}
+
+/* temp */
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0  calc(var(--govuk-spacing-responsive--2) * -1);
+}
+
+.card {
+    border: var(--govuk-spacing-static--1) solid var(--govuk-border-colour);
+    padding: var(--govuk-spacing-responsive--4);
+    width: calc(33.33% - 10px - (var(--govuk-spacing-responsive--4) * 2) - (var(--govuk-spacing-responsive--2) * 2));
+    margin: var(--govuk-spacing-responsive--2);
+}
+
+.card h1.card-title {
+    font-size: 2em;
 }

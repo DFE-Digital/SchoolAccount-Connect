@@ -1,19 +1,25 @@
+using System.Security.Claims;
+using System.Security.Principal;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Web.Manage.Authentication;
 
-internal sealed class UserContext : IUserContext
+internal sealed class UserContext(IHttpContextAccessor contextAccessor) : IUserContext, IIdentity
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    public string? AuthenticationType { get; } = contextAccessor.HttpContext?.User.Identity?.AuthenticationType;
+    public bool IsAuthenticated { get; } = contextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+    
+    public string? Id { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    
+    public string? EmailAddress { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value;
+    public string? Name { get; } = contextAccessor.HttpContext?.User.FindFirst("name")?.Value;
+    public string? PreferredName { get; } = contextAccessor.HttpContext?.User.FindFirst("preferred_name")?.Value;
 
-    public UserContext(IHttpContextAccessor httpContextAccessor)
+    public override string ToString()
     {
-        _httpContextAccessor = httpContextAccessor;
+        return PreferredName 
+               ?? Name 
+               ?? EmailAddress 
+               ?? throw new InvalidDataException();
     }
-
-    public string UserId => "Test User"; // TODO Get from HTTP context
-
-    // public string UserId =>
-    //      _httpContextAccessor.HttpContext?.User.GetUserId()
-    //     ?? throw new ApplicationException("User context is unavailable");
 }
