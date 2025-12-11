@@ -4,10 +4,9 @@ using SchoolAccount.Web.Manage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation(builder.Configuration);
 
 var app = builder.Build();
 
@@ -22,8 +21,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStripHeaders();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");

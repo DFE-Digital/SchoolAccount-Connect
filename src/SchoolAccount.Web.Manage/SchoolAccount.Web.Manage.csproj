@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <ItemGroup>
-    <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj"/>
+        <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" />
-    <PackageReference Include="FluentValidation.AspNetCore" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Identity.Web"/>
+        <PackageReference Include="Microsoft.Identity.Web.UI"/>
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="FluentValidation.AspNetCore"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+    </ItemGroup>
 </Project>

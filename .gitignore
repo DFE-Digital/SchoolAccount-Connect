@@ -17,6 +17,8 @@
 .idea/**/queries/
 .idea/**/httpRequests/
 
+**/.idea/**
+
 # AWS User-specific
 .idea/**/aws.xml
 
