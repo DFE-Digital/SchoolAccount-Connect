@@ -17,5 +17,7 @@
     <Project Path="src/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
     <Project Path="src/SchoolAccount.Web.Manage/SchoolAccount.Web.Manage.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
+  </Folder>
 </Solution>

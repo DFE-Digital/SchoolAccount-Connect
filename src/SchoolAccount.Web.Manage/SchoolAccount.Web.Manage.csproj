@@ -21,4 +21,10 @@
         <PackageReference Include="Microsoft.Identity.Web.UI"/>
         <PackageReference Include="X.PagedList"/>
     </ItemGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>SchoolAccount.ConformanceTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>

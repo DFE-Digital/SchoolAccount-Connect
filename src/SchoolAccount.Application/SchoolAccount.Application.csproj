@@ -9,7 +9,4 @@
     <PackageReference Include="Scrutor" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Abstractions\Authentication\" />
-  </ItemGroup>
 </Project>
