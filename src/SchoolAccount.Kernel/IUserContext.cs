@@ -2,5 +2,10 @@ namespace SchoolAccount.Kernel;
 
 public interface IUserContext
 {
-    string UserId { get; }
+    string? AuthenticationType { get; }
+    bool IsAuthenticated { get; }
+    string? Id { get; }
+    string? EmailAddress { get; }
+    string? Name { get; }
+    string? PreferredName { get; }
 }

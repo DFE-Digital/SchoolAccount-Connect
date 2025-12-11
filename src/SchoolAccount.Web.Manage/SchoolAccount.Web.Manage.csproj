@@ -1,14 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <UserSecretsId>4e50a46d-becc-4223-ac73-f9f5704af747</UserSecretsId>
+    </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj"/>
         <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj"/>
+        <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Identity.Web"/>
-        <PackageReference Include="Microsoft.Identity.Web.UI"/>
+        <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration"/>
         <PackageReference Include="FluentValidation"/>
         <PackageReference Include="FluentValidation.AspNetCore"/>
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+        <PackageReference Include="GovUk.Frontend.AspNetCore"/>
+        <PackageReference Include="Microsoft.FeatureManagement"/>
+        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore"/>
+        <PackageReference Include="Microsoft.Identity.Web"/>
+        <PackageReference Include="Microsoft.Identity.Web.UI"/>
+        <PackageReference Include="X.PagedList"/>
     </ItemGroup>
 </Project>

@@ -1,49 +1,129 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - SchoolAccount.Web.Manage</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/SchoolAccount.Web.Manage.styles.css" asp-append-version="true"/>
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SchoolAccount.Web.Manage</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+﻿@using GovUk.Frontend.AspNetCore
+@using SchoolAccount.Application
+@using SchoolAccount.Web.Manage.Constants
+@using SchoolAccount.Web.Manage.Extensions
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2025 - SchoolAccount.Web.Manage - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+@* ReSharper disable Razor.LayoutNotResolved *@
+@* ReSharper disable Razor.SectionNotResolved *@
+
+@{
+    Layout = "_GovUkPageTemplate";
+    ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnectManage}";
+    var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
+}
+
+@section Head {
+    @Html.GovUkFrontendStyleImports()
+    @Html.MojFrontendStyleImports()
+    @Html.DfeFrontendStyleImports()
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+}
+
+@section BodyStart {
+    @if (!consentCookieSet)
+    {
+        <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
+            <govuk-cookie-banner-message>
+                <govuk-cookie-banner-message-heading>Cookies on @ApplicationConstants.DfeConnectManage</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-content>
+                    <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                    <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the
+                        service and make improvements.</p>
+                </govuk-cookie-banner-message-content>
+                <govuk-cookie-banner-message-actions>
+                    <govuk-cookie-banner-message-action text="Accept analytics cookies" type="button"
+                                                        id="dfe-cta-acceptCookies"/>
+                    <govuk-cookie-banner-message-action text="Reject analytics cookies" type="button"
+                                                        id="dfe-cta-declineCookies"/>
+                    <govuk-cookie-banner-message-action-link text="View cookies" href="/cookies"/>
+                </govuk-cookie-banner-message-actions>
+            </govuk-cookie-banner-message>
+        </govuk-cookie-banner>
+    }
+}
+
+@section BodyEnd {
+    @if (!consentCookieSet)
+    {
+        <script>
+            (function () {
+                let banner = document.getElementById('dfe-cookie-banner');
+                let acceptBtn = document.getElementById('dfe-cta-acceptCookies');
+                let declineBtn = document.getElementById('dfe-cta-declineCookies');
+                if (!banner || !acceptBtn || !declineBtn) return;
+
+                function setConsent(value) {
+                    let parts = [
+                        '@CookieConsentStates.CookieName' + '=' + value,
+                        'Path=/',
+                        'Max-Age=' + (60 * 60 * 24 * 365),
+                        'SameSite=Lax'
+                    ];
+                    if (location.protocol === 'https:') parts.push('Secure');
+                    document.cookie = parts.join('; ');
+                }
+
+                function hide() {
+                    banner.style.display = 'none';
+                }
+
+                acceptBtn.addEventListener('click', function () {
+                    setConsent('@CookieConsentStates.Accepted');
+                    hide();
+                });
+                declineBtn.addEventListener('click', function () {
+                    setConsent('@CookieConsentStates.Rejected');
+                    hide();
+                });
+            })();
+        </script>
+    }
+}
+
+@section Header {
+    <partial name="_Header"/>
+}
+
+@section BeforeContent {
+    <govuk-phase-banner>
+        <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
+        This is a new service - your <a href="#" class="govuk-link">feedback</a> will help us to improve it.
+    </govuk-phase-banner>
+    @await RenderSectionAsync("BeforeContent", false)
+}
+
+
+@await RenderSectionAsync("Header", false)
+
+@if (IsSectionDefined("RightSide"))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @RenderBody()
+        </div>
+        <div class="govuk-grid-column-one-third">
+            @await RenderSectionAsync("RightSide")
+        </div>
     </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+}
+else
+{
+    IgnoreSection("RightSide");
+    @RenderBody()
+}
+
+@Html.GovUkFrontendScriptImports()
+@Html.MojFrontendScriptImports()
 @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+
+@section Footer {
+    <govuk-footer>
+        <govuk-footer-meta>
+            <govuk-footer-meta-items>
+                <govuk-footer-meta-item href="/privacy">Privacy</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="/cookies">Cookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="/accessibility">Accessibility</govuk-footer-meta-item>
+            </govuk-footer-meta-items>
+        </govuk-footer-meta>
+    </govuk-footer>
+}

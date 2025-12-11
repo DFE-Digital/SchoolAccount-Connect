@@ -1,0 +1,54 @@
+@using SchoolAccount.Application
+@using SchoolAccount.Kernel
+@inject IUserContext CurrentUser
+@{
+    // This resolves the issue of "govuk-service-navigation-nav-item" active state not being set due to the query of a request
+    // <partial /> & @helper functions etc are not accepted.
+    List<(string, string, string[])> navigation =
+    [
+        ("/page", "Pages", []),
+        ("/service", "Services", []),
+        ("/resource/list", "Resources", ["/resource"]),
+    ];
+}
+
+<header class="govuk-header" data-module="govuk-header">
+    <div class="govuk-header__container govuk-width-container dfe-header-container">
+        <div class="govuk-header__logo">
+            <a href="/" class="govuk-header__link govuk-header__link--homepage">
+                <img src="~/lib/dfe-frontend/assets/image/department-for-education_white.png"
+                     alt="Department for Education" class="govuk-header__logotype">
+            </a>
+        </div>
+        @if (CurrentUser?.IsAuthenticated == true)
+        {
+            <nav class="dfe-user-menu">
+                <ul class="dfe-nav-items">
+                    <li>
+                        Welcome <b>@CurrentUser.ToString()</b>
+                    </li>
+                    <li>
+                        <a class="dfe-nav-link" asp-area="MicrosoftIdentity" asp-controller="Account"
+                           asp-action="SignOut">Sign out</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</header>
+@if (CurrentUser?.IsAuthenticated == true)
+{
+    <govuk-service-navigation service-name="@ApplicationConstants.DfeConnectManage" service-url="/">
+        <govuk-service-navigation-nav>
+            @foreach (var (url, label, childNodes) in navigation)
+            {
+                <govuk-service-navigation-nav-item
+                    href="@url"
+                    current="@(Context.Request.Path.Value?.Equals(url, StringComparison.OrdinalIgnoreCase) == true)"
+                    active="@childNodes.Any(x => Context.Request.Path.Value?.StartsWith(x) == true)">
+                    @label
+                </govuk-service-navigation-nav-item>
+            }
+        </govuk-service-navigation-nav>
+    </govuk-service-navigation>
+}
