@@ -1,0 +1,129 @@
+﻿@using GovUk.Frontend.AspNetCore
+@using SchoolAccount.Application
+@using SchoolAccount.Web.Connect.Constants
+@using SchoolAccount.Web.Connect.Extensions
+
+@* ReSharper disable Razor.LayoutNotResolved *@
+@* ReSharper disable Razor.SectionNotResolved *@
+
+@{
+    Layout = "_GovUkPageTemplate";
+    ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnectManage}";
+    var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
+}
+
+@section Head {
+    @Html.GovUkFrontendStyleImports()
+    @Html.MojFrontendStyleImports()
+    @Html.DfeFrontendStyleImports()
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+}
+
+@section BodyStart {
+    @if (!consentCookieSet)
+    {
+        <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
+            <govuk-cookie-banner-message>
+                <govuk-cookie-banner-message-heading>Cookies on @ApplicationConstants.DfeConnectManage</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-content>
+                    <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                    <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the
+                        service and make improvements.</p>
+                </govuk-cookie-banner-message-content>
+                <govuk-cookie-banner-message-actions>
+                    <govuk-cookie-banner-message-action text="Accept analytics cookies" type="button"
+                                                        id="dfe-cta-acceptCookies"/>
+                    <govuk-cookie-banner-message-action text="Reject analytics cookies" type="button"
+                                                        id="dfe-cta-declineCookies"/>
+                    <govuk-cookie-banner-message-action-link text="View cookies" href="/cookies"/>
+                </govuk-cookie-banner-message-actions>
+            </govuk-cookie-banner-message>
+        </govuk-cookie-banner>
+    }
+}
+
+@section BodyEnd {
+    @if (!consentCookieSet)
+    {
+        <script>
+            (function () {
+                let banner = document.getElementById('dfe-cookie-banner');
+                let acceptBtn = document.getElementById('dfe-cta-acceptCookies');
+                let declineBtn = document.getElementById('dfe-cta-declineCookies');
+                if (!banner || !acceptBtn || !declineBtn) return;
+
+                function setConsent(value) {
+                    let parts = [
+                        '@CookieConsentStates.CookieName' + '=' + value,
+                        'Path=/',
+                        'Max-Age=' + (60 * 60 * 24 * 365),
+                        'SameSite=Lax'
+                    ];
+                    if (location.protocol === 'https:') parts.push('Secure');
+                    document.cookie = parts.join('; ');
+                }
+
+                function hide() {
+                    banner.style.display = 'none';
+                }
+
+                acceptBtn.addEventListener('click', function () {
+                    setConsent('@CookieConsentStates.Accepted');
+                    hide();
+                });
+                declineBtn.addEventListener('click', function () {
+                    setConsent('@CookieConsentStates.Rejected');
+                    hide();
+                });
+            })();
+        </script>
+    }
+}
+
+@section Header {
+    <partial name="_Header"/>
+}
+
+@section BeforeContent {
+    <govuk-phase-banner>
+        <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
+        This is a new service - your <a href="#" class="govuk-link">feedback</a> will help us to improve it.
+    </govuk-phase-banner>
+    @await RenderSectionAsync("BeforeContent", false)
+}
+
+
+@await RenderSectionAsync("Header", false)
+
+@if (IsSectionDefined("RightSide"))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @RenderBody()
+        </div>
+        <div class="govuk-grid-column-one-third">
+            @await RenderSectionAsync("RightSide")
+        </div>
+    </div>
+}
+else
+{
+    IgnoreSection("RightSide");
+    @RenderBody()
+}
+
+@Html.GovUkFrontendScriptImports()
+@Html.MojFrontendScriptImports()
+@await RenderSectionAsync("Scripts", required: false)
+
+@section Footer {
+    <govuk-footer>
+        <govuk-footer-meta>
+            <govuk-footer-meta-items>
+                <govuk-footer-meta-item href="/privacy">Privacy</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="/cookies">Cookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="/accessibility">Accessibility</govuk-footer-meta-item>
+            </govuk-footer-meta-items>
+        </govuk-footer-meta>
+    </govuk-footer>
+}

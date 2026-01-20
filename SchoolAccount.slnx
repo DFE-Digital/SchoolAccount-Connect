@@ -15,7 +15,7 @@
     <Project Path="src/SchoolAccount.Domain/SchoolAccount.Domain.csproj" />
     <Project Path="src/SchoolAccount.Infrastructure/SchoolAccount.Infrastructure.csproj" />
     <Project Path="src/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
-    <Project Path="src/SchoolAccount.Web.Manage/SchoolAccount.Web.Manage.csproj" />
+    <Project Path="src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
