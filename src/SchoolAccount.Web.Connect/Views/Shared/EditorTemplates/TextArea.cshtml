@@ -1,0 +1,32 @@
+@using SchoolAccount.Web.Connect.Extensions
+@model string
+
+@{
+    var field = ViewData.GetFieldMetadata();
+}
+<!--TODO: Add support for Rows / IsHeading-->
+<govuk-textarea for="@Model" rows="5" name="@field.FieldName">
+    
+    <govuk-textarea-label is-page-heading="false" class="govuk-label--m">
+        @field.Label
+        @if (!field.IsRequired)
+        {
+            <span class="govuk-hint">(optional)</span>
+        }
+    </govuk-textarea-label>
+    
+    @if (field.HasHint)
+    {
+        <govuk-textarea-hint>
+            @ViewData.ModelMetadata.Description
+        </govuk-textarea-hint>
+    }
+    
+    @if (field.HasError && !string.IsNullOrEmpty(field.ErrorMessage))
+    {
+        <govuk-textarea-error-message>
+            @field.ErrorMessage
+        </govuk-textarea-error-message>
+    }
+
+</govuk-textarea>

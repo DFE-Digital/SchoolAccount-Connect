@@ -1,0 +1,39 @@
+@using SchoolAccount.Web.Connect.Extensions
+@model DateTime
+
+@{
+    var field = ViewData.GetFieldMetadata();
+}
+
+<govuk-date-input id="@field.FieldName" name-prefix="@field.FieldName">
+    <govuk-date-input-fieldset>
+        <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+            @field.Label
+            @if (!field.IsRequired)
+            {
+                <span class="govuk-hint">(optional)</span>
+            }
+        </govuk-date-input-fieldset-legend>
+        
+        @if (field.HasDescription)
+        {
+            <govuk-date-input-hint>
+                @field.Description
+            </govuk-date-input-hint>
+        }
+    
+        @if (field.HasValidError)
+        {
+            <govuk-date-input-error-message>
+                @field.ErrorMessage
+            </govuk-date-input-error-message>
+        }
+        
+        @if (Model != DateTime.MinValue)
+        {
+            <govuk-date-input-day>@Model.Day</govuk-date-input-day>
+            <govuk-date-input-month>@Model.Month</govuk-date-input-month>
+            <govuk-date-input-year>@Model.Year</govuk-date-input-year>
+        }
+    </govuk-date-input-fieldset>
+</govuk-date-input>

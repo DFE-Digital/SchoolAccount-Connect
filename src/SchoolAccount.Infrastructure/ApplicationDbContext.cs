@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Infrastructure.Models;
-using SchoolAccount.Infrastructure.Teams;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure;
@@ -12,8 +11,6 @@ internal sealed class ApplicationDbContext(
     IDateTimeProvider dateTimeProvider
 ) : DbContext(options), IApplicationDbContext
 {
-    public DbSet<TeamDatabaseEntity> Teams { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
