@@ -4,6 +4,7 @@
     <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="contentful.aspnetcore" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Scrutor" />
