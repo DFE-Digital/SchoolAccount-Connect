@@ -1,17 +1,12 @@
-﻿using System.Reflection;
-using Azure.Identity;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.FeatureFilters;
-using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Models;
+using SchoolAccount.Web.Connect.SignIn;
+using System.Reflection;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -35,9 +30,7 @@ internal static class DependencyInjection
             .AddControllersWithViews()
             .AddMicrosoftIdentityUI();
         
-        services.AddAzureAuthentication(configurationManager);
-        services.AddFeatureFlagSupport(configurationManager);
-        
+        services.AddDfeSignInAuthentication(configurationManager);
     }
 
     internal static void ConfigureAreas(this WebApplication app)
@@ -78,47 +71,5 @@ internal static class DependencyInjection
             [Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly],
             includeInternalTypes: true
         );
-    }
-
-    private static void AddFeatureFlagSupport(this IServiceCollection services, ConfigurationManager configurationBuilder)
-    {
-        var appConfigEndpoint = configurationBuilder.GetValue<string>("AppConfigEndpoint");
-        var managedIdentityClientId = configurationBuilder.GetValue<string>("MANAGED_IDENTITY_CLIENT_ID");
-        var tenantId = configurationBuilder.GetValue<string>("TenantId");
-        
-        if (string.IsNullOrEmpty(appConfigEndpoint))
-        {
-            throw new ArgumentException("AppConfigEndpoint is required.");
-        }
-
-        var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-        {
-            TenantId = tenantId,
-            ManagedIdentityClientId = managedIdentityClientId
-        });
-
-        configurationBuilder.AddAzureAppConfiguration(options =>
-        {
-            options.Connect(new Uri(appConfigEndpoint), credential)
-                .Select(KeyFilter.Any)
-                .ConfigureRefresh(refresh =>
-                    refresh.RegisterAll()
-                        .SetRefreshInterval(TimeSpan.FromSeconds(30)))
-                .UseFeatureFlags();
-        });
-
-        services.AddAzureAppConfiguration();
-        
-        services.AddFeatureManagement()
-            .AddFeatureFilter<TimeWindowFilter>()
-            .AddFeatureFilter<PercentageFilter>();
-    }
-    
-    private static void AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
-    {
-        services.AddAuthorization();
-        
-        services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
     }
 }

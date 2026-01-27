@@ -12,7 +12,9 @@ public sealed class HomeController : Controller
         {
             return RedirectToAction("Get", "Dashboard");
         }
-        
-        return View();
+        else
+        {
+            return RedirectToAction("Index", "Login");
+        }
     }
 }

@@ -20,7 +20,6 @@ if (!app.Environment.IsDevelopment())
 app.UseGovUkFrontend();
 app.UseStaticFiles();
 
-app.UseAzureAppConfiguration();
 app.UseHttpsRedirection();
 
 app.UseRouting();
