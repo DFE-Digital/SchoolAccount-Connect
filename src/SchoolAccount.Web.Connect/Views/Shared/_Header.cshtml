@@ -1,53 +1,209 @@
 @using SchoolAccount.Application
 @using SchoolAccount.Kernel
 @inject IUserContext CurrentUser
+
 @{
-    // This resolves the issue of "govuk-service-navigation-nav-item" active state not being set due to the query of a request
-    // <partial /> & @helper functions etc are not accepted.
-    List<(string, string, string[])> navigation =
+    List<(string url, string label, string[] childNodes)> navigation =
     [
         ("/", "Home", []),
         ("/support", "Support", [])
     ];
+
+    var isAuthenticated = CurrentUser?.IsAuthenticated == true;
+
+    var displayName =
+        CurrentUser?.PreferredName
+        ?? CurrentUser?.Name
+        ?? CurrentUser?.EmailAddress;
+
+    var path = Context.Request.Path.Value ?? string.Empty;
+
+    static string NormalisePath(string? p)
+    {
+        if (string.IsNullOrWhiteSpace(p)) return "/";
+        var result = p.Trim();
+        if (!result.StartsWith('/')) result = "/" + result;
+        if (result.Length > 1 && result.EndsWith('/')) result = result[..^1];
+        return result;
+    }
+
+    bool IsCurrent(string url)
+    {
+        var u = NormalisePath(url);
+        var p = NormalisePath(path);
+        return string.Equals(p, u, StringComparison.OrdinalIgnoreCase);
+    }
+
+    bool IsActive(string[] childNodes)
+    {
+        var p = NormalisePath(path);
+        return childNodes.Any(x => p.StartsWith(NormalisePath(x), StringComparison.OrdinalIgnoreCase));
+    }
+
+    string ActiveClass(string url, string[] childNodes) =>
+        (IsCurrent(url) || IsActive(childNodes))
+            ? "dfe-connect-header__nav-item--active"
+            : string.Empty;
 }
 
-<header class="govuk-header" data-module="govuk-header">
-    <div class="govuk-header__container govuk-width-container dfe-header-container">
-        <div class="govuk-header__logo">
-            <a href="/" class="govuk-header__link govuk-header__link--homepage">
-                <img src="~/lib/dfe-frontend/assets/image/department-for-education_white.png"
-                     alt="Department for Education" class="govuk-header__logotype">
-            </a>
+<header class="dfe-connect-header" role="banner">
+    <div class="dfe-connect-header__top">
+        <div class="dfe-connect-header__container dfe-connect-header__top-inner">
+            <div class="dfe-connect-header__brand">
+                <a href="/"
+                   class="dfe-connect-header__brand-link"
+                   aria-label="Department for Education home">
+                    <img src="~/lib/dfe-frontend/assets/image/department-for-education_white.png"
+                         alt="Department for Education"
+                         class="dfe-connect-header__dept-image" />
+                </a>
+            </div>
+
+            <div class="dfe-connect-header__account">
+                @if (isAuthenticated)
+                {
+                    @if (!string.IsNullOrWhiteSpace(displayName))
+                    {
+                        <span class="dfe-connect-header__school">@displayName</span>
+                    }
+
+                    <button class="dfe-connect-header__search-toggle"
+                            id="dfe-connect-search-toggle"
+                            type="button"
+                            aria-controls="dfe-connect-search-panel"
+                            aria-expanded="false">
+                        <span class="govuk-visually-hidden">Open search</span>
+
+                        <svg class="dfe-connect-header__icon dfe-connect-header__icon--search"
+                             xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true"
+                             focusable="false"
+                             width="24"
+                             height="24">
+                            <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+                        </svg>
+
+                        <svg class="dfe-connect-header__icon dfe-connect-header__icon--close"
+                             xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true"
+                             focusable="false"
+                             width="24"
+                             height="24">
+                            <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+                        </svg>
+                    </button>
+
+                    <a asp-area="MicrosoftIdentity"
+                       asp-controller="Account"
+                       asp-action="SignOut"
+                       class="dfe-connect-header__signout">Sign out</a>
+                }
+            </div>
         </div>
-        @if (CurrentUser?.IsAuthenticated == true)
-        {
-            <nav class="dfe-user-menu">
-                <ul class="dfe-nav-items">
-                    <li>
-                        Welcome <b>@CurrentUser.ToString()</b>
-                    </li>
-                    <li>
-                        <a class="dfe-nav-link" asp-area="MicrosoftIdentity" asp-controller="Account"
-                           asp-action="SignOut">Sign out</a>
-                    </li>
-                </ul>
-            </nav>
-        }
     </div>
+
+    @if (isAuthenticated)
+    {
+        <div class="dfe-connect-header__search-panel"
+             id="dfe-connect-search-panel"
+             hidden>
+            <div class="dfe-connect-header__container">
+                <h2 class="govuk-heading-m dfe-connect-header__search-title">Search</h2>
+
+                <form class="dfe-connect-header__search-form"
+                      id="dfe-connect-header-search-form"
+                      action="/search"
+                      method="get"
+                      role="search">
+                    <label class="govuk-visually-hidden" for="dfe-connect-search-field">Search</label>
+
+                    <input class="govuk-input dfe-connect-header__search-input"
+                           id="dfe-connect-search-field"
+                           name="q"
+                           type="search"
+                           autocomplete="off" />
+
+                    <button class="govuk-button dfe-connect-header__search-submit"
+                            type="submit"
+                            aria-label="Search">
+                        <svg class="dfe-connect-header__icon"
+                             xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true"
+                             focusable="false"
+                             width="20"
+                             height="20">
+                            <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+
+    @if (isAuthenticated)
+    {
+        <div class="dfe-connect-header__service">
+            <div class="dfe-connect-header__container dfe-connect-header__service-inner">
+
+                <div class="dfe-connect-header__service-row dfe-connect-header__service-row--desktop">
+                    <div class="dfe-connect-header__service-nav">
+                        <a href="/" class="dfe-connect-header__service-name">@ApplicationConstants.DfeConnect</a>
+
+                        <nav class="dfe-connect-header__nav" aria-label="Primary navigation">
+                            <ul class="dfe-connect-header__nav-list">
+                                @foreach (var (url, label, childNodes) in navigation)
+                                {
+                                    <li class="dfe-connect-header__nav-item @ActiveClass(url, childNodes)">
+                                        <a href="@url" class="dfe-connect-header__nav-link">@label</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="dfe-connect-header__mobile">
+                    <div class="dfe-connect-header__container dfe-connect-header__mobile-panel">
+                        <div class="dfe-connect-header__mobile-title">
+                            <div class="dfe-connect-header__mobile-service-name">@ApplicationConstants.DfeConnect</div>
+
+                            @if (!string.IsNullOrWhiteSpace(displayName))
+                            {
+                                <div class="dfe-connect-header__mobile-org">@displayName</div>
+                            }
+                        </div>
+
+                        <button type="button"
+                                class="dfe-connect-header__menu-toggle"
+                                id="dfe-connect-mobile-toggle"
+                                aria-controls="dfe-connect-mobile-nav"
+                                aria-expanded="false">
+                            Menu
+                            <span class="dfe-connect-header__menu-caret" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+                    <nav id="dfe-connect-mobile-nav"
+                         class="dfe-connect-header__mobile-nav"
+                         aria-label="Menu"
+                         hidden>
+                        <div class="dfe-connect-header__container">
+                            <ul class="dfe-connect-header__mobile-nav-list">
+                                @foreach (var (url, label, _) in navigation)
+                                {
+                                    <li class="dfe-connect-header__mobile-nav-item">
+                                        <a href="@url" class="dfe-connect-header__mobile-nav-link">@label</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+    }
 </header>
-@if (CurrentUser?.IsAuthenticated == true)
-{
-    <govuk-service-navigation service-name="@ApplicationConstants.DfeConnect" service-url="/">
-        <govuk-service-navigation-nav>
-            @foreach (var (url, label, childNodes) in navigation)
-            {
-                <govuk-service-navigation-nav-item
-                    href="@url"
-                    current="@(Context.Request.Path.Value?.Equals(url, StringComparison.OrdinalIgnoreCase) == true)"
-                    active="@childNodes.Any(x => Context.Request.Path.Value?.StartsWith(x) == true)">
-                    @label
-                </govuk-service-navigation-nav-item>
-            }
-        </govuk-service-navigation-nav>
-    </govuk-service-navigation>
-}
