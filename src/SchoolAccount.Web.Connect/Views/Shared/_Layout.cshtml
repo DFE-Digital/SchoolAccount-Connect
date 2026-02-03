@@ -18,7 +18,6 @@
     @Html.DfeFrontendStyleImports()
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/dfe-connect-header.css" asp-append-version="true" />
-    <script src="~/js/site.js" asp-append-version="true"></script>
 }
 
 @section BodyStart {
@@ -81,8 +80,8 @@ else
 
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
+<script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-
 @section Footer {
     <govuk-footer>
         <govuk-footer-meta>
