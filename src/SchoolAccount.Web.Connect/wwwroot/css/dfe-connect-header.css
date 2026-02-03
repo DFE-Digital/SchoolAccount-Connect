@@ -1,0 +1,781 @@
+﻿/* =============================================================
+   DfE Connect header (scoped)
+   - Blue DfE band with org + search toggle + sign out
+   - Expandable full-width search panel under blue band
+   - Desktop nav row + mobile menu panel
+============================================================= */
+
+header.dfe-connect-header,
+header.dfe-connect-header * {
+    box-sizing: border-box;
+}
+
+header.dfe-connect-header {
+    font-family: "GDS Transport", Arial, sans-serif;
+    color: #0b0c0c;
+}
+
+/* Accessibility tokens (scoped) */
+header.dfe-connect-header {
+    --dfe-focus-colour: #ffdd00;
+    --dfe-focus-text: #0b0c0c;
+    --dfe-focus-shadow: 0 -2px var(--dfe-focus-colour), 0 4px var(--dfe-focus-text);
+}
+
+/* Ensure icons follow the current text colour (so they go black on yellow focus) */
+header.dfe-connect-header .dfe-connect-header__icon {
+    fill: currentColor;
+}
+
+header.dfe-connect-header .dfe-connect-header__container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ------------------------------------------------------------
+   Accessibility: GOV.UK focus styles for interactive header items
+   - Applies to links, buttons, inputs, etc.
+   - Keeps search input interior white while still showing GOV.UK focus
+------------------------------------------------------------- */
+
+header.dfe-connect-header a:focus-visible,
+header.dfe-connect-header button:focus-visible,
+header.dfe-connect-header input:focus-visible,
+header.dfe-connect-header select:focus-visible,
+header.dfe-connect-header textarea:focus-visible,
+header.dfe-connect-header [role="button"]:focus-visible,
+header.dfe-connect-header [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 3px solid transparent;
+    background-color: var(--dfe-focus-colour);
+    color: var(--dfe-focus-text);
+    box-shadow: var(--dfe-focus-shadow);
+    text-decoration: none;
+}
+
+header.dfe-connect-header a:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+}
+
+/* Search input should stay white internally but still get GOV.UK focus treatment */
+header.dfe-connect-header .dfe-connect-header__search-input:focus-visible {
+    background-color: #ffffff;
+    color: var(--dfe-focus-text);
+    box-shadow:
+            inset 0 0 0 2px var(--dfe-focus-text),
+            var(--dfe-focus-shadow);
+}
+
+/* Remove any non-visible focus styles that could conflict */
+header.dfe-connect-header a:focus,
+header.dfe-connect-header button:focus,
+header.dfe-connect-header input:focus,
+header.dfe-connect-header select:focus,
+header.dfe-connect-header textarea:focus,
+header.dfe-connect-header [role="button"]:focus,
+header.dfe-connect-header [tabindex]:not([tabindex="-1"]):focus {
+    outline: none;
+}
+
+/* ---------------------------
+   Top blue band
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__top {
+    background-color: #1D70B8;
+    color: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__top-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    min-height: 72px;
+}
+
+header.dfe-connect-header .dfe-connect-header__brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+header.dfe-connect-header .dfe-connect-header__brand-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    min-width: 0;
+}
+
+header.dfe-connect-header img.dfe-connect-header__dept-image {
+    height: 30px;
+    width: auto;
+    max-width: 260px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Right-hand account area */
+header.dfe-connect-header .dfe-connect-header__account {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    font-size: 16px;
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__school {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 420px;
+}
+
+/* ---------------------------
+   Search toggle (blue band)
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__search-toggle {
+    height: 32px;
+    width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+header.dfe-connect-header .dfe-connect-header__search-toggle:focus {
+    outline: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-toggle:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 2px;
+}
+
+header.dfe-connect-header .dfe-connect-header__icon {
+    display: block;
+    fill: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__icon--close {
+    display: none;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__search-toggle[aria-expanded="true"] .dfe-connect-header__icon--search {
+    display: none;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__search-toggle[aria-expanded="true"] .dfe-connect-header__icon--close {
+    display: block;
+}
+
+/* ---------------------------
+   Sign out
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__signout {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: 400;
+    white-space: nowrap;
+    padding-left: 12px;
+}
+
+/* ---------------------------
+   Full-width search panel
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__search-panel {
+    background: #f3f2f1;
+    border-bottom: 1px solid #b1b4b6;
+    padding: 24px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-title {
+    margin: 0 0 16px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-form {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    max-width: 920px;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border-right: 0;
+    border-radius: 0;
+}
+
+/* Submit button: flat DfE blue */
+header.dfe-connect-header .dfe-connect-header__search-submit {
+    margin: 0;
+    min-width: 48px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    background-color: #1D70B8;
+    border-color: #1D70B8;
+    box-shadow: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit::before,
+header.dfe-connect-header .dfe-connect-header__search-submit::after {
+    content: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit .dfe-connect-header__icon {
+    fill: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit:hover {
+    background-color: #155a93;
+    border-color: #155a93;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-input:focus,
+header.dfe-connect-header .dfe-connect-header__search-submit:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-input:focus-visible {
+    box-shadow: inset 0 0 0 3px rgba(29, 112, 184, 0.25);
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit:focus-visible {
+    outline: 2px solid #0b0c0c;
+    outline-offset: 2px;
+}
+
+/* ---------------------------
+   Service row + nav
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__service {
+    background-color: #ffffff;
+    border-bottom: 1px solid #1D70B8;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-inner {
+    padding: 8px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-row--desktop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-nav {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-name {
+    font-weight: 700;
+    font-size: 19px;
+    text-decoration: none;
+    color: #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-name:hover {
+    text-decoration: underline;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-item {
+    margin: 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-link {
+    text-decoration: none;
+    font-size: 16px;
+    color: #1D70B8;
+    padding-bottom: 4px;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-link:hover {
+    text-decoration: underline;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__nav-item--active
+.dfe-connect-header__nav-link {
+    font-weight: 700;
+    border-bottom: 3px solid #1D70B8;
+}
+
+/* ---------------------------
+   Mobile menu
+---------------------------- */
+header.dfe-connect-header .dfe-connect-header__mobile {
+    display: none;
+    background: #ffffff;
+    border-top: 1px solid #b1b4b6;
+    border-bottom: 1px solid #b1b4b6;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-panel {
+    padding: 14px 16px;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-title {
+    margin-bottom: 8px;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-service-name {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.3;
+    margin: 0 0 4px 0;
+    color: #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-org {
+    font-size: 16px;
+    line-height: 1.35;
+    color: #0b0c0c;
+    word-break: break-word;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-toggle {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #1D70B8;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-toggle:focus {
+    outline: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-toggle:focus-visible {
+    outline: 3px solid #ffdd00;
+    outline-offset: 2px;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #1D70B8;
+    transform: translateY(1px);
+}
+
+/* Mobile nav: hidden attribute controls visibility */
+header.dfe-connect-header .dfe-connect-header__mobile-nav[hidden] {
+    display: none !important;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav {
+    display: block;
+}
+header.dfe-connect-header .dfe-connect-header__mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-item {
+    border-top: 1px solid #b1b4b6;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link {
+    display: block;
+    padding: 12px 16px;
+    color: #1D70B8;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
+    text-decoration: underline;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link:focus {
+    outline: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link:focus-visible {
+    outline: 3px solid #ffdd00;
+    outline-offset: -3px;
+    background: #ffdd00;
+    color: #0b0c0c;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__menu-toggle[aria-expanded="true"] .dfe-connect-header__menu-caret {
+    border-top: 0;
+    border-bottom: 7px solid #1D70B8;
+    transform: translateY(-1px);
+}
+
+/* ---------------------------
+   Responsive
+---------------------------- */
+@media (max-width: 768px) {
+    header.dfe-connect-header .dfe-connect-header__top-inner {
+        min-height: 56px;
+        padding: 8px 0;
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__school {
+        display: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__service-row--desktop {
+        display: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__mobile {
+        display: block;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 70%;
+    }
+
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 30px;
+        max-width: 230px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 36px;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 6px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-panel {
+        padding: 16px 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-form {
+        max-width: none;
+        width: 100%;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-submit {
+        min-width: 44px;
+        padding: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    header.dfe-connect-header .dfe-connect-header__container {
+        padding: 0 8px;
+    }
+
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 25px;
+        max-width: 210px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account {
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+    }
+}
+
+/* Mobile: reduce logo so the right side doesn't crop */
+@media (max-width: 480px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 20px;
+        max-width: 160px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 56%;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 6px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 18px;
+        max-width: 140px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 52%;
+    }
+}
+
+@media (max-width: 480px) {
+    header.dfe-connect-header .dfe-connect-header__search-form {
+        width: 100%;
+        max-width: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-input {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-submit {
+        flex: 0 0 44px;
+        width: 44px;
+        min-width: 44px;
+        padding: 0;
+    }
+}
+
+/* Mobile: always reduce the DfE logo so it doesn't dominate */
+@media (max-width: 768px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 20px !important;
+        max-width: 170px !important;
+        width: auto !important;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Give actions a bit more room */
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 58%;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 6px;
+    }
+}
+
+@media (max-width: 420px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 18px !important;
+        max-width: 150px !important;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 54%;
+    }
+}
+
+/* Mobile header — reduce DfE logo prominence */
+@media (max-width: 768px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 18px !important;
+        max-width: 140px !important;
+        width: auto !important;
+        object-fit: contain;
+        display: block;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        max-width: 55%;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Layout: allow both sides to size correctly without clipping */
+    header.dfe-connect-header .dfe-connect-header__top-inner {
+        gap: 10px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: none;
+    }
+
+    /* Mobile logo: not tiny, not dominant */
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 22px !important;
+        max-width: 210px !important;
+        width: auto !important;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Account area must be allowed to shrink inside the container */
+    header.dfe-connect-header .dfe-connect-header__account {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    /* Keep toggle compact so it doesn't steal width */
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+        flex: 0 0 auto;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    /* Prevent Sign out from forcing overflow */
+    header.dfe-connect-header .dfe-connect-header__signout {
+        flex: 0 0 auto;
+        padding-left: 6px;
+        max-width: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* Smaller screens: reduce logo slightly, but keep it readable */
+@media (max-width: 420px) {
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 20px !important;
+        max-width: 180px !important;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account {
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        max-width: 64px;
+    }
+}
+
+/* Large-mobile edge case (e.g. iPhone 14 Pro Max @ ~430px) */
+@media (min-width: 401px) and (max-width: 480px) {
+    header.dfe-connect-header .dfe-connect-header__container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__top-inner {
+        gap: 8px;
+    }
+
+    header.dfe-connect-header img.dfe-connect-header__dept-image {
+        height: 22px;
+        max-width: 190px;
+        width: auto;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account {
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 4px;
+    }
+}
+/* Accessibility: force GOV.UK yellow focus on search input */
+header.dfe-connect-header .dfe-connect-header__search-input:focus {
+    outline: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-input:focus-visible {
+    background-color: #ffffff;
+    color: #0b0c0c;
+    outline: 3px solid transparent;
+    box-shadow:
+            0 -4px #ffdd00,
+            0 4px #ffdd00,
+            inset 0 0 0 2px #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within {
+    outline: 3px solid #ffdd00;
+    outline-offset: 0;
+    box-shadow: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within .dfe-connect-header__search-input {
+    background-color: #ffffff;
+    color: #0b0c0c;
+    box-shadow: inset 0 0 0 2px #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-input:focus-visible,
+header.dfe-connect-header .dfe-connect-header__search-submit:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+/* ---------------------------
+   Footer override 
+---------------------------- */
+.govuk-footer {
+    font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: .875rem;
+    line-height: 1.1428571429;
+    padding-top: 25px;
+    padding-bottom: 15px;
+    border-top: 10px solid #1d70b8;
+    color: #0b0c0c;
+    background: #f3f2f1;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-panel[hidden] {
+    display: none !important;
+}
