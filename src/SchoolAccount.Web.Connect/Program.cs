@@ -2,8 +2,11 @@ using GovUk.Frontend.AspNetCore;
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.Web.Connect;
+using SchoolAccount.Web.Connect.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddApplicationSights(builder.Configuration);
 
 builder.Services
     .AddApplication(builder.Configuration)
