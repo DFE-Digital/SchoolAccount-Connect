@@ -1,8 +1,6 @@
-﻿using Contentful.AspNetCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Behaviours;
 
 namespace SchoolAccount.Application;
 
