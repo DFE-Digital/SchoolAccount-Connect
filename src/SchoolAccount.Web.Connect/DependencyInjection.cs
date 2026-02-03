@@ -7,6 +7,7 @@ using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using System.Reflection;
+using Microsoft.FeatureManagement;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -23,6 +24,7 @@ internal static class DependencyInjection
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
+        services.AddFeatureToggle();
         
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         
@@ -71,5 +73,11 @@ internal static class DependencyInjection
             [Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly],
             includeInternalTypes: true
         );
+    }
+
+    private static void AddFeatureToggle(this IServiceCollection services)
+    {
+        services.AddAzureAppConfiguration();
+        services.AddFeatureManagement();
     }
 }

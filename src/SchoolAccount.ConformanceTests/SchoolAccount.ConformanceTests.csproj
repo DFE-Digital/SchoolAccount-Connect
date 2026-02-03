@@ -29,6 +29,5 @@
       <ProjectReference Include="..\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
       <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
       <ProjectReference Include="..\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
-      <ProjectReference Include="..\SchoolAccount.Web.Manage\SchoolAccount.Web.Manage.csproj" />
     </ItemGroup>
 </Project>
