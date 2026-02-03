@@ -5,7 +5,7 @@ namespace SchoolAccount.Web.Connect.Helpers;
 
 internal static class RadioListItemHelpers
 {
-    internal static RadioListItem? ToRadioListItem(this Reference? item, bool includeHint = true)
+    private static RadioListItem? ToRadioListItem(this Reference? item, bool includeHint = true)
     {
         if (item == null)
         {

@@ -6,15 +6,18 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [AllowAnonymous]
 public sealed class HomeController : Controller
 {
+    [HttpGet]
     public IActionResult Index()
     {
-        if (User.Identity?.IsAuthenticated == true)
-        {
-            return RedirectToAction("Get", "Dashboard");
-        }
-        else
-        {
-            return RedirectToAction("Index", "Login");
-        }
+        return User.Identity?.IsAuthenticated == true 
+            ? RedirectToAction("Get", "Dashboard") 
+            : RedirectToAction("Index", "Login");
+    }
+
+    [Authorize]
+    [HttpGet("support")]
+    public IActionResult Support()
+    {
+        return View("Support");
     }
 }

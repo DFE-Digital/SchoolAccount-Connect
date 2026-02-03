@@ -5,9 +5,8 @@
 @{
     List<(string url, string label, string[] childNodes)> navigation =
     [
-        ("/page", "Pages", []),
-        ("/service", "Services", []),
-        ("/resource/list", "Resources", ["/resource"]),
+        ("/", "Home", []),
+        ("/support", "Support", [])
     ];
 
     var isAuthenticated = CurrentUser?.IsAuthenticated == true;
@@ -151,7 +150,7 @@
 
                 <div class="dfe-connect-header__service-row dfe-connect-header__service-row--desktop">
                     <div class="dfe-connect-header__service-nav">
-                        <a href="/" class="dfe-connect-header__service-name">@ApplicationConstants.DfeConnectManage</a>
+                        <a href="/" class="dfe-connect-header__service-name">@ApplicationConstants.DfeConnect</a>
 
                         <nav class="dfe-connect-header__nav" aria-label="Primary navigation">
                             <ul class="dfe-connect-header__nav-list">
@@ -169,7 +168,7 @@
                 <div class="dfe-connect-header__mobile">
                     <div class="dfe-connect-header__container dfe-connect-header__mobile-panel">
                         <div class="dfe-connect-header__mobile-title">
-                            <div class="dfe-connect-header__mobile-service-name">@ApplicationConstants.DfeConnectManage</div>
+                            <div class="dfe-connect-header__mobile-service-name">@ApplicationConstants.DfeConnect</div>
 
                             @if (!string.IsNullOrWhiteSpace(displayName))
                             {
