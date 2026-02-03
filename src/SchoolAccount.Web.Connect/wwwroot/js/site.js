@@ -41,7 +41,6 @@
     var searchPanel = document.getElementById('dfe-connect-search-panel');
 
     if (searchToggle && searchPanel) {
-        // normalise initial state (keeps icons & panel in sync)
         searchToggle.setAttribute('aria-expanded', 'false');
         searchPanel.hidden = true;
 
