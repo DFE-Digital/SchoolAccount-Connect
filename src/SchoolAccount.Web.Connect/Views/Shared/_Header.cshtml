@@ -6,9 +6,8 @@
     // <partial /> & @helper functions etc are not accepted.
     List<(string, string, string[])> navigation =
     [
-        ("/page", "Pages", []),
-        ("/service", "Services", []),
-        ("/resource/list", "Resources", ["/resource"]),
+        ("/", "Home", []),
+        ("/support", "Support", [])
     ];
 }
 
@@ -38,7 +37,7 @@
 </header>
 @if (CurrentUser?.IsAuthenticated == true)
 {
-    <govuk-service-navigation service-name="@ApplicationConstants.DfeConnectManage" service-url="/">
+    <govuk-service-navigation service-name="@ApplicationConstants.DfeConnect" service-url="/">
         <govuk-service-navigation-nav>
             @foreach (var (url, label, childNodes) in navigation)
             {

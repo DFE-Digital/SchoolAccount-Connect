@@ -5,9 +5,9 @@ using SchoolAccount.Web.Connect.HtmlGeneration;
 
 namespace SchoolAccount.Web.Connect.Extensions;
 
-public static class HtmlHelperExtensions
+internal static class HtmlHelperExtensions
 {
-    public static IHtmlContent MojFrontendScriptImports(this IHtmlHelper htmlHelper)
+    internal static IHtmlContent MojFrontendScriptImports(this IHtmlHelper htmlHelper)
     {
         return HtmlContentExtensions.Combine(
             ComponentGenerator.Generate("script",
@@ -17,19 +17,15 @@ public static class HtmlHelperExtensions
         );
     }
 
-    public static IHtmlContent MojFrontendStyleImports(this IHtmlHelper htmlHelper)
+    internal static IHtmlContent MojFrontendStyleImports(this IHtmlHelper htmlHelper)
     {
         return new HtmlString(
             $"<link rel=\"stylesheet\" href=\"{PageTemplateHelper.GetMojStyleAssetUrl()}\" />");
     }
 
-    public static IHtmlContent DfeFrontendStyleImports(this IHtmlHelper htmlHelper)
+    internal static IHtmlContent DfeFrontendStyleImports(this IHtmlHelper htmlHelper)
     {
-        return ComponentGenerator.Generate("link",
-            attributes:
-            [
-                ("rel", "stylesheet"), ("href", PageTemplateHelper.GetDfeStyleAssetUrl()),
-                ("asp-append-version", "true")
-            ]);
+        return new HtmlString(
+            $"<link rel=\"stylesheet\" href=\"{PageTemplateHelper.GetDfeStyleAssetUrl()}\" asp-append-version=\"true\" />");
     }
 }
