@@ -35,3 +35,9 @@ app.ExceptionHandlers();
 app.StripHeaders();
 
 app.Run();
+
+public partial class Program
+{
+    // This partial class is used to allow the Program class to be extended in other files.
+}
+

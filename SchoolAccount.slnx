@@ -19,5 +19,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
+    <Project Path="src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
   </Folder>
 </Solution>
