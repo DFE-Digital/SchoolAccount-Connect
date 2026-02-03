@@ -48,7 +48,7 @@
 
 <header class="dfe-connect-header" role="banner">
     <div class="dfe-connect-header__top">
-        <div class="dfe-connect-header__container dfe-connect-header__top-inner">
+        <div class="govuk-width-container dfe-connect-header__top-inner">
             <div class="dfe-connect-header__brand">
                 <a href="/"
                    class="dfe-connect-header__brand-link"
@@ -109,7 +109,7 @@
         <div class="dfe-connect-header__search-panel"
              id="dfe-connect-search-panel"
              hidden>
-            <div class="dfe-connect-header__container">
+            <div class="govuk-width-container">
                 <h2 class="govuk-heading-m dfe-connect-header__search-title">Search</h2>
 
                 <form class="dfe-connect-header__search-form"
@@ -146,7 +146,7 @@
     @if (isAuthenticated)
     {
         <div class="dfe-connect-header__service">
-            <div class="dfe-connect-header__container dfe-connect-header__service-inner">
+            <div class="govuk-width-container dfe-connect-header__service-inner">
 
                 <div class="dfe-connect-header__service-row dfe-connect-header__service-row--desktop">
                     <div class="dfe-connect-header__service-nav">
@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="dfe-connect-header__mobile">
-                    <div class="dfe-connect-header__container dfe-connect-header__mobile-panel">
+                    <div class="dfe-connect-header__mobile-panel">
                         <div class="dfe-connect-header__mobile-title">
                             <div class="dfe-connect-header__mobile-service-name">@ApplicationConstants.DfeConnect</div>
 
@@ -190,7 +190,7 @@
                          class="dfe-connect-header__mobile-nav"
                          aria-label="Menu"
                          hidden>
-                        <div class="dfe-connect-header__container">
+                        <div class="govuk-width-container">
                             <ul class="dfe-connect-header__mobile-nav-list">
                                 @foreach (var (url, label, _) in navigation)
                                 {
