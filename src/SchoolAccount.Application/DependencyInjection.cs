@@ -1,14 +1,12 @@
-﻿using Contentful.AspNetCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Behaviours;
 
 namespace SchoolAccount.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
@@ -22,9 +20,7 @@ public static class DependencyInjection
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
-
-        services.AddContentful(configuration);
-
+        
         //services.Decorate(typeof(ICommandHandler<,>), typeof(ValidationDecorator.CommandHandler<,>));
         //services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
 
