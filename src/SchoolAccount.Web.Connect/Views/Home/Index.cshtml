@@ -1,8 +1,14 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using SchoolAccount.Kernel
+@model SchoolAccount.Application.Features.Dashboard.Queries.GetDashboard.DashboardLists
+@inject IUserContext CurrentUser;
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Welcome to DfE Connect</h1>
+        <p class="govuk-body-l govuk-!-margin-bottom-8">Manage your tasks, access services and find related guidance to help you run your school and work with us.</p>
+    </div>
 </div>

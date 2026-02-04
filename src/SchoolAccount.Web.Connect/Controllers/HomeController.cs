@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-[AllowAnonymous]
 public sealed class HomeController : Controller
 {
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Index()
     {
         return User.Identity?.IsAuthenticated == true 
-            ? RedirectToAction("Get", "Dashboard") 
+            ? View("Index")
             : RedirectToAction("Index", "Login");
     }
 
@@ -20,4 +20,6 @@ public sealed class HomeController : Controller
     {
         return View("Support");
     }
+    
+    
 }
