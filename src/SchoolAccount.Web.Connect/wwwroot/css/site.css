@@ -213,3 +213,510 @@ a.dfe-nav-link {
 .card h1.card-title {
     font-size: 2em;
 }
+
+/* =========================================================
+   DfE Connect Header
+   ========================================================= */
+
+/* =============================================================
+   DfE Connect header (scoped)
+   - Blue DfE band with org + search toggle + sign out
+   - Expandable full-width search panel under blue band
+   - Desktop nav row + mobile menu
+   Assumes containers are .govuk-width-container in markup
+============================================================= */
+
+header.dfe-connect-header,
+header.dfe-connect-header * {
+    box-sizing: border-box;
+}
+
+header.dfe-connect-header {
+    font-family: "GDS Transport", Arial, sans-serif;
+    color: #0b0c0c;
+
+    --dfe-blue: #1d70b8;
+    --dfe-blue-dark: #155a93;
+    --dfe-border: #b1b4b6;
+    --dfe-bg: #f3f2f1;
+
+    --dfe-focus-colour: #ffdd00;
+    --dfe-focus-text: #0b0c0c;
+    --dfe-focus-shadow: 0 -2px var(--dfe-focus-colour), 0 4px var(--dfe-focus-text);
+}
+
+/* Icons follow text colour so they go black on yellow focus */
+header.dfe-connect-header .dfe-connect-header__icon {
+    display: block;
+    fill: currentColor;
+}
+
+/* ------------------------------------------------------------
+   Focus styling (GOV.UK-like, scoped)
+   NOTE: search is handled separately as a grouped control
+------------------------------------------------------------- */
+header.dfe-connect-header a:focus-visible,
+header.dfe-connect-header button:focus-visible,
+header.dfe-connect-header input:focus-visible,
+header.dfe-connect-header select:focus-visible,
+header.dfe-connect-header textarea:focus-visible,
+header.dfe-connect-header [role="button"]:focus-visible,
+header.dfe-connect-header [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 3px solid transparent;
+    background-color: var(--dfe-focus-colour);
+    color: var(--dfe-focus-text);
+    box-shadow: var(--dfe-focus-shadow);
+    text-decoration: none;
+}
+
+header.dfe-connect-header a:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+}
+
+/* ------------------------------------------------------------
+   Top blue band
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__top {
+    background-color: var(--dfe-blue);
+    color: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__top-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    min-height: 72px;
+}
+
+/* Brand (left) */
+header.dfe-connect-header .dfe-connect-header__brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+header.dfe-connect-header .dfe-connect-header__brand-link {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__dept-image {
+    height: 30px;
+    width: auto;
+    max-width: 260px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Account/actions (right) */
+header.dfe-connect-header .dfe-connect-header__account {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    font-size: 16px;
+    min-width: 0;
+    flex: 0 0 auto;
+}
+
+header.dfe-connect-header .dfe-connect-header__school {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 420px;
+    color: #ffffff;
+}
+
+/* ------------------------------------------------------------
+   Search toggle (blue band)
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__search-toggle {
+    height: 32px;
+    width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    color: #ffffff;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+header.dfe-connect-header .dfe-connect-header__icon--close {
+    display: none;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__search-toggle[aria-expanded="true"] .dfe-connect-header__icon--search {
+    display: none;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__search-toggle[aria-expanded="true"] .dfe-connect-header__icon--close {
+    display: block;
+}
+
+/* ------------------------------------------------------------
+   Sign out
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__signout {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: underline;
+    white-space: nowrap;
+    padding-left: 12px;
+}
+
+/* ------------------------------------------------------------
+   Full-width search panel
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__search-panel {
+    background: var(--dfe-bg);
+    border-bottom: 1px solid var(--dfe-border);
+    padding: 24px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-panel[hidden] {
+    display: none !important;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-title {
+    margin: 0 0 16px 0;
+}
+
+/* Desktop: keep search full-width like before (no max-width cap) */
+header.dfe-connect-header .dfe-connect-header__search-form {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    max-width: 920px; /* restore your original desktop width */
+}
+
+/* Input */
+header.dfe-connect-header .dfe-connect-header__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border-right: 0;
+    border-radius: 0;
+}
+
+/* Submit button */
+header.dfe-connect-header .dfe-connect-header__search-submit {
+    margin: 0;
+    min-width: 48px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    background-color: var(--dfe-blue);
+    border-color: var(--dfe-blue);
+    box-shadow: none;
+    color: #ffffff;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit::before,
+header.dfe-connect-header .dfe-connect-header__search-submit::after {
+    content: none;
+}
+
+header.dfe-connect-header .dfe-connect-header__search-submit:hover {
+    background-color: var(--dfe-blue-dark);
+    border-color: var(--dfe-blue-dark);
+}
+
+/* --- Search grouped focus ring (yellow border around input+button) --- */
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within {
+    outline: 3px solid transparent;
+    box-shadow: 0 0 0 4px var(--dfe-focus-colour);
+}
+
+/* Keep input interior white + black inner line when focused */
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within
+.dfe-connect-header__search-input {
+    background: #ffffff;
+    color: var(--dfe-focus-text);
+    box-shadow: inset 0 0 0 2px var(--dfe-focus-text);
+}
+
+/* Avoid generic focus yellow background fighting inside the grouped control */
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within
+.dfe-connect-header__search-input:focus-visible,
+header.dfe-connect-header .dfe-connect-header__search-form:focus-within
+.dfe-connect-header__search-submit:focus-visible {
+    background-color: initial;
+    color: inherit;
+    box-shadow: none;
+}
+
+/* Avoid double outlines on inner controls */
+header.dfe-connect-header .dfe-connect-header__search-input:focus-visible,
+header.dfe-connect-header .dfe-connect-header__search-submit:focus-visible {
+    outline: 0;
+}
+
+/* ------------------------------------------------------------
+   Service row + nav (desktop)
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__service {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--dfe-blue);
+}
+
+header.dfe-connect-header .dfe-connect-header__service-inner {
+    padding: 8px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-row--desktop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-nav {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-name {
+    font-weight: 700;
+    font-size: 19px;
+    text-decoration: none;
+    color: #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-name:hover {
+    text-decoration: underline;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-item {
+    margin: 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-link {
+    text-decoration: none;
+    font-size: 16px;
+    color: var(--dfe-blue);
+    padding-bottom: 4px;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-link:hover {
+    text-decoration: underline;
+}
+
+header.dfe-connect-header
+.dfe-connect-header__nav-item--active .dfe-connect-header__nav-link {
+    font-weight: 700;
+    border-bottom: 3px solid var(--dfe-blue);
+}
+
+/* ------------------------------------------------------------
+   Mobile menu
+------------------------------------------------------------- */
+header.dfe-connect-header .dfe-connect-header__mobile {
+    display: none;
+    background: #ffffff;
+    border-top: 1px solid var(--dfe-border);
+    border-bottom: 1px solid var(--dfe-border);
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-panel {
+    padding: 14px 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-title {
+    margin-bottom: 8px;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-service-name {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.3;
+    margin: 0 0 4px 0;
+    color: #0b0c0c;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-org {
+    font-size: 16px;
+    line-height: 1.35;
+    color: #0b0c0c;
+    word-break: break-word;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-toggle {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--dfe-blue);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+header.dfe-connect-header .dfe-connect-header__menu-caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--dfe-blue);
+    transform: translateY(1px);
+}
+
+header.dfe-connect-header
+.dfe-connect-header__menu-toggle[aria-expanded="true"] .dfe-connect-header__menu-caret {
+    border-top: 0;
+    border-bottom: 7px solid var(--dfe-blue);
+    transform: translateY(-1px);
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav[hidden] {
+    display: none !important;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-item {
+    border-top: 1px solid var(--dfe-border);
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link {
+    display: block;
+    padding: 12px 0;
+    color: var(--dfe-blue);
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------
+   Responsive
+------------------------------------------------------------- */
+@media (max-width: 768px) {
+    /* Top band layout */
+    header.dfe-connect-header .dfe-connect-header__top-inner {
+        min-height: 56px;
+        padding: 8px 0;
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__brand {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__dept-image {
+        height: 20px;
+        max-width: 160px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__school {
+        display: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account {
+        flex: 0 0 auto;
+        min-width: 0;
+        gap: 10px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 36px;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        padding-left: 6px;
+        max-width: 70px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Search panel */
+    header.dfe-connect-header .dfe-connect-header__search-panel {
+        padding: 16px 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-form {
+        max-width: none;
+        width: 100%;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-submit {
+        flex: 0 0 44px;
+        width: 44px;
+        min-width: 44px;
+        padding: 0;
+    }
+
+    /* Service row */
+    header.dfe-connect-header .dfe-connect-header__service-row--desktop {
+        display: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__mobile {
+        display: block;
+    }
+}
+
+@media (max-width: 420px) {
+    header.dfe-connect-header .dfe-connect-header__dept-image {
+        height: 18px;
+        max-width: 140px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account {
+        gap: 8px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__search-toggle {
+        width: 34px;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__signout {
+        max-width: 64px;
+    }
+}
