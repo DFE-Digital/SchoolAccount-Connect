@@ -79,9 +79,9 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         
-        var loginHtml = await HtmlHelpers.GetDocumentAsync(response);
+        var landingHtml = await HtmlHelpers.GetDocumentAsync(response);
         
-        var welcomeTextElement = loginHtml.QuerySelector("h1");
+        var welcomeTextElement = landingHtml.QuerySelector("h1");
         
         Assert.NotNull(welcomeTextElement);
         Assert.Equal("Welcome to DfE Connect", welcomeTextElement.InnerHtml);
