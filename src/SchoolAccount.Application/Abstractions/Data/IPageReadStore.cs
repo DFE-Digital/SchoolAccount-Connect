@@ -4,7 +4,7 @@ namespace SchoolAccount.Application.Abstractions.Data;
 
 public interface IPageReadStore
 {
-    Task<TaskWithSubTasks> GetAllPagesAsync(
+    Task<TaskWithSubTasks> SearchTasksAsync(
         TaskSearchQuery query,
         CancellationToken cancellationToken);
 }

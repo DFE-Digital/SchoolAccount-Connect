@@ -27,7 +27,7 @@ public sealed class HomeController(IPageReadStore pageReadStore) : Controller
     [HttpGet("home/task-search")]
     public async Task<ActionResult<TaskWithSubTasks>> TaskSearch([FromQuery] string term, CancellationToken cancellationToken)
     {
-        var result = await pageReadStore.GetAllPagesAsync(new TaskSearchQuery(term), cancellationToken);
+        var result = await pageReadStore.SearchTasksAsync(new TaskSearchQuery(term), cancellationToken);
         return Ok(result);
     }
 }
