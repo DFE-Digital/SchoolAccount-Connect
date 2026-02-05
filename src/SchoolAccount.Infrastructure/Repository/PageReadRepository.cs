@@ -6,7 +6,7 @@ namespace SchoolAccount.Infrastructure.Repository;
 
 public sealed class PageReadRepository(IApplicationDbContext applicationDbContext) : IPageReadStore
 {
-    public async Task<TaskWithSubTasks> GetAllPagesAsync(TaskSearchQuery query, CancellationToken cancellationToken)
+    public async Task<TaskWithSubTasks> SearchTasksAsync(TaskSearchQuery query, CancellationToken cancellationToken)
     {
         var term = query.Term?.Trim();
 
