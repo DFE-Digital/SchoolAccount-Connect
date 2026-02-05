@@ -12,54 +12,66 @@ public sealed class PageReadRepository(
     public async Task<TaskWithSubTasks> GetAllPagesAsync(TaskSearchQuery query, CancellationToken cancellationToken)
     {
         var term = query.Term?.Trim();
+        var isInitialLoad = string.IsNullOrWhiteSpace(term);
+
+        var from = dateTimeProvider.UtcNow.Date;
+        var to = from.AddMonths(12);
 
         var tasksQuery = applicationDbContext.Tasks
             .AsNoTracking()
-            .Where(x => x.IsDeleted != true)
-            .Where(x => x.IsLatestVersion);
+            .Where(t => t.IsDeleted != true)
+            .Where(t => t.IsLatestVersion);
 
-        if (string.IsNullOrWhiteSpace(term))
+        if (isInitialLoad)
         {
-            
-            var from = dateTimeProvider.UtcNow.Date;
-            var to = from.AddMonths(12);
-
-            tasksQuery = tasksQuery
-                .Where(x => x.PublishDate != null)
-                .Where(x => x.PublishDate >= from && x.PublishDate < to);
+            tasksQuery = tasksQuery.Where(t =>
+                applicationDbContext.SubTasks.Any(st =>
+                    st.IsDeleted != true &&
+                    st.TaskId == t.Id &&
+                    st.DueDate != null &&
+                    st.DueDate >= from &&
+                    st.DueDate < to));
         }
         else
         {
             var like = $"%{term}%";
-            tasksQuery = tasksQuery.Where(x =>
-                EF.Functions.Like(x.TaskName!, like) ||
-                EF.Functions.Like(x.TaskReferenceNo!, like));
+            tasksQuery = tasksQuery.Where(t =>
+                EF.Functions.Like(t.TaskName!, like) ||
+                EF.Functions.Like(t.TaskReferenceNo!, like));
         }
 
         var tasks = await tasksQuery
-            .OrderBy(x => x.PublishDate)
-            .ThenByDescending(x => x.DateUpdated)
-            .Select(x => new TaskListItem(
-                x.Id,
-                x.TaskReferenceNo ?? string.Empty,
-                x.TaskName ?? string.Empty,
-                x.UpdatedBy,
-                x.DateUpdated
+            .OrderByDescending(t => t.DateUpdated)
+            .Select(t => new TaskListItem(
+                t.Id,
+                t.TaskReferenceNo ?? string.Empty,
+                t.TaskName ?? string.Empty,
+                t.UpdatedBy,
+                t.DateUpdated
             ))
             .ToListAsync(cancellationToken);
 
-        var taskIds = tasks.Select(x => x.Id).ToArray();
+        var taskIds = tasks.Select(t => t.Id).ToArray();
 
-        var subTasks = await applicationDbContext.SubTasks
+        var subTasksQuery = applicationDbContext.SubTasks
             .AsNoTracking()
-            .Where(x => x.IsDeleted != true)
-            .Where(x => taskIds.Contains(x.TaskId))
-            .OrderByDescending(x => x.DateUpdated)
-            .Select(x => new SubTaskListItem(
-                x.Id,
-                x.SubTaskName ?? x.SubTaskReferenceNo ?? string.Empty,
-                x.UpdatedBy,
-                x.DateUpdated
+            .Where(st => st.IsDeleted != true)
+            .Where(st => taskIds.Contains(st.TaskId));
+
+        if (isInitialLoad)
+        {
+            subTasksQuery = subTasksQuery
+                .Where(st => st.DueDate != null)
+                .Where(st => st.DueDate >= from && st.DueDate < to);
+        }
+
+        var subTasks = await subTasksQuery
+            .OrderByDescending(st => st.DateUpdated)
+            .Select(st => new SubTaskListItem(
+                st.Id,
+                st.SubTaskName ?? st.SubTaskReferenceNo ?? string.Empty,
+                st.UpdatedBy,
+                st.DateUpdated
             ))
             .ToListAsync(cancellationToken);
 
