@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure.Mapping;
+using SchoolAccount.Infrastructure.Repository;
 using SchoolAccount.Infrastructure.Time;
 using SchoolAccount.Kernel;
 
@@ -66,6 +68,7 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddScoped<IPageReadStore, PageReadRepository>();
 
         return services;
     }
