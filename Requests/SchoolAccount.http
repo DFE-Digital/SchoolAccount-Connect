@@ -8,6 +8,10 @@ GET https://localhost:7299/team/4
 ###
 GET http://localhost:5231/team/5
 ###
+GET http://localhost:5231/home/task-search?term=pupil
+###
+GET https://127.0.0.1:7033/home/task-search?term=pupil
+###
 POST https://localhost:7299/team
 Content-Type: application/json
 
