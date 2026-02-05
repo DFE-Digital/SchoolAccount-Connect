@@ -1,26 +1,34 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Repository;
 
-public sealed class PageReadRepository(IApplicationDbContext applicationDbContext) : IPageReadStore
+public sealed class PageReadRepository(
+    IApplicationDbContext applicationDbContext,
+    IDateTimeProvider dateTimeProvider) : IPageReadStore
 {
-    public async Task<TaskWithSubTasks> SearchTasksAsync(TaskSearchQuery query, CancellationToken cancellationToken)
+    public async Task<TaskWithSubTasks> GetAllPagesAsync(TaskSearchQuery query, CancellationToken cancellationToken)
     {
         var term = query.Term?.Trim();
-
-        if (string.IsNullOrWhiteSpace(term))
-        {
-            return new TaskWithSubTasks(Array.Empty<TaskListItem>(), Array.Empty<SubTaskListItem>());
-        }
 
         var tasksQuery = applicationDbContext.Tasks
             .AsNoTracking()
             .Where(x => x.IsDeleted != true)
             .Where(x => x.IsLatestVersion);
 
-        if (!string.IsNullOrWhiteSpace(term))
+        if (string.IsNullOrWhiteSpace(term))
+        {
+            
+            var from = dateTimeProvider.UtcNow.Date;
+            var to = from.AddMonths(12);
+
+            tasksQuery = tasksQuery
+                .Where(x => x.PublishDate != null)
+                .Where(x => x.PublishDate >= from && x.PublishDate < to);
+        }
+        else
         {
             var like = $"%{term}%";
             tasksQuery = tasksQuery.Where(x =>
@@ -29,7 +37,8 @@ public sealed class PageReadRepository(IApplicationDbContext applicationDbContex
         }
 
         var tasks = await tasksQuery
-            .OrderByDescending(x => x.DateUpdated)
+            .OrderBy(x => x.PublishDate)
+            .ThenByDescending(x => x.DateUpdated)
             .Select(x => new TaskListItem(
                 x.Id,
                 x.TaskReferenceNo ?? string.Empty,

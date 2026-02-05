@@ -9,7 +9,7 @@ public sealed class TaskSearchQueryHandler(IPageReadStore pageReadStore)
 {
     public async Task<Result<TaskWithSubTasks>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
     {
-        var result = await pageReadStore.SearchTasksAsync(query, cancellationToken);
+        var result = await pageReadStore.GetAllPagesAsync(query, cancellationToken);
 
         return Result.Success(result);
     }
