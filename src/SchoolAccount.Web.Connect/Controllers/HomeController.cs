@@ -20,6 +20,4 @@ public sealed class HomeController : Controller
     {
         return View("Support");
     }
-    
-    
 }

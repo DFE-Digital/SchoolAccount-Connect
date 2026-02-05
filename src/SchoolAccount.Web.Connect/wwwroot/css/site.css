@@ -218,14 +218,6 @@ a.dfe-nav-link {
    DfE Connect Header
    ========================================================= */
 
-/* =============================================================
-   DfE Connect header (scoped)
-   - Blue DfE band with org + search toggle + sign out
-   - Expandable full-width search panel under blue band
-   - Desktop nav row + mobile menu
-   Assumes containers are .govuk-width-container in markup
-============================================================= */
-
 header.dfe-connect-header,
 header.dfe-connect-header * {
     box-sizing: border-box;
