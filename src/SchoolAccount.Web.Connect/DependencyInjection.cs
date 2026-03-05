@@ -8,7 +8,9 @@ using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using System.Reflection;
 using Microsoft.FeatureManagement;
-using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Web.Connect.Middleware;
+using SchoolAccount.Web.Connect.Middleware.Gates;
+using SchoolAccount.Web.Connect.Middleware.Interfaces;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -24,8 +26,8 @@ internal static class DependencyInjection
         
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();
-        services.AddScoped<IOrganisationContext, OrganisationContext>();
+        services.AddContexts();
+        services.AddRequestGates();
         services.AddFeatureToggle();
         
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
@@ -35,6 +37,19 @@ internal static class DependencyInjection
             .AddMicrosoftIdentityUI();
         
         services.AddDfeSignInAuthentication(configurationManager);
+        services.AddSession();
+    }
+
+    private static void AddContexts(this IServiceCollection services)
+    {
+        services.AddScoped<IUserContext, UserContext>();
+        services.AddScoped<IOrganisationContext, OrganisationContext>();
+    }
+
+    private static void AddRequestGates(this IServiceCollection services)
+    {
+        services.AddScoped<IRequestGate, MaintenanceRequestGate>();
+        services.AddScoped<IRequestGate, MatAcceptanceRequestGate>();
     }
 
     internal static void ConfigureAreas(this WebApplication app)
@@ -81,5 +96,10 @@ internal static class DependencyInjection
     {
         services.AddAzureAppConfiguration();
         services.AddFeatureManagement();
+    }
+
+    public static void AddMiddleware(this WebApplication app)
+    {
+        app.UseMiddleware<RequestGateMiddleware>();
     }
 }

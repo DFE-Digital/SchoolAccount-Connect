@@ -1,46 +1,46 @@
-using System.Text.Json;
+using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
+using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Authentication;
 
-public class OrganisationContext : IOrganisationContext
+public class OrganisationContext(
+    IHttpContextAccessor contextAccessor,
+    IProviderResolver providerResolver,
+    IOrganisationResolver organisationResolver
+) : IOrganisationContext
 {
-    private readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
     private SchoolType? _schoolType;
     private IProvider? _provider;
-    private readonly IHttpContextAccessor _contextAccessor;
-    private readonly IProviderResolver _providerResolver;
+    private IOrganisation? _organisation;
 
-    public OrganisationContext(IHttpContextAccessor contextAccessor, IProviderResolver providerResolver)
-    {
-        _contextAccessor = contextAccessor;
-        _providerResolver = providerResolver;
+    private OrganisationClaim? Claim { get; } = contextAccessor.GetOrganisation();
 
-        var organisation = _contextAccessor.HttpContext?.User.FindFirst(ClaimConstants.Organisation)?.Value;
-        if (!string.IsNullOrEmpty(organisation))
-        {
-            Organisation = JsonSerializer.Deserialize<OrganisationClaim>(organisation, _options);
-        }
-    }
-
-    public OrganisationClaim? Organisation { get; }
-
-    public bool IsValid => Organisation is not null;
+    public bool IsValid => Claim is not null;
     public bool IsAuthenticated => IsValid && Provider is not NullProvider; 
-    public string Ukrpn => Organisation?.Ukprn!;
-    public string Name => Organisation?.Name!;
-    public SchoolType Type => _schoolType ??= DetermineSchoolType();
-    public EstablishmentType Establishment => Organisation?.Type?.Id ?? EstablishmentType.Undeclared;
-    public OrganisationCategory Category => Organisation?.Category?.Id ?? OrganisationCategory.Undeclared;
-
-    public IProvider Provider => _provider ??= _providerResolver.Resolve(Organisation);
     
+    public SchoolType Type 
+        => _schoolType ??= DetermineSchoolType();
+    
+    public EstablishmentType Establishment 
+        => Claim?.Type?.Id ?? EstablishmentType.Undeclared;
+    
+    public OrganisationCategory Category 
+        => Claim?.Category?.Id ?? OrganisationCategory.Undeclared;
+
+    public IProvider Provider 
+        => _provider ??= providerResolver.Resolve(Claim);
+    
+    public IOrganisation Organisation 
+        => _organisation ??= organisationResolver.Resolve(Claim) 
+                             ?? throw new NotSupportedException(Claim?.Category?.Name ?? "Unknown Organisation");
+
     private SchoolType DetermineSchoolType()
     {
-        return Organisation?.Type?.Id switch
+        return Claim?.Type?.Id switch
         {
             EstablishmentType.AcademyConverter
                 or EstablishmentType.AcademySponsorLed

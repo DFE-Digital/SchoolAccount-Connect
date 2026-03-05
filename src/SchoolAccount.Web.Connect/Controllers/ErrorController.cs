@@ -11,7 +11,7 @@ public class ErrorController(
     IWebHostEnvironment environment
 ) : Controller
 {
-    [Route("/error/{code}")]
+    [Route(RouteConstants.Error)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(int? code)
     {

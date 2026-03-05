@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Integration.DfESignIn.Attributes;
@@ -29,12 +30,6 @@ public sealed class HomeController(
         return View("Index", result.Value);
     }
 
-    [HttpGet("support")]
-    public IActionResult Support()
-    {
-        return View("Support");
-    }
-
     [HttpGet("home/task-search")]
     public async Task<ActionResult<TaskWithSubTasks>> TaskSearch(
         [FromQuery] string term,
@@ -50,5 +45,18 @@ public sealed class HomeController(
         }
 
         return Ok(result.Value);
+    }
+
+    [HttpGet(RouteConstants.Support)]
+    public IActionResult Support()
+    {
+        return View("Support");
+    }
+
+    [HttpGet(RouteConstants.Maintenance)]
+    [FeatureGate(FeatureNameConstants.MaintenanceMode)]
+    public IActionResult Maintenance()
+    {
+        return View();
     }
 }

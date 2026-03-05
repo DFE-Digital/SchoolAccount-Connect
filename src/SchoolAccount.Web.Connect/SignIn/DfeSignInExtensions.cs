@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using SchoolAccount.Application.Resolvers;
+using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Authentication;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
@@ -28,6 +30,7 @@ internal static class DfeSignInExtensions
         services.AddScoped<IProvider, SpecialsProvider>();
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
+        services.AddScoped<IOrganisationResolver, OrganisationResolver>();
 
         services.AddAuthentication(sharedOptions =>
         {

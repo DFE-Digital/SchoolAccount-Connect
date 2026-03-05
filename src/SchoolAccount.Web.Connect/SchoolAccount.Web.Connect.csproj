@@ -28,8 +28,4 @@
             <_Parameter1>SchoolAccount.ConformanceTests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Views\Dashboard\" />
-    </ItemGroup>
 </Project>

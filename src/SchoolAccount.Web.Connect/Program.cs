@@ -25,11 +25,13 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
+app.UseSession();
 app.UseRouting();
 
 app.ExceptionHandlers();
 
 app.UseAuthentication();
+app.AddMiddleware();
 app.UseAuthorization();
 
 app.ConfigureAreas();
