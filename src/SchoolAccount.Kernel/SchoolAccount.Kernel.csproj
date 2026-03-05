@@ -1,1 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk"></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Folder Include="DSI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\integration\SchoolAccount.Integration.DfESignIn\SchoolAccount.Integration.DfESignIn.csproj" />
+  </ItemGroup>
+</Project>

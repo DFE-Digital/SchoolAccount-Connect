@@ -27,17 +27,21 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.ExceptionHandlers();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.ConfigureAreas();
-app.ExceptionHandlers();
 app.StripHeaders();
 
 app.Run();
 
-public partial class Program
+namespace SchoolAccount.Web.Connect
 {
-    // This partial class is used to allow the Program class to be extended in other files.
+    public partial class Program
+    {
+        // This partial class is used to allow the Program class to be extended in other files.
+    }
 }
 

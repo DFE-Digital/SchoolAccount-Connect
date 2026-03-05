@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/integrations/">
+    <Project Path="integration/SchoolAccount.Integration.DfESignIn/SchoolAccount.Integration.DfESignIn.csproj" />
+  </Folder>
   <Folder Name="/requests/">
     <File Path="Requests/SchoolAccount.http" />
   </Folder>
@@ -18,6 +21,7 @@
     <Project Path="src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="src/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
     <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
     <Project Path="src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
   </Folder>

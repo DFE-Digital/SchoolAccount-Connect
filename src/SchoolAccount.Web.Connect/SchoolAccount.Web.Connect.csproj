@@ -3,6 +3,7 @@
         <UserSecretsId>4e50a46d-becc-4223-ac73-f9f5704af747</UserSecretsId>
     </PropertyGroup>
     <ItemGroup>
+        <ProjectReference Include="..\..\integration\SchoolAccount.Integration.DfESignIn\SchoolAccount.Integration.DfESignIn.csproj" />
         <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
         <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
         <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />

@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Authentication;
+using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Integration.DfESignIn.Providers;
+using SchoolAccount.Integration.DfESignIn.Requirements;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Web.Connect.SignIn;
 
@@ -15,11 +21,19 @@ internal static class DfeSignInExtensions
             throw new ArgumentException("DfeSignInConfig is required.");
         }
 
+        services.AddScoped<IProvider, NullProvider>();
+        services.AddScoped<IProvider, FreeSchoolProvider>();
+        services.AddScoped<IProvider, LamsProvider>();
+        services.AddScoped<IProvider, PreSixteenProvider>();
+        services.AddScoped<IProvider, SpecialsProvider>();
+        services.AddScoped<IProviderResolver, ProviderResolver>();
+        services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
+
         services.AddAuthentication(sharedOptions =>
         {
             sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            sharedOptions.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         })
             .AddOpenIdConnect(options =>
             {
@@ -28,15 +42,15 @@ internal static class DfeSignInExtensions
                 options.Authority = configuration.Scope;
                 options.MetadataAddress = configuration.MetaDataUrl.OriginalString;
                 options.CallbackPath = new PathString(configuration.CallbackUrl.OriginalString);
-                options.SignedOutRedirectUri = new PathString(configuration.SignoutRedirectUrl.OriginalString);
-                options.SignedOutCallbackPath = new PathString(configuration.SignoutCallbackUrl.OriginalString);
+                options.SignedOutRedirectUri = new PathString(configuration.SignOutRedirectUrl.OriginalString);
+                options.SignedOutCallbackPath = new PathString(configuration.SignOutCallbackUrl.OriginalString);
                 options.ResponseType = OpenIdConnectResponseType.IdToken;
                 options.SkipUnrecognizedRequests = true;
                 options.GetClaimsFromUserInfoEndpoint = configuration.GetClaimsFromUserInfoEndpoint;
                 options.SaveTokens = configuration.SaveTokens;
 
                 options.Scope.Clear();
-                foreach (string scope in configuration.Scopes)
+                foreach (var scope in configuration.Scopes)
                 {
                     options.Scope.Add(scope);
                 }
@@ -49,7 +63,16 @@ internal static class DfeSignInExtensions
                 options.SlidingExpiration = configuration.SlidingExpiration;
                 options.LoginPath = configuration.LoginPath;
                 options.AccessDeniedPath = configuration.AccessDeniedPath;
-                options.LogoutPath = configuration.SignoutRedirectUrl.OriginalString;
+                options.LogoutPath = configuration.SignOutRedirectUrl.OriginalString;
             });
+        
+        services.AddScoped<IAuthorizationHandler, ProviderAuthorisationHandler>();
+
+        services
+            .AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddRequirements(new ProviderRequirement())
+                .Build());
     }
 }

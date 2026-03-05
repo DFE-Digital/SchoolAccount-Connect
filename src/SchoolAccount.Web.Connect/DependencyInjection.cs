@@ -8,6 +8,7 @@ using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using System.Reflection;
 using Microsoft.FeatureManagement;
+using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -24,6 +25,7 @@ internal static class DependencyInjection
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
+        services.AddScoped<IOrganisationContext, OrganisationContext>();
         services.AddFeatureToggle();
         
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));

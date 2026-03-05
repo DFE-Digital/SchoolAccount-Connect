@@ -1,4 +1,5 @@
 using SchoolAccount.IntegrationTests.Factory;
+using SchoolAccount.Web.Connect;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Fixtures;

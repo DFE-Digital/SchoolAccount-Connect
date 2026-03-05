@@ -2,40 +2,37 @@
 
 internal sealed class DfeSignInConfiguration
 {
-    public string Scope { get; set; } = null!;
+    public string Scope { get; init; } = null!;
 
-    public Uri MetaDataUrl { get; set; } = null!;
+    public Uri MetaDataUrl { get; init; } = null!;
 
-    public Uri APIServiceProxyUrl { get; set; } = null!;
+    public Uri ApiServiceProxyUrl { get; init; } = null!;
 
-    public Uri CallbackUrl { get; set; } = null!;
+    public Uri CallbackUrl { get; init; } = null!;
 
-    public string ClientId { get; set; } = null!;
+    public string ClientId { get; init; } = null!;
 
-    public string ClientSecret { get; set; } = null!;
+    public string ClientSecret { get; init; } = null!;
 
-    public string CookieName { get; set; } = null!;
+    public string CookieName { get; init; } = null!;
 
-    public int CookieExpireTimeSpanInMinutes { get; set; }
+    public int CookieExpireTimeSpanInMinutes { get; init; }
 
-    public bool SlidingExpiration { get; set; }
+    public bool SlidingExpiration { get; init; }
 
-    public string AccessDeniedPath { get; set; } = null!;
+    public string AccessDeniedPath { get; init; } = null!;
 
-    public bool GetClaimsFromUserInfoEndpoint { get; set; }
+    public bool GetClaimsFromUserInfoEndpoint { get; init; }
 
-    public bool SaveTokens { get; set; }
+    public bool SaveTokens { get; init; }
 
-#pragma warning disable CA2227
-    public IList<string> Scopes { get; set; } = null!;
-#pragma warning restore CA2227
+    public IList<string> Scopes { get; init; } = null!;
 
-    public Uri SignoutCallbackUrl { get; set; } = null!;
+    public Uri SignOutCallbackUrl { get; init; } = null!;
 
-    public Uri SignoutRedirectUrl { get; set; } = null!;
+    public Uri SignOutRedirectUrl { get; init; } = null!;
 
-    public bool DiscoverRolesWithPublicApi { get; set; }
+    public bool DiscoverRolesWithPublicApi { get; init; }
 
-    public string LoginPath { get; set; } = null!;
-
+    public string LoginPath { get; init; } = null!;
 }

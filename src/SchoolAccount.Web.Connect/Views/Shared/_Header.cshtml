@@ -1,6 +1,7 @@
 @using SchoolAccount.Application
 @using SchoolAccount.Kernel
 @inject IUserContext CurrentUser
+@inject IOrganisationContext OrganisationContext
 
 @{
     List<(string url, string label, string[] childNodes)> navigation =
@@ -10,12 +11,7 @@
     ];
 
     var isAuthenticated = CurrentUser?.IsAuthenticated == true;
-
-    var displayName =
-        CurrentUser?.PreferredName
-        ?? CurrentUser?.Name
-        ?? CurrentUser?.EmailAddress;
-
+    var displayName = OrganisationContext?.Name;
     var path = Context.Request.Path.Value ?? string.Empty;
 
     static string NormalisePath(string? p)

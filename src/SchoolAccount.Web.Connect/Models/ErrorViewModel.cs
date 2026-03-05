@@ -9,6 +9,9 @@ public sealed class ErrorViewModel
     public bool ShowException { get; init; }
     public Exception? Exception { get; set; }
     
+    public bool HandledException { get; set; }
+
+    public string Title { get; set; } = "Error";
     public string? Heading { get; set; }
     public IEnumerable<string> Messages { get; set; } = [];
     
