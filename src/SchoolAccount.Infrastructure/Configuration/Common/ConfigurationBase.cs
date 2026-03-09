@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolAccount.Infrastructure.Models;
+using SchoolAccount.Infrastructure.Models.Entities;
 
-namespace SchoolAccount.Infrastructure.Configuration;
+namespace SchoolAccount.Infrastructure.Configuration.Common;
 
 public abstract class ConfigurationBase<TEntity> : IEntityTypeConfiguration<TEntity>
     where TEntity : AuditableDatabaseEntity

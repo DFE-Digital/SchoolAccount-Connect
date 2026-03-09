@@ -9,5 +9,6 @@
         <PackageReference Include="Microsoft.Extensions.Logging"/>
         <PackageReference Include="Scrutor"/>
         <PackageReference Include="Serilog"/>
+        <PackageReference Include="X.PagedList" />
     </ItemGroup>
 </Project>

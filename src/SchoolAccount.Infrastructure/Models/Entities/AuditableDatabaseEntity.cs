@@ -1,4 +1,6 @@
-namespace SchoolAccount.Infrastructure.Models;
+using SchoolAccount.Infrastructure.Models.Interfaces;
+
+namespace SchoolAccount.Infrastructure.Models.Entities;
 
 public abstract class AuditableDatabaseEntity : IDatabaseEntity
 {

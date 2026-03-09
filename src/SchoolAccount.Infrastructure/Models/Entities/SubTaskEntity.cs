@@ -1,4 +1,4 @@
-namespace SchoolAccount.Infrastructure.Models;
+namespace SchoolAccount.Infrastructure.Models.Entities;
 
 public sealed class SubTaskEntity : AuditableDatabaseEntity
 {
@@ -6,9 +6,9 @@ public sealed class SubTaskEntity : AuditableDatabaseEntity
 
     public long? ServiceId { get; set; }
 
-    public string? SubTaskReferenceNo { get; set; }
-    public string? SubTaskName { get; set; }
-    public string? SubTaskDescription { get; set; }
+    public string? ReferenceNo { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 
     public string? DigitalTaskLink { get; set; }
 

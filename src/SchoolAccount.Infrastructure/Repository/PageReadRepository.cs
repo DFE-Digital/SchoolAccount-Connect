@@ -36,16 +36,16 @@ public sealed class PageReadRepository(
         {
             var like = $"%{term}%";
             tasksQuery = tasksQuery.Where(t =>
-                EF.Functions.Like(t.TaskName!, like) ||
-                EF.Functions.Like(t.TaskReferenceNo!, like));
+                EF.Functions.Like(t.Name!, like) ||
+                EF.Functions.Like(t.ReferenceNo!, like));
         }
 
         var tasks = await tasksQuery
             .OrderByDescending(t => t.DateUpdated)
             .Select(t => new TaskListItem(
                 t.Id,
-                t.TaskReferenceNo ?? string.Empty,
-                t.TaskName ?? string.Empty,
+                t.ReferenceNo ?? string.Empty,
+                t.Name ?? string.Empty,
                 t.UpdatedBy,
                 t.DateUpdated
             ))
@@ -69,7 +69,7 @@ public sealed class PageReadRepository(
             .OrderByDescending(st => st.DateUpdated)
             .Select(st => new SubTaskListItem(
                 st.Id,
-                st.SubTaskName ?? st.SubTaskReferenceNo ?? string.Empty,
+                st.Name ?? st.ReferenceNo ?? string.Empty,
                 st.UpdatedBy,
                 st.DateUpdated
             ))

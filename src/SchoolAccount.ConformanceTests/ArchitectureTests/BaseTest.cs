@@ -1,6 +1,6 @@
 using System.Reflection;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Infrastructure.Models;
+using SchoolAccount.Infrastructure.Models.Interfaces;
 using SchoolAccount.Web.Connect;
 
 namespace SchoolAccount.ConformanceTests.ArchitectureTests;

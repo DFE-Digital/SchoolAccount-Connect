@@ -1,11 +1,10 @@
-namespace SchoolAccount.Infrastructure.Models;
+namespace SchoolAccount.Infrastructure.Models.Entities;
 
 public class TaskEntity : AuditableDatabaseEntity
 {
-
-    public string? TaskReferenceNo { get; set; }
-    public string? TaskName { get; set; }
-    public string? TaskDescription { get; set; }
+    public string? ReferenceNo { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 
     public long? ServiceId { get; set; }
     public DateTime? PublishDate { get; set; }
