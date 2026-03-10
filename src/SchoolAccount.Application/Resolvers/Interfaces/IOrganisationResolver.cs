@@ -5,5 +5,5 @@ namespace SchoolAccount.Application.Resolvers.Interfaces;
 
 public interface IOrganisationResolver
 {
-    IOrganisation? Resolve(OrganisationClaim? claim);
+    IOrganisation Resolve(OrganisationClaim? claim);
 }

@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
 
 namespace SchoolAccount.Web.Connect.Middleware;
 
 public class RequestGateMiddleware(RequestDelegate next)
 {
-    public async Task InvokeAsync(HttpContext context, IUrlHelperFactory urlHelperFactory,
-        IActionContextAccessor actionContextAccessor, IEnumerable<IRequestGate> gates)
+    public async Task InvokeAsync(HttpContext context, IEnumerable<IRequestGate> gates)
     {
-        var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext!);
-        
         foreach (var gate in gates.OrderBy(x => x.Priority))
         {
             var result = await gate.EvaluateAsync(context);
@@ -25,7 +23,7 @@ public class RequestGateMiddleware(RequestDelegate next)
                 throw new NullReferenceException(nameof(result.RedirectAddress));
             }
 
-            if (urlHelper.IsLocalUrl(result.RedirectAddress))
+            if (result.RedirectAddress.IsLocalUrl())
             {
                 context.Response.Redirect(result.RedirectAddress);
             }

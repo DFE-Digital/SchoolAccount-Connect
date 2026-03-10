@@ -7,10 +7,9 @@ namespace SchoolAccount.Application.Resolvers;
 
 public class OrganisationResolver : IOrganisationResolver
 {
-    public IOrganisation? Resolve(OrganisationClaim? claim)
+    public IOrganisation Resolve(OrganisationClaim? claim)
     {
-        ArgumentNullException.ThrowIfNull(claim);
-        return claim.Category?.Id switch
+        return claim?.Category?.Id switch
         {
             OrganisationCategory.SingleAcademyTrust 
                 or OrganisationCategory.MultiAcademyTrust 
@@ -23,7 +22,7 @@ public class OrganisationResolver : IOrganisationResolver
                 or OrganisationCategory.FurtherEducation
                 => new OtherOrganisation(claim),
             
-            _ => null
+            _ => NullOrganisation.Default
         };
     }
 } 

@@ -33,10 +33,9 @@ public class OrganisationContext(
 
     public IProvider Provider 
         => _provider ??= providerResolver.Resolve(Claim);
-    
-    public IOrganisation Organisation 
-        => _organisation ??= organisationResolver.Resolve(Claim) 
-                             ?? throw new NotSupportedException(Claim?.Category?.Name ?? "Unknown Organisation");
+
+    public IOrganisation Organisation
+        => _organisation ??= organisationResolver.Resolve(Claim);
 
     private SchoolType DetermineSchoolType()
     {
