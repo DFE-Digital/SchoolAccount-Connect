@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using SchoolAccount.Infrastructure.Models.Interfaces;
 
 namespace SchoolAccount.Infrastructure.Models.Entities;
@@ -8,6 +9,7 @@ public class TagsSourceMappingEntity : IDatabaseEntity
 
     public long EntityId { get; set; }
 
+    [NotMapped]
     public virtual IDatabaseEntity? Entity { get; set; }
 
     public int SourceId { get; set; }
