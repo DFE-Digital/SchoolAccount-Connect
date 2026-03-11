@@ -43,9 +43,7 @@
       const pageId = this.getAttribute('data-page-id');
 
       buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
-      this.classList.add('dfe-page-feedback__choice--selected');
-
-      /* ---------- Send event to server (captures user id) ---------- */
+      this.classList.add('dfe-page-feedback__choice--selected');    
 
       fetch('/feedback/page-useful', {
         method: 'POST',
@@ -56,9 +54,6 @@
           variant: 'v2'
         })
       }).catch(() => {});
-
-
-      /* ---------- Optional client telemetry ---------- */
 
       try {
         if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {

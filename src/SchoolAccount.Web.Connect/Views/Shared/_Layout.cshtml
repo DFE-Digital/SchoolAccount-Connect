@@ -83,10 +83,11 @@ else
 @Html.MojFrontendScriptImports()
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+
 @section Footer {
 
     @{
-        var useV2 = await FeatureManager.IsEnabledAsync("Connect.FeedbackV2");
+        var useV2 = await FeatureManager.IsEnabledAsync(FeatureSwitchesConstants.ConnectFeedback);
     }
 
     @if (useV2)
