@@ -7,7 +7,10 @@ using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
+using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
@@ -26,9 +29,10 @@ internal static class DependencyInjection
         
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
-        services.AddRequestGates();
         services.AddFeatureToggle();
+        services.AddRequestGates();
         
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         
@@ -95,7 +99,12 @@ internal static class DependencyInjection
     private static void AddFeatureToggle(this IServiceCollection services)
     {
         services.AddAzureAppConfiguration();
-        services.AddFeatureManagement();
+        services.AddFeatureManagement()
+            .AddFeatureFilter<PercentageFilter>()
+            .AddFeatureFilter<TimeWindowFilter>()
+            .AddFeatureFilter<TargetingFilter>();
+        
+        services.AddSingleton<ITargetingContextAccessor, FeatureManagementContextAccessor>();
     }
 
     public static void AddMiddleware(this WebApplication app)
