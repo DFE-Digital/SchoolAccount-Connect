@@ -41,7 +41,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         pageId: pageId,
-        value: 'clicked',
+        value: 'clicked_feedback',
         variant: 'v1'
       })
     }).catch(() => {});
@@ -52,7 +52,7 @@
           { name: 'page_feedback_response' },
           {
             pageId: pageId,
-            value: 'clicked',
+            value: 'clicked_feedback',
             variant: 'v1'
           }
         );

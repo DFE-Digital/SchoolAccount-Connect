@@ -72,16 +72,4 @@ public class FeedbackTelemetryService(
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(value));
         return Convert.ToHexString(bytes);
     }
-
-    private sealed record FeedbackTelemetry(
-        string PageId,
-        string Value,
-        string Variant,
-        string Action,
-        string UserId,
-        string OrganisationId,
-        string OrganisationType,
-        string Establishment,
-        string Category,
-        string Provider);
 }
