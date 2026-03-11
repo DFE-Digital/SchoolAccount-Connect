@@ -18,10 +18,11 @@ public class FeedbackTelemetryService(
         var telemetry = BuildTelemetry(request);
 
         logger.LogInformation(
-            "Feedback response captured. EventName: {EventName}, Variant: {Variant}, Value: {Value}, PageId: {PageId}, UserId: {UserId}, OrganisationId: {OrganisationId}, OrganisationType: {OrganisationType}, Establishment: {Establishment}, Category: {Category}, Provider: {Provider}",
+            "Feedback response captured. EventName: {EventName}, Variant: {Variant}, Value: {Value}, Action: {Action}, PageId: {PageId}, UserId: {UserId}, OrganisationId: {OrganisationId}, OrganisationType: {OrganisationType}, Establishment: {Establishment}, Category: {Category}, Provider: {Provider}",
             EventName,
             telemetry.Variant,
             telemetry.Value,
+            telemetry.Action,
             telemetry.PageId,
             telemetry.UserId,
             telemetry.OrganisationId,
@@ -39,12 +40,13 @@ public class FeedbackTelemetryService(
             PageId: request.PageId.Trim(),
             Value: request.Value.Trim(),
             Variant: request.Variant.Trim(),
+            Action: request.Action?.Trim() ?? "unknown",
             UserId: HashValue(userContext.Id),
             OrganisationId: HashValue(organisationIdentifier),
             OrganisationType: organisationContext.Type.ToString(),
             Establishment: organisationContext.Establishment.ToString(),
             Category: organisationContext.Category.ToString(),
-            Provider: organisationContext.Provider?.ToString() ?? "unknown");
+            Provider: organisationContext.Provider.ToString() ?? "unknown");
     }
 
     private string? GetOrganisationIdentifier()
@@ -75,6 +77,7 @@ public class FeedbackTelemetryService(
         string PageId,
         string Value,
         string Variant,
+        string Action,
         string UserId,
         string OrganisationId,
         string OrganisationType,

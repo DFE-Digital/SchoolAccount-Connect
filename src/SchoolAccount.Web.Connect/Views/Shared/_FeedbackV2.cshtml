@@ -1,77 +1,153 @@
 @{
-    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
-                      ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
-    var pageId = (string?)ViewData["FeedbackPageId"] ?? Context.Request.Path;
+var feedbackUrl = (string?)ViewData["FeedbackUrl"]
+?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+
+var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString()).ToLowerInvariant();
 }
 
 <section class="dfe-page-feedback" aria-label="Page feedback">
     <div class="govuk-width-container">
-        <div class="dfe-page-feedback__row">
-            <div class="dfe-page-feedback__left">
-                <span class="dfe-page-feedback__question">Is this page useful?</span>
+        <div class="dfe-page-feedback__initial" data-feedback-initial>
+            <div class="dfe-page-feedback__row">
+                <div class="dfe-page-feedback__left">
+                    <span class="dfe-page-feedback__question">Do you find DfE Connect useful?</span>
 
-                <div class="dfe-page-feedback__choices" role="group" aria-label="Is this page useful?">
-                    <button type="button" class="dfe-page-feedback__choice" data-feedback-value="yes" data-page-id="@pageId">Yes</button>
-                    <button type="button" class="dfe-page-feedback__choice" data-feedback-value="no" data-page-id="@pageId">No</button>
+                    <div class="dfe-page-feedback__choices" role="group" aria-label="Do you find DfE Connect useful?">
+                        <button type="button"
+                                class="dfe-page-feedback__choice"
+                                data-feedback-value="yes"
+                                data-page-id="@pageId">
+                            Yes
+                        </button>
+
+                        <button type="button"
+                                class="dfe-page-feedback__choice"
+                                data-feedback-value="no"
+                                data-page-id="@pageId">
+                            No
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="dfe-page-feedback__right">
-                <a class="dfe-page-feedback__cta"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   href="@feedbackUrl">
-                    Give your feedback
-                </a>
+        <div class="dfe-page-feedback__followup govuk-!-display-none" data-feedback-followup aria-live="polite">
+            <div class="dfe-page-feedback__followup-panel">
+                <h2 class="dfe-page-feedback__followup-heading">Help us improve DfE Connect</h2>
+
+                <p class="dfe-page-feedback__followup-body">
+                    To help us improve DfE Connect, we'd like to know more about your visit today.
+                    <a class="govuk-link"
+                       data-feedback-link
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       href="@feedbackUrl">
+                        Give your feedback (opens in a new tab)
+                    </a>.
+                </p>
+
+                <button type="button"
+                        class="govuk-button govuk-button--secondary dfe-page-feedback__cancel"
+                        data-feedback-cancel>
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-(function () {
+    (function () {
+        const root = document.querySelector('.dfe-page-feedback');
+        if (!root) return;
 
-  const root = document.querySelector('.dfe-page-feedback');
-  if (!root) return;
+        const initial = root.querySelector('[data-feedback-initial]');
+        const followup = root.querySelector('[data-feedback-followup]');
+        const buttons = root.querySelectorAll('[data-feedback-value]');
+        const cancelButton = root.querySelector('[data-feedback-cancel]');
+        const feedbackLink = root.querySelector('[data-feedback-link]');
 
-  const buttons = root.querySelectorAll('[data-feedback-value]');
+        let selectedValue = null;
+        let selectedPageId = null;
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', function () {
+        function postTelemetry(value, pageId, action) {
+            fetch('/feedback/page-useful', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pageId: pageId,
+                    value: value,
+                    variant: 'v2',
+                    action: action
+                })
+            }).catch(() => {});
 
-      const value = this.getAttribute('data-feedback-value');
-      const pageId = this.getAttribute('data-page-id');
-
-      buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
-      this.classList.add('dfe-page-feedback__choice--selected');    
-
-      fetch('/feedback/page-useful', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pageId: pageId,
-          value: value,
-          variant: 'v2'
-        })
-      }).catch(() => {});
-
-      try {
-        if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
-
-          window.appInsights.trackEvent(
-            { name: 'page_feedback_response' },
-            {
-              pageId: pageId,
-              value: value,
-              variant: 'v2'
-            }
-          );
-
+            try {
+                if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
+                    window.appInsights.trackEvent(
+                        { name: 'page_feedback_response' },
+                        {
+                            pageId: pageId,
+                            value: value,
+                            variant: 'v2',
+                            action: action
+                        }
+                    );
+                }
+            } catch (e) { }
         }
-      } catch (e) { }
 
-    });
-  });
+        function showFollowup() {
+            initial.classList.add('govuk-!-display-none');
+            followup.classList.remove('govuk-!-display-none');
+        }
 
-})();
+        function showInitial() {
+            followup.classList.add('govuk-!-display-none');
+            initial.classList.remove('govuk-!-display-none');
+
+            buttons.forEach(button => {
+                button.classList.remove('dfe-page-feedback__choice--selected');
+            });
+
+            selectedValue = null;
+            selectedPageId = null;
+        }
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                selectedValue = this.getAttribute('data-feedback-value');
+                selectedPageId = this.getAttribute('data-page-id');
+
+                buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
+                this.classList.add('dfe-page-feedback__choice--selected');
+
+                if (feedbackLink && selectedValue) {
+                    const separator = feedbackLink.href.indexOf('?') === -1 ? '?' : '&';
+                    feedbackLink.href = '@feedbackUrl' + separator + 'response=' + encodeURIComponent(selectedValue) + '&page=' + encodeURIComponent(selectedPageId);
+                }
+
+                postTelemetry(selectedValue, selectedPageId, 'selected');
+                showFollowup();
+            });
+        });
+
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function () {
+                if (selectedValue && selectedPageId) {
+                    postTelemetry(selectedValue, selectedPageId, 'cancelled');
+                }
+
+                showInitial();
+            });
+        }
+
+        if (feedbackLink) {
+            feedbackLink.addEventListener('click', function () {
+                if (selectedValue && selectedPageId) {
+                    postTelemetry(selectedValue, selectedPageId, 'opened_feedback_form');
+                }
+            });
+        }
+    })();
 </script>

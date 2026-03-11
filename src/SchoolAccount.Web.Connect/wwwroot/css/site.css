@@ -748,13 +748,13 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
         align-items: flex-start;
     }
 }
+
 /* =========================================
    Page feedback strip (V2)
-   Matches _PageFeedbackV2.cshtml classes
    ========================================= */
 
 .dfe-page-feedback {
-    background: #f3f2f1;
+    background: #ffffff;
     border-top: 1px solid #b1b4b6;
 }
 
@@ -812,30 +812,37 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
     color: #ffffff;
 }
 
-.dfe-page-feedback__cta {
-    display: inline-block;
+.dfe-page-feedback__followup {
+    background: #ffffff;
+    padding: 14px 0;
+}
+
+.dfe-page-feedback__followup-panel {
+    padding-top: 16px;
+}
+
+.dfe-page-feedback__followup-heading {
+    margin: 0 0 8px;
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.dfe-page-feedback__followup-body {
+    margin: 0 0 16px;
     font-family: "GDS Transport", Arial, sans-serif;
     font-size: 16px;
-    line-height: 1;
-    padding: 9px 16px;
-    background: #ffffff;
+    line-height: 1.5;
     color: #0b0c0c;
-    border: 2px solid #0b0c0c;
-    text-decoration: none;
-    box-shadow: 0 2px 0 #0b0c0c;
-    white-space: nowrap;
+    max-width: 720px;
 }
 
-.dfe-page-feedback__cta:hover {
-    background: #f3f2f1;
+.dfe-page-feedback__cancel {
+    margin-bottom: 0;
 }
 
-.dfe-page-feedback__cta:focus {
-    outline: 3px solid #ffdd00;
-    outline-offset: 0;
-}
-
-/* Mobile stack */
 @media (max-width: 40.0625em) {
     .dfe-page-feedback__row {
         flex-direction: column;

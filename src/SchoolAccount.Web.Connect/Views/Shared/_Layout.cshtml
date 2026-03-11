@@ -85,18 +85,22 @@ else
 @await RenderSectionAsync("Scripts", required: false)
 
 @section Footer {
-
     @{
-        var useV2 = await FeatureManager.IsEnabledAsync(FeatureSwitchesConstants.ConnectFeedback);
+        var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
     }
 
-    @if (useV2)
+    @if (isAuthenticated)
     {
-        <partial name="_FeedbackV2" />
-    }
-    else
-    {
-        <partial name="_Feedback" />
+        var useV2 = await FeatureManager.IsEnabledAsync(FeatureSwitchesConstants.ConnectFeedback);
+
+        if (useV2)
+        {
+            <partial name="_FeedbackV2" />
+        }
+        else
+        {
+            <partial name="_Feedback" />
+        }
     }
 
     <govuk-footer>
