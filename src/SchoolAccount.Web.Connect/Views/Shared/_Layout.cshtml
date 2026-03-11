@@ -1,6 +1,7 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
+@using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Constants
 @using SchoolAccount.Web.Connect.Extensions
 @inject IFeatureManager FeatureManager
@@ -91,7 +92,7 @@ else
 
     @if (isAuthenticated)
     {
-        var useV2 = await FeatureManager.IsEnabledAsync(FeatureSwitchesConstants.ConnectFeedback);
+        var useV2 = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectFeedback);
 
         if (useV2)
         {
