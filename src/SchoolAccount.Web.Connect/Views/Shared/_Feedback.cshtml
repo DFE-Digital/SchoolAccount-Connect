@@ -1,16 +1,21 @@
 @{
     var feedbackUrl = "https://digital-forms.education.gov.uk/7_RplP8Gef/give-feedback-on-dfe-connect";
+    var pageId = Context.Request.Path;
 }
 
 <section class="dfe-footer-feedback" aria-label="Tell us what you think of DfE Connect">
     <div class="govuk-width-container">
         <div class="dfe-footer-feedback__row">
             <div class="dfe-footer-feedback__left">
-                <h2 class="dfe-footer-feedback__heading">Tell us what you think of DfE Connect</h2>
+                <h2 class="dfe-footer-feedback__heading">
+                    Tell us what you think of DfE Connect
+                </h2>
             </div>
 
             <div class="dfe-footer-feedback__right">
                 <a class="govuk-button dfe-footer-feedback__button"
+                   data-feedback="v1"
+                   data-page-id="@pageId"
                    target="_blank"
                    rel="noopener noreferrer"
                    href="@feedbackUrl">
@@ -20,3 +25,41 @@
         </div>
     </div>
 </section>
+
+<script>
+(function () {
+
+  const btn = document.querySelector('[data-feedback="v1"]');
+  if (!btn) return;
+
+  btn.addEventListener('click', function () {
+
+    const pageId = this.getAttribute('data-page-id');
+
+    fetch('/feedback/page-useful', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pageId: pageId,
+        value: 'clicked',
+        variant: 'v1'
+      })
+    }).catch(() => {});
+
+    try {
+      if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
+        window.appInsights.trackEvent(
+          { name: 'page_feedback_response' },
+          {
+            pageId: pageId,
+            value: 'clicked',
+            variant: 'v1'
+          }
+        );
+      }
+    } catch (e) {}
+
+  });
+
+})();
+</script>

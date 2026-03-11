@@ -1,38 +1,27 @@
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Web.Connect.Models;
+using SchoolAccount.Web.Connect.Services;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [ApiController]
-public class FeedbackController(ILogger<FeedbackController> logger) : ControllerBase
+public class FeedbackController(IFeedbackTelemetryService feedbackTelemetryService) : ControllerBase
 {
     [HttpPost("/feedback/page-useful")]
-    public IActionResult PageUseful([FromBody] PageFeedbackRequest request)
+    public IActionResult RecordPageFeedback([FromBody] PageFeedbackRequest request)
     {
-        var userIdentifier = User?.Identity?.Name;
+        if (!IsValid(request))
+        {
+            return BadRequest();
+        }
 
-        var hashedUserId = HashUserId(userIdentifier);
+        feedbackTelemetryService.RecordPageFeedback(request);
 
-        logger.LogInformation(
-            "Page feedback recorded. EventName: {EventName}, Variant: {Variant}, Value: {Value}, PageId: {PageId}, UserId: {UserId}",
-            "page_feedback_response",
-            request.Variant,
-            request.Value,
-            request.PageId,
-            hashedUserId
-        );
-
-        return Ok();
+        return NoContent();
     }
 
-    private static string HashUserId(string? userId)
-    {
-        if (string.IsNullOrWhiteSpace(userId))
-            return "anonymous";
-        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(userId));
-
-        return Convert.ToHexString(bytes);
-    }
+    private static bool IsValid(PageFeedbackRequest request) =>
+        !string.IsNullOrWhiteSpace(request.PageId) &&
+        !string.IsNullOrWhiteSpace(request.Value) &&
+        !string.IsNullOrWhiteSpace(request.Variant);
 }

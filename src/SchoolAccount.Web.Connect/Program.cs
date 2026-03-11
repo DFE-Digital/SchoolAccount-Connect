@@ -1,4 +1,5 @@
 using GovUk.Frontend.AspNetCore;
+using Microsoft.FeatureManagement;
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.Web.Connect;
@@ -7,6 +8,8 @@ using SchoolAccount.Web.Connect.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddApplicationSights(builder.Configuration);
+
+builder.Services.AddAzureAppConfiguration();
 
 builder.Services
     .AddApplication()
@@ -22,6 +25,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseGovUkFrontend();
 app.UseStaticFiles();
+
+app.UseAzureAppConfiguration();
 
 app.UseHttpsRedirection();
 
