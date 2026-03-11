@@ -145,7 +145,7 @@ var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToStri
         if (feedbackLink) {
             feedbackLink.addEventListener('click', function () {
                 if (selectedValue && selectedPageId) {
-                    postTelemetry(selectedValue, selectedPageId, 'opened_feedback_form');
+                    postTelemetry(selectedValue, selectedPageId, 'opened_feedback');
                 }
             });
         }

@@ -10,4 +10,6 @@ public sealed record FeedbackTelemetry(
     string OrganisationType,
     string Establishment,
     string Category,
-    string Provider);
+    string Provider,
+    string Region,
+    string LocalAuthority);

@@ -39,23 +39,25 @@
     fetch('/feedback/page-useful', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pageId: pageId,
-        value: 'clicked_feedback',
-        variant: 'v1'
-      })
+        body: JSON.stringify({
+            pageId: pageId,
+            value: 'clicked_feedback',
+            variant: 'v1',
+            action: 'opened_feedback'
+        })
     }).catch(() => {});
 
     try {
       if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
-        window.appInsights.trackEvent(
-          { name: 'page_feedback_response' },
-          {
-            pageId: pageId,
-            value: 'clicked_feedback',
-            variant: 'v1'
-          }
-        );
+          window.appInsights.trackEvent(
+              { name: 'page_feedback_response' },
+              {
+                  pageId: pageId,
+                  value: 'clicked_feedback',
+                  variant: 'v1',
+                  action: 'opened_feedback'
+              }
+          );
       }
     } catch (e) {}
 
