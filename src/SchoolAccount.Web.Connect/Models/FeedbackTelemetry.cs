@@ -12,4 +12,5 @@ public sealed record FeedbackTelemetry(
     string Category,
     string Provider,
     string Region,
-    string LocalAuthority);
+    string LocalAuthority,
+    string LegalName);

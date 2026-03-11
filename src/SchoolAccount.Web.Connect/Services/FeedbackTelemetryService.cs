@@ -20,7 +20,9 @@ public class FeedbackTelemetryService(
         var telemetry = BuildTelemetry(request);
 
         logger.LogInformation(
-            "Page feedback recorded. EventName: {EventName}, Variant: {Variant}, Value: {Value}, Action: {Action}, PageId: {PageId}, UserId: {UserId}, OrganisationId: {OrganisationId}, OrganisationType: {OrganisationType}, Establishment: {Establishment}, Category: {Category}, Provider: {Provider}, Region: {Region}, LocalAuthority: {LocalAuthority}",
+            "Page feedback recorded. EventName: {EventName}, Variant: {Variant}, Value: {Value}, Action: {Action}, PageId: {PageId}, " +
+            "UserId: {UserId}, OrganisationId: {OrganisationId}, OrganisationType: {OrganisationType}, Establishment: {Establishment}, " +
+            "Category: {Category}, Provider: {Provider}, Region: {Region}, LocalAuthority: {LocalAuthority}, LegalName: {LegalName}",
             EventName,
             telemetry.Variant,
             telemetry.Value,
@@ -33,7 +35,8 @@ public class FeedbackTelemetryService(
             telemetry.Category,
             telemetry.Provider,
             telemetry.Region,
-            telemetry.LocalAuthority);
+            telemetry.LocalAuthority,
+            telemetry.LegalName);
     }
 
     private FeedbackTelemetry BuildTelemetry(PageFeedbackRequest request)
@@ -53,7 +56,8 @@ public class FeedbackTelemetryService(
             Category: organisationContext.Category.ToString(),
             Provider: organisationContext.Provider.ToString() ?? "unknown",
             Region: CleanOrUnknown(claim?.Region?.Name),
-            LocalAuthority: CleanOrUnknown(claim?.LocalAuthority?.Name));
+            LocalAuthority: CleanOrUnknown(claim?.LocalAuthority?.Name),
+            LegalName: CleanOrUnknown(claim?.LegalName));
     }
 
     private string? GetOrganisationIdentifier()
