@@ -1,5 +1,4 @@
 using GovUk.Frontend.AspNetCore;
-using Microsoft.FeatureManagement;
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.Web.Connect;
