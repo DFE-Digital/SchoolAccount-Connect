@@ -30,35 +30,53 @@
 
 <script>
 (function () {
+
   const root = document.querySelector('.dfe-page-feedback');
   if (!root) return;
 
   const buttons = root.querySelectorAll('[data-feedback-value]');
+
   buttons.forEach(btn => {
     btn.addEventListener('click', function () {
+
       const value = this.getAttribute('data-feedback-value');
       const pageId = this.getAttribute('data-page-id');
 
       buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
       this.classList.add('dfe-page-feedback__choice--selected');
 
-      // Telemetry hook
+      /* ---------- Send event to server (captures user id) ---------- */
+
+      fetch('/feedback/page-useful', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pageId: pageId,
+          value: value,
+          variant: 'v2'
+        })
+      }).catch(() => {});
+
+
+      /* ---------- Optional client telemetry ---------- */
+
       try {
         if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
-          window.appInsights.trackEvent(
-            { name: 'page_useful_response' },
-            { pageId: pageId, value: value, variant: 'v2' }
-          );
-          return;
-        }
 
-        fetch('/feedback/page-useful', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pageId: pageId, value: value, variant: 'v2' })
-        }).catch(() => {});
+          window.appInsights.trackEvent(
+            { name: 'page_feedback_response' },
+            {
+              pageId: pageId,
+              value: value,
+              variant: 'v2'
+            }
+          );
+
+        }
       } catch (e) { }
+
     });
   });
+
 })();
 </script>
