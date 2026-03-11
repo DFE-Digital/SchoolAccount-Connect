@@ -1,0 +1,64 @@
+@{
+    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
+                      ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+    var pageId = (string?)ViewData["FeedbackPageId"] ?? Context.Request.Path;
+}
+
+<section class="dfe-page-feedback" aria-label="Page feedback">
+    <div class="govuk-width-container">
+        <div class="dfe-page-feedback__row">
+            <div class="dfe-page-feedback__left">
+                <span class="dfe-page-feedback__question">Is this page useful?</span>
+
+                <div class="dfe-page-feedback__choices" role="group" aria-label="Is this page useful?">
+                    <button type="button" class="dfe-page-feedback__choice" data-feedback-value="yes" data-page-id="@pageId">Yes</button>
+                    <button type="button" class="dfe-page-feedback__choice" data-feedback-value="no" data-page-id="@pageId">No</button>
+                </div>
+            </div>
+
+            <div class="dfe-page-feedback__right">
+                <a class="dfe-page-feedback__cta"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   href="@feedbackUrl">
+                    Give your feedback
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+  const root = document.querySelector('.dfe-page-feedback');
+  if (!root) return;
+
+  const buttons = root.querySelectorAll('[data-feedback-value]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const value = this.getAttribute('data-feedback-value');
+      const pageId = this.getAttribute('data-page-id');
+
+      buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
+      this.classList.add('dfe-page-feedback__choice--selected');
+
+      // Telemetry hook
+      try {
+        if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
+          window.appInsights.trackEvent(
+            { name: 'page_useful_response' },
+            { pageId: pageId, value: value, variant: 'v2' }
+          );
+          return;
+        }
+
+        fetch('/feedback/page-useful', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pageId: pageId, value: value, variant: 'v2' })
+        }).catch(() => {});
+      } catch (e) { }
+    });
+  });
+})();
+</script>
