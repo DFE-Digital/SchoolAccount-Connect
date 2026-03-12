@@ -6,6 +6,7 @@ public static class RouteConstants
     public const string Maintenance = Root + "maintenance";
     public const string Support = Root + "support";
     public const string Error = Root + "error/{code}";
+    public const string FeedBack = Root + "feedback/page-useful";
     
     internal static class Start
     {

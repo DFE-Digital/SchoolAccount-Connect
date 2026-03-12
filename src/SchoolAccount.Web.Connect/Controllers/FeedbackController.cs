@@ -7,7 +7,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [ApiController]
 public class FeedbackController(IFeedbackTelemetryService feedbackTelemetryService) : ControllerBase
 {
-    [HttpPost("/feedback/page-useful")]
+    [HttpPost(RouteConstants.FeedBack)]
     public IActionResult RecordPageFeedback([FromBody] PageFeedbackRequest request)
     {
         if (!IsValid(request))

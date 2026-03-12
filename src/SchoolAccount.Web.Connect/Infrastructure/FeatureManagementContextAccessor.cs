@@ -13,14 +13,8 @@ public class FeatureManagementContextAccessor(IHttpContextAccessor httpContextAc
 
         if (httpContext?.User != null)
         {
-            foreach (var roleClaim in httpContext.User.FindAll(ClaimTypes.Role))
-            {
-                groups.Add(roleClaim.Value);
-            }
+            groups.AddRange(httpContext.User.FindAll(ClaimTypes.Role).Select(roleClaim => roleClaim.Value));
         }
-
-        Console.WriteLine($"User: {userId}");
-        Console.WriteLine($"Groups: {groups}");
         
         return new ValueTask<TargetingContext>(new TargetingContext
         {

@@ -121,12 +121,6 @@ var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToStri
 
                 buttons.forEach(b => b.classList.remove('dfe-page-feedback__choice--selected'));
                 this.classList.add('dfe-page-feedback__choice--selected');
-
-                if (feedbackLink && selectedValue) {
-                    const separator = feedbackLink.href.indexOf('?') === -1 ? '?' : '&';
-                    feedbackLink.href = '@feedbackUrl' + separator + 'response=' + encodeURIComponent(selectedValue) + '&page=' + encodeURIComponent(selectedPageId);
-                }
-
                 postTelemetry(selectedValue, selectedPageId, 'selected');
                 showFollowup();
             });
