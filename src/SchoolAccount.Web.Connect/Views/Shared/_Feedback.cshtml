@@ -1,9 +1,13 @@
 @{
     var feedbackUrl = "https://digital-forms.education.gov.uk/7_RplP8Gef/give-feedback-on-dfe-connect";
-    var pageId = Context.Request.Path;
+    var pageId = Context.Request.Path.ToString().ToLowerInvariant();
 }
 
-<section class="dfe-footer-feedback" aria-label="Tell us what you think of DfE Connect">
+<section class="dfe-footer-feedback"
+         aria-label="Tell us what you think of DfE Connect"
+         data-feedback-component="footer"
+         data-feedback-post-url="/feedback/page-useful"
+         data-feedback-variant="v1">
     <div class="govuk-width-container">
         <div class="dfe-footer-feedback__row">
             <div class="dfe-footer-feedback__left">
@@ -14,8 +18,10 @@
 
             <div class="dfe-footer-feedback__right">
                 <a class="govuk-button dfe-footer-feedback__button"
-                   data-feedback="v1"
+                   data-feedback-button
                    data-page-id="@pageId"
+                   data-feedback-value="clicked_feedback"
+                   data-feedback-action="opened_feedback"
                    target="_blank"
                    rel="noopener noreferrer"
                    href="@feedbackUrl">
@@ -25,43 +31,3 @@
         </div>
     </div>
 </section>
-
-<script>
-(function () {
-
-  const btn = document.querySelector('[data-feedback="v1"]');
-  if (!btn) return;
-
-  btn.addEventListener('click', function () {
-
-    const pageId = this.getAttribute('data-page-id');
-
-    fetch('/feedback/page-useful', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            pageId: pageId,
-            value: 'clicked_feedback',
-            variant: 'v1',
-            action: 'opened_feedback'
-        })
-    }).catch(() => {});
-
-    try {
-      if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
-          window.appInsights.trackEvent(
-              { name: 'page_feedback_response' },
-              {
-                  pageId: pageId,
-                  value: 'clicked_feedback',
-                  variant: 'v1',
-                  action: 'opened_feedback'
-              }
-          );
-      }
-    } catch (e) {}
-
-  });
-
-})();
-</script>
