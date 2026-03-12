@@ -13,6 +13,8 @@
     Layout = "_GovUkPageTemplate";
     ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnect}";
     var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
+    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
+                      ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
 }
 
 @section Head {
@@ -55,7 +57,7 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
-        This is a new service - your <a href="#" class="govuk-link">feedback</a> will help us to improve it.
+        This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
     @await RenderSectionAsync("BeforeContent", false)
 }

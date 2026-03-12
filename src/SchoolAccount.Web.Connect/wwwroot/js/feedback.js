@@ -91,7 +91,7 @@
                     pageId: selectedPageId,
                     value: selectedValue,
                     variant: variant,
-                    action: 'selected'
+                    action: 'feedback.banner.opened'
                 });
 
                 showFollowup();
@@ -105,7 +105,7 @@
                         pageId: selectedPageId,
                         value: selectedValue,
                         variant: variant,
-                        action: 'cancelled'
+                        action: 'feedback.banner.cancelled'
                     });
                 }
 
@@ -120,7 +120,7 @@
                         pageId: selectedPageId,
                         value: selectedValue,
                         variant: variant,
-                        action: 'opened_feedback'
+                        action: 'feedback.banner.opened'
                     });
                 }
             });
