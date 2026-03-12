@@ -1,7 +1,10 @@
 ﻿@using GovUk.Frontend.AspNetCore
+@using Microsoft.FeatureManagement
 @using SchoolAccount.Application
+@using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Constants
 @using SchoolAccount.Web.Connect.Extensions
+@inject IFeatureManager FeatureManager
 
 @* ReSharper disable Razor.LayoutNotResolved *@
 @* ReSharper disable Razor.SectionNotResolved *@
@@ -10,6 +13,8 @@
     Layout = "_GovUkPageTemplate";
     ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnect}";
     var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
+    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
+                      ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
 }
 
 @section Head {
@@ -52,7 +57,7 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
-        This is a new service - your <a href="#" class="govuk-link">feedback</a> will help us to improve it.
+        This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
     @await RenderSectionAsync("BeforeContent", false)
 }
@@ -80,8 +85,28 @@ else
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/feedback.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+
 @section Footer {
+    @{
+        var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
+    }
+
+    @if (isAuthenticated)
+    {
+        var useV2 = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectFeedback);
+
+        if (useV2)
+        {
+            <partial name="_FeedbackV2" />
+        }
+        else
+        {
+            <partial name="_Feedback" />
+        }
+    }
+
     <govuk-footer>
         <govuk-footer-meta>
             <govuk-footer-meta-items>

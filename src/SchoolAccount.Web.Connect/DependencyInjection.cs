@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Configuration;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.Identity.Web.UI;
@@ -7,10 +8,18 @@ using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using System.Reflection;
+using Azure.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
+using SchoolAccount.Application.Abstractions.Telemetry;
+using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
+using SchoolAccount.Web.Connect.Telemetry;
+using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -26,11 +35,13 @@ internal static class DependencyInjection
         
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
+        services.AddFeatureToggle(configurationManager);
         services.AddRequestGates();
-        services.AddFeatureToggle();
         
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
+        services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
         
         services
             .AddControllersWithViews()
@@ -92,14 +103,47 @@ internal static class DependencyInjection
         );
     }
 
-    private static void AddFeatureToggle(this IServiceCollection services)
+    private static void AddFeatureToggle(this IServiceCollection services, ConfigurationManager configurationManager)
     {
+        configurationManager.AddAzureAppConfiguration(options =>
+        {
+            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                TenantId = configurationManager["TenantId"] ?? string.Empty
+            });
+
+            var endpoint = new Uri(configurationManager["AppConfigEndpoint"] ?? string.Empty);
+
+            options.Connect(endpoint, credential)
+                .Select(KeyFilter.Any)
+                .UseFeatureFlags()
+                .ConfigureRefresh(refresh =>
+                {
+                    refresh.RegisterAll()
+                        .SetRefreshInterval(TimeSpan.FromSeconds(5));
+                });
+        });
+
         services.AddAzureAppConfiguration();
-        services.AddFeatureManagement();
+
+        services.AddFeatureManagement()
+            .AddFeatureFilter<PercentageFilter>()
+            .AddFeatureFilter<TimeWindowFilter>()
+            .AddFeatureFilter<TargetingFilter>();
+
+        services.AddSingleton<ITargetingContextAccessor, FeatureManagementContextAccessor>();
     }
 
     public static void AddMiddleware(this WebApplication app)
     {
         app.UseMiddleware<RequestGateMiddleware>();
+    }
+    
+    private static void ConfigureRefresh(AzureAppConfigurationOptions options, TimeSpan cacheExpiration)
+    {
+        options.Select(KeyFilter.Any)
+            .ConfigureRefresh(refresh =>
+                refresh.RegisterAll()
+                    .SetRefreshInterval(cacheExpiration));
     }
 }

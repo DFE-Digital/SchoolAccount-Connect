@@ -712,3 +712,140 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
         max-width: 64px;
     }
 }
+/* =========================================
+   Old footer feedback strip (A/B control)
+   ========================================= */
+
+.dfe-footer-feedback {
+    background: #f3f2f1;
+    border-top: 1px solid #b1b4b6;
+}
+
+.dfe-footer-feedback__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 12px 0;
+}
+
+.dfe-footer-feedback__heading {
+    margin: 0;
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.dfe-footer-feedback__right .govuk-button {
+    margin: 0;
+}
+
+@media (max-width: 40.0625em) {
+    .dfe-footer-feedback__row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* =========================================
+   Page feedback strip (V2)
+   ========================================= */
+
+.dfe-page-feedback {
+    background: #ffffff;
+    border-top: 1px solid #b1b4b6;
+}
+
+.dfe-page-feedback__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px 0;
+}
+
+.dfe-page-feedback__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.dfe-page-feedback__question {
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.dfe-page-feedback__choices {
+    display: inline-flex;
+    gap: 12px;
+}
+
+.dfe-page-feedback__choice {
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1;
+    padding: 9px 20px;
+    background: #ffffff;
+    color: #0b0c0c;
+    border: 2px solid #0b0c0c;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #0b0c0c;
+}
+
+.dfe-page-feedback__choice:hover {
+    background: #f3f2f1;
+}
+
+.dfe-page-feedback__choice:focus {
+    outline: 3px solid #ffdd00;
+    outline-offset: 0;
+}
+
+.dfe-page-feedback__choice--selected {
+    background: #0b0c0c;
+    color: #ffffff;
+}
+
+.dfe-page-feedback__followup {
+    background: #ffffff;
+    padding: 14px 0;
+}
+
+.dfe-page-feedback__followup-panel {
+    padding-top: 16px;
+}
+
+.dfe-page-feedback__followup-heading {
+    margin: 0 0 8px;
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.dfe-page-feedback__followup-body {
+    margin: 0 0 16px;
+    font-family: "GDS Transport", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #0b0c0c;
+    max-width: 720px;
+}
+
+.dfe-page-feedback__cancel {
+    margin-bottom: 0;
+}
+
+@media (max-width: 40.0625em) {
+    .dfe-page-feedback__row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddApplicationSights(builder.Configuration);
 
+builder.Services.AddAzureAppConfiguration();
+
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
@@ -22,6 +24,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseGovUkFrontend();
 app.UseStaticFiles();
+
+app.UseAzureAppConfiguration();
 
 app.UseHttpsRedirection();
 
