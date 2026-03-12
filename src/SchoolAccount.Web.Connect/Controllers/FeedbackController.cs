@@ -1,27 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
-using SchoolAccount.Web.Connect.Models;
-using SchoolAccount.Web.Connect.Services;
+using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Features.Feedback.Commands;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [ApiController]
-public class FeedbackController(IFeedbackTelemetryService feedbackTelemetryService) : ControllerBase
+public sealed class FeedbackController(
+    ICommandHandler<RecordPageFeedbackCommand> handler
+) : ControllerBase
 {
     [HttpPost(RouteConstants.FeedBack)]
-    public IActionResult RecordPageFeedback([FromBody] PageFeedbackRequest request)
+    public async Task<IActionResult> RecordPageFeedback(
+        [FromBody] RecordPageFeedbackCommand command,
+        CancellationToken cancellationToken)
     {
-        if (!IsValid(request))
-        {
-            return BadRequest();
-        }
+        var result = await handler.Handle(command, cancellationToken);
 
-        feedbackTelemetryService.RecordPageFeedback(request);
+        if (result.IsFailure)
+        {
+            return Problem(detail: result.Error.Description);
+        }
 
         return NoContent();
     }
-
-    private static bool IsValid(PageFeedbackRequest request) =>
-        !string.IsNullOrWhiteSpace(request.PageId) &&
-        !string.IsNullOrWhiteSpace(request.Value) &&
-        !string.IsNullOrWhiteSpace(request.Variant);
 }

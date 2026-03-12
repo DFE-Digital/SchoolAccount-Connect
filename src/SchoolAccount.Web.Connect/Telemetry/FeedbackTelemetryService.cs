@@ -1,24 +1,22 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using SchoolAccount.Application.Abstractions.Telemetry;
+using SchoolAccount.Application.Features.Feedback.Commands;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models;
 
-namespace SchoolAccount.Web.Connect.Services;
+namespace SchoolAccount.Web.Connect.Telemetry;
 
-public class FeedbackTelemetryService(
-    IOrganisationContext organisationContext,
-    IHttpContextAccessor contextAccessor)
-    : IFeedbackTelemetryService
+public class FeedbackTelemetryService(IOrganisationContext organisationContext, IHttpContextAccessor contextAccessor) : IFeedbackTelemetryService
 {
     private static readonly Meter Meter = new("SchoolAccount.Feedback");
 
     private static readonly Counter<int> FeedbackCounter =
         Meter.CreateCounter<int>("page_feedback_response");
 
-    public void RecordPageFeedback(PageFeedbackRequest request)
+    public void RecordPageFeedback(RecordPageFeedbackCommand command)
     {
-        var telemetry = BuildTelemetry(request);
+        var telemetry = BuildTelemetry(command);
 
         var tags = new TagList
         {
@@ -37,7 +35,7 @@ public class FeedbackTelemetryService(
         FeedbackCounter.Add(1, tags);
     }
 
-    private FeedbackTelemetry BuildTelemetry(PageFeedbackRequest request)
+    private FeedbackTelemetry BuildTelemetry(RecordPageFeedbackCommand request)
     {
         var claim = contextAccessor.GetOrganisation();
 

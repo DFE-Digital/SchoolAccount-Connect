@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
+using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
-using SchoolAccount.Web.Connect.Services;
+using SchoolAccount.Web.Connect.Telemetry;
 using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace SchoolAccount.Web.Connect;

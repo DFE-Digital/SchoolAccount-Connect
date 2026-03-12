@@ -1,4 +1,4 @@
-namespace SchoolAccount.Web.Connect.Models;
+namespace SchoolAccount.Application.Features.Feedback.Commands;
 
 public sealed record FeedbackTelemetry(
     string PageId,
