@@ -24,14 +24,14 @@
         }
 
         var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
-        var variant = root.getAttribute('data-feedback-variant') || 'v1';
+        var variant = root.getAttribute('data-feedback-variant') || 'feedback-button';
 
         button.addEventListener('click', function () {
             var payload = {
                 pageId: this.getAttribute('data-page-id'),
-                value: this.getAttribute('data-feedback-value') || 'clicked_feedback',
+                value: this.getAttribute('data-feedback-value') || 'clicked',
                 variant: variant,
-                action: this.getAttribute('data-feedback-action') || 'opened_feedback'
+                action: this.getAttribute('data-feedback-action') || 'feedback.clicked'
             };
 
             postTelemetry(postUrl, payload);
@@ -46,7 +46,7 @@
         var feedbackLink = root.querySelector('[data-feedback-link]');
 
         var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
-        var variant = root.getAttribute('data-feedback-variant') || 'v2';
+        var variant = root.getAttribute('data-feedback-variant') || 'feedback.yes.no';
 
         var selectedValue = null;
         var selectedPageId = null;
@@ -91,7 +91,7 @@
                     pageId: selectedPageId,
                     value: selectedValue,
                     variant: variant,
-                    action: 'feedback.banner.opened'
+                    action: 'feedback.response'
                 });
 
                 showFollowup();
@@ -105,7 +105,7 @@
                         pageId: selectedPageId,
                         value: selectedValue,
                         variant: variant,
-                        action: 'feedback.banner.cancelled'
+                        action: 'feedback.cancel.pressed'
                     });
                 }
 
@@ -120,9 +120,51 @@
                         pageId: selectedPageId,
                         value: selectedValue,
                         variant: variant,
-                        action: 'feedback.banner.opened'
+                        action: 'feedback.clicked'
                     });
                 }
+            });
+        }
+    }
+
+    function initialiseConnectBanner(root) {
+        var feedbackLink = root.querySelector('[data-connect-banner-link]');
+        var dismissButton = root.querySelector('[data-connect-banner-dismiss]');
+
+        var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
+        var variant = root.getAttribute('data-feedback-variant') || 'feedback-banner';
+        var pageId = root.getAttribute('data-page-id');
+
+        if (pageId) {
+            postTelemetry(postUrl, {
+                pageId: pageId,
+                value: 'shown',
+                variant: variant,
+                action: 'feedback.shown'
+            });
+        }
+
+        if (feedbackLink) {
+            feedbackLink.addEventListener('click', function () {
+                postTelemetry(postUrl, {
+                    pageId: this.getAttribute('data-page-id') || pageId,
+                    value: this.getAttribute('data-feedback-value') || 'clicked',
+                    variant: this.getAttribute('data-feedback-variant') || variant,
+                    action: this.getAttribute('data-feedback-action') || 'feedback.clicked'
+                });
+            });
+        }
+
+        if (dismissButton) {
+            dismissButton.addEventListener('click', function () {
+                postTelemetry(postUrl, {
+                    pageId: this.getAttribute('data-page-id') || pageId,
+                    value: this.getAttribute('data-feedback-value') || 'dismissed',
+                    variant: this.getAttribute('data-feedback-variant') || variant,
+                    action: this.getAttribute('data-feedback-action') || 'feedback.dismissed'
+                });
+
+                root.classList.add('govuk-!-display-none');
             });
         }
     }
@@ -134,6 +176,10 @@
 
         document.querySelectorAll('[data-feedback-component="page-useful"]').forEach(function (root) {
             initialisePageUsefulFeedback(root);
+        });
+
+        document.querySelectorAll('[data-feedback-component="connect-banner"]').forEach(function (root) {
+            initialiseConnectBanner(root);
         });
     });
 })();

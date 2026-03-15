@@ -849,3 +849,17 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
         align-items: flex-start;
     }
 }
+
+.dfe-connect-banner {
+    width: 70%;
+    padding: 24px;
+    background-color: #f3f2f1;
+    border-left: 6px solid #1d70b8;
+    box-sizing: border-box;
+}
+
+@media (max-width: 40.0525em) {
+    .dfe-connect-banner {
+        width: 100%;
+    }
+}

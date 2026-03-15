@@ -29,7 +29,8 @@ public class FeedbackTelemetryService(IOrganisationContext organisationContext, 
             { "Category", telemetry.Category },
             { "Provider", telemetry.Provider },
             { "Region", telemetry.Region },
-            { "LocalAuthority", telemetry.LocalAuthority }
+            { "LocalAuthority", telemetry.LocalAuthority },
+            { "Name", telemetry.Name }
         };
 
         FeedbackCounter.Add(1, tags);
@@ -49,7 +50,8 @@ public class FeedbackTelemetryService(IOrganisationContext organisationContext, 
             Category: organisationContext.Category.ToString(),
             Provider: organisationContext.Provider.ToString() ?? "unknown",
             Region: CleanOrUnknown(claim?.Region?.Name),
-            LocalAuthority: CleanOrUnknown(claim?.LocalAuthority?.Name));
+            LocalAuthority: CleanOrUnknown(claim?.LocalAuthority?.Name),
+            Name: claim?.Name ?? "unknown");
     }
 
     private static string CleanOrUnknown(string? value)

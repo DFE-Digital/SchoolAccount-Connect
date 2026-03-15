@@ -15,6 +15,7 @@
     var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+    var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
 }
 
 @section Head {
@@ -29,7 +30,8 @@
     {
         <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
             <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>Cookies on @ApplicationConstants.DfeConnect</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-heading>Cookies
+                    on @ApplicationConstants.DfeConnect</govuk-cookie-banner-message-heading>
                 <govuk-cookie-banner-message-content>
                     <p class="govuk-body">We use some essential cookies to make this service work.</p>
                     <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the
@@ -59,7 +61,20 @@
         <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
         This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
+
     @await RenderSectionAsync("BeforeContent", false)
+
+    @if (isAuthenticated)
+    {
+        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectBanner);
+        if (showConnectBanner)
+        {
+            <partial name="_ConnectBanner" view-data='new ViewDataDictionary(ViewData)
+                     {
+                         ["FeedbackUrl"] = feedbackUrl
+                     }'/>
+        }
+    }
 }
 
 
@@ -89,21 +104,17 @@ else
 @await RenderSectionAsync("Scripts", required: false)
 
 @section Footer {
-    @{
-        var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
-    }
-
     @if (isAuthenticated)
     {
         var useV2 = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectFeedback);
 
         if (useV2)
         {
-            <partial name="_FeedbackV2" />
+            <partial name="_FeedbackV2"/>
         }
         else
         {
-            <partial name="_Feedback" />
+            <partial name="_Feedback"/>
         }
     }
 

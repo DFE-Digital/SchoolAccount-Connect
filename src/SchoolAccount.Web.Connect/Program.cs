@@ -6,8 +6,6 @@ using SchoolAccount.Web.Connect.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddApplicationSights(builder.Configuration);
-
 builder.Services.AddAzureAppConfiguration();
 
 builder.Services
