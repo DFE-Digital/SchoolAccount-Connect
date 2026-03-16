@@ -10,31 +10,16 @@ public class TagEntityConfiguration : IEntityTypeConfiguration<TagEntity>
 {
     public void Configure(EntityTypeBuilder<TagEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.Tag);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.Tag);
 
-        builder
-            .ToTable(
-                TableConstants.Reference.Tag, 
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Reference.Tag, SchemaConstants.Reference);
 
-        builder
-            .HasIndex(e => new { e.TaxonomyId, e.TagName }, "UQ_Tag_TagName")
-            .IsUnique();
+        builder.HasIndex(e => new { e.TaxonomyId, e.TagName }, "UQ_Tag_TagName").IsUnique();
 
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(1500);
-        builder
-            .Property(e => e.DisplayName)
-            .HasMaxLength(250);
-        builder
-            .Property(e => e.Name)
-            .HasMaxLength(250);
-        builder
-            .Property(e => e.TagName)
-            .HasMaxLength(250);
+        builder.Property(e => e.Description).HasMaxLength(1500);
+        builder.Property(e => e.DisplayName).HasMaxLength(250);
+        builder.Property(e => e.Name).HasMaxLength(250);
+        builder.Property(e => e.TagName).HasMaxLength(250);
 
         builder
             .HasOne(d => d.Taxonomy)

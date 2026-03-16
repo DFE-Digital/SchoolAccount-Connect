@@ -4,7 +4,7 @@ public class GateResult(bool shouldRedirect, string? redirectAddress)
 {
     public bool ShouldRedirect { get; } = shouldRedirect;
     public string? RedirectAddress { get; } = redirectAddress;
-    
+
     public static GateResult Continue()
     {
         return new GateResult(false, null);

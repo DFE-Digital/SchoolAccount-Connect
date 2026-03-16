@@ -9,11 +9,11 @@ namespace SchoolAccount.Integration.DfESignIn;
 public enum EstablishmentType
 {
     Undeclared = 0,
-    
+
     CommunitySchool = 1,
     VoluntaryAidedSchool = 2,
     VoluntaryControlledSchool = 3,
-    
+
     FoundationSchool = 5,
     CityTechnologyCollege = 6,
     CommunitySpecialSchool = 7,
@@ -23,9 +23,9 @@ public enum EstablishmentType
     FoundationSpecialSchool = 12,
     PupilReferralUnit = 14,
     LaNurserySchool = 15,
-    
+
     FurtherEducation = 18,
-    
+
     SecureUnits = 24,
     OffshoreSchools = 25,
     ServiceChildrensEducation = 26,
@@ -52,7 +52,7 @@ public enum EstablishmentType
     ChildrensCentre = 47,
     ChildrensCentreLinkedSite = 48,
     OnlineProvider = 49,
-    
+
     InstitutionFundedByOtherGovernmentDepartment = 56,
-    AcademySecure16To19 = 57
+    AcademySecure16To19 = 57,
 }

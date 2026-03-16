@@ -13,25 +13,19 @@ public class PreSixteenProviderTests
         var provider = new PreSixteenProvider();
         var claim = new OrganisationClaim
         {
-            Type = new OrganisationEstablishmentTypeClaim
-            {
-                Id = EstablishmentType.AcademyConverter
-            }
+            Type = new OrganisationEstablishmentTypeClaim { Id = EstablishmentType.AcademyConverter },
         };
 
         provider.IsProvider(claim).Should().BeTrue();
     }
-    
+
     [Fact]
     public void IsProviderShouldReturnFalseIfNotForPreSixteenTypes()
     {
         var provider = new PreSixteenProvider();
         var claim = new OrganisationClaim
         {
-            Type = new OrganisationEstablishmentTypeClaim
-            {
-                Id = EstablishmentType.FreeSchools
-            }
+            Type = new OrganisationEstablishmentTypeClaim { Id = EstablishmentType.FreeSchools },
         };
 
         provider.IsProvider(claim).Should().BeFalse();

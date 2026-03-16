@@ -20,8 +20,9 @@ public class DfeCardTagHelper : TagHelper
         var url = encoder.Encode(Link);
         var description = encoder.Encode(Description);
 
-        var baseLinkClasses =
-            encoder.Encode("govuk-link govuk-link--no-visited-state dfe-card-link--header dfe-card-link--support support-guidance-regulations-link-ga");
+        var baseLinkClasses = encoder.Encode(
+            "govuk-link govuk-link--no-visited-state dfe-card-link--header dfe-card-link--support support-guidance-regulations-link-ga"
+        );
 
         var divCard = new TagBuilder("div");
         divCard.AddCssClass("dfe-card");
@@ -32,14 +33,8 @@ public class DfeCardTagHelper : TagHelper
         var h3 = new TagBuilder("h3");
         h3.AddCssClass("govuk-heading-s");
 
-        var a = new TagBuilder("a")
-        {
-            Attributes =
-            {
-                ["href"] = url,
-            }
-        };
-        
+        var a = new TagBuilder("a") { Attributes = { ["href"] = url } };
+
         a.AddCssClass(baseLinkClasses);
         a.InnerHtml.AppendHtml(title);
         h3.InnerHtml.AppendHtml(a);

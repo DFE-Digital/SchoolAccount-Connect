@@ -8,11 +8,11 @@ public class PreSixteenProvider : IProvider
     {
         return organisation.Type?.Id
             is EstablishmentType.AcademyConverter
-            or EstablishmentType.AcademySpecialConverter
-            or EstablishmentType.AcademySponsorLed
-            or EstablishmentType.AcademyAlternativeProvisionConverter
-            or EstablishmentType.AcademySpecialSponsorLed
-            or EstablishmentType.AcademyAlternativeProvisionSponsorLed;
+                or EstablishmentType.AcademySpecialConverter
+                or EstablishmentType.AcademySponsorLed
+                or EstablishmentType.AcademyAlternativeProvisionConverter
+                or EstablishmentType.AcademySpecialSponsorLed
+                or EstablishmentType.AcademyAlternativeProvisionSponsorLed;
     }
 
     public Task<bool> CanAccess()

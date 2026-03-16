@@ -3,7 +3,7 @@ namespace SchoolAccount.Kernel;
 public enum SchoolType
 {
     Unknown = 0,
-    
+
     Academy = 1,
     AcademySpecial = 2,
     MultiAcademyTrust = 3,
@@ -11,5 +11,5 @@ public enum SchoolType
     LocalAuthorityManaged = 5,
     LocalAuthorityManagedSpecial = 6,
     NonMaintainedSpecial = 7,
-    IndustrySpecial = 8
+    IndustrySpecial = 8,
 }

@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <ItemGroup>
-        <ProjectReference Include="..\SchoolAccount.Domain\SchoolAccount.Domain.csproj"/>
-        <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions"/>
-        <PackageReference Include="FluentValidation"/>
-        <PackageReference Include="Microsoft.Extensions.Logging"/>
-        <PackageReference Include="Scrutor"/>
-        <PackageReference Include="Serilog"/>
-        <PackageReference Include="X.PagedList" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+    <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Scrutor" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="X.PagedList" />
+  </ItemGroup>
 </Project>

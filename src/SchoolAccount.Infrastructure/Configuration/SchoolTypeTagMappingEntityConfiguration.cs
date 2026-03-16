@@ -10,14 +10,9 @@ public class SchoolTypeTagMappingEntityConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<SchoolTypeTagMappingEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.SchoolTypeTagMapping);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.SchoolTypeTagMapping);
 
-        builder
-            .ToTable(
-                TableConstants.Mapping.SchoolType, 
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Mapping.SchoolType, SchemaConstants.Reference);
 
         builder
             .HasOne(d => d.SchoolType)

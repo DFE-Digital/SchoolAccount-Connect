@@ -15,11 +15,9 @@ public class FeatureManagementContextAccessor(IHttpContextAccessor httpContextAc
         {
             groups.AddRange(httpContext.User.FindAll(ClaimTypes.Role).Select(roleClaim => roleClaim.Value));
         }
-        
-        return new ValueTask<TargetingContext>(new TargetingContext
-        {
-            UserId = userId ?? "anonymous",
-            Groups = groups
-        });
+
+        return new ValueTask<TargetingContext>(
+            new TargetingContext { UserId = userId ?? "anonymous", Groups = groups }
+        );
     }
 }

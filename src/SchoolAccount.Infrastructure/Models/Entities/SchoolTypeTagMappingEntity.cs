@@ -2,7 +2,7 @@ using SchoolAccount.Infrastructure.Models.Interfaces;
 
 namespace SchoolAccount.Infrastructure.Models.Entities;
 
-public class SchoolTypeTagMappingEntity: IDatabaseEntity
+public class SchoolTypeTagMappingEntity : IDatabaseEntity
 {
     public int Id { get; set; }
 

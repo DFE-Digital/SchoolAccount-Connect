@@ -11,17 +11,21 @@ namespace SchoolAccount.Web.Connect.HtmlGeneration;
 
 internal static partial class ComponentGenerator
 {
-    internal static void ApplyComponentHtml(this TagHelperOutput output, IHtmlContent content, HtmlEncoder? encoder = null)
+    internal static void ApplyComponentHtml(
+        this TagHelperOutput output,
+        IHtmlContent content,
+        HtmlEncoder? encoder = null
+    )
     {
         ArgumentNullException.ThrowIfNull(output);
         ArgumentNullException.ThrowIfNull(content);
-        
+
         encoder ??= HtmlEncoder.Default;
         ArgumentNullException.ThrowIfNull(encoder);
 
         var unwrapped = UnwrapComponent(content, encoder);
         ArgumentNullException.ThrowIfNull(unwrapped);
-        
+
         output.TagName = unwrapped.TagName;
         output.TagMode = unwrapped.TagMode;
 
@@ -51,13 +55,16 @@ internal static partial class ComponentGenerator
         var root = (HtmlElementNode)doc.RootNodes.Single(n => n is HtmlElementNode);
 
         var tagName = root.TagName;
-        var tagMode = root.IsSelfClosing 
-            ? Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing 
+        var tagMode = root.IsSelfClosing
+            ? Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing
             : Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag;
         var attributes = new TagHelperAttributeList(
-            root.Attributes.Select(a => a.Value is null 
-                ? new TagHelperAttribute(a.Name) 
-                : new TagHelperAttribute(a.Name, new HtmlString(a.Value))));
+            root.Attributes.Select(a =>
+                a.Value is null
+                    ? new TagHelperAttribute(a.Name)
+                    : new TagHelperAttribute(a.Name, new HtmlString(a.Value))
+            )
+        );
         var innerHtml = new HtmlString(root.InnerHtml);
 
         return new ComponentTagHelperOutput(tagName, tagMode, attributes, innerHtml);
@@ -67,5 +74,6 @@ internal static partial class ComponentGenerator
         string? TagName,
         Microsoft.AspNetCore.Razor.TagHelpers.TagMode TagMode,
         ReadOnlyTagHelperAttributeList Attributes,
-        IHtmlContent InnerHtml);
+        IHtmlContent InnerHtml
+    );
 }

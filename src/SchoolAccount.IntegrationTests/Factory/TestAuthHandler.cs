@@ -9,8 +9,8 @@ namespace SchoolAccount.IntegrationTests.Factory;
 internal sealed class TestAuthHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
-    UrlEncoder encoder)
-    : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+    UrlEncoder encoder
+) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     internal const string SchemeName = "Test";
     private const string AuthHeader = "X-User";
@@ -22,11 +22,8 @@ internal sealed class TestAuthHandler(
         {
             return Task.FromResult(AuthenticateResult.NoResult());
         }
-        
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, AuthHeader),
-        };
+
+        var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, AuthHeader) };
 
         var identity = new ClaimsIdentity(claims, SchemeName);
         var principal = new ClaimsPrincipal(identity);
@@ -34,14 +31,14 @@ internal sealed class TestAuthHandler(
 
         return Task.FromResult(AuthenticateResult.Success(ticket));
     }
-    
+
     private bool IsAuthenticatedFromHeader()
     {
         if (!Request.Headers.TryGetValue(AuthHeader, out var values))
         {
             return false;
         }
-        
+
         var value = values.FirstOrDefault();
         return !string.IsNullOrWhiteSpace(value);
     }

@@ -7,6 +7,7 @@ public static class ProviderExtensions
 {
     public static bool IsProviderAllowed(this IProvider provider, Type[] allowedProviders)
     {
-        return provider is not NullProvider && (allowedProviders.Length == 0 || allowedProviders.Any(t => t.IsInstanceOfType(provider)));
+        return provider is not NullProvider
+            && (allowedProviders.Length == 0 || allowedProviders.Any(t => t.IsInstanceOfType(provider)));
     }
 }

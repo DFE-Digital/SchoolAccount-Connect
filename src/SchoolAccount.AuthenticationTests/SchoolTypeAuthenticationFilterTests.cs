@@ -16,7 +16,7 @@ public class SchoolTypeAuthenticationFilterTests
         var context = AuthorizationFilterContextHelper.CreateContext(true);
         var organisationContext = OrganisationContextHelper.CreateContext(true, SchoolType.AcademySpecial, out _);
         var filter = new SchoolTypeAuthorisationFilter(organisationContext, [SchoolType.Academy]);
-        
+
         // Act
         await filter.OnAuthorizationAsync(context);
 

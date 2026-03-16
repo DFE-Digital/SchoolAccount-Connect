@@ -4,13 +4,10 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Feedback.Commands;
 
-public sealed class RecordPageFeedbackCommandHandler(
-    IFeedbackTelemetryService feedbackTelemetryService)
+public sealed class RecordPageFeedbackCommandHandler(IFeedbackTelemetryService feedbackTelemetryService)
     : ICommandHandler<RecordPageFeedbackCommand>
 {
-    public Task<Result> Handle(
-        RecordPageFeedbackCommand command,
-        CancellationToken cancellationToken)
+    public Task<Result> Handle(RecordPageFeedbackCommand command, CancellationToken cancellationToken)
     {
         feedbackTelemetryService.RecordPageFeedback(command);
 

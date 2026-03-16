@@ -14,7 +14,10 @@ namespace SchoolAccount.Web.Connect.SignIn;
 
 internal static class DfeSignInExtensions
 {
-    public static void AddDfeSignInAuthentication(this IServiceCollection services, ConfigurationManager configurationManager)
+    public static void AddDfeSignInAuthentication(
+        this IServiceCollection services,
+        ConfigurationManager configurationManager
+    )
     {
         var configuration = configurationManager.GetRequiredSection("DfeSignIn").Get<DfeSignInConfiguration>();
 
@@ -32,12 +35,13 @@ internal static class DfeSignInExtensions
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();
 
-        services.AddAuthentication(sharedOptions =>
-        {
-            sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            sharedOptions.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        })
+        services
+            .AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
             .AddOpenIdConnect(options =>
             {
                 options.ClientId = configuration.ClientId;
@@ -68,14 +72,16 @@ internal static class DfeSignInExtensions
                 options.AccessDeniedPath = configuration.AccessDeniedPath;
                 options.LogoutPath = configuration.SignOutRedirectUrl.OriginalString;
             });
-        
+
         services.AddScoped<IAuthorizationHandler, ProviderAuthorisationHandler>();
 
         services
             .AddAuthorizationBuilder()
-            .SetDefaultPolicy(new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .AddRequirements(new ProviderRequirement())
-                .Build());
+            .SetDefaultPolicy(
+                new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddRequirements(new ProviderRequirement())
+                    .Build()
+            );
     }
 }

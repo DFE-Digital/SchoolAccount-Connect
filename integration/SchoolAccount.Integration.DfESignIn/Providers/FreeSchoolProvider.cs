@@ -8,10 +8,10 @@ public class FreeSchoolProvider : IProvider
     {
         return organisation.Type?.Id
             is EstablishmentType.FreeSchools
-            or EstablishmentType.FreeSchoolsAlternativeProvision
-            or EstablishmentType.FreeSchoolsSpecial;
+                or EstablishmentType.FreeSchoolsAlternativeProvision
+                or EstablishmentType.FreeSchoolsSpecial;
     }
-    
+
     public Task<bool> CanAccess()
     {
         return Task.FromResult(true);

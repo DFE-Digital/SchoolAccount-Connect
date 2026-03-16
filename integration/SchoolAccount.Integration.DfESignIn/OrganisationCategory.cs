@@ -9,7 +9,7 @@ namespace SchoolAccount.Integration.DfESignIn;
 public enum OrganisationCategory
 {
     Undeclared = 0,
-    
+
     /// <remarks>
     /// If picked, go to <see cref="EstablishmentType"/> for further information.
     /// </remarks>
@@ -17,14 +17,14 @@ public enum OrganisationCategory
     LocalAuthority = 2,
     OtherLegacyOrganisations = 3,
     EarlyYearSetting = 4,
-    
+
     OtherStakeholders = 8,
     TrainingProviders = 9,
     MultiAcademyTrust = 10,
     Government = 11,
     OtherGiasStakeholder = 12,
     SingleAcademyTrust = 13,
-    
+
     SoftwareSuppliers = 50,
     FurtherEducation = 51,
 }

@@ -11,16 +11,12 @@ using SchoolAccount.Web.Connect.Authentication.Attributes;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
-public sealed class HomeController(
-    IQueryHandler<TaskSearchQuery, TaskWithSubTasks> handler
-) : Controller
+public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTasks> handler) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(
-            new TaskSearchQuery(string.Empty),
-            cancellationToken);
+        var result = await handler.Handle(new TaskSearchQuery(string.Empty), cancellationToken);
 
         if (result.IsFailure)
         {
@@ -33,11 +29,10 @@ public sealed class HomeController(
     [HttpGet("home/task-search")]
     public async Task<ActionResult<TaskWithSubTasks>> TaskSearch(
         [FromQuery] string term,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
-        var result = await handler.Handle(
-            new TaskSearchQuery(term),
-            cancellationToken);
+        var result = await handler.Handle(new TaskSearchQuery(term), cancellationToken);
 
         if (result.IsFailure)
         {

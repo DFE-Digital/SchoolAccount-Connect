@@ -5,8 +5,11 @@ namespace SchoolAccount.Integration.DfESignIn.Converters;
 
 public class OrganisationCategoryConverter : JsonConverter<OrganisationCategory>
 {
-    public override OrganisationCategory Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
+    public override OrganisationCategory Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         var value = reader.GetString();
 

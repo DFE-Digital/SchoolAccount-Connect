@@ -6,12 +6,12 @@ using SchoolAccount.Integration.DfESignIn.Requirements;
 
 namespace SchoolAccount.Integration.DfESignIn.Authentication;
 
-public class ProviderAuthorisationHandler(
-    IProviderContext providerContext
-) : AuthorizationHandler<ProviderRequirement>
+public class ProviderAuthorisationHandler(IProviderContext providerContext) : AuthorizationHandler<ProviderRequirement>
 {
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
-        ProviderRequirement requirement)
+    protected override async Task HandleRequirementAsync(
+        AuthorizationHandlerContext context,
+        ProviderRequirement requirement
+    )
     {
         if (!context.User.Identity?.IsAuthenticated ?? true)
         {
@@ -24,7 +24,7 @@ public class ProviderAuthorisationHandler(
         {
             throw new NoProviderException();
         }
-        
+
         if (!requirement.IsProviderAllowed(provider))
         {
             return;

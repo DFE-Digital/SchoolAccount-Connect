@@ -8,10 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAzureAppConfiguration();
 
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddPresentation(builder.Configuration);
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation(builder.Configuration);
 
 var app = builder.Build();
 
@@ -48,4 +45,3 @@ namespace SchoolAccount.Web.Connect
         // This partial class is used to allow the Program class to be extended in other files.
     }
 }
-

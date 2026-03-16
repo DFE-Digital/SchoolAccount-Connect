@@ -10,20 +10,11 @@ public class SchoolTypeEntityConfiguration : IEntityTypeConfiguration<SchoolType
 {
     public void Configure(EntityTypeBuilder<SchoolTypeEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.SchoolType);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.SchoolType);
 
-        builder
-            .ToTable(
-                TableConstants.Reference.SchoolType, 
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Reference.SchoolType, SchemaConstants.Reference);
 
-        builder
-            .Property(e => e.Id)
-            .ValueGeneratedNever();
-        builder
-            .Property(e => e.Name)
-            .HasMaxLength(250);
+        builder.Property(e => e.Id).ValueGeneratedNever();
+        builder.Property(e => e.Name).HasMaxLength(250);
     }
 }

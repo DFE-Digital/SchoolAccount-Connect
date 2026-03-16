@@ -8,25 +8,25 @@ namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class ModelStateExtensions
 {
-    public static void AddFluentValidationErrors(this ModelStateDictionary modelState, ValidationError validationResult, string prefix = "")
+    public static void AddFluentValidationErrors(
+        this ModelStateDictionary modelState,
+        ValidationError validationResult,
+        string prefix = ""
+    )
     {
         foreach (var failure in validationResult.Errors)
         {
-            var propertyName = string.IsNullOrWhiteSpace(prefix)
-                ? failure.Property
-                : $"{prefix}.{failure.Property}";
-            
-            modelState.AddModelError(
-                propertyName ?? string.Empty,
-                failure.Description);
+            var propertyName = string.IsNullOrWhiteSpace(prefix) ? failure.Property : $"{prefix}.{failure.Property}";
+
+            modelState.AddModelError(propertyName ?? string.Empty, failure.Description);
         }
     }
-    
+
     private static bool HasErrors(this ModelStateDictionary modelState, string key)
     {
         return modelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0;
     }
-    
+
     private static bool HasErrorsAndGet(this ModelStateDictionary modelState, string key, out ModelStateEntry? entry)
     {
         return modelState.TryGetValue(key, out entry) && entry.Errors.Count > 0;
@@ -34,9 +34,7 @@ public static class ModelStateExtensions
 
     private static string? GetFirstErrorMessage(this ModelStateDictionary modelState, string key)
     {
-        return modelState.HasErrorsAndGet(key, out var entry)
-            ? entry!.Errors.FirstOrDefault()?.ErrorMessage
-            : null;
+        return modelState.HasErrorsAndGet(key, out var entry) ? entry!.Errors.FirstOrDefault()?.ErrorMessage : null;
     }
 
     public static FieldMetadataModel GetFieldMetadata<TModel>(this ViewDataDictionary<TModel> viewData)
@@ -44,10 +42,10 @@ public static class ModelStateExtensions
         var modelState = viewData.ModelState;
         var metadata = viewData.ModelMetadata;
         var templateInfo = viewData.TemplateInfo;
-        
+
         var fieldName = templateInfo.GetFullHtmlFieldName("");
         viewData.TryGetValue("hint", out var hintMessage);
-        
+
         return new FieldMetadataModel
         {
             FieldName = templateInfo.GetFullHtmlFieldName(""),
@@ -57,7 +55,7 @@ public static class ModelStateExtensions
             Hint = hintMessage?.ToString(),
             IsRequired = metadata.IsRequired(), // metadata.IsRequired,
             HasError = modelState.HasErrors(fieldName),
-            ErrorMessage = modelState.GetFirstErrorMessage(fieldName)
+            ErrorMessage = modelState.GetFirstErrorMessage(fieldName),
         };
     }
 }

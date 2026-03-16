@@ -10,19 +10,11 @@ public class TaxonomySourceAssociationEntityConfiguration : IEntityTypeConfigura
 {
     public void Configure(EntityTypeBuilder<TaxonomySourceAssociationEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.TaxonomySourceAssociation);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.TaxonomySourceAssociation);
 
-        builder
-            .ToTable(
-                TableConstants.Mapping.Taxonomy,
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Mapping.Taxonomy, SchemaConstants.Reference);
 
-        builder
-            .HasIndex(e => new { e.SourceId, e.TaxonomyId }, 
-                "UQ_TaxonomySource_Association")
-            .IsUnique();
+        builder.HasIndex(e => new { e.SourceId, e.TaxonomyId }, "UQ_TaxonomySource_Association").IsUnique();
 
         builder
             .HasOne(d => d.Source)

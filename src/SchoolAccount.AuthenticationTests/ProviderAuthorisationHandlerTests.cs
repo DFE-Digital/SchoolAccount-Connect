@@ -14,16 +14,18 @@ namespace SchoolAccount.AuthenticationTests;
 
 public class ProviderAuthorisationHandlerTests
 {
-    private static (ProviderAuthorisationHandler, AuthorizationHandlerContext) CreateContext(IOrganisationContext organisationContext)
+    private static (ProviderAuthorisationHandler, AuthorizationHandlerContext) CreateContext(
+        IOrganisationContext organisationContext
+    )
     {
         var handler = new ProviderAuthorisationHandler(organisationContext);
         var requirement = new ProviderRequirement();
         var user = ClaimsPrincipalHelper.CreateUser();
         var context = new AuthorizationHandlerContext([requirement], user, null);
-        
+
         return (handler, context);
     }
-    
+
     [Fact]
     public async Task ShouldFailWhenNoProvider()
     {

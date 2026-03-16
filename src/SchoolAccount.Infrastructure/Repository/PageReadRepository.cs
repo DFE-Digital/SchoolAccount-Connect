@@ -5,9 +5,8 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Repository;
 
-public sealed class PageReadRepository(
-    IApplicationDbContext applicationDbContext,
-    IDateTimeProvider dateTimeProvider) : IPageReadStore
+public sealed class PageReadRepository(IApplicationDbContext applicationDbContext, IDateTimeProvider dateTimeProvider)
+    : IPageReadStore
 {
     public async Task<TaskWithSubTasks> GetAllPagesAsync(TaskSearchQuery query, CancellationToken cancellationToken)
     {
@@ -17,8 +16,8 @@ public sealed class PageReadRepository(
         var from = dateTimeProvider.UtcNow.Date;
         var to = from.AddMonths(12);
 
-        var tasksQuery = applicationDbContext.Tasks
-            .AsNoTracking()
+        var tasksQuery = applicationDbContext
+            .Tasks.AsNoTracking()
             .Where(t => t.IsDeleted != true)
             .Where(t => t.IsLatestVersion);
 
@@ -26,18 +25,20 @@ public sealed class PageReadRepository(
         {
             tasksQuery = tasksQuery.Where(t =>
                 applicationDbContext.SubTasks.Any(st =>
-                    st.IsDeleted != true &&
-                    st.TaskId == t.Id &&
-                    st.DueDate != null &&
-                    st.DueDate >= from &&
-                    st.DueDate < to));
+                    st.IsDeleted != true
+                    && st.TaskId == t.Id
+                    && st.DueDate != null
+                    && st.DueDate >= from
+                    && st.DueDate < to
+                )
+            );
         }
         else
         {
             var like = $"%{term}%";
             tasksQuery = tasksQuery.Where(t =>
-                EF.Functions.Like(t.Name!, like) ||
-                EF.Functions.Like(t.ReferenceNo!, like));
+                EF.Functions.Like(t.Name!, like) || EF.Functions.Like(t.ReferenceNo!, like)
+            );
         }
 
         var tasks = await tasksQuery
@@ -53,8 +54,8 @@ public sealed class PageReadRepository(
 
         var taskIds = tasks.Select(t => t.Id).ToArray();
 
-        var subTasksQuery = applicationDbContext.SubTasks
-            .AsNoTracking()
+        var subTasksQuery = applicationDbContext
+            .SubTasks.AsNoTracking()
             .Where(st => st.IsDeleted != true)
             .Where(st => taskIds.Contains(st.TaskId));
 

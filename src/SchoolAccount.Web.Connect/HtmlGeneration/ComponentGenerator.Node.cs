@@ -6,14 +6,15 @@ namespace SchoolAccount.Web.Connect.HtmlGeneration;
 internal partial class ComponentGenerator
 {
     internal static TagBuilder Generate(
-        string nodeName, 
-        string? className = null, 
-        string? text = null, 
+        string nodeName,
+        string? className = null,
+        string? text = null,
         bool treatAsHtml = false,
-        params (string, string?)[] attributes)
+        params (string, string?)[] attributes
+    )
     {
         var node = new TagBuilder(nodeName);
-        
+
         if (!string.IsNullOrEmpty(className))
         {
             node.MergeCssClass(className);
@@ -23,7 +24,7 @@ internal partial class ComponentGenerator
         {
             if (treatAsHtml)
             {
-                node.InnerHtml.AppendHtml(text);   
+                node.InnerHtml.AppendHtml(text);
             }
             else
             {
@@ -35,7 +36,7 @@ internal partial class ComponentGenerator
         {
             return node;
         }
-        
+
         foreach (var (key, property) in attributes)
         {
             if (property == null)

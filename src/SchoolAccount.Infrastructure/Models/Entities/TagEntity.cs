@@ -2,7 +2,7 @@ using SchoolAccount.Infrastructure.Models.Interfaces;
 
 namespace SchoolAccount.Infrastructure.Models.Entities;
 
-public class TagEntity: IIdNameEntity<long>
+public class TagEntity : IIdNameEntity<long>
 {
     public long Id { get; set; }
 

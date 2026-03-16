@@ -25,11 +25,10 @@ public static class DependencyInjection
 
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
-        services
-            .AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
+        services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString);
+        });
 
         return services;
     }

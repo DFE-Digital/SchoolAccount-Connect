@@ -3,9 +3,7 @@ using SchoolAccount.Integration.DfESignIn.Providers;
 
 namespace SchoolAccount.Integration.DfESignIn;
 
-public class ProviderResolver(
-    IEnumerable<IProvider> providers
-) : IProviderResolver
+public class ProviderResolver(IEnumerable<IProvider> providers) : IProviderResolver
 {
     public IProvider Resolve(OrganisationClaim? organisation)
     {
@@ -15,7 +13,7 @@ public class ProviderResolver(
         {
             provider = providers.FirstOrDefault(p => p.IsProvider(organisation));
         }
-        
+
         return provider ?? NullProvider.Default;
     }
 }

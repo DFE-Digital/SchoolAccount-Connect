@@ -7,12 +7,12 @@ using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Telemetry;
 
-public class FeedbackTelemetryService(IOrganisationContext organisationContext, IHttpContextAccessor contextAccessor) : IFeedbackTelemetryService
+public class FeedbackTelemetryService(IOrganisationContext organisationContext, IHttpContextAccessor contextAccessor)
+    : IFeedbackTelemetryService
 {
     private static readonly Meter Meter = new("SchoolAccount.Feedback");
 
-    private static readonly Counter<int> FeedbackCounter =
-        Meter.CreateCounter<int>("page_feedback_response");
+    private static readonly Counter<int> FeedbackCounter = Meter.CreateCounter<int>("page_feedback_response");
 
     public void RecordPageFeedback(RecordPageFeedbackCommand command)
     {
@@ -30,7 +30,7 @@ public class FeedbackTelemetryService(IOrganisationContext organisationContext, 
             { "Provider", telemetry.Provider },
             { "Region", telemetry.Region },
             { "LocalAuthority", telemetry.LocalAuthority },
-            { "Name", telemetry.Name }
+            { "Name", telemetry.Name },
         };
 
         FeedbackCounter.Add(1, tags);
@@ -51,7 +51,8 @@ public class FeedbackTelemetryService(IOrganisationContext organisationContext, 
             Provider: organisationContext.Provider.ToString() ?? "unknown",
             Region: CleanOrUnknown(claim?.Region?.Name),
             LocalAuthority: CleanOrUnknown(claim?.LocalAuthority?.Name),
-            Name: claim?.Name ?? "unknown");
+            Name: claim?.Name ?? "unknown"
+        );
     }
 
     private static string CleanOrUnknown(string? value)

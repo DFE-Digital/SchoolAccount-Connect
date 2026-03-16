@@ -28,7 +28,10 @@ internal static class DependencyInjection
     internal static void AddPresentation(this IServiceCollection services, ConfigurationManager configurationManager)
     {
         services.AddFluentValidation();
-        services.AddGovUkFrontend(options => { options.Rebrand = true; });
+        services.AddGovUkFrontend(options =>
+        {
+            options.Rebrand = true;
+        });
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
@@ -41,9 +44,7 @@ internal static class DependencyInjection
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
 
-        services
-            .AddControllersWithViews()
-            .AddMicrosoftIdentityUI();
+        services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();
@@ -63,13 +64,9 @@ internal static class DependencyInjection
 
     internal static void ConfigureAreas(this WebApplication app)
     {
-        app.MapControllerRoute(
-            name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+        app.MapControllerRoute(name: "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+        app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
     }
 
     internal static void ExceptionHandlers(this WebApplication app)
@@ -80,16 +77,21 @@ internal static class DependencyInjection
 
     internal static void StripHeaders(this WebApplication app)
     {
-        app.Use(async (context, next) =>
-        {
-            context.Response.Headers.Remove("X-Powered-By");
-            await next();
-        });
+        app.Use(
+            async (context, next) =>
+            {
+                context.Response.Headers.Remove("X-Powered-By");
+                await next();
+            }
+        );
     }
 
     private static void AddFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
+        services.AddFluentValidationAutoValidation(config =>
+        {
+            config.DisableDataAnnotationsValidation = true;
+        });
 
         services.AddValidatorsFromAssemblies(
             [Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly],
@@ -103,7 +105,8 @@ internal static class DependencyInjection
 
         services.AddAzureAppConfiguration();
 
-        services.AddFeatureManagement()
+        services
+            .AddFeatureManagement()
             .AddFeatureFilter<PercentageFilter>()
             .AddFeatureFilter<TimeWindowFilter>()
             .AddFeatureFilter<TargetingFilter>();
@@ -111,12 +114,14 @@ internal static class DependencyInjection
         services.AddSingleton<ITargetingContextAccessor, FeatureManagementContextAccessor>();
     }
 
-    private static void AddApplicationTelemetry(this IServiceCollection services,
-        ConfigurationManager configurationManager)
+    private static void AddApplicationTelemetry(
+        this IServiceCollection services,
+        ConfigurationManager configurationManager
+    )
     {
-        var appInsightsInstrumentationKey = configurationManager["AppInsightsInstrumentationKey"]
-                                            ?? throw new InvalidOperationException(
-                                                "Configuration value 'AppInsightsInstrumentationKey' is missing.");
+        var appInsightsInstrumentationKey =
+            configurationManager["AppInsightsInstrumentationKey"]
+            ?? throw new InvalidOperationException("Configuration value 'AppInsightsInstrumentationKey' is missing.");
 
         var appInsightsConnectionString = $"InstrumentationKey={appInsightsInstrumentationKey}";
 
@@ -125,9 +130,16 @@ internal static class DependencyInjection
             options.ConnectionString = appInsightsConnectionString;
         });
 
-        services.AddOpenTelemetry()
-            .UseAzureMonitor(options => { options.ConnectionString = appInsightsConnectionString; })
-            .WithMetrics(metrics => { metrics.AddMeter("SchoolAccount.Feedback"); });
+        services
+            .AddOpenTelemetry()
+            .UseAzureMonitor(options =>
+            {
+                options.ConnectionString = appInsightsConnectionString;
+            })
+            .WithMetrics(metrics =>
+            {
+                metrics.AddMeter("SchoolAccount.Feedback");
+            });
     }
 
     public static void AddMiddleware(this WebApplication app)
@@ -137,25 +149,27 @@ internal static class DependencyInjection
 
     private static void AddAzureAppConfiguration(ConfigurationManager configurationManager)
     {
-        var appConfigUri = configurationManager["AppConfigUri"]
-                           ?? throw new InvalidOperationException(
-                               "Configuration value 'AppConfigUri' is missing.");
+        var appConfigUri =
+            configurationManager["AppConfigUri"]
+            ?? throw new InvalidOperationException("Configuration value 'AppConfigUri' is missing.");
 
-        var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-        {
-            TenantId = configurationManager["TenantId"] ?? string.Empty
-        });
+        var credential = new DefaultAzureCredential(
+            new DefaultAzureCredentialOptions { TenantId = configurationManager["TenantId"] ?? string.Empty }
+        );
 
         configurationManager.AddAzureAppConfiguration(options =>
         {
-            options.Connect(new Uri(appConfigUri), credential)
+            options
+                .Connect(new Uri(appConfigUri), credential)
                 .Select(KeyFilter.Any)
                 .UseFeatureFlags()
-                .ConfigureKeyVault(keyVault => { keyVault.SetCredential(credential); })
+                .ConfigureKeyVault(keyVault =>
+                {
+                    keyVault.SetCredential(credential);
+                })
                 .ConfigureRefresh(refresh =>
                 {
-                    refresh.RegisterAll()
-                        .SetRefreshInterval(TimeSpan.FromSeconds(5));
+                    refresh.RegisterAll().SetRefreshInterval(TimeSpan.FromSeconds(5));
                 });
         });
     }

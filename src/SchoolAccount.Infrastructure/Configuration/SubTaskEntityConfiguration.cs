@@ -19,37 +19,16 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
     {
         base.Configure(builder);
 
-        builder
-            .ToTable(
-                TableConstants.Transactional.SubTask, 
-                SchemaConstants.Transactional)
-            .HasKey(x => x.Id);
+        builder.ToTable(TableConstants.Transactional.SubTask, SchemaConstants.Transactional).HasKey(x => x.Id);
 
-        builder
-            .Property(x => x.ReferenceNo)
-            .HasColumnName(ColumnNames.ReferenceNo)
-            .HasMaxLength(50);
-        builder
-            .Property(x => x.Name)
-            .HasColumnName(ColumnNames.Name)
-            .HasMaxLength(200);
-        builder
-            .Property(x => x.Description)
-            .HasColumnName(ColumnNames.Description)
-            .HasMaxLength(4000);
-        builder
-            .Property(x => x.DigitalTaskLink)
-            .HasMaxLength(2000);
-        builder
-            .Property(x => x.Comment)
-            .HasMaxLength(2000);
-        builder
-            .Property(x => x.ArchiveComment)
-            .HasMaxLength(2000);
-        
-        builder
-            .HasIndex(x => x.TaskId);
-        builder
-            .HasIndex(x => new { x.TaskId, x.IsDeleted });
+        builder.Property(x => x.ReferenceNo).HasColumnName(ColumnNames.ReferenceNo).HasMaxLength(50);
+        builder.Property(x => x.Name).HasColumnName(ColumnNames.Name).HasMaxLength(200);
+        builder.Property(x => x.Description).HasColumnName(ColumnNames.Description).HasMaxLength(4000);
+        builder.Property(x => x.DigitalTaskLink).HasMaxLength(2000);
+        builder.Property(x => x.Comment).HasMaxLength(2000);
+        builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
+
+        builder.HasIndex(x => x.TaskId);
+        builder.HasIndex(x => new { x.TaskId, x.IsDeleted });
     }
 }

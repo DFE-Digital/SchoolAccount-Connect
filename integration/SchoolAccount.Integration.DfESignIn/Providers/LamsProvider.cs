@@ -9,11 +9,11 @@ public class LamsProvider(IFeatureManager featureManager) : IProvider
     {
         return organisation.Type?.Id
             is EstablishmentType.VoluntaryAidedSchool
-            or EstablishmentType.LaNurserySchool
-            or EstablishmentType.PupilReferralUnit
-            or EstablishmentType.CommunitySchool
-            or EstablishmentType.FoundationSchool
-            or EstablishmentType.VoluntaryControlledSchool;
+                or EstablishmentType.LaNurserySchool
+                or EstablishmentType.PupilReferralUnit
+                or EstablishmentType.CommunitySchool
+                or EstablishmentType.FoundationSchool
+                or EstablishmentType.VoluntaryControlledSchool;
     }
 
     public async Task<bool> CanAccess()

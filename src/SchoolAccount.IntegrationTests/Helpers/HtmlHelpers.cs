@@ -10,15 +10,12 @@ internal static class HtmlHelpers
     internal static async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
     {
         var content = await response.Content.ReadAsStringAsync();
-        var document = await BrowsingContext.New()
-            .OpenAsync(ResponseFactory, CancellationToken.None);
+        var document = await BrowsingContext.New().OpenAsync(ResponseFactory, CancellationToken.None);
         return (IHtmlDocument)document;
 
         void ResponseFactory(VirtualResponse htmlResponse)
         {
-            htmlResponse
-                .Address(response.RequestMessage!.RequestUri)
-                .Status(response.StatusCode);
+            htmlResponse.Address(response.RequestMessage!.RequestUri).Status(response.StatusCode);
 
             MapHeaders(response.Headers);
             MapHeaders(response.Content.Headers);

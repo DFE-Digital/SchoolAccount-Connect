@@ -10,17 +10,20 @@ public class TagsSourceMappingEntityConfiguration : IEntityTypeConfiguration<Tag
 {
     public void Configure(EntityTypeBuilder<TagsSourceMappingEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.TagsSourceMapping);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.TagsSourceMapping);
+
+        builder.ToTable(TableConstants.Mapping.Tag, SchemaConstants.Transactional);
 
         builder
-            .ToTable(
-                TableConstants.Mapping.Tag, 
-                SchemaConstants.Transactional);
-
-        builder
-            .HasIndex(e => new { e.EntityId, e.SourceId, e.TagId }, "UQ_TagsSourceMapping_All")
+            .HasIndex(
+                e => new
+                {
+                    e.EntityId,
+                    e.SourceId,
+                    e.TagId,
+                },
+                "UQ_TagsSourceMapping_All"
+            )
             .IsUnique();
 
         builder

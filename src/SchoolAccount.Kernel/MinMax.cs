@@ -1,10 +1,11 @@
 namespace SchoolAccount.Kernel;
 
-public class MinMax<T>(T min, T max) where T : struct
+public class MinMax<T>(T min, T max)
+    where T : struct
 {
     public T Min { get; } = min;
     public T Max { get; } = max;
-    
+
     public void Deconstruct(out T start, out T end)
     {
         start = Min;

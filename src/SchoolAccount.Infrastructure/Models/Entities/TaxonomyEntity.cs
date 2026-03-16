@@ -5,11 +5,11 @@ namespace SchoolAccount.Infrastructure.Models.Entities;
 public class TaxonomyEntity : IIdNameEntity<int>
 {
     public int Id { get; set; }
-    
+
     public string Name { get; set; } = null!;
 
     public int? TaxonomyGroupingId { get; set; }
-    
+
     public string? DisplayName { get; set; }
 
     public bool? IsMandatory { get; set; }

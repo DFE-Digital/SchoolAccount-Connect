@@ -16,6 +16,6 @@ public interface IApplicationDbContext
     DbSet<TaxonomyEntity> Taxonomies { get; set; }
     DbSet<TaxonomyGroupingEntity> TaxonomyGroupings { get; set; }
     DbSet<TaxonomySourceAssociationEntity> TaxonomySourceAssociations { get; set; }
-    
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

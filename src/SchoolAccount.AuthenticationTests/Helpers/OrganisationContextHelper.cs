@@ -10,7 +10,7 @@ public static class OrganisationContextHelper
     {
         provider = Substitute.For<IProvider>();
         provider.CanAccess().Returns(canAccess);
-        
+
         var context = Substitute.For<IOrganisationContext>();
         context.Type.Returns(schoolType);
         context.Provider.Returns(provider);

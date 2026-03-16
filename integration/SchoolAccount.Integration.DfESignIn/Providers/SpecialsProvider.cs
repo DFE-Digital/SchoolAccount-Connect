@@ -9,9 +9,9 @@ public class SpecialsProvider(IFeatureManager featureManager) : IProvider
     {
         return organisation.Type?.Id
             is EstablishmentType.CommunitySpecialSchool
-            or EstablishmentType.FoundationSpecialSchool
-            or EstablishmentType.OtherIndependentSpecialSchool
-            or EstablishmentType.NonMaintainedSpecialSchool;
+                or EstablishmentType.FoundationSpecialSchool
+                or EstablishmentType.OtherIndependentSpecialSchool
+                or EstablishmentType.NonMaintainedSpecialSchool;
     }
 
     public async Task<bool> CanAccess()

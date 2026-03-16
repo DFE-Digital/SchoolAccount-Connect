@@ -12,37 +12,35 @@ using SchoolAccount.Infrastructure;
 
 namespace SchoolAccount.IntegrationTests.Factory;
 
-internal sealed class SchoolAccountWebApplicationFactory<TStartup> 
-    : WebApplicationFactory<TStartup> where TStartup : class
+internal sealed class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+    where TStartup : class
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test");
-        
-        builder.ConfigureAppConfiguration((_, config) =>
-        {
-            var overrides = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-            };
 
-            config.AddInMemoryCollection(overrides!);
-        });
-        
+        builder.ConfigureAppConfiguration(
+            (_, config) =>
+            {
+                var overrides = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { };
+
+                config.AddInMemoryCollection(overrides!);
+            }
+        );
+
         builder.ConfigureTestServices(services =>
         {
             //todo move to helper
-            var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType == 
-                     typeof(IDbContextOptionsConfiguration<ApplicationDbContext>));
+            var dbContextDescriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(IDbContextOptionsConfiguration<ApplicationDbContext>)
+            );
 
             services.Remove(dbContextDescriptor!);
 
-            var dbConnectionDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbConnection));
+            var dbConnectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
 
             services.Remove(dbConnectionDescriptor!);
-            
+
             services.AddSingleton<DbConnection>(container =>
             {
                 var connection = new SqliteConnection("DataSource=:memory:");
@@ -52,14 +50,17 @@ internal sealed class SchoolAccountWebApplicationFactory<TStartup>
             });
 
             //Todo: Seeding classes - will implement once actual application has data setup
-            services.AddDbContext<ApplicationDbContext>((container, options) =>
-            {
-                var connection = container.GetRequiredService<DbConnection>();
-                options.UseSqlite(connection);
-            });
-            
+            services.AddDbContext<ApplicationDbContext>(
+                (container, options) =>
+                {
+                    var connection = container.GetRequiredService<DbConnection>();
+                    options.UseSqlite(connection);
+                }
+            );
+
             // Register test authentication as the default scheme for integration tests
-            services.AddAuthentication(options =>
+            services
+                .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = TestAuthHandler.SchemeName;
                     options.DefaultChallengeScheme = TestAuthHandler.SchemeName;
@@ -70,7 +71,7 @@ internal sealed class SchoolAccountWebApplicationFactory<TStartup>
             services.AddAuthorization();
         });
     }
-    
+
     internal async Task ResetDatabaseAsync()
     {
         var context = GetDbContext();
@@ -79,7 +80,7 @@ internal sealed class SchoolAccountWebApplicationFactory<TStartup>
         await context.Database.EnsureDeletedAsync();
         await context.SaveChangesAsync();
     }
-    
+
     internal ApplicationDbContext GetDbContext()
     {
 #pragma warning disable CA2000

@@ -2,8 +2,7 @@ using FluentValidation;
 
 namespace SchoolAccount.Application.Features.Feedback.Commands;
 
-public sealed class RecordPageFeedbackCommandValidator
-    : AbstractValidator<RecordPageFeedbackCommand>
+public sealed class RecordPageFeedbackCommandValidator : AbstractValidator<RecordPageFeedbackCommand>
 {
     public RecordPageFeedbackCommandValidator()
     {

@@ -12,20 +12,15 @@ public class LoginController : Controller
     public IActionResult Login(string? redirect)
     {
         return Challenge(
-            new AuthenticationProperties
-            {
-                RedirectUri = redirect ?? "/"
-            },
-            OpenIdConnectDefaults.AuthenticationScheme);
+            new AuthenticationProperties { RedirectUri = redirect ?? "/" },
+            OpenIdConnectDefaults.AuthenticationScheme
+        );
     }
-    
+
     [Authorize]
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-        return SignOut(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            OpenIdConnectDefaults.AuthenticationScheme
-        );
+        return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
     }
 }

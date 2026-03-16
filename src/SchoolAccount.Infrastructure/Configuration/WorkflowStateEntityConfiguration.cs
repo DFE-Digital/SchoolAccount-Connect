@@ -10,27 +10,14 @@ public class WorkflowStateEntityConfiguration : IEntityTypeConfiguration<Workflo
 {
     public void Configure(EntityTypeBuilder<WorkflowStateEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.WorkflowState);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.WorkflowState);
 
-        builder
-            .ToTable(
-                TableConstants.Reference.WorkflowState, 
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Reference.WorkflowState, SchemaConstants.Reference);
 
-        builder
-            .HasIndex(e => e.Name, "UQ__Workflow__737584F6CD1ECE89")
-            .IsUnique();
+        builder.HasIndex(e => e.Name, "UQ__Workflow__737584F6CD1ECE89").IsUnique();
 
-        builder
-            .Property(e => e.Id)
-            .ValueGeneratedNever();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(1500);
-        builder
-            .Property(e => e.Name)
-            .HasMaxLength(250);
+        builder.Property(e => e.Id).ValueGeneratedNever();
+        builder.Property(e => e.Description).HasMaxLength(1500);
+        builder.Property(e => e.Name).HasMaxLength(250);
     }
 }

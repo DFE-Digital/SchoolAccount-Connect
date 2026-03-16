@@ -10,24 +10,13 @@ public class TaxonomyGroupingEntityConfiguration : IEntityTypeConfiguration<Taxo
 {
     public void Configure(EntityTypeBuilder<TaxonomyGroupingEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.TaxonomyGrouping);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.TaxonomyGrouping);
 
-        builder
-            .ToTable(
-                TableConstants.Reference.TaxonomyGrouping,
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Reference.TaxonomyGrouping, SchemaConstants.Reference);
 
-        builder
-            .HasIndex(e => e.Name, "UQ_TaxonomyGrouping_Name")
-            .IsUnique();
+        builder.HasIndex(e => e.Name, "UQ_TaxonomyGrouping_Name").IsUnique();
 
-        builder
-            .Property(e => e.DisplayName)
-            .HasMaxLength(1500);
-        builder
-            .Property(e => e.Name)
-            .HasMaxLength(250);
+        builder.Property(e => e.DisplayName).HasMaxLength(1500);
+        builder.Property(e => e.Name).HasMaxLength(250);
     }
 }

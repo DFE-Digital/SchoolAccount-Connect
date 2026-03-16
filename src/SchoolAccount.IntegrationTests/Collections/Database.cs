@@ -4,6 +4,4 @@ using Xunit;
 namespace SchoolAccount.IntegrationTests.Collections;
 
 [CollectionDefinition("Database Collection")]
-public class Database : ICollectionFixture<DatabaseFixture>
-{
-}
+public class Database : ICollectionFixture<DatabaseFixture> { }

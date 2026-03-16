@@ -8,9 +8,11 @@ public class BasePaginationModel
     public string? SearchTerm { get; init; }
     public int TotalItemCount { get; init; }
     public int PageSize { get; init; } = ApplicationConstants.StandardPageSize;
+
     public int TotalPages() => (int)Math.Ceiling((double)TotalItemCount / PageSize);
+
     public string? Endpoint { get; init; }
-    
+
     public void SetCurrentPage()
     {
         if (TotalPages() >= PageNumber)

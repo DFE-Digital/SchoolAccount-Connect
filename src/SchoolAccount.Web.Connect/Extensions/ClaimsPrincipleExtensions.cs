@@ -6,8 +6,10 @@ namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class ClaimsPrincipleExtensions
 {
-    public static OrganisationClaim? GetOrganisation(this ClaimsPrincipal principal,
-        JsonSerializerOptions? options = null)
+    public static OrganisationClaim? GetOrganisation(
+        this ClaimsPrincipal principal,
+        JsonSerializerOptions? options = null
+    )
     {
         options ??= new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         var organisation = principal.FindFirst(ClaimConstants.Organisation)?.Value;

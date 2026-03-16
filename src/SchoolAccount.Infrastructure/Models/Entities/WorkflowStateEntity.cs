@@ -2,7 +2,7 @@ using SchoolAccount.Infrastructure.Models.Interfaces;
 
 namespace SchoolAccount.Infrastructure.Models.Entities;
 
-public class WorkflowStateEntity: IIdNameEntity<int>
+public class WorkflowStateEntity : IIdNameEntity<int>
 {
     public int Id { get; set; }
 

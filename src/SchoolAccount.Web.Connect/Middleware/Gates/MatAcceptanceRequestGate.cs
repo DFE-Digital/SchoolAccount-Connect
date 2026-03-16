@@ -8,13 +8,17 @@ namespace SchoolAccount.Web.Connect.Middleware.Gates;
 public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationContext organisationContext) : IRequestGate
 {
     public int Priority { get; } = 2;
-    
+
     public Task<GateResult> EvaluateAsync(HttpContext context)
     {
-        if (!userContext.IsAuthenticated
+        if (
+            !userContext.IsAuthenticated
             || organisationContext.Organisation is not TrustOrganisation
-            || context.Request.Path.StartsWithSegments(RouteConstants.Start.MatAcceptance,
-                StringComparison.InvariantCultureIgnoreCase))
+            || context.Request.Path.StartsWithSegments(
+                RouteConstants.Start.MatAcceptance,
+                StringComparison.InvariantCultureIgnoreCase
+            )
+        )
         {
             return Task.FromResult(GateResult.Continue());
         }
@@ -28,6 +32,7 @@ public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationCon
 
         var returnUrl = context.Request.Path + context.Request.QueryString;
         return Task.FromResult(
-            GateResult.Redirect($"{RouteConstants.Start.MatAcceptance}?return={Uri.EscapeDataString(returnUrl)}"));
+            GateResult.Redirect($"{RouteConstants.Start.MatAcceptance}?return={Uri.EscapeDataString(returnUrl)}")
+        );
     }
 }

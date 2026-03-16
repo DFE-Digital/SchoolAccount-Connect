@@ -5,8 +5,7 @@ namespace SchoolAccount.Integration.DfESignIn.Converters;
 
 public class EstablishmentTypeConverter : JsonConverter<EstablishmentType>
 {
-    public override EstablishmentType Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
+    public override EstablishmentType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString();
 

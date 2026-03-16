@@ -6,17 +6,15 @@ using SchoolAccount.Integration.DfESignIn.Providers;
 
 namespace SchoolAccount.Integration.DfESignIn.Filters;
 
-public class ProviderAuthorisationFilter(
-    IProviderContext organisationContext,
-    Type[] allowedProviders
-) : IAsyncAuthorizationFilter
+public class ProviderAuthorisationFilter(IProviderContext organisationContext, Type[] allowedProviders)
+    : IAsyncAuthorizationFilter
 {
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         ArgumentNullException.ThrowIfNull(organisationContext);
         ArgumentNullException.ThrowIfNull(allowedProviders);
         ArgumentNullException.ThrowIfNull(context);
-        
+
         if (!context.HttpContext.User.Identity?.IsAuthenticated ?? true)
         {
             return;

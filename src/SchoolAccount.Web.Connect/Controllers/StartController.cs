@@ -10,7 +10,7 @@ public class StartController : Controller
     [HttpGet(RouteConstants.Start.Index)]
     public IActionResult Index()
     {
-        return View(); 
+        return View();
     }
 
     [Authorize]

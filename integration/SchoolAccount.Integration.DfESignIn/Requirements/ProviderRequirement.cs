@@ -3,9 +3,7 @@ using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Integration.DfESignIn.Requirements;
 
-public class ProviderRequirement(
-    params Type[] allowedProviders
-) : IAuthorizationRequirement
+public class ProviderRequirement(params Type[] allowedProviders) : IAuthorizationRequirement
 {
     public IReadOnlyCollection<Type> AllowedProviders { get; } = allowedProviders;
 

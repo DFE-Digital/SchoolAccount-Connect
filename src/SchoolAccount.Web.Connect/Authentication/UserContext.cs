@@ -17,9 +17,6 @@ internal sealed class UserContext(IHttpContextAccessor contextAccessor) : IUserC
 
     public override string ToString()
     {
-        return PreferredName 
-               ?? Name 
-               ?? EmailAddress 
-               ?? throw new InvalidDataException();
+        return PreferredName ?? Name ?? EmailAddress ?? throw new InvalidDataException();
     }
 }

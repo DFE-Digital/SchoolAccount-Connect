@@ -16,7 +16,7 @@ public static class HtmlContentExtensions
                 builder.AppendHtml(tag);
             }
         }
-        
+
         return builder;
     }
 }

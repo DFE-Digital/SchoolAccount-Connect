@@ -21,7 +21,7 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
     }
-    
+
     [Fact(Skip = "Authentication changes break these tests")]
     [Trait("Support", "HomeController")]
     public async Task SupportPageShouldReturnView()
@@ -37,15 +37,15 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
         var supportHtml = await HtmlHelpers.GetDocumentAsync(response);
-        
+
         var supportSection = supportHtml.QuerySelector("#support-section");
 
         var guidanceSection = supportHtml.QuerySelector("#data-and-insights-section");
-        
+
         Assert.NotNull(supportSection);
         Assert.NotNull(guidanceSection);
     }
-    
+
     [Fact(Skip = "Authentication changes break these tests")]
     [Trait("Index", "HomeController")]
     public async Task ShouldRedirectToLoginWhenNotAuthenticated()
@@ -58,14 +58,14 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
-        
+
         var loginHtml = await HtmlHelpers.GetDocumentAsync(response);
-        
+
         var loginButton = loginHtml.QuerySelector("#login-button");
-        
+
         Assert.NotNull(loginButton);
     }
-    
+
     [Fact(Skip = "Authentication changes break these tests")]
     [Trait("Index", "HomeController")]
     public async Task ShouldRedirectToDashboardWhenAuthenticated()
@@ -78,11 +78,11 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
-        
+
         var landingHtml = await HtmlHelpers.GetDocumentAsync(response);
-        
+
         var welcomeTextElement = landingHtml.QuerySelector("h1");
-        
+
         Assert.NotNull(welcomeTextElement);
         Assert.Equal("Welcome to DfE Connect", welcomeTextElement.InnerHtml);
     }

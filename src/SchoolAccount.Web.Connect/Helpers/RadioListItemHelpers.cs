@@ -15,7 +15,7 @@ internal static class RadioListItemHelpers
         var value = new RadioListItem
         {
             Value = item.Id.ToString(Thread.CurrentThread.CurrentCulture),
-            Text = item.Name
+            Text = item.Name,
         };
 
         if (includeHint)
@@ -29,8 +29,6 @@ internal static class RadioListItemHelpers
     internal static IEnumerable<RadioListItem> ToRadioListItems<T>(this IEnumerable<T> items, bool includeHint = true)
         where T : Reference
     {
-        return items
-            .Select(x => x.ToRadioListItem(includeHint))
-            .OfType<RadioListItem>();
+        return items.Select(x => x.ToRadioListItem(includeHint)).OfType<RadioListItem>();
     }
 }

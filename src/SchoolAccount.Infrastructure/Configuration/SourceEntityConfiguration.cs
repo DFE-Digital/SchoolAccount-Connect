@@ -10,24 +10,13 @@ public class SourceEntityConfiguration : IEntityTypeConfiguration<SourceEntity>
 {
     public void Configure(EntityTypeBuilder<SourceEntity> builder)
     {
-        builder
-            .HasKey(e => e.Id)
-            .HasName(KeyConstants.Primary.Source);
+        builder.HasKey(e => e.Id).HasName(KeyConstants.Primary.Source);
 
-        builder
-            .ToTable(
-                TableConstants.Reference.Source, 
-                SchemaConstants.Reference);
+        builder.ToTable(TableConstants.Reference.Source, SchemaConstants.Reference);
 
-        builder
-            .HasIndex(e => e.Name, "UQ__Source__737584F632177336")
-            .IsUnique();
+        builder.HasIndex(e => e.Name, "UQ__Source__737584F632177336").IsUnique();
 
-        builder
-            .Property(e => e.Id)
-            .ValueGeneratedNever();
-        builder
-            .Property(e => e.Name)
-            .HasMaxLength(250);
+        builder.Property(e => e.Id).ValueGeneratedNever();
+        builder.Property(e => e.Name).HasMaxLength(250);
     }
 }
