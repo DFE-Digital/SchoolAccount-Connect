@@ -24,5 +24,6 @@
     <Project Path="src/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
     <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
     <Project Path="src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
+    <Project Path="src/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
   </Folder>
 </Solution>

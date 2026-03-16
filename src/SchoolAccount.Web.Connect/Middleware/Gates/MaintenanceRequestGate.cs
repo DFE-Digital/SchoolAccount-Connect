@@ -1,4 +1,5 @@
 using Microsoft.FeatureManagement;
+using SchoolAccount.Application.Constants;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
 using SchoolAccount.Web.Connect.Middleware.Models;
 
@@ -10,7 +11,7 @@ public class MaintenanceRequestGate(IFeatureManager featureManager) : IRequestGa
 
     public async Task<GateResult> EvaluateAsync(HttpContext context)
     {
-        if (!(await featureManager.IsEnabledAsync(FeatureNameConstants.MaintenanceMode)))
+        if (!await featureManager.IsEnabledAsync(FeatureFlagConstants.MaintenanceMode))
         {
             return GateResult.Continue();
         }

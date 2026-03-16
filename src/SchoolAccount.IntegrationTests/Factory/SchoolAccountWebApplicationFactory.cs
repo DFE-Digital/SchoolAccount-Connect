@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Infrastructure;
+using SchoolAccount.IntegrationTests.Fakes;
 
 namespace SchoolAccount.IntegrationTests.Factory;
 
@@ -17,7 +18,7 @@ internal sealed class SchoolAccountWebApplicationFactory<TStartup> : WebApplicat
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Test");
+        builder.UseEnvironment("IntegrationTest");
 
         builder.ConfigureAppConfiguration(
             (_, config) =>
@@ -62,11 +63,11 @@ internal sealed class SchoolAccountWebApplicationFactory<TStartup> : WebApplicat
             services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = TestAuthHandler.SchemeName;
-                    options.DefaultChallengeScheme = TestAuthHandler.SchemeName;
-                    options.DefaultScheme = TestAuthHandler.SchemeName;
+                    options.DefaultAuthenticateScheme = FakeAuthHandler.SchemeName;
+                    options.DefaultChallengeScheme = FakeAuthHandler.SchemeName;
+                    options.DefaultScheme = FakeAuthHandler.SchemeName;
                 })
-                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.SchemeName, options => { });
+                .AddScheme<AuthenticationSchemeOptions, FakeAuthHandler>(FakeAuthHandler.SchemeName, options => { });
 
             services.AddAuthorization();
         });

@@ -3,40 +3,63 @@ using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.Web.Connect;
 using SchoolAccount.Web.Connect.Extensions;
+using SchoolAccount.Web.Connect.Logging;
 
-var builder = WebApplication.CreateBuilder(args);
+ILogger? bootstrapLogger = null;
 
-builder.Services.AddAzureAppConfiguration();
-
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration).AddPresentation(builder.Configuration);
-
-var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
+try
 {
-    app.UseHsts();
+    var builder = WebApplication.CreateBuilder(args);
+
+    var appInsightsConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+
+    using var bootstrapLoggerFactory = BootstrapLogger.Create(appInsightsConnectionString);
+    bootstrapLogger = bootstrapLoggerFactory.CreateLogger("Bootstrap");
+
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddPresentation(builder.Configuration, bootstrapLogger);
+
+    var app = builder.Build();
+
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseHsts();
+    }
+
+    app.UseGovUkFrontend();
+    app.UseStaticFiles();
+
+    app.UseAzureAppConfigurationIfEnabled(builder.Configuration);
+
+    app.UseHttpsRedirection();
+
+    app.UseSession();
+    app.UseRouting();
+
+    app.ExceptionHandlers();
+
+    app.UseAuthentication();
+    app.AddMiddleware();
+    app.UseAuthorization();
+
+    app.ConfigureAreas();
+    app.StripHeaders();
+
+    await app.RunAsync();
 }
+catch (Exception ex)
+{
+    bootstrapLogger?.LogCritical(
+        "Application startup failed: {ExceptionMessage}, Type: {ExceptionType}",
+        ex.Message,
+        ex.GetType().Name
+    );
 
-app.UseGovUkFrontend();
-app.UseStaticFiles();
+    await Task.Delay(2000); // Give telemetry time to flush before disposal
 
-app.UseAzureAppConfiguration();
-
-app.UseHttpsRedirection();
-
-app.UseSession();
-app.UseRouting();
-
-app.ExceptionHandlers();
-
-app.UseAuthentication();
-app.AddMiddleware();
-app.UseAuthorization();
-
-app.ConfigureAreas();
-app.StripHeaders();
-
-app.Run();
+    throw;
+}
 
 namespace SchoolAccount.Web.Connect
 {

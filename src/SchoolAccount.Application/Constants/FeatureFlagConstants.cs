@@ -1,6 +1,6 @@
-namespace SchoolAccount.Web.Connect;
+namespace SchoolAccount.Application.Constants;
 
-public static class FeatureNameConstants
+public static class FeatureFlagConstants
 {
     public const string MaintenanceMode = "MaintenanceMode";
     public const string ButtonTesting = "ButtonTesting";

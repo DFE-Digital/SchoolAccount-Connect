@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace SchoolAccount.IntegrationTests.Factory;
+namespace SchoolAccount.IntegrationTests.Fakes;
 
-internal sealed class TestAuthHandler(
+internal sealed class FakeAuthHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder

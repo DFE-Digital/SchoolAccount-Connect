@@ -1,7 +1,7 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
-@using SchoolAccount.Web.Connect
+@using SchoolAccount.Application.Constants
 @using SchoolAccount.Web.Connect.Constants
 @using SchoolAccount.Web.Connect.Extensions
 @inject IFeatureManager FeatureManager
@@ -66,7 +66,7 @@
 
     @if (isAuthenticated)
     {
-        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectBanner);
+        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectBanner);
         if (showConnectBanner)
         {
             <partial name="_ConnectBanner" view-data='new ViewDataDictionary(ViewData)
@@ -106,7 +106,7 @@ else
 @section Footer {
     @if (isAuthenticated)
     {
-        var useV2 = await FeatureManager.IsEnabledAsync(FeatureNameConstants.ConnectFeedback);
+        var useV2 = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectFeedback);
 
         if (useV2)
         {

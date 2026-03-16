@@ -2,11 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
-using SchoolAccount.Integration.DfESignIn.Attributes;
-using SchoolAccount.Integration.DfESignIn.Providers;
-using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Authentication.Attributes;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -49,7 +46,7 @@ public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTas
     }
 
     [HttpGet(RouteConstants.Maintenance)]
-    [FeatureGate(FeatureNameConstants.MaintenanceMode)]
+    [FeatureGate(FeatureFlagConstants.MaintenanceMode)]
     public IActionResult Maintenance()
     {
         return View();

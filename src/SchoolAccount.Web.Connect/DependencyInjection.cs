@@ -1,17 +1,16 @@
 ﻿using System.Reflection;
-using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using Microsoft.Identity.Web.UI;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication;
+using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
@@ -25,8 +24,14 @@ namespace SchoolAccount.Web.Connect;
 
 internal static class DependencyInjection
 {
-    internal static void AddPresentation(this IServiceCollection services, ConfigurationManager configurationManager)
+    internal static void AddPresentation(
+        this IServiceCollection services,
+        ConfigurationManager configurationManager,
+        ILogger bootstrapLogger
+    )
     {
+        configurationManager.AddAzureAppConfigurationIfEnabled(bootstrapLogger);
+
         services.AddFluentValidation();
         services.AddGovUkFrontend(options =>
         {
@@ -37,6 +42,7 @@ internal static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
+        services.AddAzureAppConfigurationIfEnabled(configurationManager);
         services.AddFeatureToggle(configurationManager);
         services.AddApplicationTelemetry(configurationManager);
         services.AddRequestGates();
@@ -101,10 +107,6 @@ internal static class DependencyInjection
 
     private static void AddFeatureToggle(this IServiceCollection services, ConfigurationManager configurationManager)
     {
-        AddAzureAppConfiguration(configurationManager);
-
-        services.AddAzureAppConfiguration();
-
         services
             .AddFeatureManagement()
             .AddFeatureFilter<PercentageFilter>()
@@ -119,16 +121,12 @@ internal static class DependencyInjection
         ConfigurationManager configurationManager
     )
     {
-        var appInsightsInstrumentationKey =
-            configurationManager["AppInsightsInstrumentationKey"]
-            ?? throw new InvalidOperationException("Configuration value 'AppInsightsInstrumentationKey' is missing.");
+        var appInsightsConnectionString = configurationManager["ApplicationInsights:ConnectionString"];
 
-        var appInsightsConnectionString = $"InstrumentationKey={appInsightsInstrumentationKey}";
-
-        services.AddApplicationInsightsTelemetry(options =>
+        if (string.IsNullOrWhiteSpace(appInsightsConnectionString))
         {
-            options.ConnectionString = appInsightsConnectionString;
-        });
+            return;
+        }
 
         services
             .AddOpenTelemetry()
@@ -145,32 +143,5 @@ internal static class DependencyInjection
     public static void AddMiddleware(this WebApplication app)
     {
         app.UseMiddleware<RequestGateMiddleware>();
-    }
-
-    private static void AddAzureAppConfiguration(ConfigurationManager configurationManager)
-    {
-        var appConfigUri =
-            configurationManager["AppConfigUri"]
-            ?? throw new InvalidOperationException("Configuration value 'AppConfigUri' is missing.");
-
-        var credential = new DefaultAzureCredential(
-            new DefaultAzureCredentialOptions { TenantId = configurationManager["TenantId"] ?? string.Empty }
-        );
-
-        configurationManager.AddAzureAppConfiguration(options =>
-        {
-            options
-                .Connect(new Uri(appConfigUri), credential)
-                .Select(KeyFilter.Any)
-                .UseFeatureFlags()
-                .ConfigureKeyVault(keyVault =>
-                {
-                    keyVault.SetCredential(credential);
-                })
-                .ConfigureRefresh(refresh =>
-                {
-                    refresh.RegisterAll().SetRefreshInterval(TimeSpan.FromSeconds(5));
-                });
-        });
     }
 }
