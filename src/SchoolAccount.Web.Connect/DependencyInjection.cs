@@ -179,11 +179,11 @@ internal static class DependencyInjection
 
         services
             .AddOpenTelemetry()
-            .ConfigureResource(resource => resource.AddService(environment.ApplicationName))
             .UseAzureMonitor(options =>
             {
                 options.ConnectionString = appInsightsConnectionString;
             })
+            .ConfigureResource(resource => resource.AddService(environment.ApplicationName))
             .WithMetrics(metrics =>
             {
                 metrics.AddMeter("SchoolAccount.Feedback");
