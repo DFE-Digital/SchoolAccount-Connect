@@ -1,0 +1,711 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+        "parameters": {
+            "environmentTag": {
+                "type": "string"
+            },
+            "portfolioTag": {
+                "type": "string"
+            },
+            "serviceLineTag": {
+                "type": "string"
+            },
+            "serviceTag": {
+                "type": "string"
+            },
+            "productTag": {
+                "type": "string"
+            },
+            "serviceOfferingTag": {
+                "type": "string"
+            },
+            "parentBusinessTag": {
+                "type": "string"
+            },
+            "sharedLogAnalyticsName": {
+                "type": "string"
+            },
+            "sharedAppInsightsName": {
+                "type": "string",
+                "metadata": {
+                    "description": "Resource name of the application insights instance"
+                }
+            },
+            "sharedKeyVaultName": {
+                "type": "string",
+                   "metadata": {
+                       "description": "Resource name for the key vault"
+                   }
+            },
+            "sharedAppServicePlanName": {
+                "type": "string"
+            },
+            "schoolAccountConnectAppServiceName": {
+                "type": "string"
+            },
+            "sharedVirtualNetworkName": {
+                "type": "string"
+            },
+            "Http5xxTH": {
+                "type": "string",
+                "defaultValue": "2",
+                "metadata": {
+                    "description": "No of HTTP 5xx error(s) threshold"
+                    }
+            },
+            "Http401TH": {
+                "type": "string",
+                "defaultValue": "2",
+                "metadata": {
+                    "description": "No of HTTP 4xx error(s) threshold"
+                    }
+            },
+            "HttpResponseTimeTH": {
+                "type": "string",
+                "defaultValue": "5",
+                "metadata": {
+                    "description": "HTTP Response time threshold"
+                }
+            },
+            "sharedStorageName": {
+                "type": "string"
+            }, 
+            "feIPSecurityRestrictionsEnabled": {
+                "type": "bool",
+                "defaultValue": true,
+                "metadata": {
+                    "description": "Set IP Security Restrictions"
+                }
+            },
+            "sharedAppConfigName": {
+                "type": "string",
+                   "metadata": {
+                       "description": "Resource name for the app config"
+                   }
+            }
+        },
+        "variables": {
+        "fundingBuildingBlocksUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/sa-platform-building-blocks/main/templates/",
+        "actionGroupName": "sa-alerting",
+        "alertRules": [
+            {
+                "MetricName": "Http5xx",
+                "Operator": "GreaterThan",
+                "Threshold": "[parameters('Http5xxTH')]",
+                "Aggregation": "Average",
+                "ResourceType": "Microsoft.Web/sites",
+                "ResourceName": "[parameters('schoolAccountConnectAppServiceName')]",
+                "WindowSize": "PT5M"
+            },
+            {
+                "MetricName": "Http401",
+                "Operator": "GreaterThan",
+                "Threshold": "[parameters('Http401TH')]",
+                "Aggregation": "Average",
+                "ResourceType": "Microsoft.Web/sites",
+                "ResourceName": "[parameters('schoolAccountConnectAppServiceName')]",
+                "WindowSize": "PT5M"
+            },
+            {
+                "MetricName": "HttpResponseTime",
+                "Operator": "GreaterThan",
+                "Threshold": "[parameters('HttpResponseTimeTH')]",
+                "Aggregation": "Average",
+                "ResourceType": "Microsoft.Web/sites",
+                "ResourceName": "[parameters('schoolAccountConnectAppServiceName')]",
+                "WindowSize": "PT5M"
+            }
+        ],
+        "ipSecurityRestrictions": [
+            {
+                "ipAddress": "213.123.63.150/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 100,
+                "name": "DfE London Proxy"
+            },
+            {
+                "ipAddress": "86.188.174.157/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Sheffield Proxy Old"
+            },
+            {
+                "ipAddress": "194.72.231.130/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Sheffield Proxy New 0"
+            },
+            {
+                "ipAddress": "194.72.231.131/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Sheffield Proxy New 1"
+            },
+            {
+                "ipAddress": "194.72.231.132/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Sheffield Proxy New 2"
+            },
+            {
+                "ipAddress": "194.72.231.133/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Sheffield Proxy New 3"
+            },
+            {
+                "ipAddress": "217.38.175.48/28",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE External IP Block A"
+            },
+            {
+                "ipAddress": "217.38.175.64/28",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE External IP Block B"
+            },
+            {
+                "ipAddress": "217.38.165.192/28",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE External IP Block C"
+            },
+            {
+                "ipAddress": "217.38.165.176/28",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE External IP Block D"
+            },
+            {
+                "ipAddress": "81.128.242.152/29",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Darlington"
+            },
+            {
+                "ipAddress": "81.128.242.120/29",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Manc Local Circuit"
+            },
+            {
+                "ipAddress": "31.121.65.90/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Newcastle Local Circuit"
+            },
+            {
+                "ipAddress": "81.134.140.20/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "DfE Coventry Local Circuit"
+            },
+            {
+                "ipAddress": "109.159.240.25/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Cloud Connect Public IP"
+            },
+            {
+                "ipAddress": "208.127.46.232/29",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "VPN Range 1"
+            },
+            {
+                "ipAddress": "208.127.46.240/28",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "VPN Range 2"
+            },
+            {
+                "ipAddress": "208.127.45.99/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 1"
+            },
+            {
+                "ipAddress": "208.127.45.248/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 2"
+            },
+            {
+                "ipAddress": "208.127.46.14/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 3"
+            },
+            {
+                "ipAddress": "208.127.46.110/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 4"
+            },
+            {
+                "ipAddress": "208.127.50.230/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 5"
+            },
+            {
+                "ipAddress": "208.127.52.236/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 6"
+            },
+            {
+                "ipAddress": "208.127.52.237/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 7"
+            },
+            {
+                "ipAddress": "208.127.53.148/32",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 200,
+                "name": "Prisma Access PIP 8"
+            },
+            {
+                "ipAddress": "Any",
+                "action": "Deny",
+                "priority": 2147483647,
+                "name": "Deny all",
+                "description": "Deny all access"
+            }
+            
+        ]
+            },
+        "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "SchoolAccountConnectAppService",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('fundingBuildingBlocksUrl'),'app-service.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "environmentTag": {
+                        "value": "[parameters('environmentTag')]"
+                    },
+                    "parentBusinessTag": {
+                        "value": "[parameters('parentBusinessTag')]"
+                    },
+                    "portfolioTag": {
+                        "value": "[parameters('portfolioTag')]"
+                    },
+                    "productTag": {
+                        "value": "[parameters('productTag')]"
+                    },
+                    "serviceTag": {
+                        "value": "[parameters('serviceTag')]"
+                    },
+                    "serviceLineTag": {
+                        "value": "[parameters('serviceLineTag')]"
+                    },
+                    "serviceOfferingTag": {
+                        "value": "[parameters('serviceOfferingTag')]"
+                    },
+                    "appServiceName": {
+                        "value": "[parameters('schoolAccountConnectAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('sharedAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "appKind": {
+                        "value": "web"
+                    },
+                    "http20Enabled": {
+                        "value": true
+                    },
+                    "workspaceId": {
+                       "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('sharedLogAnalyticsName'))]"
+                    },
+                    "appServiceHTTPLogsSetting": {
+                        "value": true
+                    },
+                    "appServiceConsoleLogsSetting": {
+                        "value": true
+                    },
+                    "appServiceAppLogsSetting": {
+                        "value": true
+                    },
+                    "appServiceAuditLogsSetting": {
+                        "value": true
+                    },
+                    "allMetricsSetting": {
+                        "value": true
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[if(parameters('feIPSecurityRestrictionsEnabled'), variables('ipSecurityRestrictions'), json('[]'))]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "value": "[reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2015-05-01').InstrumentationKey]"
+                            },
+                            {
+                                "name": "APPINSIGHTS_PROFILERFEATURE_VERSION",
+                                "value": "1.0.0"
+                            },
+                            {
+                                "name": "APPINSIGHTS_SNAPSHOTFEATURE_VERSION",
+                                "value": "1.0.0"
+                            },
+                            {
+                                "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                "value": "[concat('InstrumentationKey=', reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2015-05-01').InstrumentationKey,';IngestionEndpoint=https://westeurope-2.in.applicationinsights.azure.com/')]"
+                            },
+                            {
+                                "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                                "value": "~2"
+                            },
+                            {
+                                "name": "DiagnosticServices_EXTENSION_VERSION",
+                                "value": "~3"
+                            },
+                            {
+                                "name": "InstrumentationEngine_EXTENSION_VERSION",
+                                "value": "disabled"
+                            },
+                            {
+                                "name": "SnapshotDebugger_EXTENSION_VERSION",
+                                "value": "disabled"
+                            },
+                            {
+                                "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
+                                "value": "disabled"
+                            },
+                            {
+                                "name": "XDT_MicrosoftApplicationInsights_Java",
+                                "value": "1"
+                            },
+                            {
+                                "name": "XDT_MicrosoftApplicationInsights_Mode",
+                                "value": "recommended"
+                            },
+                            {
+                                "name": "XDT_MicrosoftApplicationInsights_NodeJS",
+                                "value": "1"
+                            },
+                            {
+                                "name": "XDT_MicrosoftApplicationInsights_PreemptSkd",
+                                "value": "disabled"
+                            },
+                            {
+                                "name": "StorageConnectionString",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=StorageConnectionString)')]"
+                            },
+                            {
+                                "name": "WEBSITE_TIME_ZONE",
+                                "value": "GMT Standard Time"
+                            },
+                            {
+                                "name": "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG",
+                                "value": "1"
+                            },
+                            {
+                                "name": "WEBSITE_RUN_FROM_PACKAGE",
+                                "value": "1"
+                            },
+                            {
+                                "name": "ConnectionStrings__SchoolAccount",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=saSQLConnectionString)')]"
+                            },
+                            {
+                                "name": "AzureAppConfiguration__Endpoint",
+                                "value": "[concat('https://', parameters('sharedAppConfigName'),'.azconfig.io')]"
+                            },
+                            {
+                                "name": "DfeSignIn__PublicURL",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=DFESignInPublicURL)')]"
+                            }, 
+                            {
+                                "name": "DfeSignIn__Scope",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=DFESignInScope)')]"
+                            },
+                            {
+                                "name": "DfeSignIn__MetaDataUrl",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=DFESignInMetaDataUrl)')]"
+                            },
+                            {
+                                "name": "DfeSignIn__ClientId",
+                                "value": "SCHOOLACCOUNT"
+                            },
+                            {
+                                "name": "DfeSignIn__ClientSecret",
+                                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('sharedKeyVaultName'),';SecretName=DFESignInClientSecret)')]"
+                            },
+                            {
+                                "name": "DfeSignIn__CallbackUrl",
+                                "value": "/home"
+                            },
+                            {
+                                "name": "DfeSignIn__SignoutCallbackUrl",
+                                "value": "/account"
+                            },
+                            {
+                                "name": "DfeSignIn__SignoutRedirectUrl",
+                                "value": "/account/SignedOut"
+                            },
+                            {
+                                "name": "DfeSignIn__LoginPath",
+                                "value": "/login/login"
+                            },
+                            {
+                                "name": "DfeSignIn__CookieName",
+                                "value": "sa-login"
+                            },
+                            {
+                                "name": "DfeSignIn__CookieExpireTimeSpanInMinutes",
+                                "value": "60"
+                            },
+                            {
+                                "name": "DfeSignIn__GetClaimsFromUserInfoEndpoint",
+                                "value": "true"
+                            },
+                            {
+                                "name": "DfeSignIn__SaveTokens",
+                                "value": "true"
+                            },
+                            {
+                                "name": "DfeSignIn__SlidingExpiration",
+                                "value": "true"
+                            },
+                            {
+                                "name": "DfeSignIn__Scopes__0",
+                                "value": "openid"
+                            },
+                            { 
+                                "name": "DfeSignIn__Scopes__1", 
+                                "value": "email"
+                            },
+                            {   
+                                "name": "DfeSignIn__Scopes__2",
+                                "value": "profile"
+                            },
+                            {   
+                                "name": "DfeSignIn__Scopes__3",
+                                "value": "organisation"
+                            },
+                            {
+                                "name": "DfeSignIn__AccessDeniedPath",
+                                "value": "/error/401"
+                            },
+                            {
+                                "name": "DfeSignIn__DiscoverRolesWithPublicApi",
+                                "value": "false"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+             "type": "Microsoft.Web/sites/networkConfig",
+            "name": "[concat(parameters('schoolAccountConnectAppServiceName'), '/VirtualNetwork')]",
+            "apiVersion": "2018-02-01",
+            "properties": {
+                "subnetResourceid": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('sharedVirtualNetworkName'), 'sa-appsrv-sn')]",
+                "swiftSupported": true
+            },
+            "dependsOn": [
+                "SchoolAccountConnectAppService"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/networkConfig",
+            "name": "[concat(parameters('schoolAccountConnectAppServiceName'), '/staging/VirtualNetwork')]",
+            "apiVersion": "2018-02-01",
+            "properties": {
+                "subnetResourceid": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('sharedVirtualNetworkName'), 'sa-appsrv-sn')]",
+                "swiftSupported": true
+            },
+            "dependsOn": [
+                "SchoolAccountConnectAppService"
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "SchoolAccountConnectAppServiceWebLogStorageContainer",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('fundingBuildingBlocksUrl'),'storage-container.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "storageAccountName": {
+                        "value": "[parameters('sharedStorageName')]"
+                    },
+                    "containerName": {
+                        "value": "[concat(parameters('schoolAccountConnectAppServiceName'), '-weblogs')]"
+                    },
+                    "publicAccess": {
+                        "value": "None"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "SchoolAccountConnectAppServiceLogging",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "SchoolAccountConnectAppServiceWebLogStorageContainer",
+                "SchoolAccountConnectAppService"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('fundingBuildingBlocksUrl'),'app-service-logging.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceResourceName": {
+                        "value": "[parameters('schoolAccountConnectAppServiceName')]"
+                    },
+                    "appServiceLogRetentionDays": {
+                        "value": "60"
+                    },
+                    "weblogToBlob": {
+                        "value": true
+                    },
+                    "sharedLogStorageAccount": {
+                        "value": "[parameters('sharedStorageName')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "SchoolAccountConnectAppServiceKeyVaultAccessPolicy",
+            "dependsOn": [
+                "SchoolAccountConnectAppService"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('fundingBuildingBlocksUrl'), 'keyvault-accesspolicies.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultName": {
+                        "value": "[parameters('sharedKeyVaultName')]"
+                    },
+                    "accessPolicies": {
+                        "value": [
+                           {
+                                "tenantId": "[subscription().tenantId]",
+                                "objectId": "[reference('SchoolAccountConnectAppService').outputs.managedServiceIdentityId.value]",
+                                "permissions": {
+                                    "secrets": [
+                                        "list",
+                                        "get"
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {   
+            "condition": false,
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "[concat(variables('alertRules')[copyIndex()].ResourceName, '-', replace(variables('alertRules')[copyIndex()].MetricName, '/', '-'))]",
+            "dependsOn": [
+                "SchoolAccountConnectAppService"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('fundingBuildingBlocksUrl'),'alert-rules.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "environmentTag": {
+                        "value": "[parameters('environmentTag')]"
+                    },
+                    "parentBusinessTag": {
+                        "value": "[parameters('parentBusinessTag')]"
+                    },
+                    "portfolioTag": {
+                        "value": "[parameters('portfolioTag')]"
+                    },
+                    "productTag": {
+                        "value": "[parameters('productTag')]"
+                    },
+                    "serviceLineTag": {
+                        "value": "[parameters('serviceLineTag')]"
+                    },
+                    "alertName": {
+                        "value": "[concat(variables('alertRules')[copyIndex()].ResourceName, '-metric-', replace(variables('alertRules')[copyIndex()].MetricName, '/', '-'))]"
+                    },
+                    "metricName": {
+                        "value": "[variables('alertRules')[copyIndex()].MetricName]"
+                    },
+                    "operator": {
+                        "value": "[variables('alertRules')[copyIndex()].Operator]"
+                    },
+                    "threshold": {
+                        "value": "[variables('alertRules')[copyIndex()].Threshold]"
+                    },
+                    "aggregation": {
+                        "value": "[variables('alertRules')[copyIndex()].Aggregation]"
+                    },
+                    "actionGroupName": {
+                        "value": "[variables('actionGroupName')]"
+                    },
+                    "windowSize": {
+                        "value": "[variables('alertRules')[copyIndex()].WindowSize]"
+                    },
+                    "resourceId": {
+                        "value": "[resourceId(variables('alertRules')[copyIndex()].ResourceType, variables('alertRules')[copyIndex()].ResourceName)]"
+                    }
+                }
+            },
+            "copy": {
+                "name": "AlertRulesCopy",
+                "count": "[length(variables('alertRules'))]"
+            }
+        }            
+    ]
+}

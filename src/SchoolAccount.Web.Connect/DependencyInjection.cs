@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Azure.Monitor.OpenTelemetry.Exporter;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
@@ -7,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using Microsoft.Identity.Web.UI;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication;
@@ -18,7 +22,6 @@ using SchoolAccount.Web.Connect.Middleware.Interfaces;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.SignIn;
 using SchoolAccount.Web.Connect.Telemetry;
-using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace SchoolAccount.Web.Connect;
 
@@ -26,7 +29,8 @@ internal static class DependencyInjection
 {
     internal static void AddPresentation(
         this IServiceCollection services,
-        ConfigurationManager configurationManager,
+        IConfigurationManager configurationManager,
+        IWebHostEnvironment environment,
         ILogger bootstrapLogger
     )
     {
@@ -43,8 +47,8 @@ internal static class DependencyInjection
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
         services.AddAzureAppConfigurationIfEnabled(configurationManager);
-        services.AddFeatureToggle(configurationManager);
-        services.AddApplicationTelemetry(configurationManager);
+        services.AddFeatureToggle();
+        services.AddApplicationTelemetry(configurationManager, environment, bootstrapLogger);
         services.AddRequestGates();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
@@ -54,6 +58,48 @@ internal static class DependencyInjection
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();
+    }
+
+    internal static void AddPresentation(
+        this ILoggingBuilder logging,
+        IConfigurationManager config,
+        IWebHostEnvironment environment
+    )
+    {
+        var appInsightsConnectionString = config["ApplicationInsights:ConnectionString"];
+
+        if (environment.IsDevelopment())
+        {
+            logging.AddConsole();
+        }
+
+        logging.AddOpenTelemetry(options =>
+        {
+            options.IncludeFormattedMessage = true;
+            options.IncludeScopes = true;
+            options.ParseStateValues = true;
+
+            options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(environment.ApplicationName));
+
+            if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+            {
+                options.AddAzureMonitorLogExporter(exporterOptions =>
+                {
+                    exporterOptions.ConnectionString = appInsightsConnectionString;
+                });
+            }
+
+            var seqEndpoint = config["Seq:Endpoint"];
+
+            if (!string.IsNullOrWhiteSpace(seqEndpoint))
+            {
+                options.AddOtlpExporter(exporterOptions =>
+                {
+                    exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
+                    exporterOptions.Endpoint = new Uri(seqEndpoint);
+                });
+            }
+        });
     }
 
     private static void AddContexts(this IServiceCollection services)
@@ -105,7 +151,7 @@ internal static class DependencyInjection
         );
     }
 
-    private static void AddFeatureToggle(this IServiceCollection services, ConfigurationManager configurationManager)
+    private static void AddFeatureToggle(this IServiceCollection services)
     {
         services
             .AddFeatureManagement()
@@ -118,18 +164,22 @@ internal static class DependencyInjection
 
     private static void AddApplicationTelemetry(
         this IServiceCollection services,
-        ConfigurationManager configurationManager
+        IConfigurationManager configurationManager,
+        IHostEnvironment environment,
+        ILogger logger
     )
     {
         var appInsightsConnectionString = configurationManager["ApplicationInsights:ConnectionString"];
 
         if (string.IsNullOrWhiteSpace(appInsightsConnectionString))
         {
+            logger.LogWarning("No app insights connection string found. Skipping app insights setup.");
             return;
         }
 
         services
             .AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(environment.ApplicationName))
             .UseAzureMonitor(options =>
             {
                 options.ConnectionString = appInsightsConnectionString;

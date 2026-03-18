@@ -1,9 +1,24 @@
 <Solution>
-  <Folder Name="/integrations/">
+  <Folder Name="/build/">
+    <File Path="build/azure-pipelines.yml" />
+  </Folder>
+  <Folder Name="/build/job-templates/">
+    <File Path="build/job-templates/build.yml" />
+    <File Path="build/job-templates/deploy.yml" />
+  </Folder>
+  <Folder Name="/infrastructure/" />
+  <Folder Name="/infrastructure/arm-templates/">
+    <File Path="infrastructure/arm-templates/template.json" />
+    <File Path="infrastructure/arm-templates/test-parameters.json" />
+  </Folder>
+  <Folder Name="/infrastructure/scripts/">
+    <File Path="infrastructure/scripts/Test-ArmTemplate.ps1" />
+  </Folder>
+  <Folder Name="/integration/">
     <Project Path="integration/SchoolAccount.Integration.DfESignIn/SchoolAccount.Integration.DfESignIn.csproj" />
   </Folder>
   <Folder Name="/requests/">
-    <File Path="Requests/SchoolAccount.http" />
+    <File Path="requests/SchoolAccount.http" />
   </Folder>
   <Folder Name="/solution/">
     <File Path=".csharpierignore" />

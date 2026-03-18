@@ -1,0 +1,51 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentTag": {
+            "value": "Dev"
+        },
+        "parentBusinessTag": {
+            "value": "Funding and Allocations"
+        },
+        "portfolioTag": {
+            "value": "Education and Skills Funding Agency"
+        },
+        "productTag": {
+            "value": "Funding Reporting Service"
+        },
+        "serviceTag": {
+            "value": "Funding and Allocations"
+        },
+        "serviceLineTag": {
+            "value": "Funding"
+        },
+        "serviceOfferingTag": {
+            "value": "Funding Reporting Service"
+        },
+        "sharedLogAnalyticsName":{
+            "value": "aLogAnalytics"
+        },
+        "sharedAppInsightsName":{
+            "value": "aAppInsight"
+        },
+        "sharedKeyVaultName": {
+            "value": "aKeyVault"
+        },
+        "sharedAppConfigName": {
+            "value": "aAppConfig"
+        },
+        "sharedAppServicePlanName":{
+            "value": "aSharedASP"
+        },
+        "schoolAccountConnectAppServiceName":{
+            "value": "anAppService"
+        },
+        "sharedVirtualNetworkName":{
+            "value": "aVnet"
+        },
+        "sharedStorageName":{
+            "value": "sasharedstorage"
+        }
+    }
+}

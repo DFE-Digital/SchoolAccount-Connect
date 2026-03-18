@@ -1,0 +1,81 @@
+stages:
+  - stage: Build_Test_Publish
+    displayName: Build Test and Publish
+    jobs:
+      - job: Test_Build
+        displayName: Build Test and Publish
+        workspace:
+          clean: all
+        steps:
+          - task: AzurePowerShell@5
+            displayName: 'Test ARM templates'
+            inputs:
+              azureSubscription: 'SchoolAccount-CDS-Dev'
+              ScriptType: 'FilePath'
+              ScriptPath: '$(System.DefaultWorkingDirectory)/infrastructure/scripts/Test-ArmTemplate.ps1'
+              ScriptArguments: '-ResourceGroup ''sa-tpltest01-rg'' -BaseDirectory ''$(System.DefaultWorkingDirectory)/infrastructure/arm-templates'' -Verbose'
+              azurePowerShellVersion: 'LatestVersion'
+
+          - task: UseDotNet@2
+            displayName: 'Use .NET Core sdk 8.0.x'
+            inputs:
+              packageType: 'sdk'
+              version: '8.0.x'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore NuGet Packages'
+            inputs:
+              command: 'restore'
+              projects: '**/*.csproj'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Connect Web App'
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+              arguments: '--configuration Release --no-restore'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Conformance Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Conformance Tests'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Authentication Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'src/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Authentication Tests'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Integration Tests'
+            inputs:
+              command: 'test'
+              projects: 'src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Integration Tests'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Connect Web App'
+            inputs:
+              command: publish
+              publishWebProjects: false
+              zipAfterPublish: true
+              arguments: '--configuration Release --no-restore --output $(Build.ArtifactStagingDirectory)'
+              projects: 'src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj'
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish ARM Templates'
+            inputs:
+              artifactName: 'saConnect.ArmTemplates.shared'
+              targetPath: '$(System.DefaultWorkingDirectory)/infrastructure/arm-templates'
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Drop Artifact'
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)
+              artifactName: drop

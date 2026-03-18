@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure.Mapping;
 using SchoolAccount.Infrastructure.Repository;
@@ -12,18 +13,33 @@ namespace SchoolAccount.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        ILogger logger
+    )
     {
-        services.AddDatabase(configuration).AddHealthChecks(configuration).AddMappers().AddServices();
+        services.AddDatabase(configuration, logger);
+        services.AddHealthChecks(configuration, logger);
+        services.AddMappers();
+        services.AddServices();
 
         return services;
     }
 
-    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddDatabase(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        ILogger logger
+    )
     {
         var connectionString = configuration.GetConnectionString("SchoolAccount");
 
-        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            logger.LogWarning("No database connection string found. Skipping database setup.");
+            return services;
+        }
 
         services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
         {
@@ -33,21 +49,29 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddHealthChecks(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        ILogger logger
+    )
     {
         var connectionString = configuration.GetConnectionString("SchoolAccount");
 
-        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            logger.LogWarning("No database connection string found. Skipping health checks setup.");
+            return services;
+        }
 
-        services
-            .AddHealthChecks()
-            .AddSqlServer(
-                connectionString: connectionString,
-                healthQuery: "SELECT 1;",
-                name: "sql",
-                failureStatus: HealthStatus.Degraded,
-                tags: ["db", "sql", "sqlserver"]
-            );
+        var healthChecks = services.AddHealthChecks();
+
+        healthChecks.AddSqlServer(
+            connectionString: connectionString,
+            healthQuery: "SELECT 1;",
+            name: "sql",
+            failureStatus: HealthStatus.Degraded,
+            tags: ["db", "sql", "sqlserver"]
+        );
 
         return services;
     }

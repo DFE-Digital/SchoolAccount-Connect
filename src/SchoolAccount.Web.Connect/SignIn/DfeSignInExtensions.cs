@@ -16,7 +16,7 @@ internal static class DfeSignInExtensions
 {
     public static void AddDfeSignInAuthentication(
         this IServiceCollection services,
-        ConfigurationManager configurationManager
+        IConfigurationManager configurationManager
     )
     {
         var configuration = configurationManager.GetRequiredSection("DfeSignIn").Get<DfeSignInConfiguration>();

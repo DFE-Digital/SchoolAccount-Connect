@@ -11,14 +11,14 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    var appInsightsConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
-
-    using var bootstrapLoggerFactory = BootstrapLogger.Create(appInsightsConnectionString);
+    using var bootstrapLoggerFactory = BootstrapLogger.Create(builder);
     bootstrapLogger = bootstrapLoggerFactory.CreateLogger("Bootstrap");
 
     builder.Services.AddApplication();
-    builder.Services.AddInfrastructure(builder.Configuration);
-    builder.Services.AddPresentation(builder.Configuration, bootstrapLogger);
+    builder.Services.AddInfrastructure(builder.Configuration, bootstrapLogger);
+    builder.Services.AddPresentation(builder.Configuration, builder.Environment, bootstrapLogger);
+
+    builder.Logging.AddPresentation(builder.Configuration, builder.Environment);
 
     var app = builder.Build();
 

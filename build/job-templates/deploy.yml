@@ -1,0 +1,42 @@
+parameters:
+  - name: Environment
+    type: string
+  - name: EnvironmentDisplayName
+    type: string
+
+jobs:
+  - deployment: Deploy_to_${{ parameters.Environment }}
+    displayName: "Deploy To ${{ parameters.EnvironmentDisplayName }}"
+    environment: ${{ parameters.Environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceManagerTemplateDeployment@2
+              displayName: Deploy infrastructure
+              inputs:
+                azureSubscription: '$(AzureSubscription)'
+                resourceGroupName: '$(sharedResourceGroup)'
+                location: 'West Europe'
+                csmFile: '$(Pipeline.Workspace)/saConnect.ArmTemplates.shared/template.json'
+                overrideParameters: '-environmentTag $(environmentTag) -portfolioTag $(portfolioTag) -serviceLineTag $(serviceLineTag) -serviceTag $(serviceTag) -productTag $(productTag) -serviceOfferingTag $(serviceOfferingTag) -parentBusinessTag $(parentBusinessTag) -sharedLogAnalyticsName $(sharedLogAnalyticsName) -sharedAppInsightsName $(sharedAppInsightsName) -sharedKeyVaultName $(sharedKeyVaultName) -sharedAppConfigName $(sharedAppConfigName) -sharedAppServicePlanName $(sharedAppServicePlanName) -schoolAccountConnectAppServiceName $(schoolAccountConnectAppServiceName) -sharedStorageName $(sharedStorageName) -sharedVirtualNetworkName $(sharedVirtualNetworkName) -Http5xxTH $(Http5xx) -Http401TH $(Http401) -HttpResponseTimeTH $(HttpResponseTime)'
+
+            - task: AzureWebApp@1
+              displayName: Deploy web app to staging slot
+              inputs:
+                azureSubscription: '$(AzureSubscription)'
+                appType: webApp
+                appName: '$(schoolAccountConnectAppServiceName)'
+                package: '$(Pipeline.Workspace)/drop/SchoolAccount.Web.Connect.zip'
+                deployToSlotOrASE: true
+                resourceGroupName: '$(sharedResourceGroup)'
+                slotName: 'Staging'
+
+            - task: AzureAppServiceManage@0
+              displayName: Swap staging to production
+              inputs:
+                azureSubscription: '$(AzureSubscription)'
+                Action: 'Swap Slots'
+                WebAppName: '$(schoolAccountConnectAppServiceName)'
+                ResourceGroupName: '$(sharedResourceGroup)'
+                SourceSlot: 'Staging'

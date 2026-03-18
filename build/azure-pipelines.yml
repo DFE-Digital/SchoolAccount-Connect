@@ -1,0 +1,92 @@
+pool:
+  vmImage: ubuntu-latest
+
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  - group: 'Shared Resources - Dev'
+  - group: 'Shared Resources - Test'
+  - group: 'Shared Resources - UAT'
+  - group: 'Shared Resources - PreProd'
+  - group: 'Shared Resources - Prod'
+
+stages:
+  - template: job-templates/build.yml
+
+  - stage: DeployToDev
+    displayName: Deploy to Dev
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: 'Shared Resources - Dev'
+      - group: 'Alert Thresholds - Dev'
+    jobs:
+      - template: job-templates/deploy.yml
+        parameters:
+          Environment: dev
+          EnvironmentDisplayName: Dev
+
+  - stage: DeployToTest
+    displayName: Deploy to Test
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: 'Shared Resources - Test'
+      - group: 'Alert Thresholds - Test'
+    jobs:
+      - template: job-templates/deploy.yml
+        parameters:
+          Environment: test
+          EnvironmentDisplayName: Test
+
+  - stage: DeployToUAT
+    displayName: Deploy to UAT
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: 'Shared Resources - UAT'
+      - group: 'Alert Thresholds - UAT'
+    jobs:
+      - template: job-templates/deploy.yml
+        parameters:
+          Environment: uat
+          EnvironmentDisplayName: UAT
+
+  - stage: DeployToPreProd
+    displayName: Deploy to PreProd
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: 'Shared Resources - PreProd'
+      - group: 'Alert Thresholds - PreProd'
+    jobs:
+      - template: job-templates/deploy.yml
+        parameters:
+          Environment: pp
+          EnvironmentDisplayName: PreProd
+
+  - stage: DeployToProd
+    displayName: Deploy to Prod
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: 'Shared Resources - Prod'
+      - group: 'Alert Thresholds - Prod'
+    jobs:
+      - template: job-templates/deploy.yml
+        parameters:
+          Environment: pd
+          EnvironmentDisplayName: Prod

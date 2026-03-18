@@ -1,4 +1,6 @@
 using Azure.Monitor.OpenTelemetry.Exporter;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
 
 namespace SchoolAccount.Web.Connect.Logging;
 
@@ -8,17 +10,29 @@ public sealed class BootstrapLogger : IDisposable
 
     private BootstrapLogger() { }
 
-    public static ILoggerFactory Create(string? connectionString)
+    public static ILoggerFactory Create(WebApplicationBuilder builder)
     {
+        var appInsightsConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+        var seqEndpoint = builder.Configuration["Seq:Endpoint"];
+
         _loggerFactory = LoggerFactory.Create(loggingBuilder =>
         {
             loggingBuilder.AddOpenTelemetry(options =>
             {
-                if (!string.IsNullOrEmpty(connectionString))
+                if (!string.IsNullOrEmpty(appInsightsConnectionString))
                 {
                     options.AddAzureMonitorLogExporter(o =>
                     {
-                        o.ConnectionString = connectionString;
+                        o.ConnectionString = appInsightsConnectionString;
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(seqEndpoint))
+                {
+                    options.AddOtlpExporter(exporterOptions =>
+                    {
+                        exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
+                        exporterOptions.Endpoint = new Uri(seqEndpoint);
                     });
                 }
             });
