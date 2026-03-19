@@ -23,7 +23,7 @@ public static class TableConstants
     internal static class Mapping
     {
         public const string Resource = "ResourceSourceMapping";
-        public const string Tag = "TagSourceMapping";
+        public const string Tag = "TagsSourceMapping";
         public const string Type = "TypeTaskMapping";
         public const string SchoolType = "SchoolTypeTagMapping";
         public const string Taxonomy = "TaxonomySourceAssociation";

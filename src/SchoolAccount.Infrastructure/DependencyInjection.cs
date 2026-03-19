@@ -4,8 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Abstractions.Infrastructure;
+using SchoolAccount.Infrastructure.Abstraction;
+using SchoolAccount.Infrastructure.Aggregators;
 using SchoolAccount.Infrastructure.Mapping;
 using SchoolAccount.Infrastructure.Repository;
+using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.Infrastructure.Time;
 using SchoolAccount.Kernel;
 
@@ -23,6 +27,7 @@ public static class DependencyInjection
         services.AddHealthChecks(configuration, logger);
         services.AddMappers();
         services.AddServices();
+        services.AddCalendarOfItemsEngine();
 
         return services;
     }
@@ -92,6 +97,21 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IPageReadStore, PageReadRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddCalendarOfItemsEngine(this IServiceCollection services)
+    {
+        services.Scan(scan =>
+            scan.FromAssembliesOf(typeof(DependencyInjection))
+                .AddClasses(classes => classes.AssignableTo(typeof(ICalendarOfItemsQueryFactory)))
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+        );
+
+        services.AddScoped<ICalendarOfItemsAggregator, CalendarOfItemsAggregator>();
+        services.AddScoped<CalendarOfItemsQueryFactoryResolver>();
 
         return services;
     }

@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Infrastructure.Models;
 using SchoolAccount.Infrastructure.Models.Entities;
 
 namespace SchoolAccount.Infrastructure;

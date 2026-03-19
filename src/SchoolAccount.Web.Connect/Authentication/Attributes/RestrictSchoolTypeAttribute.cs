@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication.Filters;

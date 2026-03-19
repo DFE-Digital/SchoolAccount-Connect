@@ -8,7 +8,7 @@ using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
-public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTasks> handler) : Controller
+public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTas
     }
 
     [HttpGet("home/task-search")]
-    public async Task<ActionResult<TaskWithSubTasks>> TaskSearch(
+    public async Task<ActionResult<TaskWithSubTasksDto>> TaskSearch(
         [FromQuery] string term,
         CancellationToken cancellationToken
     )

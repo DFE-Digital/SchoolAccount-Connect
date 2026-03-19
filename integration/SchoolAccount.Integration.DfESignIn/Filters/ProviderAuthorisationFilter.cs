@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SchoolAccount.Integration.DfESignIn.Extensions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
-using SchoolAccount.Integration.DfESignIn.Providers;
 
 namespace SchoolAccount.Integration.DfESignIn.Filters;
 
@@ -11,11 +10,9 @@ public class ProviderAuthorisationFilter(IProviderContext organisationContext, T
 {
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
-        ArgumentNullException.ThrowIfNull(organisationContext);
-        ArgumentNullException.ThrowIfNull(allowedProviders);
         ArgumentNullException.ThrowIfNull(context);
 
-        if (!context.HttpContext.User.Identity?.IsAuthenticated ?? true)
+        if (context.HttpContext.User.Identity?.IsAuthenticated != true)
         {
             return;
         }

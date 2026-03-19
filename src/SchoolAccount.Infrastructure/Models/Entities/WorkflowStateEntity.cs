@@ -1,10 +1,8 @@
-using SchoolAccount.Infrastructure.Models.Interfaces;
-
 namespace SchoolAccount.Infrastructure.Models.Entities;
 
-public class WorkflowStateEntity : IIdNameEntity<int>
+public partial class WorkflowStateEntity
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     public string Name { get; set; } = null!;
 

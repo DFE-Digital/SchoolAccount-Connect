@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Messaging;
 
 namespace SchoolAccount.Application;

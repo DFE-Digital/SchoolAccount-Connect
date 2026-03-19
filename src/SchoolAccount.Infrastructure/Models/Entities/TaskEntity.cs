@@ -2,8 +2,9 @@ namespace SchoolAccount.Infrastructure.Models.Entities;
 
 public class TaskEntity : AuditableDatabaseEntity
 {
+    public string Name { get; set; } = null!;
+
     public string? ReferenceNo { get; set; }
-    public string? Name { get; set; }
     public string? Description { get; set; }
 
     public long? ServiceId { get; set; }
@@ -20,4 +21,6 @@ public class TaskEntity : AuditableDatabaseEntity
 
     public int? Version { get; set; }
     public bool IsLatestVersion { get; set; }
+
+    public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
 }

@@ -4,7 +4,6 @@ using NSubstitute;
 using SchoolAccount.AuthenticationTests.Helpers;
 using SchoolAccount.Integration.DfESignIn.Authentication;
 using SchoolAccount.Integration.DfESignIn.Exceptions;
-using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
 using SchoolAccount.Kernel;

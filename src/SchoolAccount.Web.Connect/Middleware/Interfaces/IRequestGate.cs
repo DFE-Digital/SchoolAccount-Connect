@@ -1,4 +1,3 @@
-using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Middleware.Models;
 
 namespace SchoolAccount.Web.Connect.Middleware.Interfaces;

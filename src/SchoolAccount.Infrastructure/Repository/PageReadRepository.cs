@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Kernel;
 
@@ -8,12 +9,15 @@ namespace SchoolAccount.Infrastructure.Repository;
 public sealed class PageReadRepository(IApplicationDbContext applicationDbContext, IDateTimeProvider dateTimeProvider)
     : IPageReadStore
 {
-    public async Task<TaskWithSubTasks> GetAllPagesAsync(TaskSearchQuery query, CancellationToken cancellationToken)
+    public async Task<TaskWithSubTasksDto> GetAllPagesAsync(
+        TaskSearchCriteria query,
+        CancellationToken cancellationToken
+    )
     {
         var term = query.Term?.Trim();
         var isInitialLoad = string.IsNullOrWhiteSpace(term);
 
-        var from = dateTimeProvider.UtcNow.Date;
+        var from = dateTimeProvider.UtcNow.Date.ToDateOnly();
         var to = from.AddMonths(12);
 
         var tasksQuery = applicationDbContext
@@ -43,7 +47,7 @@ public sealed class PageReadRepository(IApplicationDbContext applicationDbContex
 
         var tasks = await tasksQuery
             .OrderByDescending(t => t.DateUpdated)
-            .Select(t => new TaskListItem(
+            .Select(t => new TaskListItemDto(
                 t.Id,
                 t.ReferenceNo ?? string.Empty,
                 t.Name ?? string.Empty,
@@ -68,7 +72,7 @@ public sealed class PageReadRepository(IApplicationDbContext applicationDbContex
 
         var subTasks = await subTasksQuery
             .OrderByDescending(st => st.DateUpdated)
-            .Select(st => new SubTaskListItem(
+            .Select(st => new SubTaskListItemDto(
                 st.Id,
                 st.Name ?? st.ReferenceNo ?? string.Empty,
                 st.UpdatedBy,
@@ -76,6 +80,6 @@ public sealed class PageReadRepository(IApplicationDbContext applicationDbContex
             ))
             .ToListAsync(cancellationToken);
 
-        return new TaskWithSubTasks(tasks, subTasks);
+        return new TaskWithSubTasksDto(tasks, subTasks);
     }
 }

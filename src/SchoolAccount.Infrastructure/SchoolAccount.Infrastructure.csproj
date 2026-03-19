@@ -5,8 +5,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+    <PackageReference Include="Scrutor" />
+    <PackageReference Include="X.PagedList" />
   </ItemGroup>
+
   <ItemGroup>
+    <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
     <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
   </ItemGroup>
 

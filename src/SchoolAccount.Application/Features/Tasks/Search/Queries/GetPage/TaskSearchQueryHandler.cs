@@ -5,12 +5,11 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 
 public sealed class TaskSearchQueryHandler(IPageReadStore pageReadStore)
-    : IQueryHandler<TaskSearchQuery, TaskWithSubTasks>
+    : IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto>
 {
-    public async Task<Result<TaskWithSubTasks>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
+    public async Task<Result<TaskWithSubTasksDto>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
     {
-        var result = await pageReadStore.GetAllPagesAsync(query, cancellationToken);
-
+        var result = await pageReadStore.GetAllPagesAsync(new(query.Term), cancellationToken);
         return Result.Success(result);
     }
 }

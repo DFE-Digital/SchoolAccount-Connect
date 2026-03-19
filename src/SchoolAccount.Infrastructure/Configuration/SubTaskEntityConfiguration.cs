@@ -30,5 +30,23 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
 
         builder.HasIndex(x => x.TaskId);
         builder.HasIndex(x => new { x.TaskId, x.IsDeleted });
+
+        builder
+            .HasOne(d => d.Task)
+            .WithMany(p => p.SubTasks)
+            .HasForeignKey(d => d.TaskId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder
+            .HasOne(d => d.WorkflowState)
+            .WithMany(p => p.SubTasks)
+            .HasForeignKey(d => d.WorkflowStateId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder
+            .HasMany(x => x.TagsSourceMappings)
+            .WithOne(x => (SubTaskEntity?)x.Entity)
+            .HasForeignKey(x => x.EntityId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

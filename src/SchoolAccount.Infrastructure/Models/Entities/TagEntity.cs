@@ -4,7 +4,7 @@ namespace SchoolAccount.Infrastructure.Models.Entities;
 
 public class TagEntity : IIdNameEntity<long>
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
 
     public int TaxonomyId { get; set; }
 

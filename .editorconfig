@@ -45,3 +45,9 @@ dotnet_diagnostic.CA2225.severity = none
 
 # CA1707: Identifiers should not contain underscores
 dotnet_diagnostic.CA1707.severity = none
+
+# CA1034: Do not nest type Specifications. Alternatively, change its accessibility so that it is not externally visible.
+dotnet_diagnostic.CA1034.severity = none
+
+# CA1711: Rename type name {} so that it does not end in 'Exception'
+dotnet_diagnostic.CA1711.severity = none

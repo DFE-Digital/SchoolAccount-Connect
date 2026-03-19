@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SchoolAccount.Application.Features.Shared;
+﻿namespace SchoolAccount.Application.Features.Shared;
 
 public abstract class BaseListItem
 {
