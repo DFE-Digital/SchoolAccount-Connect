@@ -21,9 +21,10 @@ public class CalendarController(IQueryHandler<CalendarOfItemsDirectionalQuery, C
         var queryModel = query with
         {
             ToQuery = CalendarOfItemsQueryTypes.SubTask,
-            ViewMode = query.ViewMode == CalendarOfItemsViewMode.NotSpecified 
-                ? CalendarOfItemsViewMode.Forward 
-                : query.ViewMode,
+            ViewMode =
+                query.ViewMode == CalendarOfItemsViewMode.NotSpecified
+                    ? CalendarOfItemsViewMode.Forward
+                    : query.ViewMode,
             ViewPeriodInMonths = 12,
             QueryFromDate = DateOnlyExtensions.Today,
             PageSize = query.PageSize <= 0 ? 10 : query.PageSize,

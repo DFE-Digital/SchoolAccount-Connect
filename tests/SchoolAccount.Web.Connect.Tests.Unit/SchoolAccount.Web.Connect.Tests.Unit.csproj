@@ -17,6 +17,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
   </ItemGroup>
 </Project>

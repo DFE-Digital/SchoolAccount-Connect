@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Application\SchoolAccount.Application.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
   </ItemGroup>
 </Project>

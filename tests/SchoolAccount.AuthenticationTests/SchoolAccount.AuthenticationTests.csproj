@@ -19,8 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\integration\SchoolAccount.Integration.DfESignIn\SchoolAccount.Integration.DfESignIn.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
-    <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
   </ItemGroup>
 </Project>

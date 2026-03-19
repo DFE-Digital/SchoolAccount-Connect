@@ -36,9 +36,9 @@
     <Project Path="src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="src/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
-    <Project Path="src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
-    <Project Path="src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
-    <Project Path="src/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
+    <Project Path="tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
+    <Project Path="tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
+    <Project Path="tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
+    <Project Path="tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
   </Folder>
 </Solution>
