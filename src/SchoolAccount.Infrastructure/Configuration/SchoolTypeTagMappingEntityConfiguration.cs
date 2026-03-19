@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolAccount.Infrastructure.Configuration.Constants;
-using SchoolAccount.Infrastructure.Models;
 using SchoolAccount.Infrastructure.Models.Entities;
 
 namespace SchoolAccount.Infrastructure.Configuration;
@@ -18,14 +17,12 @@ public class SchoolTypeTagMappingEntityConfiguration : IEntityTypeConfiguration<
             .HasOne(d => d.SchoolType)
             .WithMany(p => p.SchoolTypeTagMappings)
             .HasForeignKey(d => d.SchoolTypeId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("FK_SchoolTypeTagMapping.SchoolTypeId");
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder
             .HasOne(x => x.Tag)
             .WithMany(x => x.SchoolTypeTagMappings)
             .HasForeignKey(x => x.TagId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName($"FK_SchoolTypeTagMapping.TagId");
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
