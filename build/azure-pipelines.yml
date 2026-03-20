@@ -7,11 +7,11 @@ trigger:
       - main
 
 variables:
-  - group: 'Shared Resources - Dev'
-  - group: 'Shared Resources - Test'
-  - group: 'Shared Resources - UAT'
-  - group: 'Shared Resources - PreProd'
-  - group: 'Shared Resources - Prod'
+  - group: 'Shared Resources - S268Dev'
+  - group: 'Shared Resources - S268Test'
+  - group: 'Shared Resources - S268UAT'
+  - group: 'Shared Resources - S268PreProd'
+  - group: 'Shared Resources - S268Prod'
 
 stages:
   - template: job-templates/build.yml
@@ -21,9 +21,9 @@ stages:
     condition: and(
       succeeded(),
       ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      eq(variables['Build.SourceBranch'], 'refs/heads/main_dfe'))
     variables:
-      - group: 'Shared Resources - Dev'
+      - group: 'Shared Resources - S268Dev'
       - group: 'Alert Thresholds - Dev'
     jobs:
       - template: job-templates/deploy.yml
@@ -38,7 +38,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - Test'
+      - group: 'Shared Resources - S268Test'
       - group: 'Alert Thresholds - Test'
     jobs:
       - template: job-templates/deploy.yml
@@ -53,7 +53,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - UAT'
+      - group: 'Shared Resources - S268UAT'
       - group: 'Alert Thresholds - UAT'
     jobs:
       - template: job-templates/deploy.yml
@@ -68,7 +68,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - PreProd'
+      - group: 'Shared Resources - S268PreProd'
       - group: 'Alert Thresholds - PreProd'
     jobs:
       - template: job-templates/deploy.yml
@@ -83,7 +83,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - Prod'
+      - group: 'Shared Resources - S268Prod'
       - group: 'Alert Thresholds - Prod'
     jobs:
       - template: job-templates/deploy.yml
