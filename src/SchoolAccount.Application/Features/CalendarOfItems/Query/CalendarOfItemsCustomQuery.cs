@@ -1,7 +1,7 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Kernel;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 

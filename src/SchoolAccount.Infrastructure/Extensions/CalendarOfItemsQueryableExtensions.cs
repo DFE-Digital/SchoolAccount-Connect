@@ -1,5 +1,5 @@
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Infrastructure.Extensions;
 

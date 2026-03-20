@@ -1,5 +1,5 @@
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Infrastructure.Abstraction;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Infrastructure.Resolvers;
 

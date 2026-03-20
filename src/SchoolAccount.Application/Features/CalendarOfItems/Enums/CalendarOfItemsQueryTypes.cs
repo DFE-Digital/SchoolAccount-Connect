@@ -1,4 +1,4 @@
-namespace SchoolAccount.Kernel.CalendarOfItems;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 [Flags]
 public enum CalendarOfItemsQueryTypes

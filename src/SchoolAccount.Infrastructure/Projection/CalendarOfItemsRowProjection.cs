@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Infrastructure.Models.Entities;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Infrastructure.Projection;
 

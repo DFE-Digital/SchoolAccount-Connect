@@ -1,4 +1,3 @@
-using System.Data.SqlTypes;
 using SchoolAccount.Application.Abstractions.Infrastructure;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -6,7 +5,6 @@ using SchoolAccount.Infrastructure.Extensions;
 using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.Infrastructure.Specifications;
 using SchoolAccount.Kernel;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Infrastructure.Aggregators;
 

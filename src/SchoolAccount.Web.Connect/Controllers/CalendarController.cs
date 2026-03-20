@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
-using SchoolAccount.Kernel.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
