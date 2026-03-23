@@ -23,4 +23,5 @@ public class CalendarOfItemsRow
     public DateOnly? SortDate { get; init; }
 
     public CalendarOfItemsRowType Type { get; init; } = CalendarOfItemsRowType.None;
+    public DateTime? LastUpdated { get; set; }
 }

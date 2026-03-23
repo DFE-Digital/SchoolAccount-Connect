@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Abstractions.Infrastructure;
+using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Infrastructure.Extensions;
@@ -33,7 +33,7 @@ public class CalendarOfItemsAggregator(CalendarOfItemsQueryFactoryResolver query
             .Where(CalendarOfItemsRowSpecifications.IsWithinDateRange(criteria.Range));
 
         var result = await query
-            .WithSorting(criteria.ViewMode, criteria.SortMode)
+            .WithSorting(criteria.ViewModes, criteria.SortMode)
             .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
         return Result.Success(new CalendarOfItemsPagedResult(criteria, result));

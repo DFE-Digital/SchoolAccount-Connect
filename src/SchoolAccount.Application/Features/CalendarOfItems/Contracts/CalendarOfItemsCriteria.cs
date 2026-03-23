@@ -9,6 +9,6 @@ public class CalendarOfItemsCriteria
     public int PageSize { get; init; }
     public int PageNumber { get; init; }
     public DateOnlyRange Range { get; init; }
-    public CalendarOfItemsViewMode ViewMode { get; init; }
+    public CalendarOfItemsViewModes ViewModes { get; init; }
     public CalendarOfItemsSortMode SortMode { get; init; }
 }

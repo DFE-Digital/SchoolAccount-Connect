@@ -1,4 +1,4 @@
-﻿@model SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage.TaskWithSubTasksDto
+﻿@model SchoolAccount.Web.Connect.Models.DashboardViewModel
 
 @{
     ViewData["Title"] = "Home";
@@ -10,3 +10,13 @@
         <p class="govuk-body-l govuk-!-margin-bottom-8">Manage your tasks, access services and find related guidance to help you run your school and work with us.</p>
     </div>
 </div>
+
+@foreach (var view in Model.Value)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="@view.View" model="@view.ViewModel" />
+        </div>
+    </div>
+}
+

@@ -1,0 +1,69 @@
+@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+
+@if (Model.HasTitle)
+{
+    <h2 class="govuk-heading govuk-heading-l @(Model.HasDescription || Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Title</h2>
+}
+@if (Model.HasDescription)
+{
+    <p class="govuk-body govuk-body-l @(Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Description</p>
+}
+@if (Model.HasLastUpdatedMessage)
+{
+    <p class="govuk-caption">@Model.LastUpdatedMessage</p>
+}
+
+<ul class="govuk-task-list">
+    @if (Model.Pagination.TotalItemCount > 0)
+    {
+        foreach (var group in Model.Items)
+        {
+            if (group.HasDisplayValue)
+            {
+                <li class="govuk-task-list__item dfe-task-list__group">
+                    <div class="govuk-task-list__name-and-hint">
+                        <strong>@group.DisplayValue</strong>
+                    </div>
+                </li>
+            }
+
+            foreach (var row in group)
+            {
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" href="@row.Url">
+                            @row.Name
+                        </a>
+                        <div class="govuk-task-list__hint">
+                            @row.Description
+                        </div>
+                        <div class="govuk-task-list__hint">
+                            <strong>@row.DateText</strong>
+                        </div>
+                    </div>
+                    @if (row.ShowTag)
+                    {
+                        <div class="govuk-task-list__status">
+                            <govuk-tag class="@row.TagTheme">@row.TagValue</govuk-tag>
+                        </div>
+                    }
+                </li>
+            }
+        }
+    }
+    else if (Model.HasNoResultsMessage)
+    {
+        <li class="govuk-task-list__item">
+            <p class="govuk-body">@Model.NoResultsMessage</p>
+        </li>
+    }
+</ul>
+<partial name="_Pagination" model="@Model.Pagination" />
+    
+@if (Model.ShowNavigator)
+{
+    <div class="govuk-body">
+        <a class="govuk-link" asp-controller="Calendar" asp-action="Index">@Model.CallToActionMessage</a>
+        <partial name="SVG/ArrowRight"/>
+    </div>
+}

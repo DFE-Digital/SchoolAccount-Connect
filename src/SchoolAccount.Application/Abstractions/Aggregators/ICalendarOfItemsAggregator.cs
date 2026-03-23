@@ -1,7 +1,7 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Abstractions.Infrastructure;
+namespace SchoolAccount.Application.Abstractions.Aggregators;
 
 public interface ICalendarOfItemsAggregator
 {

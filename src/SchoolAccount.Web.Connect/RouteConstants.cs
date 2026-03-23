@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace SchoolAccount.Web.Connect;
 
 public static class RouteConstants
@@ -17,5 +19,10 @@ public static class RouteConstants
     internal static class Calendar
     {
         public const string Index = Root + "calendar";
+    }
+
+    internal static class Task
+    {
+        public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task/{0}");
     }
 }

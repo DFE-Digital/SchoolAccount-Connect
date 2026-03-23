@@ -4,23 +4,21 @@ using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
+using SchoolAccount.Web.Connect.Builders.Interfaces;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
-public sealed class HomeController(IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler) : Controller
+public sealed class HomeController(
+    IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
+    IDashboardViewBuilder dashboardViewBuilder
+) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(new TaskSearchQuery(string.Empty), cancellationToken);
-
-        if (result.IsFailure)
-        {
-            return Problem(detail: result.Error.Description);
-        }
-
-        return View("Index", result.Value);
+        var result = await dashboardViewBuilder.Build(cancellationToken);
+        return result.IsFailure ? Problem(detail: result.Error.Description) : View(result);
     }
 
     [HttpGet("home/task-search")]

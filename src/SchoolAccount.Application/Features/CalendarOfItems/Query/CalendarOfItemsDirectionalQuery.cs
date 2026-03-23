@@ -6,7 +6,7 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
 public record CalendarOfItemsDirectionalQuery(
     CalendarOfItemsQueryTypes ToQuery,
-    CalendarOfItemsViewMode ViewMode,
+    CalendarOfItemsViewModes ViewModes,
     int ViewPeriodInMonths,
     DateOnly QueryFromDate,
     int PageSize,

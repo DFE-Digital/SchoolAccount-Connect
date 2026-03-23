@@ -51,3 +51,9 @@ dotnet_diagnostic.CA1034.severity = none
 
 # CA1711: Rename type name {} so that it does not end in 'Exception'
 dotnet_diagnostic.CA1711.severity = none
+
+# CA1056: Change the type of property 'Url' from 'string' to 'System.Uri'
+dotnet_diagnostic.CA1056.severity = none
+
+# CA1054: Change the type of parameter 'Url' of method 'x' from 'string' to 'System.Uri', or provide an overload to 'x that allows 'Url' to be passed as a 'System.Uri' object
+dotnet_diagnostic.CA1054.severity = none

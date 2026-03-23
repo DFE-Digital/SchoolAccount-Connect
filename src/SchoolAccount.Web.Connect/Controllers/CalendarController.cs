@@ -1,43 +1,32 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Web.Connect.Builders.Interfaces;
+using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
-public class CalendarController(IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> queryHandler)
-    : Controller
+public class CalendarController(ICalendarOfItemsViewBuilder viewBuilder) : Controller
 {
     [HttpGet(RouteConstants.Calendar.Index)]
     public async Task<IActionResult> Index(
-        [FromQuery] CalendarOfItemsDirectionalQuery query,
+        [FromQuery] CalendarQuery query,
         CancellationToken cancellationToken = default
     )
     {
-        var queryModel = query with
-        {
-            ToQuery = CalendarOfItemsQueryTypes.SubTask,
-            ViewMode =
-                query.ViewMode == CalendarOfItemsViewMode.NotSpecified
-                    ? CalendarOfItemsViewMode.Forward
-                    : query.ViewMode,
-            ViewPeriodInMonths = 12,
-            QueryFromDate = DateOnlyExtensions.Today,
-            PageSize = query.PageSize <= 0 ? 10 : query.PageSize,
-            PageNumber = query.PageNumber <= 0 ? 1 : query.PageNumber,
-        };
-        var result = await queryHandler.Handle(queryModel, cancellationToken);
-        return Json(
-            new
-            {
-                result.IsSuccess,
-                Payload = result.IsSuccess ? result.Value : null,
-                Error = result.IsFailure ? result.Error : null,
-            }
+        var queryModel = new CalendarOfItemsDirectionalQuery(
+            CalendarOfItemsQueryTypes.SubTask,
+            query.ViewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : query.ViewModes,
+            12,
+            DateOnlyExtensions.Today,
+            query.PageSize <= 0 ? 10 : query.PageSize,
+            query.PageNumber <= 0 ? 1 : query.PageNumber,
+            query.SortMode
         );
+
+        return View(await viewBuilder.BuildForPage(queryModel, cancellationToken));
     }
 }

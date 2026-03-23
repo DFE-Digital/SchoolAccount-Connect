@@ -1,5 +1,5 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Infrastructure.Extensions;
 
@@ -7,13 +7,13 @@ internal static class CalendarOfItemsQueryableExtensions
 {
     internal static IQueryable<CalendarOfItemsRow> WithSorting(
         this IQueryable<CalendarOfItemsRow> query,
-        CalendarOfItemsViewMode viewMode,
+        CalendarOfItemsViewModes viewModes,
         CalendarOfItemsSortMode sortMode
     )
     {
-        return viewMode switch
+        return viewModes switch
         {
-            CalendarOfItemsViewMode.Backward => sortMode switch
+            CalendarOfItemsViewModes.Backward => sortMode switch
             {
                 _ => query.OrderByDescending(x => x.SortDate),
             },

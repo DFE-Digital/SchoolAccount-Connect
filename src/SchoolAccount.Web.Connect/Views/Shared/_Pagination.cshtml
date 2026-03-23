@@ -1,0 +1,32 @@
+﻿@using SchoolAccount.Web.Connect.Models
+@model SchoolAccount.Web.Connect.Models.PaginationViewModel
+
+@if (Model.ShowPagination)
+{
+    <govuk-pagination>
+        @if (Model.ShowPrevious)
+        {
+            <govuk-pagination-previous href="@Html.Raw(Model.PreviousUrl)"/>
+        }
+
+        @foreach (var item in Model.Items)
+        {
+            switch (item)
+            {
+                case PaginationEllipsisViewModel:
+                    <govuk-pagination-ellipsis />
+                    break;
+                case PaginationItemViewModel pageItem:
+                    <govuk-pagination-item current="@pageItem.IsCurrent" href="@Html.Raw(pageItem.Url)">
+                        @pageItem.PageNumber
+                    </govuk-pagination-item>
+                    break;
+            }
+        }
+
+        @if (Model.ShowNext)
+        {
+            <govuk-pagination-next href="@Html.Raw(Model.NextUrl)"/>
+        }
+    </govuk-pagination>
+}

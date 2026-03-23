@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Abstractions.Infrastructure;
+using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -19,7 +19,7 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
         {
             ToQuery = query.ToQuery,
             Range = DetermineDateRange(query),
-            ViewMode = CalendarOfItemsViewMode.Custom,
+            ViewModes = query.ViewModes,
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
@@ -30,15 +30,24 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
 
     private static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)
     {
+        var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
+        if ((filter.ViewModes & bothSet) == bothSet)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(filter),
+                filter.ViewModes,
+                "ViewModes cannot have both Forward and Backward set simultaneously.");
+        }
+        
         DateOnly rangeStart;
         DateOnly rangeEnd;
 
-        if (filter.ViewMode == CalendarOfItemsViewMode.Backward)
+        if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Backward))
         {
             rangeStart = filter.QueryFromDate.AddMonths(-filter.ViewPeriodInMonths).AddMonths(-1).StartOfMonth();
             rangeEnd = filter.QueryFromDate.AddMonths(-1).EndOfMonth();
         }
-        else if (filter.ViewMode == CalendarOfItemsViewMode.Forward)
+        else if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Forward))
         {
             rangeStart = filter.QueryFromDate.StartOfMonth();
             rangeEnd = filter.QueryFromDate.AddMonths(filter.ViewPeriodInMonths).EndOfMonth();

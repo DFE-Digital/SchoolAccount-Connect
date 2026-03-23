@@ -1,6 +1,6 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using X.PagedList;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -8,7 +8,7 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 public class CalendarOfItemsPagedResult(CalendarOfItemsCriteria criteria, IPagedList<CalendarOfItemsRow> payload)
     : IPagedList
 {
-    public CalendarOfItemsViewMode ViewMode { get; } = criteria.ViewMode;
+    public CalendarOfItemsViewModes ViewModes { get; } = criteria.ViewModes;
     public DateTime GeneratedDate { get; } = DateTime.UtcNow;
     public DateOnlyRange QueryRange { get; } = criteria.Range;
     public IReadOnlyCollection<CalendarOfItemsRow> Payload { get; } = payload;
