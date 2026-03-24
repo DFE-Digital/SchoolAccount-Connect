@@ -105,7 +105,7 @@ public static class DependencyInjection
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(ICalendarOfItemsQueryFactory)))
+                .AddClasses(classes => classes.AssignableTo<ICalendarOfItemsQueryFactory>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );

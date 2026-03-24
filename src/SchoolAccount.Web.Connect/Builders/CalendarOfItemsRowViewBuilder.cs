@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
@@ -38,9 +38,13 @@ public class CalendarOfItemsRowViewBuilder : ICalendarOfItemsRowViewBuilder
 
         return (false, null, null, null);
     }
-    
-    private static string? GenerateAvailableOrDueMessage(CalendarOfItemsRow row, DateOnly? today = null,
-        string dateFormatter = "d MMMM yyyy", string monthFormatter = "MMMM yyyy")
+
+    private static string? GenerateAvailableOrDueMessage(
+        CalendarOfItemsRow row,
+        DateOnly? today = null,
+        string dateFormatter = "d MMMM yyyy",
+        string monthFormatter = "MMMM yyyy"
+    )
     {
         today ??= DateTime.Today.ToDateOnly();
 
@@ -54,8 +58,7 @@ public class CalendarOfItemsRowViewBuilder : ICalendarOfItemsRowViewBuilder
             return $"Due {FormatDate(row.DueDate.Value, row.DueDateIsExact)}.";
         }
 
-        if (row.StartDate.HasValue &&
-            (!row.DueDate.HasValue || row.DueDate.Value >= today))
+        if (row.StartDate.HasValue && (!row.DueDate.HasValue || row.DueDate.Value >= today))
         {
             if (!row.DueDate.HasValue || row.StartDate.Value > today)
             {
@@ -70,17 +73,14 @@ public class CalendarOfItemsRowViewBuilder : ICalendarOfItemsRowViewBuilder
 
     public CalendarOfItemsRowItemViewModel Build(CalendarOfItemsViewModes mode, CalendarOfItemsRow row)
     {
-        ArgumentNullException.ThrowIfNull(row.Id, nameof(row.Id));
-        ArgumentNullException.ThrowIfNull(row.Name, nameof(row.Name));
-
         var (showTag, tagValue, tagTheme, queryExtensions) = DetermineTag(mode, row);
-        return new CalendarOfItemsRowItemViewModel(row.Name, DetermineUri(row.Type, row.Id.Value, queryExtensions))
+        return new CalendarOfItemsRowItemViewModel(row.Name, DetermineUri(row.Type, row.Id, queryExtensions))
         {
             Description = row.Description,
             ShowTag = showTag,
             TagValue = tagValue,
             TagTheme = tagTheme,
-            DateText = GenerateAvailableOrDueMessage(row)
+            DateText = GenerateAvailableOrDueMessage(row),
         };
     }
 }

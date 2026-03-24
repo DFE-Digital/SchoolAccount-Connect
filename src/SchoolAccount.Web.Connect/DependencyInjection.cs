@@ -4,7 +4,6 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using Microsoft.Identity.Web.UI;
@@ -46,7 +45,6 @@ internal static class DependencyInjection
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
         services.AddAzureAppConfigurationIfEnabled(configurationManager);
         services.AddFeatureToggle();
