@@ -1,0 +1,7 @@
+﻿@using SchoolAccount.Web.Connect
+@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+<partial name="@ViewAddressConstraints.CalendarOfItems.Widget" model="@Model"/>

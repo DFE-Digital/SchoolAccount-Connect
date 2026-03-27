@@ -17,4 +17,10 @@ public static class HttpContextExtensions
     {
         return context?.User.GetOrganisation(options);
     }
+
+    public static string GetCurrentEndpoint(this HttpContext context)
+    {
+        var endpoint = context.GetEndpoint();
+        return (endpoint as RouteEndpoint)?.RoutePattern?.RawText ?? endpoint?.DisplayName ?? string.Empty;
+    }
 }

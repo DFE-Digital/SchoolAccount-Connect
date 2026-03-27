@@ -17,29 +17,29 @@ stages:
               azurePowerShellVersion: 'LatestVersion'
 
           - task: UseDotNet@2
-            displayName: 'Use .NET Core sdk 8.0.x'
+            displayName: 'Use .NET Core sdk 10.0.x'
             inputs:
               packageType: 'sdk'
-              version: '8.0.x'
+              version: '10.0.x'
 
           - task: DotNetCoreCLI@2
             displayName: 'Restore NuGet Packages'
             inputs:
               command: 'restore'
-              projects: '**/*.csproj'
+              projects: 'SchoolAccount.slnx'
 
           - task: DotNetCoreCLI@2
             displayName: 'Build Connect Web App'
             inputs:
               command: 'build'
-              projects: '**/*.csproj'
+              projects: 'SchoolAccount.slnx'
               arguments: '--configuration Release --no-restore'
 
           - task: DotNetCoreCLI@2
             displayName: 'Run Conformance Unit Tests'
             inputs:
               command: 'test'
-              projects: 'src/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj'
+              projects: 'tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj'
               arguments: '--configuration Release --no-restore --no-build'
               testRunTitle: 'Conformance Tests'
 
@@ -47,15 +47,23 @@ stages:
             displayName: 'Run Authentication Unit Tests'
             inputs:
               command: 'test'
-              projects: 'src/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
+              projects: 'tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
               arguments: '--configuration Release --no-restore --no-build'
               testRunTitle: 'Authentication Tests'
 
           - task: DotNetCoreCLI@2
+            displayName: 'Run Connect Web Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Connect Web Tests'
+              
+          - task: DotNetCoreCLI@2
             displayName: 'Run Integration Tests'
             inputs:
               command: 'test'
-              projects: 'src/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj'
+              projects: 'tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj'
               arguments: '--configuration Release --no-restore --no-build'
               testRunTitle: 'Integration Tests'
               

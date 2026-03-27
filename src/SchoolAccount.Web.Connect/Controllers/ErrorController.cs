@@ -6,7 +6,7 @@ using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-public class ErrorController(ILogger<ErrorController> logger, IWebHostEnvironment environment) : Controller
+public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEnvironment environment) : Controller
 {
     [Route(RouteConstants.Error)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -71,24 +71,21 @@ public class ErrorController(ILogger<ErrorController> logger, IWebHostEnvironmen
                 break;
         }
 
-#pragma warning disable CA1508
-#pragma warning disable CA1727
         if (model.Exception is not null)
         {
-            logger.LogCritical(
-                model.Exception,
-                "{route} : An exception occured. {message}",
-                model.OriginalPath,
-                model.Exception?.Message
-            );
+            LogCriticalError(model.OriginalPath, model.Exception.Message, model.Exception);
         }
         else
         {
-            logger.LogWarning("{route} : An issue occured.", model.OriginalPath);
+            LogWarning(model.OriginalPath);
         }
-#pragma warning restore CA1508
-#pragma warning restore CA1727
 
         return View(model);
     }
+
+    [LoggerMessage(EventId = 1001, Level = LogLevel.Critical, Message = "{route} : An exception occured. {message}")]
+    private partial void LogCriticalError(string route, string message, Exception exception);
+
+    [LoggerMessage(EventId = 1002, Level = LogLevel.Warning, Message = "{route} : An issue occured.")]
+    private partial void LogWarning(string route);
 }

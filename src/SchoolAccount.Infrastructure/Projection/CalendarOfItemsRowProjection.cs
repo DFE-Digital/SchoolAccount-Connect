@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Infrastructure.Models.Entities;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Infrastructure.Projection;
 
@@ -26,6 +26,7 @@ public static class CalendarOfItemsRowProjection
                 Type = CalendarOfItemsRowType.WorkflowState,
                 EntityId = x.WorkflowStateId,
             },
+            LastUpdated = x.DateUpdated,
         };
     }
 }

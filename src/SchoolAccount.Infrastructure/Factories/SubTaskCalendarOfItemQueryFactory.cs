@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Infrastructure.Abstraction;
 using SchoolAccount.Infrastructure.Projection;
 using SchoolAccount.Infrastructure.Specifications;
 using SchoolAccount.Kernel;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Infrastructure.Factories;
 

@@ -1,6 +1,7 @@
-using SchoolAccount.Application.Abstractions.Infrastructure;
+using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
@@ -17,7 +18,7 @@ public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggreg
         {
             ToQuery = query.ToQuery,
             Range = query.QueryRange,
-            ViewMode = query.ViewMode,
+            ViewModes = CalendarOfItemsViewModes.Custom,
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,

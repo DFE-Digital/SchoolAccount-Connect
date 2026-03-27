@@ -863,3 +863,8 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
         width: 100%;
     }
 }
+
+.dfe-task-list__group {
+    border-top: none !important;
+    margin-top: var(--govuk-spacing-responsive--4);
+}

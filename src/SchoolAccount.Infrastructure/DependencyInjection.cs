@@ -3,8 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Abstractions.Infrastructure;
 using SchoolAccount.Infrastructure.Abstraction;
 using SchoolAccount.Infrastructure.Aggregators;
 using SchoolAccount.Infrastructure.Mapping;
@@ -105,7 +105,7 @@ public static class DependencyInjection
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(ICalendarOfItemsQueryFactory)))
+                .AddClasses(classes => classes.AssignableTo<ICalendarOfItemsQueryFactory>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );

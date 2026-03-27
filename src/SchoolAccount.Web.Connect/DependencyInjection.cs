@@ -4,7 +4,6 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using Microsoft.Identity.Web.UI;
@@ -14,6 +13,8 @@ using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication;
+using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
@@ -44,7 +45,6 @@ internal static class DependencyInjection
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddContexts();
         services.AddAzureAppConfigurationIfEnabled(configurationManager);
         services.AddFeatureToggle();
@@ -53,6 +53,11 @@ internal static class DependencyInjection
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
+
+        services.AddScoped<IPaginationViewBuilder, PaginationViewBuilder>();
+        services.AddScoped<IDashboardViewBuilder, DashboardViewBuilder>();
+        services.AddScoped<ICalendarOfItemsViewBuilder, CalendarOfItemsViewBuilder>();
+        services.AddScoped<ICalendarOfItemsRowViewBuilder, CalendarOfItemsRowViewBuilder>();
 
         services.AddControllersWithViews().AddMicrosoftIdentityUI();
 

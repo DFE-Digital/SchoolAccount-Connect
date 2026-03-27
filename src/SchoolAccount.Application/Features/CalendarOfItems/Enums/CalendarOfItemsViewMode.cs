@@ -1,9 +1,11 @@
 namespace SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
-public enum CalendarOfItemsViewMode
+[Flags]
+public enum CalendarOfItemsViewModes
 {
-    NotSpecified = 0,
-    Forward = 1,
-    Backward = 2,
-    Custom = 3,
+    None = 0,
+    Forward = 1 << 0,
+    Backward = 1 << 1,
+    Custom = 1 << 2,
+    Standalone = 1 << 3,
 }

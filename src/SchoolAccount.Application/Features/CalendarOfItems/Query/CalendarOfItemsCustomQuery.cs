@@ -7,10 +7,9 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
 public record CalendarOfItemsCustomQuery(
     CalendarOfItemsQueryTypes ToQuery,
-    CalendarOfItemsViewMode ViewMode,
-    int ViewPeriodInMonths,
     DateOnlyRange QueryRange,
     int PageSize,
     int PageNumber,
-    CalendarOfItemsSortMode SortMode
+    CalendarOfItemsSortMode SortMode,
+    string NoResultMessage
 ) : IQuery<CalendarOfItemsPagedResult>;

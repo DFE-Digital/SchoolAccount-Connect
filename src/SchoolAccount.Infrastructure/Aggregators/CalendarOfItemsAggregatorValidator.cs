@@ -1,8 +1,8 @@
 using System.Data.SqlTypes;
 using FluentValidation;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Infrastructure.Resolvers;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Infrastructure.Aggregators;
 
@@ -16,10 +16,10 @@ public class CalendarOfItemsAggregatorValidator : AbstractValidator<CalendarOfIt
             .WithMessage(x => $"{nameof(x.ToQuery)} is out of range.")
             .WithErrorCode(nameof(ArgumentOutOfRangeException));
 
-        RuleFor(x => x.ViewMode)
-            .Must(v => v > CalendarOfItemsViewMode.NotSpecified)
-            .WithName(nameof(CalendarOfItemsCriteria.ViewMode))
-            .WithMessage(x => $"{nameof(x.ViewMode)} is out of range.")
+        RuleFor(x => x.ViewModes)
+            .Must(v => v > CalendarOfItemsViewModes.None)
+            .WithName(nameof(CalendarOfItemsCriteria.ViewModes))
+            .WithMessage(x => $"{nameof(x.ViewModes)} is out of range.")
             .WithErrorCode(nameof(ArgumentOutOfRangeException));
 
         RuleFor(x => x.PageSize)

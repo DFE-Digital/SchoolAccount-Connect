@@ -50,11 +50,14 @@ try
 }
 catch (Exception ex)
 {
-    bootstrapLogger?.LogCritical(
-        "Application startup failed: {ExceptionMessage}, Type: {ExceptionType}",
-        ex.Message,
-        ex.GetType().Name
-    );
+    if (bootstrapLogger != null && bootstrapLogger.IsEnabled(LogLevel.Critical))
+    {
+        bootstrapLogger.LogCritical(
+            "Application startup failed: {ExceptionMessage}, Type: {ExceptionType}",
+            ex.Message,
+            ex.GetType().Name
+        );
+    }
 
     await Task.Delay(2000); // Give telemetry time to flush before disposal
 
