@@ -45,6 +45,7 @@ public sealed class HomeController(
 
     [HttpGet(RouteConstants.Maintenance)]
     [FeatureGate(FeatureFlagConstants.MaintenanceMode)]
+    [AllowAnonymous]
     public IActionResult Maintenance()
     {
         return View();
