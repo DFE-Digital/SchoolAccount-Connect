@@ -1,0 +1,52 @@
+﻿@using SchoolAccount.Domain.ViewModels
+@model TaskDetailsViewModel
+
+<link href="/dist/moj-frontend-8.0.0.min.css" rel="stylesheet" />
+
+@{
+    ViewData["Title"] = "Task details";
+}
+
+<div class="govuk-grid-row">
+    <form method="get">
+        <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-caption-l">
+                Task
+            </p>
+                <h1 class="govuk-heading-l govuk-!-padding-top-0">
+                @Model.TaskName
+            </h1>
+            <p class="govuk-body">
+                Track the jobs you need to do to manage your @Model.TaskNameLowerCase and view information and resources that can help you. All links open in a new tab.
+            </p>
+        </div>
+        <div class="dfe-grid-column-two-thirds">
+
+            <div class="govuk-tabs">
+                <partial name="_TaskMenu" model="@Model" />
+
+                @if (Model?.TabViewModel?.SelectedTabSubTasks?.Count() > 0)
+                {
+                    @foreach (var subTask in Model.TabViewModel.SelectedTabSubTasks)
+                    {
+                        <hr class="govuk-section-break govuk-section-break--visible">
+                        <div class="govuk-grid-row govuk-!-padding-top-2">
+                            <div class="govuk-grid-column-full">
+                                <partial name="_SubTaskView" model="subTask" />
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <hr class="govuk-section-break govuk-section-break--visible">
+                    <div class="govuk-grid-row govuk-!-padding-top-2">
+                        <div class="govuk-grid-column-full">
+                            <p>@Model?.TabViewModel?.NoTasksMessage</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+</div>

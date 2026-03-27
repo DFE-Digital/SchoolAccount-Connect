@@ -1,6 +1,6 @@
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using X.PagedList;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;

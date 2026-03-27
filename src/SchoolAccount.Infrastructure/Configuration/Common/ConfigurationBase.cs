@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolAccount.Infrastructure.Models;
-using SchoolAccount.Infrastructure.Models.Entities;
+using SchoolAccount.Domain;
+using SchoolAccount.Domain.Entities;
 
 namespace SchoolAccount.Infrastructure.Configuration.Common;
 

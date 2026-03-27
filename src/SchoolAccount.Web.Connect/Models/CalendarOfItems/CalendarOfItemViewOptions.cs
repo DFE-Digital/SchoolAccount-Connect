@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 
 namespace SchoolAccount.Web.Connect.Models.CalendarOfItems;
 

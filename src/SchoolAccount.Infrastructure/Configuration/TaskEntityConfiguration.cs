@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolAccount.Domain.Entities;
 using SchoolAccount.Infrastructure.Configuration.Common;
 using SchoolAccount.Infrastructure.Configuration.Constants;
-using SchoolAccount.Infrastructure.Models.Entities;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 
@@ -30,5 +30,7 @@ public sealed class TaskEntityConfiguration : ConfigurationBase<TaskEntity>
         builder.HasIndex(x => x.ReferenceNo);
         builder.HasIndex(x => x.Name);
         builder.HasIndex(x => new { x.IsDeleted, x.IsLatestVersion });
+
+        builder.HasOne(x => x.WorkflowStateEntity).WithMany(t => t.Tasks).HasForeignKey(f => f.WorkflowStateId);
     }
 }

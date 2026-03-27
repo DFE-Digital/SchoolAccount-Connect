@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
-using SchoolAccount.Infrastructure.Models.Entities;
+using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Models.Entities;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Specifications;

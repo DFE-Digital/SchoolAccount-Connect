@@ -36,9 +36,10 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             throw new ArgumentOutOfRangeException(
                 nameof(filter),
                 filter.ViewModes,
-                "ViewModes cannot have both Forward and Backward set simultaneously.");
+                "ViewModes cannot have both Forward and Backward set simultaneously."
+            );
         }
-        
+
         DateOnly rangeStart;
         DateOnly rangeEnd;
 

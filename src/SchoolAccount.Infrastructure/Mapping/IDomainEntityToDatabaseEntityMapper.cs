@@ -1,4 +1,4 @@
-using SchoolAccount.Infrastructure.Models.Interfaces;
+using SchoolAccount.Domain.Interfaces;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Mapping;
