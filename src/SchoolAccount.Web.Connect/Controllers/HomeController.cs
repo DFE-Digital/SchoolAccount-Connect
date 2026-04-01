@@ -10,7 +10,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
+using SchoolAccount.Web.Connect.Builders;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -18,7 +18,9 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> customQueryHandler,
-    IDashboardViewBuilder dashboardViewBuilder
+    IOrganisationContext organisationContext,
+    IHttpContextAccessor contextAccessor,
+    IHostEnvironment environment
 ) : Controller
 {
     [HttpGet]
@@ -42,7 +44,8 @@ public sealed class HomeController(
             return Problem(detail: result.Error.Description);
         }
 
-        var viewModel = dashboardViewBuilder.Build(result.Value);
+        var dashboardViewBuilder = new DashboardViewBuilder();
+        var viewModel = dashboardViewBuilder.Build(result.Value, organisationContext, contextAccessor, environment);
 
         return View(viewModel);
     }

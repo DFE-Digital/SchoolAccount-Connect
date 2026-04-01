@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.WebUtilities;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.Interfaces;
@@ -7,7 +6,7 @@ using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class PaginationViewBuilder(IHttpContextAccessor contextAccessor) : IPaginationViewBuilder
+public class PaginationViewBuilder(IHttpContextAccessor contextAccessor)
 {
     private const int EllipsisIdentifier = -1;
 

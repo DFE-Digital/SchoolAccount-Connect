@@ -5,7 +5,6 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
@@ -13,13 +12,14 @@ using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 namespace SchoolAccount.Web.Connect.Builders;
 
 public class CalendarOfItemsViewBuilder(
-    ICalendarOfItemsRowViewBuilder rowViewBuilder,
-    IPaginationViewBuilder paginationBuilder,
     IOrganisationContext organisationContext,
     IHostEnvironment environment,
     IHttpContextAccessor contextAccessor
-) : ICalendarOfItemsViewBuilder
+)
 {
+    private readonly CalendarOfItemsRowViewBuilder _rowViewBuilder = new();
+    private readonly PaginationViewBuilder _paginationViewBuilder = new(contextAccessor);
+
     public CalendarOfItemsViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsPagedResult result)
     {
         Collection<CalendarOfItemsRowGroupViewModel> rows = [];
@@ -30,7 +30,7 @@ public class CalendarOfItemsViewBuilder(
                 .Payload.GroupBy(x => options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty)
                 .Select(x => new CalendarOfItemsRowGroupViewModel(
                     x.Key,
-                    x.Select(r => rowViewBuilder.Build(options.ViewMode, r))
+                    x.Select(r => _rowViewBuilder.Build(options.ViewMode, r))
                 ))
                 .ToCollection();
         }
@@ -41,7 +41,7 @@ public class CalendarOfItemsViewBuilder(
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            paginationBuilder.Build(result),
+            _paginationViewBuilder.Build(result),
             FiltrationViewModel.Build(contextAccessor.GetFullRequestUri().ToString(), environment, result.Filter)
         )
         {

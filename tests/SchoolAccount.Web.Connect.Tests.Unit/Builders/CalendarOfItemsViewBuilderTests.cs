@@ -29,17 +29,9 @@ public class CalendarOfItemsViewBuilderTests
 
         var organisationContext = Substitute.For<IOrganisationContext>();
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
-        var rowViewBuilder = new CalendarOfItemsRowViewBuilder();
-        var paginationViewBuilder = new PaginationViewBuilder(httpContextAccessor);
         var hostEnvironment = Substitute.For<IHostEnvironment>();
         var filters = new Collection<Filterable>();
-        var viewBuilder = new CalendarOfItemsViewBuilder(
-            rowViewBuilder,
-            paginationViewBuilder,
-            organisationContext,
-            hostEnvironment,
-            httpContextAccessor
-        );
+        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext, hostEnvironment, httpContextAccessor);
 
         MockUrl(request);
 

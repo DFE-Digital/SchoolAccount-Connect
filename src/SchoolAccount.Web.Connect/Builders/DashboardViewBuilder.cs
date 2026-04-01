@@ -1,15 +1,24 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class DashboardViewBuilder(ICalendarOfItemsViewBuilder calendarOfItemsViewBuilder) : IDashboardViewBuilder
+public class DashboardViewBuilder
 {
-    public DashboardViewModel Build(CalendarOfItemsPagedResult items)
+    public DashboardViewModel Build(
+        CalendarOfItemsPagedResult items,
+        IOrganisationContext organisationContext,
+        IHttpContextAccessor contextAccessor,
+        IHostEnvironment environment
+    )
     {
+        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(
+            organisationContext,
+            environment,
+            contextAccessor
+        );
         var dashboardViewItems = new Collection<DashboardViewItem>();
 
         dashboardViewItems.Add(

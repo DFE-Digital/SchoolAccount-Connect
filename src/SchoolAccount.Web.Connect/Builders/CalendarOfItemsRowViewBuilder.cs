@@ -2,12 +2,11 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Domain.ViewModels;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class CalendarOfItemsRowViewBuilder : ICalendarOfItemsRowViewBuilder
+public class CalendarOfItemsRowViewBuilder
 {
     private static string DetermineUri(CalendarOfItemsRowType type, long id, string? queryExtensions)
     {

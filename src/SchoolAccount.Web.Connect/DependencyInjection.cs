@@ -13,8 +13,6 @@ using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Authentication;
-using SchoolAccount.Web.Connect.Builders;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
@@ -53,11 +51,6 @@ internal static class DependencyInjection
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
-
-        services.AddScoped<IPaginationViewBuilder, PaginationViewBuilder>();
-        services.AddScoped<IDashboardViewBuilder, DashboardViewBuilder>();
-        services.AddScoped<ICalendarOfItemsViewBuilder, CalendarOfItemsViewBuilder>();
-        services.AddScoped<ICalendarOfItemsRowViewBuilder, CalendarOfItemsRowViewBuilder>();
 
         services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
