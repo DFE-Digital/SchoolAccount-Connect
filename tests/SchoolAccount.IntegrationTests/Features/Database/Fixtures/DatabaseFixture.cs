@@ -1,7 +1,6 @@
-using SchoolAccount.IntegrationTests.Factory;
 using Xunit;
 
-namespace SchoolAccount.IntegrationTests.Fixtures;
+namespace SchoolAccount.IntegrationTests.Features.Database.Fixtures;
 
 public class DatabaseFixture : IAsyncLifetime
 {
