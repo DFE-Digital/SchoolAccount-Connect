@@ -31,4 +31,9 @@ public static class DateTimeExtensions
 
         return formatted;
     }
+
+    public static string ToGdsDateString(this DateTime? date, bool includeTime = false)
+    {
+        return date is null ? string.Empty : ((DateTime)date).ToGdsDateString(includeTime);
+    }
 }

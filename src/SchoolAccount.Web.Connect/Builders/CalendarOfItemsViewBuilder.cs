@@ -85,14 +85,7 @@ public class CalendarOfItemsViewBuilder(
 
         var selectedTab = tabOptions.FirstOrDefault(x => x.IsSelected);
 
-        if (items.TotalItemCount == 0)
-        {
-            var emptyOptions = new CalendarOfItemViewOptions { NoResultsMessage = "No results found" };
-            return Build(emptyOptions, items);
-        }
-
-        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
-        var lastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}";
+        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 
         var options = new CalendarOfItemViewOptions
         {
@@ -104,7 +97,9 @@ public class CalendarOfItemsViewBuilder(
             SubHeading = "These are all of the required tasks that you must complete for your school each month.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
             NoResultsMessage = "No results found",
-            LastUpdatedMessage = lastUpdatedMessage,
+            LastUpdatedMessage = lastUpdatedDate is not null
+                ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"
+                : string.Empty,
         };
 
         return Build(options, items);
@@ -115,14 +110,7 @@ public class CalendarOfItemsViewBuilder(
         CancellationToken cancellationToken
     )
     {
-        if (items.TotalItemCount == 0)
-        {
-            var emptyOptions = new CalendarOfItemViewOptions { NoResultsMessage = "No results found" };
-            return Build(emptyOptions, items);
-        }
-
-        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
-        var lastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}";
+        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 
         var options = new CalendarOfItemViewOptions
         {
@@ -131,8 +119,10 @@ public class CalendarOfItemsViewBuilder(
             Title = "Upcoming tasks",
             Description = "These are all the required tasks that you must complete for your school each month.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
-            LastUpdatedMessage = lastUpdatedMessage,
             NoResultsMessage = "No results found",
+            LastUpdatedMessage = lastUpdatedDate is not null
+                ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"
+                : string.Empty,
         };
 
         return Build(options, items);
