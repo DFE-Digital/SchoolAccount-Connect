@@ -59,7 +59,7 @@
                     @foreach (var value in item.GetSelectedValuesOnly())
                     {
                         <li>
-                            <a class="moj-filter__tag" href="@value.GetUriWithoutPropertyValue(Model.GetBaseUrl(), Model.Environment, item.Field)">
+                            <a class="moj-filter__tag" href="@value.GetUriWithoutPropertyValue(Model.BaseUrl, item.Field)">
                                 <span class="govuk-visually-hidden">Remove this filter</span> @value.DisplayName
                             </a>
                         </li>

@@ -4,13 +4,10 @@ namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class FilterableItemExtensions
 {
-    public static string GetUriWithoutPropertyValue(
-        this FilterableItem item,
-        string baseUri,
-        IHostEnvironment environment,
-        string key
-    )
+    public static Uri GetUriWithoutPropertyValue(this FilterableItem item, Uri baseUri, string key)
     {
-        return UriExtensions.RemoveByValueQuery(baseUri, environment, ($"filters[{key}]", item.Value));
+        var filterKey = $"filters[{key}]";
+
+        return baseUri.RemoveQueryParam(filterKey, item.Value);
     }
 }

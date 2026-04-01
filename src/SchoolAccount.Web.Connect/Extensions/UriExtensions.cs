@@ -1,88 +1,88 @@
+using System.Globalization;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Primitives;
 
 namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class UriExtensions
 {
-    private static string ToQueryString(IHostEnvironment env, Uri uri, List<KeyValuePair<string, string?>> query)
+    public static Uri SetQueryParam(this Uri uri, string key, string value)
     {
-        var constructedUri = env.IsDevelopment()
-            ? $"{uri.Scheme}://{uri.Host}:{uri.Port}"
-            : $"{uri.Scheme}://{uri.Host}";
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentException.ThrowIfNullOrEmpty(key);
 
-        return QueryHelpers.AddQueryString($"{constructedUri}{uri.AbsolutePath}", query);
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        queryParameters[key] = value;
+
+        var builder = new UriBuilder(uri);
+
+        builder.Query = QueryHelpers.AddQueryString(string.Empty, queryParameters);
+
+        return builder.Uri;
     }
 
-    private static List<KeyValuePair<string, string?>> DetermineQueryString(
-        this Uri uri,
-        IHostEnvironment env,
-        Func<KeyValuePair<string, StringValues>, bool> predicate
-    )
+    public static Uri SetQueryParam(this Uri uri, string key, int value)
     {
-        return QueryHelpers
-            .ParseQuery(uri.Query)
-            .Where(predicate)
-            .SelectMany(q => q.Value.Select(v => new KeyValuePair<string, string?>(q.Key, v)))
-            .ToList();
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentException.ThrowIfNullOrEmpty(key);
+
+        var valueAsString = value.ToString(CultureInfo.InvariantCulture);
+        return uri.SetQueryParam(key, valueAsString);
     }
 
-    public static string RemoveByValueQuery(
-        string url,
-        IHostEnvironment env,
-        params (string Key, object Value)[] queries
-    )
+    public static Uri RemoveQueryParam(this Uri uri, string key, string value)
     {
-        var uri = new Uri(url);
-        var query = uri.DetermineQueryString(env, q => true);
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentException.ThrowIfNullOrEmpty(key);
 
-        query = query
-            .Where(q =>
-                !queries.Any(x =>
-                    string.Equals(q.Key, x.Key, StringComparison.OrdinalIgnoreCase)
-                    && q.Value?.ToString() == x.Value.ToString()
-                )
-            )
-            .ToList();
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
 
-        return ToQueryString(env, uri, query);
-    }
-
-    public static string RemoveByKeyQuery(string url, IHostEnvironment env, params string[] keys)
-    {
-        var uri = new Uri(url);
-        var query = uri.DetermineQueryString(
-            env,
-            q => !keys.Any(x => q.Key.StartsWith(x, StringComparison.OrdinalIgnoreCase))
-        );
-
-        return ToQueryString(env, uri, query);
-    }
-
-    public static string AddOrUpdateQuery(
-        string url,
-        IHostEnvironment env,
-        params (string Key, object? Value)[] queryParams
-    )
-    {
-        var uri = new Uri(url);
-        var query = uri.DetermineQueryString(
-            env,
-            q => queryParams.All(x => !string.Equals(q.Key, x.Key, StringComparison.OrdinalIgnoreCase))
-        );
-
-        foreach (var item in queryParams)
+        if (
+            queryParameters.TryGetValue(key, out var existing)
+            && string.Equals(existing, value, StringComparison.OrdinalIgnoreCase)
+        )
         {
-            if (item.Value != null)
-            {
-                query.Add(new KeyValuePair<string, string>(item.Key, item.Value.ToString()!)!);
-            }
-            else
-            {
-                query.RemoveAt(query.FindIndex(x => x.Key == item.Key && x.Value == (string?)item.Value));
-            }
+            queryParameters.Remove(key);
         }
 
-        return ToQueryString(env, uri, query);
+        var builder = new UriBuilder(uri);
+        builder.Query = QueryHelpers.AddQueryString(string.Empty, queryParameters);
+
+        return builder.Uri;
+    }
+
+    public static Uri RemoveQueryParam(this Uri uri, string key)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentException.ThrowIfNullOrEmpty(key);
+
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        queryParameters.Remove(key);
+
+        var builder = new UriBuilder(uri);
+        builder.Query = QueryHelpers.AddQueryString(string.Empty, queryParameters);
+
+        return builder.Uri;
+    }
+
+    public static Uri RemoveQueryParamsStartingWith(this Uri uri, string prefix)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentException.ThrowIfNullOrEmpty(prefix);
+
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        var keysToRemove = queryParameters
+            .Keys.Where(k => k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        foreach (var k in keysToRemove)
+            queryParameters.Remove(k);
+
+        var builder = new UriBuilder(uri);
+        builder.Query = QueryHelpers.AddQueryString(string.Empty, queryParameters);
+
+        return builder.Uri;
     }
 }

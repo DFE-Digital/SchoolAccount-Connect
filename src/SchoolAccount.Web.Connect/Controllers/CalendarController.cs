@@ -17,8 +17,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public class CalendarController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
     IOrganisationContext organisationContext,
-    IHttpContextAccessor contextAccessor,
-    IHostEnvironment environment
+    IHttpContextAccessor contextAccessor
 ) : Controller
 {
     [HttpGet(RouteConstants.Calendar.Index)]
@@ -62,7 +61,7 @@ public class CalendarController(
             throw new ApplicationException(result.Error.Description);
         }
 
-        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext, environment, contextAccessor);
+        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext, contextAccessor);
         var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes);
 
         return View(viewModel);

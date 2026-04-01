@@ -14,11 +14,7 @@ public class DashboardViewBuilder
         IHostEnvironment environment
     )
     {
-        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(
-            organisationContext,
-            environment,
-            contextAccessor
-        );
+        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(organisationContext, contextAccessor);
         var dashboardViewItems = new Collection<DashboardViewItem>();
 
         dashboardViewItems.Add(

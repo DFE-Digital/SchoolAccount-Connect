@@ -11,11 +11,7 @@ using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class CalendarOfItemsViewBuilder(
-    IOrganisationContext organisationContext,
-    IHostEnvironment environment,
-    IHttpContextAccessor contextAccessor
-)
+public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext, IHttpContextAccessor contextAccessor)
 {
     private readonly CalendarOfItemsRowViewBuilder _rowViewBuilder = new();
     private readonly PaginationViewBuilder _paginationViewBuilder = new(contextAccessor);
@@ -42,7 +38,7 @@ public class CalendarOfItemsViewBuilder(
             options.Tabs ?? [],
             rows,
             _paginationViewBuilder.Build(result),
-            FiltrationViewModel.Build(contextAccessor.GetFullRequestUri().ToString(), environment, result.Filter)
+            FiltrationViewModel.Build(contextAccessor.GetFullRequestUri(), result.Filter)
         )
         {
             GeneratedAt = result.GeneratedDate,
@@ -60,17 +56,16 @@ public class CalendarOfItemsViewBuilder(
     public CalendarOfItemsViewModel BuildForPage(CalendarOfItemsPagedResult items, CalendarOfItemsViewModes viewModes)
     {
         var url = contextAccessor.HttpContext!.Request.GetDisplayUrl();
+        var uri = new Uri(url);
 
         CalendarOfItemsTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
         {
-            var updatedUrl = UriExtensions.AddOrUpdateQuery(
-                url,
-                environment,
-                (nameof(CalendarOfItemsDirectionalQuery.ViewModes), mode)
-            );
-            var correctedUrl = UriExtensions.RemoveByKeyQuery(updatedUrl, environment, "pageNumber");
+            var key = nameof(CalendarOfItemsDirectionalQuery.ViewModes);
+            var value = mode.ToString();
 
-            return new CalendarOfItemsTabViewModel(label, description, correctedUrl, viewModes.HasFlag(mode));
+            var updatedUrl = uri.SetQueryParam(key, value).RemoveQueryParam("pageNumber");
+
+            return new CalendarOfItemsTabViewModel(label, description, updatedUrl, viewModes.HasFlag(mode));
         }
 
         var tabOptions = new[]
