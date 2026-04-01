@@ -46,7 +46,7 @@ public class CalendarOfItemsViewBuilderTests
         var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
 
         // Act
-        var viewModel = viewBuilder.BuildForPage(items, CalendarOfItemsViewModes.None, CancellationToken.None);
+        var viewModel = viewBuilder.BuildForPage(items, CalendarOfItemsViewModes.None);
 
         // Assert
         viewModel.Items.Should().BeEmpty();

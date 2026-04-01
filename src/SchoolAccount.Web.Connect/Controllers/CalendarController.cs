@@ -59,7 +59,7 @@ public class CalendarController(
             throw new ApplicationException(result.Error.Description);
         }
 
-        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes, cancellationToken);
+        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes);
 
         return View(viewModel);
     }

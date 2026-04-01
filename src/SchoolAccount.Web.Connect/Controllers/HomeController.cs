@@ -42,7 +42,7 @@ public sealed class HomeController(
             return Problem(detail: result.Error.Description);
         }
 
-        var viewModel = dashboardViewBuilder.Build(result.Value, cancellationToken);
+        var viewModel = dashboardViewBuilder.Build(result.Value);
 
         return View(viewModel);
     }

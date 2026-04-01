@@ -57,11 +57,7 @@ public class CalendarOfItemsViewBuilder(
         };
     }
 
-    public CalendarOfItemsViewModel BuildForPage(
-        CalendarOfItemsPagedResult items,
-        CalendarOfItemsViewModes viewModes,
-        CancellationToken cancellationToken
-    )
+    public CalendarOfItemsViewModel BuildForPage(CalendarOfItemsPagedResult items, CalendarOfItemsViewModes viewModes)
     {
         var url = contextAccessor.HttpContext!.Request.GetDisplayUrl();
 
@@ -105,10 +101,7 @@ public class CalendarOfItemsViewBuilder(
         return Build(options, items);
     }
 
-    public CalendarOfItemsViewModel BuildForDashboard(
-        CalendarOfItemsPagedResult items,
-        CancellationToken cancellationToken
-    )
+    public CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items)
     {
         var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 

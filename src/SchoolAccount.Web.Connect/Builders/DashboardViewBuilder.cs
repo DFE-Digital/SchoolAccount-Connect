@@ -8,14 +8,14 @@ namespace SchoolAccount.Web.Connect.Builders;
 
 public class DashboardViewBuilder(ICalendarOfItemsViewBuilder calendarOfItemsViewBuilder) : IDashboardViewBuilder
 {
-    public DashboardViewModel Build(CalendarOfItemsPagedResult items, CancellationToken cancellationToken)
+    public DashboardViewModel Build(CalendarOfItemsPagedResult items)
     {
         var dashboardViewItems = new Collection<DashboardViewItem>();
 
         dashboardViewItems.Add(
             new DashboardViewItem(
                 ViewAddressConstraints.CalendarOfItems.Tab,
-                calendarOfItemsViewBuilder.BuildForDashboard(items, cancellationToken)
+                calendarOfItemsViewBuilder.BuildForDashboard(items)
             )
         );
 
