@@ -11,8 +11,10 @@ public class TaskEntity : AuditableDatabaseEntity
 
     public long? ServiceId { get; set; }
     public DateTime? PublishDate { get; set; }
+
     public int? RequirementId { get; set; }
     public int? WorkflowStateId { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public string? PublishComment { get; set; }
@@ -22,7 +24,8 @@ public class TaskEntity : AuditableDatabaseEntity
 
     public int? Version { get; set; }
     public bool IsLatestVersion { get; set; }
-    public virtual WorkflowStateEntity WorkflowStateEntity { get; set; } = null!;
 
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
+    public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
+    public virtual WorkflowStateEntity? WorkflowState { get; set; }
 }

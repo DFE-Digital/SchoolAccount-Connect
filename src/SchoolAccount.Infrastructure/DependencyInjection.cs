@@ -7,6 +7,8 @@ using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure.Abstraction;
 using SchoolAccount.Infrastructure.Aggregators;
+using SchoolAccount.Infrastructure.Helpers.Filtering;
+using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using SchoolAccount.Infrastructure.Mapping;
 using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.Infrastructure.Time;
@@ -26,6 +28,7 @@ public static class DependencyInjection
         services.AddHealthChecks(configuration, logger);
         services.AddMappers();
         services.AddServices();
+        services.AddFilterableServices();
         services.AddCalendarOfItemsEngine();
 
         return services;
@@ -112,5 +115,20 @@ public static class DependencyInjection
         services.AddScoped<CalendarOfItemsQueryFactoryResolver>();
 
         return services;
+    }
+
+    public static void AddFilterableServices(this IServiceCollection services)
+    {
+        services.Scan(scan =>
+            scan.FromAssembliesOf(typeof(DependencyInjection))
+                .AddClasses(classes => classes.AssignableTo<IFilterableFactory>())
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo<IFilterableRegistrar>())
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+        );
+
+        services.AddScoped<FilterableFieldRegistry>();
     }
 }

@@ -2,7 +2,7 @@ using SchoolAccount.Domain.Interfaces;
 
 namespace SchoolAccount.Domain.Entities;
 
-public class TaxonomyEntity : IIdNameEntity<int>
+public partial class TaxonomyEntity : IIdNameEntity<int>
 {
     public int Id { get; init; }
 

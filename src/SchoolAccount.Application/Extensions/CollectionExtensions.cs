@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace SchoolAccount.Web.Connect.Extensions;
+namespace SchoolAccount.Application.Extensions;
 
 public static class CollectionExtensions
 {

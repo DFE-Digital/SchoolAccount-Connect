@@ -27,6 +27,20 @@ public static class CalendarOfItemsRowProjection
                 EntityId = x.WorkflowStateId,
             },
             LastUpdated = x.DateUpdated,
+            Tags = x.TagsSourceMappings.Select(t => new CalendarOfItemsExtensionNode
+            {
+                Id = t.Tag.Id,
+                Name = t.Tag.Name,
+                DisplayValue = t.Tag.Name,
+                Type = CalendarOfItemsExtensionNodeType.Tag,
+            }),
+            Types = x.Task.TypeTaskMappings.Select(t => new CalendarOfItemsExtensionNode
+            {
+                Id = t.Type.Id,
+                Name = t.Type.Name,
+                DisplayValue = t.Type.Name,
+                Type = CalendarOfItemsExtensionNodeType.Type,
+            }),
         };
     }
 }

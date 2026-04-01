@@ -20,4 +20,8 @@
       <_Parameter1>SchoolAccount.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
 </Project>

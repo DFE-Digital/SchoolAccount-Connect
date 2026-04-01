@@ -23,4 +23,14 @@ public static class HttpContextExtensions
         var endpoint = context.GetEndpoint();
         return (endpoint as RouteEndpoint)?.RoutePattern?.RawText ?? endpoint?.DisplayName ?? string.Empty;
     }
+
+    public static Uri GetFullRequestUri(this IHttpContextAccessor context)
+    {
+        return context.HttpContext!.GetFullRequestUri();
+    }
+
+    public static Uri GetFullRequestUri(this HttpContext context)
+    {
+        return context.Request.GetFullRequestUri();
+    }
 }

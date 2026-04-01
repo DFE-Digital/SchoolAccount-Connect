@@ -1,0 +1,97 @@
+﻿@using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Models
+@model SchoolAccount.Web.Connect.Models.FiltrationViewModel
+
+<style>
+    .govuk-checkboxes > .govuk-checkboxes {
+        margin-left: 30px;
+    }
+
+    .govuk-checkboxes__input[indeterminate]+.govuk-checkboxes__label:after {
+        height: 0;
+        transform: none;
+        top: 20px;
+    }
+
+    @@media (min-width: 40.0625em) {
+        .govuk-heading-m {
+            line-height: 1.44;
+        }
+    }
+
+    .moj-filter button.govuk-accordion__section-button {
+        padding-bottom: 0 !important;
+    }
+
+    .moj-filter .govuk-accordion__section-content {
+        padding-bottom: var(--govuk-spacing-responsive--4);
+        padding-top: var(--govuk-spacing-responsive--1);
+    }
+</style>
+
+<div class="moj-filter" data-module="moj-filter">
+
+    <div class="moj-filter__header">
+        <div class="moj-filter__header-title">
+            <h2 class="govuk-heading-m">Filter</h2>
+        </div>
+    </div>
+    
+    @if (Model.AreAnyItemsSelected)
+    {
+        <div class="moj-filter__selected">
+            <div class="moj-filter__selected-heading">
+                <div class="moj-filter__heading-title">
+                    <h2 class="govuk-heading-m">Selected filters</h2>
+                </div>
+                <div class="moj-filter__heading-action">
+                    <p>
+                        <a href="@Model.GetUriWithoutFilters()" class="govuk-link govuk-link--no-visited-state">
+                            Clear filters
+                        </a>
+                    </p>
+                </div>
+            </div>
+            @foreach (var item in Model.SelectedItems)
+            {
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-0">@item.DisplayName</h3>
+                <ul class="moj-filter-tags">
+                    @foreach (var value in item.GetSelectedValuesOnly())
+                    {
+                        <li>
+                            <a class="moj-filter__tag" href="@value.GetUriWithoutPropertyValue(Model.GetBaseUrl(), Model.Environment, item.Field)">
+                                <span class="govuk-visually-hidden">Remove this filter</span> @value.DisplayName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+
+    @if (Model.AnyItems)
+    {
+        <div class="moj-filter__content">
+            <div class="moj-filter__options">
+
+                <govuk-accordion id="accordion-filter" heading-level="4" remember-expanded="true">
+                    @foreach (var filter in Model)
+                    {
+                        <govuk-accordion-item>
+                            <govuk-accordion-item-heading>@filter.DisplayName</govuk-accordion-item-heading>
+                            <govuk-accordion-item-content>
+                                <partial name="DisplayComponents/FilterCheckbox" model="@FilterCheckboxViewModel.Parent(filter)"/>
+                            </govuk-accordion-item-content>
+                        </govuk-accordion-item>
+                    }
+                </govuk-accordion>
+
+                <button type="submit" class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" data-test-id="submit-button">
+                    Apply filters
+                </button>
+            </div>
+
+        </div>
+    }
+
+</div>

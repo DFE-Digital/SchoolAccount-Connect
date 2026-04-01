@@ -1,0 +1,30 @@
+﻿@using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Models
+@model SchoolAccount.Web.Connect.Models.FilterCheckboxViewModel
+
+@foreach (var value in Model.Children)
+{
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+        
+        <div class="govuk-checkboxes__item">
+
+            <input class="govuk-checkboxes__input" id="filters[@Model.Filter.Field]['@value.DisplayName']"
+                   name="filters[@Model.Filter.Field]"
+                   type="checkbox" value="@value.Value"
+                   checked="@value.IsSelected"
+                   test-id="@HtmlContentExtensions.GenerateTestId("filters", Model.Filter.Field, value.DisplayName)"/>
+
+            <label class="govuk-label govuk-checkboxes__label" for="filters[@Model.Filter.Field]['@value.DisplayName']">
+                @value.DisplayName
+                @if (value.Count.HasValue)
+                {
+                    <span style="color: #505a5f;"> (@value.Count)</span>
+                }
+            </label>
+
+        </div>
+
+        <partial name="~/Views/Shared/DisplayComponents/FilterCheckbox.cshtml" 
+                 model="@FilterCheckboxViewModel.Child(Model.Filter, value.Children ?? [])"/>
+    </div>
+}

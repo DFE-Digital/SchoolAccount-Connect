@@ -23,6 +23,7 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
+            Filter = query.Filter ?? new([]),
         };
 
         return await aggregator.Query(model, cancellationToken);

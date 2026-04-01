@@ -25,4 +25,8 @@ public class CalendarOfItemsRow
     public CalendarOfItemsRowType Type { get; init; } = CalendarOfItemsRowType.None;
 
     public DateTime? LastUpdated { get; init; }
+
+    public IEnumerable<CalendarOfItemsExtensionNode> Types { get; init; } = [];
+
+    public IEnumerable<CalendarOfItemsExtensionNode> Tags { get; init; } = [];
 }

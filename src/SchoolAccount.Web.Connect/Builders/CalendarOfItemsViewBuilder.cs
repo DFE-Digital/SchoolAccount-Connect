@@ -8,6 +8,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
+using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
@@ -43,7 +44,8 @@ public class CalendarOfItemsViewBuilder(
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            paginationBuilder.Build(result)
+            paginationBuilder.Build(result),
+            FiltrationViewModel.Build(contextAccessor.GetFullRequestUri().ToString(), environment, result.Filter)
         )
         {
             GeneratedAt = result.GeneratedDate,

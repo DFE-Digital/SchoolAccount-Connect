@@ -31,6 +31,10 @@ public sealed class TaskEntityConfiguration : ConfigurationBase<TaskEntity>
         builder.HasIndex(x => x.Name);
         builder.HasIndex(x => new { x.IsDeleted, x.IsLatestVersion });
 
-        builder.HasOne(x => x.WorkflowStateEntity).WithMany(t => t.Tasks).HasForeignKey(f => f.WorkflowStateId);
+        builder
+            .HasOne(d => d.WorkflowState)
+            .WithMany(p => p.Tasks)
+            .HasForeignKey(d => d.WorkflowStateId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

@@ -1,16 +1,22 @@
+using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 using X.PagedList;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 
-public class CalendarOfItemsPagedResult(CalendarOfItemsCriteria criteria, IPagedList<CalendarOfItemsRow> payload)
-    : IPagedList
+public class CalendarOfItemsPagedResult(
+    CalendarOfItemsCriteria criteria,
+    IPagedList<CalendarOfItemsRow> payload,
+    Collection<Filterable> filter
+) : IPagedList
 {
     public CalendarOfItemsViewModes ViewModes { get; } = criteria.ViewModes;
     public DateTime GeneratedDate { get; } = DateTime.UtcNow;
     public DateOnlyRange QueryRange { get; } = criteria.Range;
+    public Collection<Filterable> Filter { get; } = filter;
     public IReadOnlyCollection<CalendarOfItemsRow> Payload { get; } = payload;
     public int PageCount { get; } = payload.PageCount;
     public int TotalItemCount { get; } = payload.TotalItemCount;

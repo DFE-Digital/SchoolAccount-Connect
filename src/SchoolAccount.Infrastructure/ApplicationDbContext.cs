@@ -32,6 +32,12 @@ internal sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext
 
     public DbSet<TaxonomySourceAssociationEntity> TaxonomySourceAssociations { get; set; }
 
+    public DbSet<TypeEntity> Types { get; set; }
+
+    public DbSet<TypeGroupingEntity> TypeGroupings { get; set; }
+
+    public DbSet<TypeTaskMappingEntity> TypeTaskMappings { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
