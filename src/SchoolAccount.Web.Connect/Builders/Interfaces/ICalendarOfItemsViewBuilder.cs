@@ -1,4 +1,5 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
@@ -8,13 +9,11 @@ public interface ICalendarOfItemsViewBuilder
 {
     CalendarOfItemsViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsPagedResult result);
 
-    Task<CalendarOfItemsViewModel> BuildForPage(
-        CalendarOfItemsDirectionalQuery query,
+    CalendarOfItemsViewModel BuildForPage(
+        CalendarOfItemsPagedResult items,
+        CalendarOfItemsViewModes viewModes,
         CancellationToken cancellationToken
     );
 
-    Task<CalendarOfItemsViewModel> BuildForDashboard(
-        CalendarOfItemsCustomQuery query,
-        CancellationToken cancellationToken
-    );
+    CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items, CancellationToken cancellationToken);
 }

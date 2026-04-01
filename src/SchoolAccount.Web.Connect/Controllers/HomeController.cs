@@ -3,8 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -12,14 +17,34 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [Authorize]
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
+    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> customQueryHandler,
     IDashboardViewBuilder dashboardViewBuilder
 ) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var result = await dashboardViewBuilder.Build(cancellationToken);
-        return result.IsFailure ? Problem(detail: result.Error.Description) : View(result);
+        var date = DateTime.Today;
+
+        var query = new CalendarOfItemsCustomQuery(
+            CalendarOfItemsQueryTypes.SubTask,
+            new DateOnlyRange(date.StartOfMonth().ToDateOnly(), date.EndOfMonth().ToDateOnly()),
+            10,
+            1,
+            CalendarOfItemsSortMode.NotSpecified,
+            $"No required tasks for {date:MMMM yyyy}"
+        );
+
+        var result = await customQueryHandler.Handle(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return Problem(detail: result.Error.Description);
+        }
+
+        var viewModel = dashboardViewBuilder.Build(result.Value, cancellationToken);
+
+        return View(viewModel);
     }
 
     [HttpGet("home/task-search")]

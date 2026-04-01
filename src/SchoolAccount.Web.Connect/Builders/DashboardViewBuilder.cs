@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
-using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Models;
@@ -10,26 +8,17 @@ namespace SchoolAccount.Web.Connect.Builders;
 
 public class DashboardViewBuilder(ICalendarOfItemsViewBuilder calendarOfItemsViewBuilder) : IDashboardViewBuilder
 {
-    public async Task<DashboardViewModel> Build(CancellationToken cancellationToken)
+    public DashboardViewModel Build(CalendarOfItemsPagedResult items, CancellationToken cancellationToken)
     {
-        var items = new Collection<DashboardViewItem>();
-        var date = DateTime.Today;
+        var dashboardViewItems = new Collection<DashboardViewItem>();
 
-        var calendarOfItemOptions = new CalendarOfItemsCustomQuery(
-            CalendarOfItemsQueryTypes.SubTask,
-            new DateOnlyRange(date.StartOfMonth().ToDateOnly(), date.EndOfMonth().ToDateOnly()),
-            10,
-            1,
-            CalendarOfItemsSortMode.NotSpecified,
-            $"No required tasks for {date:MMMM yyyy}"
-        );
-        items.Add(
+        dashboardViewItems.Add(
             new DashboardViewItem(
                 ViewAddressConstraints.CalendarOfItems.Tab,
-                await calendarOfItemsViewBuilder.BuildForDashboard(calendarOfItemOptions, cancellationToken)
+                calendarOfItemsViewBuilder.BuildForDashboard(items, cancellationToken)
             )
         );
 
-        return new DashboardViewModel(Result.Success(), items);
+        return new DashboardViewModel(Result.Success(), dashboardViewItems);
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Microsoft.AspNetCore.Http.Extensions;
-using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
@@ -14,8 +13,6 @@ using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 namespace SchoolAccount.Web.Connect.Builders;
 
 public class CalendarOfItemsViewBuilder(
-    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> directionalQueryBuilder,
-    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> customQueryBuilder,
     ICalendarOfItemsRowViewBuilder rowViewBuilder,
     IPaginationViewBuilder paginationBuilder,
     IOrganisationContext organisationContext,
@@ -60,18 +57,12 @@ public class CalendarOfItemsViewBuilder(
         };
     }
 
-    public async Task<CalendarOfItemsViewModel> BuildForPage(
-        CalendarOfItemsDirectionalQuery query,
+    public CalendarOfItemsViewModel BuildForPage(
+        CalendarOfItemsPagedResult items,
+        CalendarOfItemsViewModes viewModes,
         CancellationToken cancellationToken
     )
     {
-        var result = await directionalQueryBuilder.Handle(query, cancellationToken);
-
-        if (result.IsFailure)
-        {
-            throw new ApplicationException(result.Error.Description);
-        }
-
         var url = contextAccessor.HttpContext!.Request.GetDisplayUrl();
 
         CalendarOfItemsTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
@@ -83,7 +74,7 @@ public class CalendarOfItemsViewBuilder(
             );
             var correctedUrl = UriExtensions.RemoveByKeyQuery(updatedUrl, environment, "pageNumber");
 
-            return new CalendarOfItemsTabViewModel(label, description, correctedUrl, query.ViewModes.HasFlag(mode));
+            return new CalendarOfItemsTabViewModel(label, description, correctedUrl, viewModes.HasFlag(mode));
         }
 
         var tabOptions = new[]
@@ -91,15 +82,21 @@ public class CalendarOfItemsViewBuilder(
             BuildTab(CalendarOfItemsViewModes.Forward, "Upcoming tasks"),
             BuildTab(CalendarOfItemsViewModes.Backward, "Previous tasks"),
         };
+
         var selectedTab = tabOptions.FirstOrDefault(x => x.IsSelected);
-        var lastUpdatedMessage =
-            result.Value.Payload.Count > 0
-                ? $"Last updated: {result.Value.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max().ToGdsDateString()}"
-                : null;
+
+        if (items.TotalItemCount == 0)
+        {
+            var emptyOptions = new CalendarOfItemViewOptions { NoResultsMessage = "No results found" };
+            return Build(emptyOptions, items);
+        }
+
+        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
+        var lastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}";
 
         var options = new CalendarOfItemViewOptions
         {
-            ViewMode = query.ViewModes,
+            ViewMode = viewModes,
             Tabs = tabOptions.ToCollection(),
             Title = selectedTab?.Label ?? string.Empty,
             Description = selectedTab?.Description ?? string.Empty,
@@ -110,27 +107,22 @@ public class CalendarOfItemsViewBuilder(
             LastUpdatedMessage = lastUpdatedMessage,
         };
 
-        return Build(options, result.Value);
+        return Build(options, items);
     }
 
-    public async Task<CalendarOfItemsViewModel> BuildForDashboard(
-        CalendarOfItemsCustomQuery query,
+    public CalendarOfItemsViewModel BuildForDashboard(
+        CalendarOfItemsPagedResult items,
         CancellationToken cancellationToken
     )
     {
-        var result = await customQueryBuilder.Handle(query, cancellationToken);
-
-        if (result.IsFailure)
+        if (items.TotalItemCount == 0)
         {
-            throw new ApplicationException(result.Error.Description);
+            var emptyOptions = new CalendarOfItemViewOptions { NoResultsMessage = "No results found" };
+            return Build(emptyOptions, items);
         }
 
-        if (result.Value.Payload.Count == 0)
-        {
-            return Build(new CalendarOfItemViewOptions { NoResultsMessage = "No tasks found" }, result.Value);
-        }
-
-        var lastUpdatedDate = result.Value.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
+        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
+        var lastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}";
 
         var options = new CalendarOfItemViewOptions
         {
@@ -139,10 +131,10 @@ public class CalendarOfItemsViewBuilder(
             Title = "Upcoming tasks",
             Description = "These are all the required tasks that you must complete for your school each month.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
-            LastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}",
-            NoResultsMessage = query.NoResultMessage,
+            LastUpdatedMessage = lastUpdatedMessage,
+            NoResultsMessage = "No results found",
         };
 
-        return Build(options, result.Value);
+        return Build(options, items);
     }
 }

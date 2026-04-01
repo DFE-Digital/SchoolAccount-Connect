@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
@@ -11,7 +13,10 @@ using SchoolAccount.Web.Connect.Models;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
-public class CalendarController(ICalendarOfItemsViewBuilder viewBuilder) : Controller
+public class CalendarController(
+    ICalendarOfItemsViewBuilder viewBuilder,
+    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler
+) : Controller
 {
     [HttpGet(RouteConstants.Calendar.Index)]
     public async Task<IActionResult> Index(
@@ -47,6 +52,15 @@ public class CalendarController(ICalendarOfItemsViewBuilder viewBuilder) : Contr
             )
         );
 
-        return View(await viewBuilder.BuildForPage(queryModel, cancellationToken));
+        var result = await handler.Handle(queryModel, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            throw new ApplicationException(result.Error.Description);
+        }
+
+        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes, cancellationToken);
+
+        return View(viewModel);
     }
 }

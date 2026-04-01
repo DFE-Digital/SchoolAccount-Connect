@@ -1,8 +1,9 @@
+using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Builders.Interfaces;
 
 public interface IDashboardViewBuilder
 {
-    Task<DashboardViewModel> Build(CancellationToken cancellationToken);
+    DashboardViewModel Build(CalendarOfItemsPagedResult items, CancellationToken cancellationToken);
 }
