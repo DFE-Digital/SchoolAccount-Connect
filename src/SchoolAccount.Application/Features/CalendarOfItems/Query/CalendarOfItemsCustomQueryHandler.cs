@@ -22,15 +22,10 @@ public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggreg
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
+            Filter = query.Filter ?? new([]),
         };
 
         var result = await aggregator.Query(model, cancellationToken);
-
-        if (result.IsFailure)
-        {
-            return result;
-            //throw new ApplicationException();
-        }
 
         return result;
     }

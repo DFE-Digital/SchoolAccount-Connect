@@ -16,7 +16,7 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         using var request = BuildRequestMessage(HttpMethod.Get, "/Support", false);
 
         // Act
-        var response = await databaseFixture.Client.SendAsync(request);
+        var response = await databaseFixture.Client.SendAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
@@ -31,7 +31,7 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         using var request = BuildRequestMessage(HttpMethod.Get, "/Support");
 
         // Act
-        var response = await databaseFixture.Client.SendAsync(request);
+        var response = await databaseFixture.Client.SendAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -54,7 +54,7 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         using var request = BuildRequestMessage(HttpMethod.Get, "/", false);
 
         // Act
-        var response = await databaseFixture.Client.SendAsync(request);
+        var response = await databaseFixture.Client.SendAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
@@ -74,7 +74,7 @@ public class HomeControllerTests(DatabaseFixture databaseFixture)
         using var request = BuildRequestMessage(HttpMethod.Get, "/");
 
         // Act
-        var response = await databaseFixture.Client.SendAsync(request);
+        var response = await databaseFixture.Client.SendAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);

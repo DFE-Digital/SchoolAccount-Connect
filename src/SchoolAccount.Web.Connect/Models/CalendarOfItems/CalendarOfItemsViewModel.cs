@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Extensions;
 
@@ -17,7 +18,8 @@ public record CalendarOfItemsViewModel(
     CalendarOfItemsViewModes ViewModes,
     Collection<CalendarOfItemsTabViewModel> Tabs,
     Collection<CalendarOfItemsRowGroupViewModel> Items,
-    PaginationViewModel Pagination
+    PaginationViewModel Pagination,
+    FiltrationViewModel Filters
 )
 {
     private readonly string _callToActionMessage = "See the full calendar of tasks";
@@ -60,4 +62,6 @@ public record CalendarOfItemsViewModel(
     public bool HasTitle => !string.IsNullOrEmpty(Title);
     public bool HasDescription => !string.IsNullOrEmpty(Description);
     public bool ShowNavigator => ViewModes.HasFlag(CalendarOfItemsViewModes.Standalone);
+
+    public bool HasFilters => Filters.Count > 0;
 }

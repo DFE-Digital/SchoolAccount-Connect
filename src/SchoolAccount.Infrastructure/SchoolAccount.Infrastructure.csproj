@@ -10,13 +10,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
     <ProjectReference Include="..\SchoolAccount.Application\SchoolAccount.Application.csproj" />
+    <ProjectReference Include="..\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+    <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>SchoolAccount.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

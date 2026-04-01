@@ -46,6 +46,18 @@
         },
         "sharedStorageName":{
             "value": "sasharedstorage"
+        },
+        "WAFIpAddress":{
+            "value": "anIPAdress"
+        },
+        "saConnectIPSecurityRestrictionsMode":{
+            "value": "Off"
+        },
+        "tsiSharedResourceGroup":{
+            "value": "aTSIResourceGroup"
+        },
+        "tsiSharedVirtualNetworkName":{
+            "value": "aVnet"
         }
     }
 }

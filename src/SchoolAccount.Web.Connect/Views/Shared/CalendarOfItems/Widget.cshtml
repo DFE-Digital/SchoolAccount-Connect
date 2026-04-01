@@ -49,6 +49,13 @@
             }
         </div>
 
+        @if (Model.HasFilters)
+        {
+            <div class="govuk-grid-column-one-third">
+                <partial name="_Filtration" model="Model.Filters"/>
+            </div>
+        }
+
     </form>
 
 </div>

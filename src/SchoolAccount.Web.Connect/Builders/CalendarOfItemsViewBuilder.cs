@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Http.Extensions;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Extensions;
+using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
@@ -43,7 +44,8 @@ public class CalendarOfItemsViewBuilder(
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            paginationBuilder.Build(result)
+            paginationBuilder.Build(result),
+            FiltrationViewModel.Build(contextAccessor.GetFullRequestUri().ToString(), environment, result.Filter)
         )
         {
             GeneratedAt = result.GeneratedDate,
@@ -123,6 +125,13 @@ public class CalendarOfItemsViewBuilder(
             throw new ApplicationException(result.Error.Description);
         }
 
+        if (result.Value.Payload.Count == 0)
+        {
+            return Build(new CalendarOfItemViewOptions { NoResultsMessage = "No tasks found" }, result.Value);
+        }
+
+        var lastUpdatedDate = result.Value.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max();
+
         var options = new CalendarOfItemViewOptions
         {
             ViewMode = CalendarOfItemsViewModes.Custom | CalendarOfItemsViewModes.Standalone,
@@ -130,8 +139,7 @@ public class CalendarOfItemsViewBuilder(
             Title = "Upcoming tasks",
             Description = "These are all the required tasks that you must complete for your school each month.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
-            LastUpdatedMessage =
-                $"Last updated: {result.Value.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Max().ToGdsDateString()}",
+            LastUpdatedMessage = $"Last updated: {lastUpdatedDate.ToGdsDateString()}",
             NoResultsMessage = query.NoResultMessage,
         };
 

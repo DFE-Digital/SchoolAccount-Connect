@@ -70,12 +70,28 @@
             },
             "sharedStorageName": {
                 "type": "string"
-            }, 
-            "feIPSecurityRestrictionsEnabled": {
-                "type": "bool",
-                "defaultValue": true,
+            },
+            "saConnectIPSecurityRestrictionsMode": {
+                "type": "string",
+                "allowedValues": [
+                    "Off",
+                    "SubnetsOnly",
+                    "SubnetsAndIPs"
+                ],
                 "metadata": {
-                    "description": "Set IP Security Restrictions"
+                 "description": "Controls the IP security restrictions mode."
+                }
+            },
+            "tsiSharedResourceGroup": {
+                "type": "string"
+            },
+            "tsiSharedVirtualNetworkName": {
+                "type": "string"
+            },
+            "WAFIpAddress": {
+                "type": "string",
+                "metadata": {
+                    "description": "Inbound IP Address of WAF"
                 }
             },
             "sharedAppConfigName": {
@@ -117,7 +133,7 @@
                 "WindowSize": "PT5M"
             }
         ],
-        "ipSecurityRestrictions": [
+        "ipSecurityRestrictionsIPs": [
             {
                 "ipAddress": "213.123.63.150/32",
                 "action": "Allow",
@@ -299,10 +315,30 @@
                 "priority": 2147483647,
                 "name": "Deny all",
                 "description": "Deny all access"
+            },
+            {
+                "ipAddress": "[parameters('WAFIpAddress')]",
+                "action": "Allow",
+                "tag": "Default",
+                "priority": 100,
+                "name": "WAF Inbound IP Address"
             }
             
-        ]
-            },
+        ],
+            "ipSecurityRestrictionsSubnets": [
+                {
+                    "name": "SASubnet",
+                    "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('sharedVirtualNetworkName'), 'sa-appsrv-sn')]",
+                    "priority": 200
+                },
+                {
+                    "name": "TSISubnet",
+                    "vnetSubnetResourceId": "[resourceId(parameters('tsiSharedResourceGroup') , 'Microsoft.Network/virtualNetworks/subnets', parameters('tsiSharedVirtualNetworkName'), 'tsi-appsrv-sn')]",
+                    "priority": 200
+                }
+            ],
+        "ipSecurityRestrictions": "[if(equals(parameters('saConnectIPSecurityRestrictionsMode'), 'Off'), json('[]'), if(equals(parameters('saConnectIPSecurityRestrictionsMode'), 'SubnetsOnly'), variables('ipSecurityRestrictionsSubnets'), union(variables('ipSecurityRestrictionsSubnets'), variables('ipSecurityRestrictionsIPs'))))]"  
+        },
         "resources": [
         {
             "type": "Microsoft.Resources/deployments",
@@ -370,7 +406,7 @@
                         "value": true
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[if(parameters('feIPSecurityRestrictionsEnabled'), variables('ipSecurityRestrictions'), json('[]'))]"
+                        "value": "[variables('ipSecurityRestrictions')]"
                     },
                     "appServiceAppSettings": {
                         "value": [

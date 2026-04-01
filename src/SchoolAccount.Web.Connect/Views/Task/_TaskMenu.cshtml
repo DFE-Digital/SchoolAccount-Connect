@@ -1,0 +1,26 @@
+﻿@using SchoolAccount.Domain.ViewModels
+@model TaskDetailsViewModel
+
+<moj-sub-navigation>
+    <moj-sub-navigation-item href="@Model?.TabViewModel?.UpcomingTab.Href" current="Model?.TabViewModel?.UpcomingTab.TabIsSet ?? false">@Model?.TabViewModel?.UpcomingTab.DisplayName</moj-sub-navigation-item>
+    <moj-sub-navigation-item href="@Model?.TabViewModel?.PreviousTab.Href" current="Model?.TabViewModel?.PreviousTab.TabIsSet ?? false">@Model?.TabViewModel?.PreviousTab.DisplayName</moj-sub-navigation-item>
+</moj-sub-navigation>
+
+@if (Model?.TabViewModel?.UpcomingTab.TabIsSet == true)
+{
+    <div class="govuk-grid-row govuk-!-padding-top-2">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">Upcoming Tasks</h2>
+            <h3 class="govuk-caption-m">Last updated: @Model.LastUpdatedDate</h3>
+        </div>
+    </div>
+}
+@if (Model?.TabViewModel?.PreviousTab.TabIsSet == true)
+{
+    <div class="govuk-grid-row govuk-!-padding-top-2">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">Previous 12 months</h2>
+            <h3 class="govuk-caption-m">Last updated: @Model.LastUpdatedDate</h3>
+        </div>
+    </div>
+}

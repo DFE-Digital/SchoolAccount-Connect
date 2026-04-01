@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolAccount.Domain.Entities;
 using SchoolAccount.Infrastructure.Configuration.Common;
 using SchoolAccount.Infrastructure.Configuration.Constants;
-using SchoolAccount.Infrastructure.Models.Entities;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 
@@ -27,10 +27,17 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
         builder.Property(x => x.DigitalTaskLink).HasMaxLength(2000);
         builder.Property(x => x.Comment).HasMaxLength(2000);
         builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
-
         builder.HasIndex(x => x.TaskId);
         builder.HasIndex(x => new { x.TaskId, x.IsDeleted });
-
+        builder.Property(x => x.RequirementId);
+        builder.Property(x => x.StartDate);
+        builder.Property(x => x.StartDateIsExact);
+        builder.Property(x => x.DueDate);
+        builder.Property(x => x.DueDateIsExact);
+        builder.Property(x => x.ExpiryDate);
+        builder.Property(x => x.DisplayDate);
+        builder.Property(x => x.WorkflowStateId);
+        builder.Property(x => x.Version);
         builder
             .HasOne(d => d.Task)
             .WithMany(p => p.SubTasks)

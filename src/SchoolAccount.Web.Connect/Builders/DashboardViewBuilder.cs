@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Builders.Interfaces;
 using SchoolAccount.Web.Connect.Models;
 
@@ -17,10 +17,7 @@ public class DashboardViewBuilder(ICalendarOfItemsViewBuilder calendarOfItemsVie
 
         var calendarOfItemOptions = new CalendarOfItemsCustomQuery(
             CalendarOfItemsQueryTypes.SubTask,
-            new DateOnlyRange(
-                date.StartOfMonth().ToDateOnly(), 
-                date.EndOfMonth().ToDateOnly()
-            ),
+            new DateOnlyRange(date.StartOfMonth().ToDateOnly(), date.EndOfMonth().ToDateOnly()),
             10,
             1,
             CalendarOfItemsSortMode.NotSpecified,

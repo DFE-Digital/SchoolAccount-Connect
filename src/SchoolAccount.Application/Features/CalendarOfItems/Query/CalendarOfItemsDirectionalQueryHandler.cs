@@ -23,12 +23,13 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
+            Filter = query.Filter ?? new([]),
         };
 
         return await aggregator.Query(model, cancellationToken);
     }
 
-    private static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)
+    public static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)
     {
         var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
         if ((filter.ViewModes & bothSet) == bothSet)
@@ -36,9 +37,10 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             throw new ArgumentOutOfRangeException(
                 nameof(filter),
                 filter.ViewModes,
-                "ViewModes cannot have both Forward and Backward set simultaneously.");
+                "ViewModes cannot have both Forward and Backward set simultaneously."
+            );
         }
-        
+
         DateOnly rangeStart;
         DateOnly rangeEnd;
 

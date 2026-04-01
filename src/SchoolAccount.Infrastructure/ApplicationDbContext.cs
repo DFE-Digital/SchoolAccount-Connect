@@ -1,6 +1,8 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Infrastructure.Models.Entities;
+using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Models.Entities;
 
 namespace SchoolAccount.Infrastructure;
 
@@ -29,6 +31,12 @@ internal sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext
     public DbSet<TaxonomyGroupingEntity> TaxonomyGroupings { get; set; }
 
     public DbSet<TaxonomySourceAssociationEntity> TaxonomySourceAssociations { get; set; }
+
+    public DbSet<TypeEntity> Types { get; set; }
+
+    public DbSet<TypeGroupingEntity> TypeGroupings { get; set; }
+
+    public DbSet<TypeTaskMappingEntity> TypeTaskMappings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

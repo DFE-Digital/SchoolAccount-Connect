@@ -1,6 +1,7 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
@@ -11,5 +12,6 @@ public record CalendarOfItemsDirectionalQuery(
     DateOnly QueryFromDate,
     int PageSize,
     int PageNumber,
-    CalendarOfItemsSortMode SortMode
+    CalendarOfItemsSortMode SortMode,
+    CalendarOfItemsFilter? Filter = null
 ) : IQuery<CalendarOfItemsPagedResult>;

@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Infrastructure.Abstraction;
+using SchoolAccount.Infrastructure.Helpers.Filtering;
 using SchoolAccount.Infrastructure.Projection;
 using SchoolAccount.Infrastructure.Specifications;
 using SchoolAccount.Kernel;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Infrastructure.Factories;
 
@@ -18,7 +20,7 @@ public class SubTaskCalendarOfItemQueryFactory(
         return (identifier & CalendarOfItemsQueryTypes.SubTask) == CalendarOfItemsQueryTypes.SubTask;
     }
 
-    public IQueryable<CalendarOfItemsRow> Query()
+    public IQueryable<CalendarOfItemsRow> Query(CalendarOfItemsFilter filter, FieldSelectorMapping mappings)
     {
         var accessibleTags = applicationDbContext.SchoolTypeTagMappings.AsQueryable();
         return applicationDbContext
@@ -28,7 +30,7 @@ public class SubTaskCalendarOfItemQueryFactory(
             .Include(x => x.TagsSourceMappings)
             .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
             .Where(SubTaskEntitySpecifications.IsVisible())
-            .Where(SubTaskEntitySpecifications.IsMandatory())
+            .Apply(filter, mappings)
             .Select(CalendarOfItemsRowProjection.FromSubTask());
     }
 }

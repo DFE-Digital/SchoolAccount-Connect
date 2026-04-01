@@ -1,12 +1,9 @@
 using SchoolAccount.IntegrationTests.Factory;
-using SchoolAccount.Web.Connect;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Fixtures;
 
-#pragma warning disable CA1001
 public class DatabaseFixture : IAsyncLifetime
-#pragma warning restore CA1001
 {
     private readonly SchoolAccountWebApplicationFactory<Program> _factory;
     public HttpClient Client { get; }
@@ -30,5 +27,16 @@ public class DatabaseFixture : IAsyncLifetime
     public async Task DisposeAsync()
     {
         await _factory.GetDbContext().Database.EnsureDeletedAsync();
+    }
+
+    async ValueTask IAsyncLifetime.InitializeAsync()
+    {
+        await Task.Delay(1);
+    }
+
+    ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        return _factory.DisposeAsync();
     }
 }

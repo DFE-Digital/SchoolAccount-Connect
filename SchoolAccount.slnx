@@ -38,6 +38,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
     <Project Path="tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
+    <Project Path="tests/SchoolAccount.FrontEndTests/SchoolAccount.FrontEndTests.csproj" />
     <Project Path="tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
     <Project Path="tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
   </Folder>
