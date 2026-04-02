@@ -6,35 +6,9 @@ using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class PaginationViewBuilder(IHttpContextAccessor contextAccessor)
+public class PaginationViewBuilder
 {
     private const int EllipsisIdentifier = -1;
-
-    private static string? BuildUrl(string endpoint, int pageNumber, HttpRequest request)
-    {
-        ArgumentNullException.ThrowIfNull(endpoint);
-        ArgumentOutOfRangeException.ThrowIfLessThan(pageNumber, 0);
-
-        var query = request
-            .Query.SelectMany(q => q.Value.Select(v => new KeyValuePair<string, string?>(q.Key, v)))
-            .ToList();
-
-        for (var i = query.Count - 1; i >= 0; i--)
-        {
-            var pair = query[i];
-
-            if (pair.Key.Equals("pageNumber", StringComparison.OrdinalIgnoreCase))
-            {
-                query.RemoveAt(i);
-            }
-        }
-
-        query.Add(
-            new KeyValuePair<string, string?>("pageNumber", pageNumber.ToString(Thread.CurrentThread.CurrentCulture))
-        );
-
-        return QueryHelpers.AddQueryString($"/{endpoint.TrimStart('/')}", query);
-    }
 
     private static List<int> GetListOfPagesToShow(Pagination model)
     {
@@ -70,26 +44,27 @@ public class PaginationViewBuilder(IHttpContextAccessor contextAccessor)
         return pagesToShow;
     }
 
-    public PaginationViewModel Build(Pagination model, string endpoint, HttpRequest? request = null)
+    private static PaginationViewModel Build(Pagination model, Uri currentUri)
     {
-        request ??= contextAccessor.HttpContext?.Request ?? throw new ArgumentNullException(nameof(request));
-
         var items = GetListOfPagesToShow(model)
-            .Select<int, IPaginationItem>(p =>
+            .Select<int, IPaginationItem>(page =>
             {
-                if (p == EllipsisIdentifier)
+                if (page == EllipsisIdentifier)
                 {
                     return new PaginationEllipsisViewModel();
                 }
 
-                return new PaginationItemViewModel(p, BuildUrl(endpoint, p, request)!, p == model.PageNumber);
+                var pageUri = currentUri.SetQueryParam("pageNumber", page);
+                var isCurrentPage = page == model.PageNumber;
+
+                return new PaginationItemViewModel(page, pageUri, isCurrentPage);
             })
             .ToList();
 
         return new PaginationViewModel(items)
         {
-            PreviousUrl = model.HasPreviousPage ? BuildUrl(endpoint, model.PageNumber - 1, request) : null,
-            NextUrl = model.HasNextPage ? BuildUrl(endpoint, model.PageNumber + 1, request) : null,
+            PreviousUrl = model.HasPreviousPage ? currentUri.SetQueryParam("pageNumber", model.PageNumber - 1) : null,
+            NextUrl = model.HasNextPage ? currentUri.SetQueryParam("pageNumber", model.PageNumber + 1) : null,
             PageCount = model.PageCount,
             TotalItemCount = model.TotalItemCount,
             FirstItemOnPage = model.FirstItemOnPage,
@@ -103,13 +78,9 @@ public class PaginationViewBuilder(IHttpContextAccessor contextAccessor)
         };
     }
 
-    public PaginationViewModel Build<T>(T model)
+    public PaginationViewModel Build<T>(T model, Uri currentUri)
         where T : IPagedList
     {
-        return Build(
-            new Pagination(model),
-            contextAccessor.HttpContext!.GetCurrentEndpoint(),
-            contextAccessor.HttpContext!.Request
-        );
+        return Build(new Pagination(model), currentUri);
     }
 }

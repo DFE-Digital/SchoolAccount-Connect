@@ -9,6 +9,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -16,8 +17,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [Authorize]
 public class CalendarController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
-    IOrganisationContext organisationContext,
-    IHttpContextAccessor contextAccessor
+    IOrganisationContext organisationContext
 ) : Controller
 {
     [HttpGet(RouteConstants.Calendar.Index)]
@@ -61,8 +61,9 @@ public class CalendarController(
             throw new ApplicationException(result.Error.Description);
         }
 
-        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext, contextAccessor);
-        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes);
+        var currentUri = Request.GetFullRequestUri();
+        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes, currentUri);
 
         return View(viewModel);
     }

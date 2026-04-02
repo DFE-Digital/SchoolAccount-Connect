@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using Microsoft.AspNetCore.Http.Extensions;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
@@ -11,12 +10,16 @@ using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext, IHttpContextAccessor contextAccessor)
+public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext)
 {
     private readonly CalendarOfItemsRowViewBuilder _rowViewBuilder = new();
-    private readonly PaginationViewBuilder _paginationViewBuilder = new(contextAccessor);
+    private readonly PaginationViewBuilder _paginationViewBuilder = new();
 
-    public CalendarOfItemsViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsPagedResult result)
+    public CalendarOfItemsViewModel Build(
+        CalendarOfItemViewOptions options,
+        CalendarOfItemsPagedResult result,
+        Uri currentUri
+    )
     {
         Collection<CalendarOfItemsRowGroupViewModel> rows = [];
 
@@ -37,8 +40,8 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            _paginationViewBuilder.Build(result),
-            FiltrationViewModel.Build(contextAccessor.GetFullRequestUri(), result.Filter)
+            _paginationViewBuilder.Build(result, currentUri),
+            FiltrationViewModel.Build(currentUri, result.Filter)
         )
         {
             GeneratedAt = result.GeneratedDate,
@@ -53,17 +56,18 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
         };
     }
 
-    public CalendarOfItemsViewModel BuildForPage(CalendarOfItemsPagedResult items, CalendarOfItemsViewModes viewModes)
+    public CalendarOfItemsViewModel BuildForPage(
+        CalendarOfItemsPagedResult items,
+        CalendarOfItemsViewModes viewModes,
+        Uri currentUri
+    )
     {
-        var url = contextAccessor.HttpContext!.Request.GetDisplayUrl();
-        var uri = new Uri(url);
-
         CalendarOfItemsTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
         {
             var key = nameof(CalendarOfItemsDirectionalQuery.ViewModes);
             var value = mode.ToString();
 
-            var updatedUrl = uri.SetQueryParam(key, value).RemoveQueryParam("pageNumber");
+            var updatedUrl = currentUri.SetQueryParam(key, value).RemoveQueryParam("pageNumber");
 
             return new CalendarOfItemsTabViewModel(label, description, updatedUrl, viewModes.HasFlag(mode));
         }
@@ -93,10 +97,10 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
                 : string.Empty,
         };
 
-        return Build(options, items);
+        return Build(options, items, currentUri);
     }
 
-    public CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items)
+    public CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items, Uri currentUri)
     {
         var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 
@@ -113,6 +117,6 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
                 : string.Empty,
         };
 
-        return Build(options, items);
+        return Build(options, items, currentUri);
     }
 }

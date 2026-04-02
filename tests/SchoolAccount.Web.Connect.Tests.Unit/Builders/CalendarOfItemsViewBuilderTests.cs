@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
 using AwesomeAssertions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
@@ -20,35 +18,18 @@ public class CalendarOfItemsViewBuilderTests
     public void Successfully_handles_an_empty_list_of_items()
     {
         // Arrange
-        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
-        var context = Substitute.For<HttpContext>();
-        var request = Substitute.For<HttpRequest>();
-
-        httpContextAccessor.HttpContext.Returns(context);
-        context.Request.Returns(request);
-
         var organisationContext = Substitute.For<IOrganisationContext>();
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
-        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext, httpContextAccessor);
-
-        MockUrl(request);
+        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var currentUri = new Uri("https://localhost:7033/calendar");
 
         var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
 
         // Act
-        var viewModel = viewBuilder.BuildForPage(items, CalendarOfItemsViewModes.None);
+        var viewModel = viewBuilder.BuildForPage(items, CalendarOfItemsViewModes.None, currentUri);
 
         // Assert
         viewModel.Items.Should().BeEmpty();
-    }
-
-    private static void MockUrl(HttpRequest request)
-    {
-        request.Scheme.Returns("https");
-        request.Host.Returns(new HostString("www.example.com"));
-        request.PathBase.Returns(new PathString("/api"));
-        request.Path.Returns(new PathString("/v1/users"));
-        request.QueryString.Returns(new QueryString("?id=123"));
     }
 }

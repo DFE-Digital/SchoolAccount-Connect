@@ -4,14 +4,14 @@ namespace SchoolAccount.Web.Connect.Models;
 
 public sealed class PaginationItemViewModel : IPaginationItem
 {
-    public PaginationItemViewModel(int pageNumber, string url, bool isCurrent)
+    public PaginationItemViewModel(int pageNumber, Uri uri, bool isCurrent)
     {
         PageNumber = pageNumber;
-        Url = url;
+        Uri = uri;
         IsCurrent = isCurrent;
     }
 
     public int? PageNumber { get; init; }
-    public string? Url { get; init; }
+    public Uri? Uri { get; init; }
     public bool IsCurrent { get; init; }
 }

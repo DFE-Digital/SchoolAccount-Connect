@@ -10,17 +10,16 @@ public class DashboardViewBuilder
     public DashboardViewModel Build(
         CalendarOfItemsPagedResult items,
         IOrganisationContext organisationContext,
-        IHttpContextAccessor contextAccessor,
-        IHostEnvironment environment
+        Uri currentUri
     )
     {
-        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(organisationContext, contextAccessor);
+        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
         var dashboardViewItems = new Collection<DashboardViewItem>();
 
         dashboardViewItems.Add(
             new DashboardViewItem(
                 ViewAddressConstraints.CalendarOfItems.Tab,
-                calendarOfItemsViewBuilder.BuildForDashboard(items)
+                calendarOfItemsViewBuilder.BuildForDashboard(items, currentUri)
             )
         );
 

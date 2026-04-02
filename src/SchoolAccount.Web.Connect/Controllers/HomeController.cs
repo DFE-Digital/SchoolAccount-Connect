@@ -11,6 +11,7 @@ using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -18,9 +19,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> customQueryHandler,
-    IOrganisationContext organisationContext,
-    IHttpContextAccessor contextAccessor,
-    IHostEnvironment environment
+    IOrganisationContext organisationContext
 ) : Controller
 {
     [HttpGet]
@@ -44,8 +43,9 @@ public sealed class HomeController(
             return Problem(detail: result.Error.Description);
         }
 
+        var currentUri = Request.GetFullRequestUri();
         var dashboardViewBuilder = new DashboardViewBuilder();
-        var viewModel = dashboardViewBuilder.Build(result.Value, organisationContext, contextAccessor, environment);
+        var viewModel = dashboardViewBuilder.Build(result.Value, organisationContext, currentUri);
 
         return View(viewModel);
     }
