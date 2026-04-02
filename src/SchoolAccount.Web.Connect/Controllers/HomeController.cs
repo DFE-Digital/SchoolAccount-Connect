@@ -23,7 +23,7 @@ public sealed class HomeController(
 ) : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index([FromQuery] int? pageNumber, CancellationToken cancellationToken)
     {
         var date = DateTime.Today;
 
@@ -31,7 +31,7 @@ public sealed class HomeController(
             CalendarOfItemsQueryTypes.SubTask,
             new DateOnlyRange(date.StartOfMonth().ToDateOnly(), date.EndOfMonth().ToDateOnly()),
             10,
-            1,
+            pageNumber ?? 1,
             CalendarOfItemsSortMode.NotSpecified,
             $"No required tasks for {date:MMMM yyyy}"
         );
