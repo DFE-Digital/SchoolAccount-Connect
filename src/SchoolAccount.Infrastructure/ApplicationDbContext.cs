@@ -2,7 +2,6 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Models.Entities;
 
 namespace SchoolAccount.Infrastructure;
 

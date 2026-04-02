@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class TagEntity : IIdNameEntity<long>
+public class TagEntity
 {
     public long Id { get; init; }
 

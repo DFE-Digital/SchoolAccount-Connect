@@ -52,7 +52,7 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
 
         builder
             .HasMany(x => x.TagsSourceMappings)
-            .WithOne(x => (SubTaskEntity?)x.Entity)
+            .WithOne(x => x.SubTask)
             .HasForeignKey(x => x.EntityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }

@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class SchoolTypeEntity : IIdNameEntity<int>
+public class SchoolTypeEntity
 {
     public int Id { get; init; }
 

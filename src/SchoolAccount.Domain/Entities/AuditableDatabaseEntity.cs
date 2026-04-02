@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public abstract class AuditableDatabaseEntity : IDatabaseEntity
+public abstract class AuditableDatabaseEntity
 {
     public long Id { get; init; }
 

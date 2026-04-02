@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class SchoolTypeTagMappingEntity : IDatabaseEntity
+public class SchoolTypeTagMappingEntity
 {
     public int Id { get; set; }
 

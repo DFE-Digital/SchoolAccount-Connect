@@ -1,5 +1,10 @@
-using SchoolAccount.Domain.Interfaces;
+namespace SchoolAccount.Domain.Entities;
 
-namespace SchoolAccount.Domain.Models.Entities;
+public partial class RequirementEntity
+{
+    public int Id { get; init; }
 
-public partial class RequirementEntity : IDatabaseEntity { }
+    public required string Name { get; set; }
+
+    public string? Description { get; set; }
+}

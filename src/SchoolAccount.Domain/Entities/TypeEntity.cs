@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class TypeEntity : IDatabaseEntity
+public class TypeEntity
 {
     public int Id { get; set; }
 

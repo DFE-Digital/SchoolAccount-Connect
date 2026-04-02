@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class TaxonomySourceAssociationEntity : IDatabaseEntity
+public class TaxonomySourceAssociationEntity
 {
     public long Id { get; set; }
 

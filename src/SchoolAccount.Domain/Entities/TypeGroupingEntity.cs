@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class TypeGroupingEntity : IDatabaseEntity
+public class TypeGroupingEntity
 {
     public int Id { get; set; }
 

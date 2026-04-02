@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public partial class TaxonomyEntity : IIdNameEntity<int>
+public partial class TaxonomyEntity
 {
     public int Id { get; init; }
 

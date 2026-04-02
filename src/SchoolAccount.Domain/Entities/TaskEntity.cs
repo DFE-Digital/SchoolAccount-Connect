@@ -1,5 +1,3 @@
-using SchoolAccount.Domain.Models.Entities;
-
 namespace SchoolAccount.Domain.Entities;
 
 public class TaskEntity : AuditableDatabaseEntity

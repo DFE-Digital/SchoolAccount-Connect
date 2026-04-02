@@ -1,8 +1,6 @@
-using SchoolAccount.Domain.Interfaces;
-
 namespace SchoolAccount.Domain.Entities;
 
-public class TaxonomyGroupingEntity : IDatabaseEntity
+public class TaxonomyGroupingEntity
 {
     public int Id { get; set; }
 

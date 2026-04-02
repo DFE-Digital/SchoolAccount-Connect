@@ -1,4 +1,4 @@
-namespace SchoolAccount.Domain.Models.Entities;
+namespace SchoolAccount.Domain.Entities;
 
 public partial class WorkflowStateEntity
 {

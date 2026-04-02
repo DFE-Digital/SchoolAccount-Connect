@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Models.Entities;
 using SchoolAccount.Kernel;
+using RequirementEntity = SchoolAccount.Domain.Entities.RequirementEntity;
 
 namespace SchoolAccount.Infrastructure.Specifications;
 

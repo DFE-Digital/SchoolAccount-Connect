@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Models.Entities;
 
 namespace SchoolAccount.Application.Abstractions.Data;
 
