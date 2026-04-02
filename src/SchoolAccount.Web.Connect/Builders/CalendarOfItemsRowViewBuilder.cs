@@ -1,7 +1,9 @@
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Domain.Entities;
 using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
@@ -30,7 +32,7 @@ public class CalendarOfItemsRowViewBuilder
             row.Status is not null
             && mode == CalendarOfItemsViewModes.Forward
             && row.Status!.Type == CalendarOfItemsRowType.WorkflowState
-            && row.Status.EntityId == (int)WorkflowStateValues.Expired
+            && row.Status.EntityId == (int)WorkflowState.Expired
         )
         {
             return (true, row.Status.DisplayValue, row.Status.Theme, "#previous");

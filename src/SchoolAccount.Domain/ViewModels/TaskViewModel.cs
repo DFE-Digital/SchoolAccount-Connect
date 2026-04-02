@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Domain.Entities;
 using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels
@@ -85,7 +87,7 @@ namespace SchoolAccount.Domain.ViewModels
         {
             DateOnly lastUpdated;
             var subtask = subTasks
-                ?.Where(x => x.WorkflowStateId == (long)WorkflowStateValues.Expired)
+                ?.Where(x => x.WorkflowState == WorkflowState.Expired)
                 .OrderByDescending(x => x.DateUpdated)
                 .FirstOrDefault();
             if (subtask != null)

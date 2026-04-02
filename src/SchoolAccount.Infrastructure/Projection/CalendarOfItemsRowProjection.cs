@@ -22,9 +22,9 @@ public static class CalendarOfItemsRowProjection
             Type = CalendarOfItemsRowType.Task,
             Status = new CalendarOfItemsRowStatus
             {
-                DisplayValue = x.WorkflowState.Name,
+                DisplayValue = Enum.GetName(x.WorkflowState)!,
                 Type = CalendarOfItemsRowType.WorkflowState,
-                EntityId = x.WorkflowStateId,
+                EntityId = (int)x.WorkflowState,
             },
             LastUpdated = x.DateUpdated,
             Tags = x.TagsSourceMappings.Select(t => new CalendarOfItemsExtensionNode

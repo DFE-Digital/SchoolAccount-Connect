@@ -1,4 +1,4 @@
-using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Domain.Workflow;
 
 namespace SchoolAccount.Domain.Dtos;
 
@@ -15,12 +15,10 @@ public record SubTaskListItemDto(
     int? RequirementId,
     bool? StartDateExact,
     bool? DueDateIsExact,
-    int WorkflowStateId
+    WorkflowState WorkflowState
 )
 {
-    public bool IsPublishedAndHasStartAndEndDate =>
-        _hasStartAndDueDate && WorkflowStateId == (long)WorkflowStateValues.Published;
-    public bool IsExpiredAndHasStartAndEndDate =>
-        _hasStartAndDueDate && WorkflowStateId == (long)WorkflowStateValues.Expired;
+    public bool IsPublishedAndHasStartAndEndDate => _hasStartAndDueDate && WorkflowState == WorkflowState.Published;
+    public bool IsExpiredAndHasStartAndEndDate => _hasStartAndDueDate && WorkflowState == WorkflowState.Expired;
     private bool _hasStartAndDueDate => !(StartDate == null && DueDate == null);
 }

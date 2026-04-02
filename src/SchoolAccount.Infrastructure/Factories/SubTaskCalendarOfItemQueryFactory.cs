@@ -26,7 +26,6 @@ public class SubTaskCalendarOfItemQueryFactory(
         return applicationDbContext
             .SubTasks.AsNoTracking()
             .Include(x => x.Task)
-            .Include(x => x.WorkflowState)
             .Include(x => x.TagsSourceMappings)
             .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
             .Where(SubTaskEntitySpecifications.IsVisible())

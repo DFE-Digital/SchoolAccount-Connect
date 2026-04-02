@@ -1,9 +1,9 @@
 using System.Globalization;
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.TaskDetails.ViewModels;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 using Xunit;
 
@@ -23,13 +23,13 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, true, "Available 2 Mar 2026.")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, true, "Available 2 Mar 2026.")]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, false, "Available Mar 2026.")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, false, "Available Mar 2026.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, true, "Available 2 Mar 2026.")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, true, "Available 2 Mar 2026.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, false, "Available Mar 2026.")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, false, "Available Mar 2026.")]
     public async Task CheckAvailableAndDueDateLabelIsSetWhenHasStartDateAndCorrectWorkFlowState(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool exactDate,
         string expectedAvailable
     )
@@ -40,7 +40,7 @@ public class TaskDetailsViewModelTests
         var startDate = DateOnly.FromDateTime(
             DateTime.ParseExact("02/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, exactDate, dueDateIsExact: false);
+        AddSubTaskItem(startDate, dueDate, workflowState, exactDate, dueDateIsExact: false);
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
         var model = new TaskDetailsViewModel(tasksWithSubtasks, taskDetailViewModes, _dateTimeProvider);
@@ -52,13 +52,13 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Expired, true)]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Published, true)]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Expired, false)]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Published, false)]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Expired, true)]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Published, true)]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Expired, false)]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Published, false)]
     public async Task CheckSubTasksNotPopulatedWhenNotMatchingViewModeWithWorkFlowState(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool exactDate
     )
     {
@@ -68,7 +68,7 @@ public class TaskDetailsViewModelTests
         var startDate = DateOnly.FromDateTime(
             DateTime.ParseExact("02/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, exactDate, dueDateIsExact: false);
+        AddSubTaskItem(startDate, dueDate, workflowState, exactDate, dueDateIsExact: false);
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
         var model = new TaskDetailsViewModel(tasksWithSubtasks, taskDetailViewModes, _dateTimeProvider);
@@ -78,15 +78,15 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, null, "No due date")]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, false, "Due Mar 2026.")]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, true, "Due 11 Mar 2026.")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, null, "No due date")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, false, "Due Mar 2026.")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, true, "Due 11 Mar 2026.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, null, "No due date")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, false, "Due Mar 2026.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, true, "Due 11 Mar 2026.")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, null, "No due date")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, false, "Due Mar 2026.")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, true, "Due 11 Mar 2026.")]
     public async Task CheckDueDateReturnsCorrectFormat(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool? dueDateExact,
         string expectedDueDateLabel
     )
@@ -97,7 +97,7 @@ public class TaskDetailsViewModelTests
         var startDate = DateOnly.FromDateTime(
             DateTime.ParseExact("02/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, startDateExact: true, dueDateExact);
+        AddSubTaskItem(startDate, dueDate, workflowState, startDateExact: true, dueDateExact);
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
         var model = new TaskDetailsViewModel(tasksWithSubtasks, taskDetailViewModes, _dateTimeProvider);
@@ -107,15 +107,15 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Expired, null)]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Expired, false)]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Expired, true)]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Published, null)]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Published, false)]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Published, true)]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Expired, null)]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Expired, false)]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Expired, true)]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Published, null)]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Published, false)]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Published, true)]
     public async Task CheckDueDateReturnsNoSubTasksWhenNotCorrectFormat(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool? dueDateExact
     )
     {
@@ -125,7 +125,7 @@ public class TaskDetailsViewModelTests
         var startDate = DateOnly.FromDateTime(
             DateTime.ParseExact("02/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, startDateExact: true, dueDateExact);
+        AddSubTaskItem(startDate, dueDate, workflowState, startDateExact: true, dueDateExact);
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
         var model = new TaskDetailsViewModel(tasksWithSubtasks, taskDetailViewModes, _dateTimeProvider);
@@ -134,26 +134,12 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, true, null, "12/02/2026", "Available Now.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, null, false, "", "Available Now.")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, false, true, "01/02/2026", "Available Now.")]
     [InlineData(
         TaskDetailViewMode.UpcomingTasks,
-        WorkflowStateValues.Published,
-        true,
-        null,
-        "12/02/2026",
-        "Available Now."
-    )]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, null, false, "", "Available Now.")]
-    [InlineData(
-        TaskDetailViewMode.UpcomingTasks,
-        WorkflowStateValues.Published,
-        false,
-        true,
-        "01/02/2026",
-        "Available Now."
-    )]
-    [InlineData(
-        TaskDetailViewMode.UpcomingTasks,
-        WorkflowStateValues.Published,
+        WorkflowState.Published,
         true,
         true,
         "02/03/2026",
@@ -161,7 +147,7 @@ public class TaskDetailsViewModelTests
     )]
     [InlineData(
         TaskDetailViewMode.UpcomingTasks,
-        WorkflowStateValues.Published,
+        WorkflowState.Published,
         false,
         true,
         "01/03/2026",
@@ -169,7 +155,7 @@ public class TaskDetailsViewModelTests
     )]
     [InlineData(
         TaskDetailViewMode.PreviousTasks,
-        WorkflowStateValues.Expired,
+        WorkflowState.Expired,
         true,
         true,
         "01/03/2026",
@@ -177,16 +163,16 @@ public class TaskDetailsViewModelTests
     )]
     [InlineData(
         TaskDetailViewMode.PreviousTasks,
-        WorkflowStateValues.Expired,
+        WorkflowState.Expired,
         false,
         true,
         "01/03/2026",
         "Available Mar 2026."
     )]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, null, true, "", "")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, null, true, "", "")]
     public async Task CheckAvailabilityLabelCorrectlyFormatted(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool? startDateExact,
         bool? dueDateExact,
         string startDateString,
@@ -203,7 +189,7 @@ public class TaskDetailsViewModelTests
         var dueDate = DateOnly.FromDateTime(
             DateTime.ParseExact("11/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, startDateExact, dueDateExact);
+        AddSubTaskItem(startDate, dueDate, workflowState, startDateExact, dueDateExact);
 
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
@@ -214,13 +200,13 @@ public class TaskDetailsViewModelTests
     }
 
     [Theory]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, true, "1 January 2026")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, true, "1 February 2026")]
-    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowStateValues.Published, false, "1 January 2026")]
-    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowStateValues.Expired, false, "1 February 2026")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, true, "1 January 2026")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, true, "1 February 2026")]
+    [InlineData(TaskDetailViewMode.UpcomingTasks, WorkflowState.Published, false, "1 January 2026")]
+    [InlineData(TaskDetailViewMode.PreviousTasks, WorkflowState.Expired, false, "1 February 2026")]
     public async Task CheckLastUpdatedDateIsSetWhenHasStartDateAndCorrectWorkFlowState(
         TaskDetailViewMode taskDetailViewModes,
-        WorkflowStateValues workflowStateValue,
+        WorkflowState workflowState,
         bool exactDate,
         string expectedLastUpdatedDate
     )
@@ -231,7 +217,7 @@ public class TaskDetailsViewModelTests
         var dueDate = DateOnly.FromDateTime(
             DateTime.ParseExact("11/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
-        AddSubTaskItem(startDate, dueDate, workflowStateValue, exactDate, dueDateIsExact: false);
+        AddSubTaskItem(startDate, dueDate, workflowState, exactDate, dueDateIsExact: false);
         var tasksWithSubtasks = new TaskListItemWithSubTaskList(_taskListItemDto, _subTaskListItemDto);
 
         var model = new TaskDetailsViewModel(tasksWithSubtasks, taskDetailViewModes, _dateTimeProvider);
@@ -243,7 +229,7 @@ public class TaskDetailsViewModelTests
     private void AddSubTaskItem(
         DateOnly? startDate,
         DateOnly? dueDate,
-        WorkflowStateValues workflowState,
+        WorkflowState workflowState,
         bool? startDateExact,
         bool? dueDateIsExact
     )
@@ -262,7 +248,7 @@ public class TaskDetailsViewModelTests
                 RequirementId: 2,
                 startDateExact,
                 dueDateIsExact,
-                (int)workflowState
+                workflowState
             )
         );
     }

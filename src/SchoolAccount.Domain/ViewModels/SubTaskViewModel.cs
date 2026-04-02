@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels
@@ -21,7 +22,7 @@ namespace SchoolAccount.Domain.ViewModels
         private bool? DueDateIsExact { get; }
         private DateOnly? DueDate { get; }
         private DateOnly? StartDate { get; }
-        private int WorkflowStateId { get; }
+        private WorkflowState WorkflowState { get; }
         private bool HasExactStartDate { get; }
         private bool DoesntHaveExactStartDate { get; }
         private bool DoesntHaveStartButHasDueDate { get; }
@@ -40,7 +41,7 @@ namespace SchoolAccount.Domain.ViewModels
             RequirementId = subTask.RequirementId;
             DigitalLink = subTask.DigitalLink;
             DueDateIsExact = subTask.DueDateIsExact;
-            WorkflowStateId = subTask.WorkflowStateId;
+            WorkflowState = subTask.WorkflowState;
             HasExactStartDate = StartDate.HasValue && StartDateIsExact.HasValue && StartDateIsExact.Value == true;
             DoesntHaveExactStartDate =
                 StartDate.HasValue && StartDateIsExact.HasValue && StartDateIsExact.Value == false;
@@ -62,7 +63,7 @@ namespace SchoolAccount.Domain.ViewModels
 
         private void SetAvailabilityForPublishedTasks()
         {
-            if (WorkflowStateId == (int)WorkflowStateValues.Published)
+            if (WorkflowState == WorkflowState.Published)
             {
                 SetAvailabilityLabelWhenPublishedAndHasExactStartDate();
                 SetAvailabilityLabelWhenPublishedAndDoesntHaveStartDate();
@@ -72,7 +73,7 @@ namespace SchoolAccount.Domain.ViewModels
 
         private void SetAvailabilityForExpiredTasks()
         {
-            if (WorkflowStateId == (int)WorkflowStateValues.Expired)
+            if (WorkflowState == WorkflowState.Expired)
             {
                 SetAvailabilityLabelWhenExpiredAndHasExactStartDate();
                 SetAvailabilityLabelWhenExpiredAndDoesntHaveExactStartDate();

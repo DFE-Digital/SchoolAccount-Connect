@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Workflow;
 
 namespace SchoolAccount.Domain.Entities;
 
@@ -19,7 +20,7 @@ public class TaskEntity
 
     public int? RequirementId { get; set; }
 
-    public int? WorkflowStateId { get; set; }
+    public WorkflowState WorkflowState { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -40,8 +41,6 @@ public class TaskEntity
     public required string UpdatedBy { get; set; }
 
     public DateTime DateUpdated { get; set; }
-
-    public virtual required WorkflowStateEntity WorkflowState { get; set; }
 
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
 

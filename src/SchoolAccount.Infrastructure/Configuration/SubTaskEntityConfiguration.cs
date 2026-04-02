@@ -13,6 +13,7 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
         public const string ReferenceNo = "SubTaskReferenceNo";
         public const string Name = "SubTaskName";
         public const string Description = "SubTaskDescription";
+        public const string WorkflowState = "WorkflowStateId";
     }
 
     public void Configure(EntityTypeBuilder<SubTaskEntity> builder)
@@ -34,7 +35,7 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
         builder.Property(x => x.DueDateIsExact);
         builder.Property(x => x.ExpiryDate);
         builder.Property(x => x.DisplayDate);
-        builder.Property(x => x.WorkflowStateId);
+        builder.Property(x => x.WorkflowState).HasConversion<int>().HasColumnName(ColumnNames.WorkflowState);
         builder.Property(x => x.Version);
         builder.Property(e => e.CreatedBy).HasMaxLength(Lengths.CreatedUpdatedBy).IsRequired();
         builder.Property(e => e.DateCreated).IsRequired();
@@ -45,12 +46,6 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
             .HasOne(d => d.Task)
             .WithMany(p => p.SubTasks)
             .HasForeignKey(d => d.TaskId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        builder
-            .HasOne(d => d.WorkflowState)
-            .WithMany(p => p.SubTasks)
-            .HasForeignKey(d => d.WorkflowStateId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder

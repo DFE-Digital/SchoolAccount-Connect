@@ -9,7 +9,6 @@ public interface IApplicationDbContext
     DbSet<SubTaskEntity> SubTasks { get; }
     DbSet<SchoolTypeTagMappingEntity> SchoolTypeTagMappings { get; set; }
     DbSet<TagsSourceMappingEntity> TagsSourceMappings { get; set; }
-    DbSet<WorkflowStateEntity> WorkflowStates { get; set; }
     DbSet<SchoolTypeEntity> SchoolTypes { get; set; }
     DbSet<SourceEntity> Sources { get; set; }
     DbSet<TagEntity> Tags { get; set; }

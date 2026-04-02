@@ -20,7 +20,7 @@ namespace SchoolAccount.Domain.Helpers
                 subTaskEntity.RequirementId,
                 subTaskEntity.StartDateIsExact,
                 subTaskEntity.DueDateIsExact,
-                subTaskEntity.WorkflowStateId
+                subTaskEntity.WorkflowState
             );
         }
     }

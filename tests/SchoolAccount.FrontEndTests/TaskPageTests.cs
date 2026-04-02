@@ -6,6 +6,7 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.TaskDetails.ViewModels;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Controllers;
 using Xunit;
@@ -102,7 +103,7 @@ public class TaskPageTests
                 RequirementId: 2,
                 true,
                 true,
-                (int)WorkflowStateValues.Expired
+                WorkflowState.Expired
             )
         );
     }

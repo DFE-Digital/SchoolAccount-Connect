@@ -17,8 +17,6 @@ internal sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext
 
     public DbSet<TagsSourceMappingEntity> TagsSourceMappings { get; set; }
 
-    public DbSet<WorkflowStateEntity> WorkflowStates { get; set; }
-
     public DbSet<SchoolTypeEntity> SchoolTypes { get; set; }
 
     public DbSet<SourceEntity> Sources { get; set; }

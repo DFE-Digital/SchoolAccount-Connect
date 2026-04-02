@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 using RequirementEntity = SchoolAccount.Domain.Entities.RequirementEntity;
 
@@ -25,8 +26,6 @@ public static class SubTaskEntitySpecifications
 
     public static Expression<Func<SubTaskEntity, bool>> IsVisible()
     {
-        return s =>
-            s.WorkflowState.Id == WorkflowStateEntity.IdValues.Published
-            || s.WorkflowState.Id == WorkflowStateEntity.IdValues.Expired;
+        return s => s.WorkflowState == WorkflowState.Published || s.WorkflowState == WorkflowState.Expired;
     }
 }

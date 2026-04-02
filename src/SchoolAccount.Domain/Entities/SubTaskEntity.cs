@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Workflow;
 
 namespace SchoolAccount.Domain.Entities;
 
@@ -29,7 +30,7 @@ public class SubTaskEntity
 
     public DateOnly? ExpiryDate { get; set; }
 
-    public int WorkflowStateId { get; set; }
+    public WorkflowState WorkflowState { get; set; }
 
     public string? Comment { get; set; }
 
@@ -50,8 +51,6 @@ public class SubTaskEntity
     public DateTime DateUpdated { get; set; }
 
     public virtual required TaskEntity Task { get; set; }
-
-    public virtual required WorkflowStateEntity WorkflowState { get; set; }
 
     public virtual ICollection<TagsSourceMappingEntity> TagsSourceMappings { get; } = [];
 }

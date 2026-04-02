@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using Type = System.Type;
 
@@ -25,7 +26,7 @@ public class SubTaskFilterableRegistrar : IFilterableRegistrar
             [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
             [Keys.Categories] =
                 (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
-            [Keys.State] = (Expression<Func<SubTaskEntity, int>>)(x => x.WorkflowStateId),
+            [Keys.State] = (Expression<Func<SubTaskEntity, WorkflowState>>)(x => x.WorkflowState),
             [Keys.PhaseOfEducation] =
                 (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
         };
@@ -39,11 +40,7 @@ public class SubTaskFilterableRegistrar : IFilterableRegistrar
                 {
                     Field = Keys.State,
                     Operator = ComparisonType.In,
-                    Value = new List<int>
-                    {
-                        WorkflowStateEntity.IdValues.Published,
-                        WorkflowStateEntity.IdValues.Expired,
-                    },
+                    Value = new List<WorkflowState> { WorkflowState.Published, WorkflowState.Expired },
                 }
             );
         }

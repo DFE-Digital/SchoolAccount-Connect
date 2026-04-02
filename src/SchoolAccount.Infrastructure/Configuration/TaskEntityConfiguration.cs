@@ -13,6 +13,7 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         public const string ReferenceNo = "TaskReferenceNo";
         public const string Name = "TaskName";
         public const string Description = "TaskDescription";
+        public const string WorkflowState = "WorkflowStateId";
     }
 
     public void Configure(EntityTypeBuilder<TaskEntity> builder)
@@ -24,6 +25,7 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         builder.Property(x => x.Description).HasColumnName(ColumnNames.Description).HasMaxLength(4000);
         builder.Property(x => x.PublishComment).HasMaxLength(2000);
         builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
+        builder.Property(x => x.WorkflowState).HasConversion<int>().HasColumnName(ColumnNames.WorkflowState);
         builder.Property(e => e.CreatedBy).HasMaxLength(Lengths.CreatedUpdatedBy).IsRequired();
         builder.Property(e => e.DateCreated).IsRequired();
         builder.Property(e => e.UpdatedBy).HasMaxLength(Lengths.CreatedUpdatedBy);
@@ -32,11 +34,5 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         builder.HasIndex(x => x.ReferenceNo);
         builder.HasIndex(x => x.Name);
         builder.HasIndex(x => new { x.IsDeleted, x.IsLatestVersion });
-
-        builder
-            .HasOne(d => d.WorkflowState)
-            .WithMany(p => p.Tasks)
-            .HasForeignKey(d => d.WorkflowStateId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
