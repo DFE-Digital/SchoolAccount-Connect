@@ -1,14 +1,17 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TagEntity
 {
     public long Id { get; init; }
 
     public int TaxonomyId { get; set; }
 
-    public string TagName { get; set; } = null!;
+    public required string TagName { get; set; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     public string? DisplayName { get; set; }
 
@@ -20,5 +23,5 @@ public class TagEntity
 
     public virtual ICollection<SchoolTypeTagMappingEntity> SchoolTypeTagMappings { get; } = [];
 
-    public virtual TaxonomyEntity Taxonomy { get; } = null!;
+    public virtual required TaxonomyEntity Taxonomy { get; set; }
 }

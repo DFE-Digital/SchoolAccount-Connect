@@ -1,29 +1,49 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
-public class TaskEntity : AuditableDatabaseEntity
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+public class TaskEntity
 {
-    public string Name { get; set; } = null!;
+    public long Id { get; init; }
+
+    public required string Name { get; set; }
 
     public string? ReferenceNo { get; set; }
+
     public string? Description { get; set; }
 
     public long? ServiceId { get; set; }
+
     public DateTime? PublishDate { get; set; }
 
     public int? RequirementId { get; set; }
+
     public int? WorkflowStateId { get; set; }
 
     public bool? IsDeleted { get; set; }
 
     public string? PublishComment { get; set; }
+
     public string? ArchiveComment { get; set; }
 
     public long? TeamId { get; set; }
 
     public int? Version { get; set; }
+
     public bool IsLatestVersion { get; set; }
 
+    public required string CreatedBy { get; set; }
+
+    public DateTime DateCreated { get; set; }
+
+    public required string UpdatedBy { get; set; }
+
+    public DateTime DateUpdated { get; set; }
+
+    public virtual required WorkflowStateEntity WorkflowState { get; set; }
+
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
+
     public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
-    public virtual WorkflowStateEntity? WorkflowState { get; set; }
 }

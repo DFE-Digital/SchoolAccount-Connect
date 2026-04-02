@@ -1,10 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class SchoolTypeEntity
 {
     public int Id { get; init; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     public virtual ICollection<SchoolTypeTagMappingEntity> SchoolTypeTagMappings { get; } = [];
 }

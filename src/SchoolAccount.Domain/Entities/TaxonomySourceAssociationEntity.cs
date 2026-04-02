@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TaxonomySourceAssociationEntity
 {
     public long Id { get; set; }
@@ -10,7 +13,7 @@ public class TaxonomySourceAssociationEntity
 
     public bool? IsActive { get; set; }
 
-    public virtual SourceEntity Source { get; set; } = null!;
+    public virtual required SourceEntity Source { get; set; }
 
-    public virtual TaxonomyEntity Taxonomy { get; set; } = null!;
+    public virtual required TaxonomyEntity Taxonomy { get; set; }
 }

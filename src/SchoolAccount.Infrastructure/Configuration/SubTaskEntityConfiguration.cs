@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolAccount.Domain;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Infrastructure.Configuration.Common;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 
-public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity>
+public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTaskEntity>
 {
     private static class ColumnNames
     {
@@ -15,10 +15,8 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
         public const string Description = "SubTaskDescription";
     }
 
-    public override void Configure(EntityTypeBuilder<SubTaskEntity> builder)
+    public void Configure(EntityTypeBuilder<SubTaskEntity> builder)
     {
-        base.Configure(builder);
-
         builder.ToTable(TableConstants.Transactional.SubTask, SchemaConstants.Transactional).HasKey(x => x.Id);
 
         builder.Property(x => x.ReferenceNo).HasColumnName(ColumnNames.ReferenceNo).HasMaxLength(50);
@@ -38,6 +36,11 @@ public sealed class SubTaskEntityConfiguration : ConfigurationBase<SubTaskEntity
         builder.Property(x => x.DisplayDate);
         builder.Property(x => x.WorkflowStateId);
         builder.Property(x => x.Version);
+        builder.Property(e => e.CreatedBy).HasMaxLength(Lengths.CreatedUpdatedBy).IsRequired();
+        builder.Property(e => e.DateCreated).IsRequired();
+        builder.Property(e => e.UpdatedBy).HasMaxLength(Lengths.CreatedUpdatedBy);
+        builder.Property(e => e.DateUpdated);
+
         builder
             .HasOne(d => d.Task)
             .WithMany(p => p.SubTasks)

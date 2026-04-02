@@ -1,14 +1,17 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeEntity
 {
     public int Id { get; set; }
 
-    public string TagName { get; set; } = null!;
+    public required string TagName { get; set; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
-    public string DisplayName { get; set; } = null!;
+    public required string DisplayName { get; set; }
 
     public string? Description { get; set; }
 

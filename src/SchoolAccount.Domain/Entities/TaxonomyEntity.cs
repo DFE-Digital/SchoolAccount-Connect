@@ -1,10 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public partial class TaxonomyEntity
 {
     public int Id { get; init; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     public int? TaxonomyGroupingId { get; set; }
 
@@ -16,11 +19,11 @@ public partial class TaxonomyEntity
 
     public string? Description { get; set; }
 
-    public string TaxonomyName { get; set; } = null!;
-
-    public virtual ICollection<TagEntity> Tags { get; } = [];
+    public required string TaxonomyName { get; set; }
 
     public virtual TaxonomyGroupingEntity? TaxonomyGrouping { get; set; }
+
+    public virtual ICollection<TagEntity> Tags { get; } = [];
 
     public virtual ICollection<TaxonomySourceAssociationEntity> TaxonomySourceAssociations { get; } = [];
 }

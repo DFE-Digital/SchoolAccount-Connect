@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TagsSourceMappingEntity
 {
     public long Id { get; set; }
@@ -10,9 +13,9 @@ public class TagsSourceMappingEntity
 
     public long TagId { get; set; }
 
-    public virtual SubTaskEntity SubTask { get; } = null!;
+    public virtual required SubTaskEntity SubTask { get; set; }
 
-    public virtual SourceEntity Source { get; } = null!;
+    public virtual required SourceEntity Source { get; set; }
 
-    public virtual TagEntity Tag { get; } = null!;
+    public virtual required TagEntity Tag { get; set; }
 }

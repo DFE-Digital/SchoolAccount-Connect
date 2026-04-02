@@ -1,10 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TaxonomyGroupingEntity
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     public string? DisplayName { get; set; }
 

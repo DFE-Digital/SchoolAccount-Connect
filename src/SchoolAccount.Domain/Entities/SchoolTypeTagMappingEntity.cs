@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class SchoolTypeTagMappingEntity
 {
     public int Id { get; set; }
@@ -8,7 +11,7 @@ public class SchoolTypeTagMappingEntity
 
     public long TagId { get; set; }
 
-    public virtual SchoolTypeEntity SchoolType { get; } = null!;
+    public virtual required SchoolTypeEntity SchoolType { get; set; }
 
-    public virtual TagEntity Tag { get; } = null!;
+    public virtual required TagEntity Tag { get; set; }
 }

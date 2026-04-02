@@ -1,12 +1,15 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeGroupingEntity
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
-    public string DisplayName { get; set; } = null!;
+    public required string DisplayName { get; set; }
 
     public int? TypeLevel { get; set; }
 

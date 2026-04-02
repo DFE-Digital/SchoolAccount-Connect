@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolAccount.Domain;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Infrastructure.Configuration.Common;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 
-public sealed class TaskEntityConfiguration : ConfigurationBase<TaskEntity>
+public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntity>
 {
     private static class ColumnNames
     {
@@ -15,10 +15,8 @@ public sealed class TaskEntityConfiguration : ConfigurationBase<TaskEntity>
         public const string Description = "TaskDescription";
     }
 
-    public override void Configure(EntityTypeBuilder<TaskEntity> builder)
+    public void Configure(EntityTypeBuilder<TaskEntity> builder)
     {
-        base.Configure(builder);
-
         builder.ToTable(TableConstants.Transactional.Task, SchemaConstants.Transactional).HasKey(x => x.Id);
 
         builder.Property(x => x.ReferenceNo).HasColumnName(ColumnNames.ReferenceNo).HasMaxLength(50);
@@ -26,6 +24,10 @@ public sealed class TaskEntityConfiguration : ConfigurationBase<TaskEntity>
         builder.Property(x => x.Description).HasColumnName(ColumnNames.Description).HasMaxLength(4000);
         builder.Property(x => x.PublishComment).HasMaxLength(2000);
         builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
+        builder.Property(e => e.CreatedBy).HasMaxLength(Lengths.CreatedUpdatedBy).IsRequired();
+        builder.Property(e => e.DateCreated).IsRequired();
+        builder.Property(e => e.UpdatedBy).HasMaxLength(Lengths.CreatedUpdatedBy);
+        builder.Property(e => e.DateUpdated);
 
         builder.HasIndex(x => x.ReferenceNo);
         builder.HasIndex(x => x.Name);

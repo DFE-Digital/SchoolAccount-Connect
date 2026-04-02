@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchoolAccount.Domain.Entities;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeTaskMappingEntity
 {
     public int Id { get; set; }
@@ -8,7 +11,7 @@ public class TypeTaskMappingEntity
 
     public int TypeId { get; set; }
 
-    public virtual TaskEntity Task { get; set; } = null!;
+    public virtual required TaskEntity Task { get; set; }
 
-    public virtual TypeEntity Type { get; set; } = null!;
+    public virtual required TypeEntity Type { get; set; }
 }
