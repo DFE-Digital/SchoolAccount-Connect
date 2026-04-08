@@ -8,10 +8,10 @@ trigger:
 
 variables:
   - group: 'Shared Resources - S268Dev'
-  - group: 'Shared Resources - S268Test'
-  - group: 'Shared Resources - S268UAT'
-  - group: 'Shared Resources - S268PreProd'
-  - group: 'Shared Resources - S268Prod'
+  - group: 'Shared Resources - Test'
+  - group: 'Shared Resources - UAT'
+  - group: 'Shared Resources - PreProd'
+  - group: 'Shared Resources - Prod'
 
 stages:
   - template: job-templates/build.yml
@@ -38,7 +38,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - S268Test'
+      - group: 'Shared Resources - Test'
       - group: 'Alert Thresholds - Test'
     jobs:
       - template: job-templates/deploy.yml
@@ -53,7 +53,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - S268UAT'
+      - group: 'Shared Resources - UAT'
       - group: 'Alert Thresholds - UAT'
     jobs:
       - template: job-templates/deploy.yml
@@ -68,7 +68,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - S268PreProd'
+      - group: 'Shared Resources - PreProd'
       - group: 'Alert Thresholds - PreProd'
     jobs:
       - template: job-templates/deploy.yml
@@ -83,7 +83,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - S268Prod'
+      - group: 'Shared Resources - Prod'
       - group: 'Alert Thresholds - Prod'
     jobs:
       - template: job-templates/deploy.yml
