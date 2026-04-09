@@ -150,6 +150,32 @@ public class UriExtensionsTests
     }
 
     [Fact]
+    public void Removing_by_key_and_value_removes_matching_key_and_value_when_multiple_matches_exist()
+    {
+        // Arrange
+        var uri = new Uri("https://example.com/path?foo=bar&foo=qux&baz=qry");
+
+        // Act
+        var result = uri.RemoveQueryParam("foo", "bar");
+
+        // Assert
+        result.Should().Be("https://example.com/path?foo=qux&baz=qry");
+    }
+
+    [Fact]
+    public void Removing_by_key_and_value_preserves_remaining_values_as_separate_params()
+    {
+        // Arrange
+        var uri = new Uri("https://example.com/path?foo=bar&foo=qux&foo=bert&baz=qry");
+
+        // Act
+        var result = uri.RemoveQueryParam("foo", "bar");
+
+        // Assert
+        result.Should().Be("https://example.com/path?foo=qux&foo=bert&baz=qry");
+    }
+
+    [Fact]
     public void Does_not_remove_when_key_matches_but_value_does_not()
     {
         // Arrange

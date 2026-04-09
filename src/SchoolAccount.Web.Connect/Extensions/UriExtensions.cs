@@ -37,12 +37,20 @@ public static class UriExtensions
 
         var queryParameters = QueryHelpers.ParseQuery(uri.Query);
 
-        if (
-            queryParameters.TryGetValue(key, out var existing)
-            && string.Equals(existing, value, StringComparison.OrdinalIgnoreCase)
-        )
+        if (queryParameters.TryGetValue(key, out var existing))
         {
-            queryParameters.Remove(key);
+            var remainingValues = existing
+                .Where(v => !string.Equals(v, value, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
+            if (remainingValues.Length > 0)
+            {
+                queryParameters[key] = remainingValues;
+            }
+            else
+            {
+                queryParameters.Remove(key);
+            }
         }
 
         var builder = new UriBuilder(uri);
