@@ -7,14 +7,16 @@
     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
         
         <div class="govuk-checkboxes__item">
+            
+            @{ var id = HtmlContentExtensions.GenerateId("filters", Model.Filter.Field, value.DisplayName); }
 
-            <input class="govuk-checkboxes__input" id="filters[@Model.Filter.Field]['@value.DisplayName']"
-                   name="filters[@Model.Filter.Field]"
+            <input class="govuk-checkboxes__input" id="@id"
+                   name="filters.@Model.Filter.Field"
                    type="checkbox" value="@value.Value"
                    checked="@value.IsSelected"
-                   test-id="@HtmlContentExtensions.GenerateTestId("filters", Model.Filter.Field, value.DisplayName)"/>
+                   test-id="@id"/>
 
-            <label class="govuk-label govuk-checkboxes__label" for="filters[@Model.Filter.Field]['@value.DisplayName']">
+            <label class="govuk-label govuk-checkboxes__label" for="@id">
                 @value.DisplayName
                 @if (value.Count.HasValue)
                 {

@@ -20,7 +20,7 @@ public static class HtmlContentExtensions
         return builder;
     }
 
-    public static string GenerateTestId(params string[] parts)
+    public static string GenerateId(params string[] parts)
     {
         return string.Join(
             "-",

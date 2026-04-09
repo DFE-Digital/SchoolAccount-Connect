@@ -6,7 +6,7 @@ public static class FilterableItemExtensions
 {
     public static Uri GetUriWithoutPropertyValue(this FilterableItem item, Uri baseUri, string key)
     {
-        var filterKey = $"filters[{key}]";
+        var filterKey = $"filters.{key}";
 
         return baseUri.RemoveQueryParam(filterKey, item.Value);
     }
