@@ -5,8 +5,8 @@ using NSubstitute;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.TaskDetails.ViewModels;
 using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Domain.ViewModels;
-using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Controllers;
 using Xunit;
@@ -100,7 +100,7 @@ public class TaskPageTests
                 new DateOnly(2026, 02, 01),
                 new DateTime(2026, 02, 01),
                 new DateOnly(2026, 02, 01),
-                RequirementId: 2,
+                Requirement: Requirement.Conditional,
                 true,
                 true,
                 WorkflowState.Expired

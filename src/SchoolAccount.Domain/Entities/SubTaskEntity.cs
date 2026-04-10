@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 
 namespace SchoolAccount.Domain.Entities;
 
@@ -18,7 +18,7 @@ public class SubTaskEntity
 
     public string? DigitalTaskLink { get; set; }
 
-    public int? RequirementId { get; set; }
+    public Requirement Requirement { get; set; }
 
     public DateOnly? StartDate { get; set; }
 

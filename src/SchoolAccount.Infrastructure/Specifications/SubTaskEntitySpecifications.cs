@@ -1,8 +1,7 @@
 using System.Linq.Expressions;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Kernel;
-using RequirementEntity = SchoolAccount.Domain.Entities.RequirementEntity;
 
 namespace SchoolAccount.Infrastructure.Specifications;
 
@@ -21,7 +20,7 @@ public static class SubTaskEntitySpecifications
 
     public static Expression<Func<SubTaskEntity, bool>> IsMandatory()
     {
-        return s => s.RequirementId == RequirementEntity.IdValues.Mandatory;
+        return s => s.Requirement == Requirement.Mandatory;
     }
 
     public static Expression<Func<SubTaskEntity, bool>> IsVisible()

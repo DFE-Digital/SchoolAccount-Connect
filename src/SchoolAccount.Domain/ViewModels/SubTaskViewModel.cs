@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels
@@ -10,11 +10,10 @@ namespace SchoolAccount.Domain.ViewModels
         public string Name { get; }
         public string Description { get; }
         public string? DigitalLink { get; }
-        public int? RequirementId { get; }
+        public Requirement? Requirement { get; }
         public bool HasLinks => !string.IsNullOrWhiteSpace(DigitalLink);
         public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
-        public bool IsOptional =>
-            RequirementId.HasValue ? RequirementId.Value == (int)RequirementValues.Optional : false;
+        public bool IsOptional => Requirement == SchoolAccount.Domain.Enums.Requirement.Optional;
         public string? AvailabilityLabel { get; private set; }
         public DateOnly? SortingDate { get; }
         public string? DueDateLabel { get; }
@@ -38,7 +37,7 @@ namespace SchoolAccount.Domain.ViewModels
             StartDate = subTask.StartDate;
             StartDateIsExact = subTask.StartDateExact;
             DueDateIsExact = subTask.DueDateIsExact;
-            RequirementId = subTask.RequirementId;
+            Requirement = subTask.Requirement;
             DigitalLink = subTask.DigitalLink;
             DueDateIsExact = subTask.DueDateIsExact;
             WorkflowState = subTask.WorkflowState;

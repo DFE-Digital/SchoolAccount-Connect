@@ -1,4 +1,4 @@
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 
 namespace SchoolAccount.Domain.Dtos;
 
@@ -12,7 +12,7 @@ public record SubTaskListItemDto(
     DateOnly? StartDate,
     DateTime DateUpdated,
     DateOnly? DueDate,
-    int? RequirementId,
+    Requirement? Requirement,
     bool? StartDateExact,
     bool? DueDateIsExact,
     WorkflowState WorkflowState

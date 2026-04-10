@@ -10,9 +10,10 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
 {
     private static class ColumnNames
     {
-        public const string ReferenceNo = "TaskReferenceNo";
-        public const string Name = "TaskName";
         public const string Description = "TaskDescription";
+        public const string Name = "TaskName";
+        public const string ReferenceNo = "TaskReferenceNo";
+        public const string Requirement = "RequirementId";
         public const string WorkflowState = "WorkflowStateId";
     }
 
@@ -25,6 +26,7 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         builder.Property(x => x.Description).HasColumnName(ColumnNames.Description).HasMaxLength(4000);
         builder.Property(x => x.PublishComment).HasMaxLength(2000);
         builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
+        builder.Property(x => x.Requirement).HasConversion<int>().HasColumnName(ColumnNames.Requirement);
         builder.Property(x => x.WorkflowState).HasConversion<int>().HasColumnName(ColumnNames.WorkflowState);
         builder.Property(e => e.CreatedBy).HasMaxLength(Lengths.CreatedUpdatedBy).IsRequired();
         builder.Property(e => e.DateCreated).IsRequired();

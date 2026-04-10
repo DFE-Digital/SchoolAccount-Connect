@@ -17,7 +17,7 @@ namespace SchoolAccount.Domain.Helpers
                 subTaskEntity.StartDate,
                 subTaskEntity.DateUpdated,
                 subTaskEntity.DueDate,
-                subTaskEntity.RequirementId,
+                subTaskEntity.Requirement,
                 subTaskEntity.StartDateIsExact,
                 subTaskEntity.DueDateIsExact,
                 subTaskEntity.WorkflowState

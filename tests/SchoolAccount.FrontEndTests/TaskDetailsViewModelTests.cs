@@ -2,8 +2,8 @@ using System.Globalization;
 using AwesomeAssertions;
 using NSubstitute;
 using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Domain.ViewModels;
-using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 using Xunit;
 
@@ -245,7 +245,7 @@ public class TaskDetailsViewModelTests
                 startDate,
                 new DateTime(2026, 02, 01),
                 dueDate,
-                RequirementId: 2,
+                Requirement: Requirement.Conditional,
                 startDateExact,
                 dueDateIsExact,
                 workflowState

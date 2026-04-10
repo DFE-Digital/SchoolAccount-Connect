@@ -10,9 +10,10 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
 {
     private static class ColumnNames
     {
-        public const string ReferenceNo = "SubTaskReferenceNo";
-        public const string Name = "SubTaskName";
         public const string Description = "SubTaskDescription";
+        public const string Name = "SubTaskName";
+        public const string ReferenceNo = "SubTaskReferenceNo";
+        public const string Requirement = "RequirementId";
         public const string WorkflowState = "WorkflowStateId";
     }
 
@@ -28,7 +29,7 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
         builder.Property(x => x.ArchiveComment).HasMaxLength(2000);
         builder.HasIndex(x => x.TaskId);
         builder.HasIndex(x => new { x.TaskId, x.IsDeleted });
-        builder.Property(x => x.RequirementId);
+        builder.Property(x => x.Requirement).HasConversion<int>().HasColumnName(ColumnNames.Requirement);
         builder.Property(x => x.StartDate);
         builder.Property(x => x.StartDateIsExact);
         builder.Property(x => x.DueDate);

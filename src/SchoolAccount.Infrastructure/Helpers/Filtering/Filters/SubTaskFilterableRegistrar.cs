@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using Type = System.Type;
 

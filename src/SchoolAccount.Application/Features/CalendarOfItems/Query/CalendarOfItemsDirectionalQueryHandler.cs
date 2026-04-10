@@ -4,7 +4,7 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Shared.Filtering;
-using SchoolAccount.Domain.Workflow;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
@@ -21,18 +21,23 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
 
         if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
         {
-            filter.Add(new FilterRequest
-            {
-                Field = "state",
-                Operator = ComparisonType.Equals,
-                Value = query.ViewModes switch
+            filter.Add(
+                new FilterRequest
                 {
-                    CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
-                    CalendarOfItemsViewModes.Forward => WorkflowState.Published,
-                    _ => throw new ArgumentOutOfRangeException(nameof(query), query.ViewModes,
-                        "View Mode incorrectly set")
+                    Field = "state",
+                    Operator = ComparisonType.Equals,
+                    Value = query.ViewModes switch
+                    {
+                        CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
+                        CalendarOfItemsViewModes.Forward => WorkflowState.Published,
+                        _ => throw new ArgumentOutOfRangeException(
+                            nameof(query),
+                            query.ViewModes,
+                            "View Mode incorrectly set"
+                        ),
+                    },
                 }
-            });
+            );
         }
 
         var model = new CalendarOfItemsCriteria

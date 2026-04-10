@@ -1,4 +1,4 @@
-namespace SchoolAccount.Domain.Workflow;
+namespace SchoolAccount.Domain.Enums;
 
 public enum WorkflowState
 {

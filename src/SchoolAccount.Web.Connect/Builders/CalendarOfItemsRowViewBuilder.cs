@@ -3,8 +3,8 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Enums;
 using SchoolAccount.Domain.ViewModels;
-using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders;
@@ -24,16 +24,16 @@ public class CalendarOfItemsRowViewBuilder
         };
     }
 
-    private static string? GenerateAvailableOrDueMessage(
-        CalendarOfItemsRow row,
-        DateOnly? today = null
-    )
+    private static string? GenerateAvailableOrDueMessage(CalendarOfItemsRow row, DateOnly? today = null)
     {
         today ??= DateTime.Today.ToDateOnly();
 
         string FormatDate(DateOnly date, bool? isExact)
         {
-            return date.ToString(isExact == true ? FormattingConstants.DateMonthYearFormat : FormattingConstants.MonthYearFormat, null);
+            return date.ToString(
+                isExact == true ? FormattingConstants.DateMonthYearFormat : FormattingConstants.MonthYearFormat,
+                null
+            );
         }
 
         if (row.DueDate.HasValue)
@@ -57,12 +57,11 @@ public class CalendarOfItemsRowViewBuilder
     public CalendarOfItemsRowItemViewModel Build(CalendarOfItemsViewModes mode, CalendarOfItemsRow row)
     {
         var url = DetermineUri(
-            row.Type, 
-            row.Id, 
-            row.Status?.EntityId == (int)WorkflowState.Expired 
-                ? "#previous" 
-                : string.Empty);
-        
+            row.Type,
+            row.Id,
+            row.Status?.EntityId == (int)WorkflowState.Expired ? "#previous" : string.Empty
+        );
+
         return new CalendarOfItemsRowItemViewModel(row.Name, url)
         {
             Description = row.Description,
