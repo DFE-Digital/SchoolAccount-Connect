@@ -12,6 +12,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Kernel;
+using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Infrastructure;
@@ -104,6 +105,7 @@ internal static class DependencyInjection
     {
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IOrganisationContext, OrganisationContext>();
+        services.AddScoped<ICookieConsentContext, CookieConsentContext>();
     }
 
     private static void AddRequestGates(this IServiceCollection services)

@@ -3,15 +3,16 @@
     // ------------------------------------------------------
     // Cookie banner
     // ------------------------------------------------------
-    var banner = document.getElementById('dfe-cookie-banner');
+    
+    const banner = document.getElementById('dfe-cookie-banner');
 
     if (banner) {
-        var acceptBtn = document.getElementById('dfe-cta-acceptCookies');
-        var declineBtn = document.getElementById('dfe-cta-declineCookies');
+        const acceptBtn = document.getElementById('dfe-cta-acceptCookies');
+        const declineBtn = document.getElementById('dfe-cta-declineCookies');
 
         function setConsent(value) {
             var parts = [
-                'cookie_consent=' + value,
+                window.cookieConsentName + '=' + value,
                 'Path=/',
                 'Max-Age=' + (60 * 60 * 24 * 365),
                 'SameSite=Lax'
@@ -26,17 +27,18 @@
         }
 
         acceptBtn?.addEventListener('click', function () {
-            setConsent('Accepted');
+            setConsent(window.cookieConsentAcceptId);
         });
 
         declineBtn?.addEventListener('click', function () {
-            setConsent('Rejected');
+            setConsent(window.cookieConsentRejectId);
         });
     }
 
     // ------------------------------------------------------
     // Header search toggle
     // ------------------------------------------------------
+    
     var searchToggle = document.getElementById('dfe-connect-search-toggle');
     var searchPanel = document.getElementById('dfe-connect-search-panel');
 

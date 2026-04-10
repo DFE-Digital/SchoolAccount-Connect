@@ -2,9 +2,11 @@
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
-@using SchoolAccount.Web.Connect.Constants
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect.Extensions
 @inject IFeatureManager FeatureManager
+@inject ICookieConsentContext CookieConsent
 
 @* ReSharper disable Razor.LayoutNotResolved *@
 @* ReSharper disable Razor.SectionNotResolved *@
@@ -12,7 +14,6 @@
 @{
     Layout = "_GovUkPageTemplate";
     ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnect}";
-    var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
@@ -26,7 +27,7 @@
 }
 
 @section BodyStart {
-    @if (!consentCookieSet)
+    @if (!CookieConsent.IsSet)
     {
         <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
             <govuk-cookie-banner-message>
@@ -99,6 +100,13 @@ else
 
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
+<script>
+    (function () {
+        window.cookieConsentName = "@CookieConsentConstants.CookieName";
+        window.cookieConsentAcceptId = "@CookieConsentConstants.IdValues.Accepted";
+        window.cookieConsentRejectId = "@CookieConsentConstants.IdValues.Rejected";
+    })();
+</script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script src="~/js/feedback.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
