@@ -10,14 +10,17 @@ namespace SchoolAccount.FrontEndTests.TaskPageTests;
 public class DetermineDateRangeTests
 {
     [Theory]
-    [InlineData("11/03/2026", "01/01/2026", "28/02/2026")]
-    [InlineData("01/03/2026", "01/01/2026", "28/02/2026")]
-    [InlineData("11/02/2026", "01/12/2025", "31/01/2026")]
-    [InlineData("01/01/2026", "01/11/2025", "31/12/2025")]
+    [InlineData(1, "11/03/2026", "01/02/2026", "31/03/2026")]
+    [InlineData(1, "01/03/2026", "01/02/2026", "31/03/2026")]
+    [InlineData(1, "11/02/2026", "01/01/2026", "28/02/2026")]
+    [InlineData(1, "01/01/2026", "01/12/2025", "31/01/2026")]
+    [InlineData(2, "02/01/2026", "01/11/2025", "31/01/2026")]
+    [InlineData(3, "13/02/2026", "01/11/2025", "28/02/2026")]
     public async Task CheckDetermineDateRangeFiltersCorrectDateOnlyRangeWhenBackwardViewMode(
+        int monthPeriod,
         string from,
         string expectedStart,
-        string expcetedEnd
+        string expectedEnd
     )
     {
         var expectedStartDate = DateOnly.FromDateTime(
@@ -25,7 +28,7 @@ public class DetermineDateRangeTests
         );
 
         var expectedEndDate = DateOnly.FromDateTime(
-            DateTime.ParseExact(expcetedEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+            DateTime.ParseExact(expectedEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
@@ -33,7 +36,7 @@ public class DetermineDateRangeTests
         var calendarOfItemsDirectionalQuery = new CalendarOfItemsDirectionalQuery(
             CalendarOfItemsQueryTypes.None,
             CalendarOfItemsViewModes.Backward,
-            1,
+            monthPeriod,
             fromDate,
             1,
             1,
@@ -54,7 +57,7 @@ public class DetermineDateRangeTests
     [InlineData(1, "11/02/2026", "01/02/2026", "31/03/2026")]
     [InlineData(2, "01/01/2026", "01/01/2026", "31/03/2026")]
     [InlineData(3, "21/04/2026", "01/04/2026", "31/07/2026")]
-    public async Task CheckDetermineDateRangeFiltersCorrectDateOnlyRangeWhenForewardViewMode(
+    public Task CheckDetermineDateRangeFiltersCorrectDateOnlyRangeWhenForwardViewMode(
         int monthPeriod,
         string from,
         string expectedStart,
@@ -86,6 +89,7 @@ public class DetermineDateRangeTests
         var expectedResult = new DateOnlyRange(expectedStartDate, expectedEndDate);
 
         result.Should().BeEquivalentTo(expectedResult);
+        return Task.CompletedTask;
     }
 
     [Theory]

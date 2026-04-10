@@ -63,7 +63,7 @@ public class CalendarController(
 
         var currentUri = Request.GetFullRequestUri();
         var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        var viewModel = viewBuilder.BuildForPage(result.Value, query.ViewModes, currentUri);
+        var viewModel = viewBuilder.BuildForPage(result.Value, queryModel.ViewModes, currentUri);
 
         return View(viewModel);
     }

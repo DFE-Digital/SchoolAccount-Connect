@@ -90,7 +90,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             Description = selectedTab?.Description ?? string.Empty,
             Heading = "Calendar of tasks",
             SubHeading = "These are all of the required tasks that you must complete for your school each month.",
-            GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
+            GroupingFunction = x => x.SortDate.ToGdsMonthString(),
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null
                 ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"

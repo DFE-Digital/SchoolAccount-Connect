@@ -3,6 +3,8 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Domain.Workflow;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
@@ -15,6 +17,24 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
         CancellationToken cancellationToken
     )
     {
+        var filter = query.Filter ?? new([]);
+
+        if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
+        {
+            filter.Add(new FilterRequest
+            {
+                Field = "state",
+                Operator = ComparisonType.Equals,
+                Value = query.ViewModes switch
+                {
+                    CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
+                    CalendarOfItemsViewModes.Forward => WorkflowState.Published,
+                    _ => throw new ArgumentOutOfRangeException(nameof(query), query.ViewModes,
+                        "View Mode incorrectly set")
+                }
+            });
+        }
+
         var model = new CalendarOfItemsCriteria
         {
             ToQuery = query.ToQuery,
@@ -23,7 +43,7 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
-            Filter = query.Filter ?? new([]),
+            Filter = filter,
         };
 
         return await aggregator.Query(model, cancellationToken);
@@ -46,8 +66,8 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
 
         if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Backward))
         {
-            rangeStart = filter.QueryFromDate.AddMonths(-filter.ViewPeriodInMonths).AddMonths(-1).StartOfMonth();
-            rangeEnd = filter.QueryFromDate.AddMonths(-1).EndOfMonth();
+            rangeStart = filter.QueryFromDate.AddMonths(-filter.ViewPeriodInMonths).StartOfMonth();
+            rangeEnd = filter.QueryFromDate.EndOfMonth();
         }
         else if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Forward))
         {
