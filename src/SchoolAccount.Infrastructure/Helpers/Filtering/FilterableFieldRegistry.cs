@@ -12,7 +12,7 @@ public class FilterableFieldRegistry
     public FilterableFieldRegistry(IEnumerable<IFilterableRegistrar> registrars)
     {
         _registrars = registrars.ToList();
-
+        
         foreach (var registrar in _registrars)
         {
             _all.TryAdd(registrar.TypeBeingRegistered, registrar.FieldSelectorsBeingRegistered);
@@ -31,8 +31,7 @@ public class FilterableFieldRegistry
         return GetSelectorsForType(type).TryGetValue(fieldName, out var selector)
             ? selector
             : throw new InvalidDataException(
-                $"No selector with name \"{fieldName}\" has been registered for type \"{type.Name}\"."
-            );
+                $"No selector with name \"{fieldName}\" has been registered for type \"{type.Name}\".");
     }
 
     public FieldSelectorMapping All => _all;

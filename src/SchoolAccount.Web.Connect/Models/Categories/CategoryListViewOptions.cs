@@ -1,0 +1,18 @@
+using System.Collections.ObjectModel;
+using SchoolAccount.Application.Features.Category.Enums;
+using SchoolAccount.Application.Features.Category.Models;
+
+namespace SchoolAccount.Web.Connect.Models.Categories;
+
+public class CategoryListViewOptions
+{
+    public string Title { get; init; } = null!;
+    public CategoryListViewModes ViewMode { get; set; }
+    public Collection<CategoryType>? Categories { get; init; }
+    public Func<CategoryRow, string>? GroupingFunction { get; init; }
+    public string? Description { get; init; } = null!;
+    public string? BaseUri { get; set; }
+    public string? NoResultsMessage { get; init; }
+    public string? Heading { get; init; }
+    public string? SubHeading { get; init; }
+}

@@ -40,7 +40,7 @@ public static class CalendarOfItemsRowProjection
                 Name = t.Type.Name,
                 DisplayValue = t.Type.Name,
                 Type = CalendarOfItemsExtensionNodeType.Type,
-            }),
+            })
         };
     }
 }

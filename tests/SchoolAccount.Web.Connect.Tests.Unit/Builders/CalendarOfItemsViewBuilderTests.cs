@@ -7,6 +7,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using X.PagedList;
 using Xunit;
 

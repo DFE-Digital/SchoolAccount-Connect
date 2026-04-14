@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Shared.Filtering;
-using SchoolAccount.Infrastructure.Extensions;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;

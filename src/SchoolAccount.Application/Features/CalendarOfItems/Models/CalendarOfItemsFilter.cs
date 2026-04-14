@@ -6,6 +6,7 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
 
 public class CalendarOfItemsFilter(Collection<FilterRequest> items) : Collection<FilterRequest>(items)
 {
-    public CalendarOfItemsFilter(IEnumerable<FilterRequest> items)
-        : this(items.ToCollection()) { }
+    public CalendarOfItemsFilter(IEnumerable<FilterRequest> items) : this(items.ToCollection())
+    {
+    }
 }

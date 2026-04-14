@@ -18,11 +18,19 @@ public class TypeEntityConfiguration : IEntityTypeConfiguration<TypeEntity>
         builder.HasIndex(e => e.TagName).IsUnique();
 
         builder.Property(e => e.Description).HasMaxLength(1500);
+        
         builder.Property(e => e.DisplayName).HasMaxLength(250);
+        
         builder.Property(e => e.Name).HasMaxLength(250);
-        builder.Property(e => e.ParentTypeId).HasColumnName("ParentTypeID");
+        
         builder.Property(e => e.TagName).HasMaxLength(250);
 
-        builder.HasOne(d => d.TypeGrouping).WithMany(p => p.Types).HasForeignKey(d => d.TypeGroupingId);
+        builder.HasOne(d => d.TypeGrouping)
+            .WithMany(p => p.Types)
+            .HasForeignKey(d => d.TypeGroupingId);
+        
+        builder.HasMany(x => x.Children)
+            .WithOne(x => x.Parent)
+            .HasForeignKey(x => x.ParentTypeId);
     }
 }

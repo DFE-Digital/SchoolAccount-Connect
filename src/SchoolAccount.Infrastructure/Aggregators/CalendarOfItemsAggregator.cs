@@ -22,12 +22,11 @@ public class CalendarOfItemsAggregator(
 ) : ICalendarOfItemsAggregator
 {
     private readonly CalendarOfItemsAggregatorValidator _validator = new(queryFactoryResolver);
-
     private void ConsolidateFilters(CalendarOfItemsFilter filter)
     {
-        foreach (var validator in filterRegistry.Registrars)
+        foreach (var registrar in filterRegistry.Registrars.OfType<IFilterableRegistrar<CalendarOfItemsFilter>>())
         {
-            validator.ConsolidateFilters(filter);
+            registrar.ConsolidateFilters(filter);
         }
     }
 
@@ -74,7 +73,7 @@ public class CalendarOfItemsAggregator(
         {
             return validation.ToResult<CalendarOfItemsPagedResult>();
         }
-
+        
         ConsolidateFilters(criteria.Filter);
 
         var factories = queryFactoryResolver.GetFactoriesByType(criteria.ToQuery);

@@ -8,7 +8,7 @@ using Type = System.Type;
 
 namespace SchoolAccount.Infrastructure.Helpers.Filtering.Filters;
 
-public class SubTaskFilterableRegistrar : IFilterableRegistrar
+public class SubTaskFilterableRegistrar : IFilterableRegistrar<CalendarOfItemsFilter>
 {
     public static class Keys
     {
@@ -20,16 +20,15 @@ public class SubTaskFilterableRegistrar : IFilterableRegistrar
 
     public Type TypeBeingRegistered => typeof(SubTaskEntity);
 
-    public FieldSelector FieldSelectorsBeingRegistered =>
-        new()
-        {
-            [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
-            [Keys.Categories] =
-                (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
+    public FieldSelector FieldSelectorsBeingRegistered => new()
+    {
+        [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
+        [Keys.Categories] =
+            (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
             [Keys.State] = (Expression<Func<SubTaskEntity, WorkflowState>>)(x => x.WorkflowState),
-            [Keys.PhaseOfEducation] =
-                (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
-        };
+        [Keys.PhaseOfEducation] =
+            (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
+    };
 
     public void ConsolidateFilters(CalendarOfItemsFilter filter)
     {

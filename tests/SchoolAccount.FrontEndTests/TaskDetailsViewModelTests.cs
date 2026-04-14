@@ -7,12 +7,12 @@ using SchoolAccount.Domain.ViewModels;
 using SchoolAccount.Kernel;
 using Xunit;
 
-namespace SchoolAccount.FrontEndTests.TaskPageTests;
+namespace SchoolAccount.FrontEndTests;
 
 public class TaskDetailsViewModelTests
 {
     private TaskListItemDto _taskListItemDto { get; set; } =
-        new TaskListItemDto(22, "testRef22", "TestTask1", "Ken lawrie", new DateTime(2026, 01, 01));
+        new TaskListItemDto(22, "testRef22", "TestTask1", "Ken Lawrie", new DateTime(2026, 01, 01));
     private List<SubTaskListItemDto> _subTaskListItemDto { get; set; } = [];
     private IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
     private DateTime _today = new(2026, 03, 01);

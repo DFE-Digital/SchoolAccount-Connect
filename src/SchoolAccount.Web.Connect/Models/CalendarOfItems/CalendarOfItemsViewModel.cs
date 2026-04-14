@@ -62,6 +62,7 @@ public record CalendarOfItemsViewModel(
     public bool HasTitle => !string.IsNullOrEmpty(Title);
     public bool HasDescription => !string.IsNullOrEmpty(Description);
     public bool ShowNavigator => ViewModes.HasFlag(CalendarOfItemsViewModes.Standalone);
-
-    public bool HasFilters => Filters.Count > 0;
+    
+    public bool CanRenderFilter { get; init; } = true;
+    public bool HasFilters => CanRenderFilter && Filters.Count > 0;
 }

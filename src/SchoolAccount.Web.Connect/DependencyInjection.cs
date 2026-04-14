@@ -37,10 +37,7 @@ internal static class DependencyInjection
         configurationManager.AddAzureAppConfigurationIfEnabled(bootstrapLogger);
 
         services.AddFluentValidation();
-        services.AddGovUkFrontend(options =>
-        {
-            options.Rebrand = true;
-        });
+        services.AddGovUkFrontend(options => { options.Rebrand = true; });
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();

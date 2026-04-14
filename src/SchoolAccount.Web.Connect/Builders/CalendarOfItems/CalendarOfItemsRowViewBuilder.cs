@@ -2,28 +2,28 @@ using SchoolAccount.Application;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Domain.Entities;
 using SchoolAccount.Domain.Enums;
-using SchoolAccount.Domain.ViewModels;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
-namespace SchoolAccount.Web.Connect.Builders;
+namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 
 public class CalendarOfItemsRowViewBuilder
 {
-    private static string DetermineUri(CalendarOfItemsRowType type, long id, string? queryExtensions)
+    public CalendarOfItemsRowItemViewModel Build(CalendarOfItemsViewModes mode, CalendarOfItemsRow row)
     {
-        return type switch
+        var url = DetermineUri(
+            row.Type,
+            row.Id,
+            row.Status?.EntityId == (int)WorkflowState.Expired ? "#previous" : string.Empty
+        );
+
+        return new CalendarOfItemsRowItemViewModel(row.Name, url)
         {
-            CalendarOfItemsRowType.Task => string.Format(
-                Thread.CurrentThread.CurrentCulture,
-                RouteConstants.Task.Index,
-                id
-            ) + (queryExtensions ?? string.Empty),
-            _ => throw new NotSupportedException(),
+            Description = row.Description,
+            DateText = GenerateAvailableOrDueMessage(row),
         };
     }
-
+    
     private static string? GenerateAvailableOrDueMessage(CalendarOfItemsRow row, DateOnly? today = null)
     {
         today ??= DateTime.Today.ToDateOnly();
@@ -53,19 +53,17 @@ public class CalendarOfItemsRowViewBuilder
 
         return null;
     }
-
-    public CalendarOfItemsRowItemViewModel Build(CalendarOfItemsViewModes mode, CalendarOfItemsRow row)
+    
+    private static string DetermineUri(CalendarOfItemsRowType type, long id, string? queryExtensions)
     {
-        var url = DetermineUri(
-            row.Type,
-            row.Id,
-            row.Status?.EntityId == (int)WorkflowState.Expired ? "#previous" : string.Empty
-        );
-
-        return new CalendarOfItemsRowItemViewModel(row.Name, url)
+        return type switch
         {
-            Description = row.Description,
-            DateText = GenerateAvailableOrDueMessage(row),
+            CalendarOfItemsRowType.Task => string.Format(
+                Thread.CurrentThread.CurrentCulture,
+                RouteConstants.Task.Index,
+                id
+            ) + (queryExtensions ?? string.Empty),
+            _ => throw new NotSupportedException(),
         };
     }
 }

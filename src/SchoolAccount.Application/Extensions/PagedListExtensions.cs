@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
-namespace SchoolAccount.Infrastructure.Extensions;
+namespace SchoolAccount.Application.Extensions;
 
-internal static class PagedListExtensions
+public static class PagedListExtensions
 {
-    internal static IPagedList<T> ToStaticPagedList<T>(
+    public static IPagedList<T> ToStaticPagedList<T>(
         this IEnumerable<T> query,
         int pageNumber,
         int pageSize,
@@ -15,7 +15,7 @@ internal static class PagedListExtensions
         return new StaticPagedList<T>(query, pageNumber, pageSize, totalCount);
     }
 
-    internal static async Task<IPagedList<T>> PaginateAsync<T>(
+    public static async Task<IPagedList<T>> PaginateAsync<T>(
         this IQueryable<T> query,
         int pageSize,
         int pageNumber,

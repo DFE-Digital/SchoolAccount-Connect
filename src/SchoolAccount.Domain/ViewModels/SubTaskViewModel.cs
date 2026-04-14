@@ -66,7 +66,7 @@ namespace SchoolAccount.Domain.ViewModels
             {
                 SetAvailabilityLabelWhenPublishedAndHasExactStartDate();
                 SetAvailabilityLabelWhenPublishedAndDoesntHaveStartDate();
-                SetAvailabilityLabelWhenPublisheddAndDoesntHaveExactStartDate();
+                SetAvailabilityLabelWhenPublishedAndDoesntHaveExactStartDate();
             }
         }
 
@@ -115,7 +115,7 @@ namespace SchoolAccount.Domain.ViewModels
             }
         }
 
-        private void SetAvailabilityLabelWhenPublisheddAndDoesntHaveExactStartDate()
+        private void SetAvailabilityLabelWhenPublishedAndDoesntHaveExactStartDate()
         {
             if (DoesntHaveExactStartDate)
             {

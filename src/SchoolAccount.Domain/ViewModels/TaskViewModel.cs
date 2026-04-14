@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Entities;
 using SchoolAccount.Domain.Enums;
-using SchoolAccount.Domain.ViewModels;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels

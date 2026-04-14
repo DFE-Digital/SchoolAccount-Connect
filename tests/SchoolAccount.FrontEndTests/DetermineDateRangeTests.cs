@@ -5,7 +5,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
 using Xunit;
 
-namespace SchoolAccount.FrontEndTests.TaskPageTests;
+namespace SchoolAccount.FrontEndTests;
 
 public class DetermineDateRangeTests
 {
@@ -61,7 +61,7 @@ public class DetermineDateRangeTests
         int monthPeriod,
         string from,
         string expectedStart,
-        string expcetedEnd
+        string expectedEnd
     )
     {
         var expectedStartDate = DateOnly.FromDateTime(
@@ -69,7 +69,7 @@ public class DetermineDateRangeTests
         );
 
         var expectedEndDate = DateOnly.FromDateTime(
-            DateTime.ParseExact(expcetedEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+            DateTime.ParseExact(expectedEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
@@ -96,7 +96,7 @@ public class DetermineDateRangeTests
     [InlineData(CalendarOfItemsViewModes.Standalone)]
     [InlineData(CalendarOfItemsViewModes.None)]
     [InlineData(CalendarOfItemsViewModes.Custom)]
-    public async Task CheckExceptionThrownWhenUnsuppotedViewMode(CalendarOfItemsViewModes calendarOfItemsViewModes)
+    public void CheckExceptionThrownWhenUnsupportedViewMode(CalendarOfItemsViewModes calendarOfItemsViewModes)
     {
         var expectedStartDate = DateOnly.FromDateTime(
             DateTime.ParseExact("01/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)

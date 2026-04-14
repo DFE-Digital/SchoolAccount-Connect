@@ -18,6 +18,7 @@ public static class TableConstants
         public const string TaskDateSet = "TaskDateSet";
         public const string TaskRelation = "TaskRelation";
         public const string Team = "Team";
+        public const string ExploreCategory = "ExploreCategory";
     }
 
     internal static class Mapping
@@ -27,6 +28,7 @@ public static class TableConstants
         public const string Type = "TypeTaskMapping";
         public const string SchoolType = "SchoolTypeTagMapping";
         public const string Taxonomy = "TaxonomySourceAssociation";
+        public const string ExploreCategory = "ExploreCategoryTypeMapping";
     }
 
     internal static class Reference

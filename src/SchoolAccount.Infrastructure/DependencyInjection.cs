@@ -84,7 +84,6 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         return services;
     }
 
@@ -102,8 +101,8 @@ public static class DependencyInjection
 
         return services;
     }
-
-    public static void AddFilterableServices(this IServiceCollection services)
+    
+    private static void AddFilterableServices(this IServiceCollection services)
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
@@ -114,7 +113,7 @@ public static class DependencyInjection
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
-
+        
         services.AddScoped<FilterableFieldRegistry>();
     }
 }

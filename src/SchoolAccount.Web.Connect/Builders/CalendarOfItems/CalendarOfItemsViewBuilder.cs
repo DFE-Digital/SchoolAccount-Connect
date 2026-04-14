@@ -8,7 +8,7 @@ using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
-namespace SchoolAccount.Web.Connect.Builders;
+namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 
 public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext)
 {
