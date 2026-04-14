@@ -11,6 +11,7 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
+using SchoolAccount.Application.Constants;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
@@ -49,6 +50,7 @@ internal static class DependencyInjection
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
+        services.AddScoped<IRequestContext, RequestContext>();
 
         services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
@@ -183,7 +185,8 @@ internal static class DependencyInjection
             .ConfigureResource(resource => resource.AddService(environment.ApplicationName))
             .WithMetrics(metrics =>
             {
-                metrics.AddMeter("SchoolAccount.Feedback");
+                metrics.AddMeter(MeterConstants.SchoolAccountFeedback);
+                metrics.AddMeter(MeterConstants.SchoolAccountAnalytics);
             });
     }
 

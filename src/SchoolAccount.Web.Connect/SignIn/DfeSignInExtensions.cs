@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Features.Telemetry.Commands;
 using SchoolAccount.Application.Resolvers;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
@@ -9,6 +13,7 @@ using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
 using SchoolAccount.Kernel;
+using SchoolAccount.Web.Connect.Telemetry;
 
 namespace SchoolAccount.Web.Connect.SignIn;
 
@@ -34,6 +39,8 @@ internal static class DfeSignInExtensions
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();
+
+        services.AddScoped<ICommandHandler<TrackAnalyticsTelemetryCommand>, TrackAnalyticsTelemetryCommandHandler>();
 
         services
             .AddAuthentication(sharedOptions =>
@@ -61,6 +68,32 @@ internal static class DfeSignInExtensions
                 {
                     options.Scope.Add(scope);
                 }
+
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var handler = context.HttpContext.RequestServices.GetRequiredService<
+                            ICommandHandler<TrackAnalyticsTelemetryCommand>
+                        >();
+
+                        var hashedUserId = TelemetryUserIdFactory.CreateHashedUserId(context.Principal!);
+
+                        var command = new TrackAnalyticsTelemetryCommand(
+                            AnalyticsMetrics.UserLogin,
+                            new[]
+                            {
+                                (AnalyticsTagNames.Outcome, "success"),
+                                (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
+                                (AnalyticsTagNames.Journey, "sign-in"),
+                                (AnalyticsTagNames.UserId, hashedUserId),
+                                (AnalyticsTagNames.Scheme, context.Scheme.Name),
+                            }
+                        );
+
+                        await handler.Handle(command, context.HttpContext.RequestAborted);
+                    },
+                };
             })
             .AddCookie(options =>
             {

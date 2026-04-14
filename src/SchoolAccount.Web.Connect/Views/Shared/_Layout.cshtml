@@ -13,8 +13,10 @@
 @{
     Layout = "_GovUkPageTemplate";
     ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnect}";
+
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
 }
 
@@ -30,26 +32,32 @@
     {
         <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
             <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>Cookies
-                    on @ApplicationConstants.DfeConnect</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-heading>
+                    Cookies on @ApplicationConstants.DfeConnect
+                </govuk-cookie-banner-message-heading>
                 <govuk-cookie-banner-message-content>
                     <p class="govuk-body">We use some essential cookies to make this service work.</p>
-                    <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the
-                        service and make improvements.</p>
+                    <p class="govuk-body">
+                        We’d also like to use analytics cookies so we can understand how you use the
+                        service and make improvements.
+                    </p>
                 </govuk-cookie-banner-message-content>
                 <govuk-cookie-banner-message-actions>
-                    <govuk-cookie-banner-message-action text="Accept analytics cookies" type="button"
-                                                        id="dfe-cta-acceptCookies"/>
-                    <govuk-cookie-banner-message-action text="Reject analytics cookies" type="button"
-                                                        id="dfe-cta-declineCookies"/>
-                    <govuk-cookie-banner-message-action-link text="View cookies" href="/cookies"/>
+                    <govuk-cookie-banner-message-action
+                        text="Accept analytics cookies"
+                        type="button"
+                        id="dfe-cta-acceptCookies"/>
+                    <govuk-cookie-banner-message-action
+                        text="Reject analytics cookies"
+                        type="button"
+                        id="dfe-cta-declineCookies"/>
+                    <govuk-cookie-banner-message-action-link
+                        text="View cookies"
+                        href="/cookies"/>
                 </govuk-cookie-banner-message-actions>
             </govuk-cookie-banner-message>
         </govuk-cookie-banner>
     }
-}
-
-@section BodyEnd {
 }
 
 @section Header {
@@ -67,16 +75,18 @@
     @if (isAuthenticated)
     {
         var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectBanner);
+
         if (showConnectBanner)
         {
-            <partial name="_ConnectBanner" view-data='new ViewDataDictionary(ViewData)
-                     {
-                         ["FeedbackUrl"] = feedbackUrl
-                     }'/>
+            <partial
+                name="_ConnectBanner"
+                view-data='new ViewDataDictionary(ViewData)
+                {
+                    ["FeedbackUrl"] = feedbackUrl
+                }'/>
         }
     }
 }
-
 
 @await RenderSectionAsync("Header", false)
 
@@ -99,13 +109,15 @@ else
 
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
+
 <script>
-    (function () {
-        window.cookieConsentName = "@CookieConsentConstants.CookieName";
-        window.cookieConsentAcceptId = "@CookieConsentConstants.IdValues.Accepted";
-        window.cookieConsentRejectId = "@CookieConsentConstants.IdValues.Rejected";
-    })();
+    window.cookieConsentConfig = {
+        cookieName: "@CookieConsentConstants.CookieName",
+        acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
+        rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
+    };
 </script>
+
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script src="~/js/feedback.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
