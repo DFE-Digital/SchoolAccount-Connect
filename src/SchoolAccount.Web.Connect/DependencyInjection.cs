@@ -16,6 +16,7 @@ using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Extensions;
+using SchoolAccount.Web.Connect.Filters;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
@@ -38,7 +39,10 @@ internal static class DependencyInjection
         configurationManager.AddAzureAppConfigurationIfEnabled(bootstrapLogger);
 
         services.AddFluentValidation();
-        services.AddGovUkFrontend(options => { options.Rebrand = true; });
+        services.AddGovUkFrontend(options =>
+        {
+            options.Rebrand = true;
+        });
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
@@ -47,12 +51,18 @@ internal static class DependencyInjection
         services.AddFeatureToggle();
         services.AddApplicationTelemetry(configurationManager, environment, bootstrapLogger);
         services.AddRequestGates();
+        services.AddAppInsightsFilter();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
         services.AddScoped<IRequestContext, RequestContext>();
 
-        services.AddControllersWithViews().AddMicrosoftIdentityUI();
+        services
+            .AddControllersWithViews(options =>
+            {
+                options.Filters.AddService<AppInsightsFilter>();
+            })
+            .AddMicrosoftIdentityUI();
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();
@@ -193,5 +203,10 @@ internal static class DependencyInjection
     public static void AddMiddleware(this WebApplication app)
     {
         app.UseMiddleware<RequestGateMiddleware>();
+    }
+
+    private static void AddAppInsightsFilter(this IServiceCollection services)
+    {
+        services.AddScoped<AppInsightsFilter>();
     }
 }

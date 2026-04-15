@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Features.Telemetry.Commands;
+using SchoolAccount.Application.Features.Telemetry.Enums;
 using SchoolAccount.Application.Resolvers;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
@@ -78,20 +79,30 @@ internal static class DfeSignInExtensions
                         >();
 
                         var hashedUserId = TelemetryUserIdFactory.CreateHashedUserId(context.Principal!);
+                        var sessionId = AnalyticsSessionIdProvider.EnsureSessionIdClaim(context.Principal!);
 
-                        var command = new TrackAnalyticsTelemetryCommand(
+                        var metricCommand = new TrackAnalyticsTelemetryCommand(
                             AnalyticsMetrics.UserLogin,
-                            new[]
-                            {
-                                (AnalyticsTagNames.Outcome, "success"),
-                                (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
-                                (AnalyticsTagNames.Journey, "sign-in"),
-                                (AnalyticsTagNames.UserId, hashedUserId),
-                                (AnalyticsTagNames.Scheme, context.Scheme.Name),
-                            }
+                            AnalyticsTelemetryType.Metric,
+                            (AnalyticsTagNames.Outcome, "success"),
+                            (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
+                            (AnalyticsTagNames.Journey, "sign-in"),
+                            (AnalyticsTagNames.Client, "web")
                         );
 
-                        await handler.Handle(command, context.HttpContext.RequestAborted);
+                        await handler.Handle(metricCommand, context.HttpContext.RequestAborted);
+
+                        var eventCommand = new TrackAnalyticsTelemetryCommand(
+                            AnalyticsEvents.LoginSucceeded,
+                            AnalyticsTelemetryType.Event,
+                            (AnalyticsTagNames.UserId, hashedUserId),
+                            (AnalyticsTagNames.SessionId, sessionId),
+                            (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
+                            (AnalyticsTagNames.Journey, "sign-in"),
+                            (AnalyticsTagNames.Client, "web")
+                        );
+
+                        await handler.Handle(eventCommand, context.HttpContext.RequestAborted);
                     },
                 };
             })
