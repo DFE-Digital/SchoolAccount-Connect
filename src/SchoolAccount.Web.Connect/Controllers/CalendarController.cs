@@ -26,35 +26,16 @@ public class CalendarController(
         CancellationToken cancellationToken = default
     )
     {
-        var queryModel = new CalendarOfItemsDirectionalQuery(
-            CalendarOfItemsQueryTypes.SubTask,
-            query.ViewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : query.ViewModes,
-            12,
-            DateOnlyExtensions.Today,
-            query.PageSize <= 0 ? 10 : query.PageSize,
-            query.PageNumber <= 0 ? 1 : query.PageNumber,
-            query.SortMode,
-            new CalendarOfItemsFilter(
-                query.Filters
-                    .Select(filter => new FilterRequest
-                    {
-                        Field = filter.Key,
-                        Operator = filter.Key switch
-                        {
-                            "name" => ComparisonType.Contains,
-                            _ => ComparisonType.In
-                        },
-                        Value = filter.Key switch
-                        {
-                            "name" => filter.Value,
-                            _ => filter.Value.GetType() == typeof(string)
-                                ? filter.Value.ToString()?.Split(',').ToList()
-                                : filter.Value
-                        }
-                    }))
+        var filter = new GetSubTasksByDirectionForTabViewCalendarOfItemsQuery(
+            query.ViewModes,
+            query.PageSize,
+            query.PageNumber,
+            query.Filters,
+            query.SortMode
         );
-
-        var result = await handler.Handle(queryModel, cancellationToken);
+        var result = await handler.Handle(
+            filter, 
+            cancellationToken);
 
         if (result.IsFailure)
         {
@@ -63,7 +44,7 @@ public class CalendarController(
 
         var currentUri = Request.GetFullRequestUri();
         var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        var viewModel = viewBuilder.BuildForPage(result.Value, queryModel.ViewModes, currentUri);
+        var viewModel = viewBuilder.BuildForPage(result.Value, filter.ViewModes, currentUri);
 
         return View(viewModel);
     }

@@ -21,25 +21,15 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
     IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
-    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> customQueryHandler,
+    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
     IOrganisationContext organisationContext
 ) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] int? pageNumber, CancellationToken cancellationToken)
     {
-        var date = DateTime.Today;
-
-        var calendarOfItemsQuery = new CalendarOfItemsCustomQuery(
-            CalendarOfItemsQueryTypes.SubTask,
-            new DateOnlyRange(date.StartOfMonth().ToDateOnly(), date.EndOfMonth().ToDateOnly()),
-            10,
-            pageNumber ?? 1,
-            CalendarOfItemsSortMode.NotSpecified,
-            $"No required tasks for {date:MMMM yyyy}"
-        );
-
-        var calendarOfItemsResult = await customQueryHandler.Handle(calendarOfItemsQuery, cancellationToken);
+        var calendarOfItemsQuery = new GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnlyExtensions.Today);
+        var calendarOfItemsResult = await calendarOfItemQueryBuilder.Handle(calendarOfItemsQuery, cancellationToken);
 
         if (calendarOfItemsResult.IsFailure)
         {

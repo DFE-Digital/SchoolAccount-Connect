@@ -33,14 +33,10 @@ public class DetermineDateRangeTests
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
 
-        var calendarOfItemsDirectionalQuery = new CalendarOfItemsDirectionalQuery(
-            CalendarOfItemsQueryTypes.None,
+        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
             CalendarOfItemsViewModes.Backward,
             monthPeriod,
-            fromDate,
-            1,
-            1,
-            CalendarOfItemsSortMode.NotSpecified
+            fromDate
         );
 
         var result = CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery);
@@ -74,14 +70,10 @@ public class DetermineDateRangeTests
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
 
-        var calendarOfItemsDirectionalQuery = new CalendarOfItemsDirectionalQuery(
-            CalendarOfItemsQueryTypes.None,
+        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
             CalendarOfItemsViewModes.Forward,
             monthPeriod,
-            fromDate,
-            1,
-            1,
-            CalendarOfItemsSortMode.NotSpecified
+            fromDate
         );
 
         var result = CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery);
@@ -110,18 +102,33 @@ public class DetermineDateRangeTests
             DateTime.ParseExact("11/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
 
-        var calendarOfItemsDirectionalQuery = new CalendarOfItemsDirectionalQuery(
-            CalendarOfItemsQueryTypes.None,
+        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
             calendarOfItemsViewModes,
             1,
-            fromDate,
-            1,
-            1,
-            CalendarOfItemsSortMode.NotSpecified
+            fromDate
         );
 
         Assert.Throws<InvalidOperationException>(() =>
             CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery)
         );
+    }
+
+    private sealed record DetermineDateRangeTestCalendarOfItemQuery : CalendarOfItemsDirectionalQuery
+    {
+        public DetermineDateRangeTestCalendarOfItemQuery(
+            CalendarOfItemsViewModes viewModes,
+            int viewPeriod,
+            DateOnly date
+        ) : base(
+            CalendarOfItemsQueryTypes.None,
+            viewModes,
+            viewPeriod,
+            date,
+            1,
+            1,
+            CalendarOfItemsSortMode.NotSpecified
+        )
+        {
+        }
     }
 }

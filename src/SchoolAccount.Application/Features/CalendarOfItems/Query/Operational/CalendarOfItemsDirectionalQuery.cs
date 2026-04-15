@@ -5,7 +5,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Models;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public record CalendarOfItemsDirectionalQuery(
+public abstract record CalendarOfItemsDirectionalQuery(
     CalendarOfItemsQueryTypes ToQuery,
     CalendarOfItemsViewModes ViewModes,
     int ViewPeriodInMonths,

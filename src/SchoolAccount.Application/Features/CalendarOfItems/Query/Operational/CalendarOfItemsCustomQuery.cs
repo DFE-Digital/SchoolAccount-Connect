@@ -6,7 +6,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public record CalendarOfItemsCustomQuery(
+public abstract record CalendarOfItemsCustomQuery(
     CalendarOfItemsQueryTypes ToQuery,
     DateOnlyRange QueryRange,
     int PageSize,

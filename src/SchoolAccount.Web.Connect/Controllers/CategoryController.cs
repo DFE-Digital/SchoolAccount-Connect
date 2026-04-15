@@ -44,11 +44,11 @@ public class CategoryController(
         {
             throw new ApplicationException(result.Error.Description);
         }
-        
+
         var currentUri = Request.GetFullRequestUri();
         var viewBuilder = new CategoryListViewBuilder();
         var viewModel = viewBuilder.BuildForPage(result.Value, CategoryListViewModes.Standalone, currentUri);
-        
+
         return View(viewModel);
     }
 
@@ -59,41 +59,28 @@ public class CategoryController(
         CancellationToken cancellationToken = default
     )
     {
-        var category = await exploreCategoryQueryHandler.Handle(new GetCategoryByIdQuery(id), cancellationToken);
+        var category = await exploreCategoryQueryHandler.Handle(
+            new GetCategoryByIdQuery(id),
+            cancellationToken);
 
         if (category.IsFailure)
         {
             throw new ApplicationException(category.Error.Description);
         }
 
-        var date = DateOnlyExtensions.Today;
-        var range = new DateOnlyRange(date.AddYears(-1), date.AddYears(1));
-        
-        var filter = new CalendarOfItemsCustomQuery(
-            CalendarOfItemsQueryTypes.SubTask,
-            range,
-            query.PageSize <= 0 ? 10 : query.PageSize,
-            query.PageNumber <= 0 ? 1 : query.PageNumber,
-            CalendarOfItemsSortMode.NotSpecified,
-            "No results found",
-            new CalendarOfItemsFilter([
-                new FilterRequest
-                {
-                    Field = "category",
-                    Operator = ComparisonType.In,
-                    Value = category.Value.Children.Count > 0 
-                        ? category.Value.Children.Append(category.Value.Id).ToArray()  
-                        : new List<int> {category.Value.Id}
-                }
-            ])
-        );
-        var results = await calendarOfItemsQueryHandler.Handle(filter,  cancellationToken);
-        
+        var results = await calendarOfItemsQueryHandler.Handle(
+            new GetSubTasksByCategoriesCalendarOfItemsQuery(
+                category.Value.AllCategoryIds,
+                query.PageSize,
+                query.PageNumber
+            ),
+            cancellationToken);
+
         if (results.IsFailure)
         {
             throw new ApplicationException(results.Error.Description);
         }
-        
+
         var currentUri = Request.GetFullRequestUri();
         var viewBuilder = new CategoryHubViewBuilder(organisationContext);
         var viewModel = viewBuilder.Build(results.Value, currentUri, category.Value);
@@ -106,26 +93,19 @@ public class CategoryController(
         [FromQuery] CalendarQuery query,
         CancellationToken cancellationToken = default)
     {
-        var date = DateOnlyExtensions.Today;
-        var range = new DateOnlyRange(date.AddYears(-1), date.AddYears(1));
-        
-        var filter = new CalendarOfItemsCustomQuery(
-            CalendarOfItemsQueryTypes.SubTask,
-            range,
-            query.PageSize <= 0 ? 10 : query.PageSize,
-            query.PageNumber <= 0 ? 1 : query.PageNumber,
-            CalendarOfItemsSortMode.NotSpecified,
-            "No results found",
-            new CalendarOfItemsFilter([])
-        );
-        
-        var results = await calendarOfItemsQueryHandler.Handle(filter,  cancellationToken);
-        
+        var results = await calendarOfItemsQueryHandler.Handle(
+            new GetSubTasksByCategoriesCalendarOfItemsQuery(
+                [],
+                query.PageSize,
+                query.PageNumber
+            ),
+            cancellationToken);
+
         if (results.IsFailure)
         {
             throw new ApplicationException(results.Error.Description);
         }
-        
+
         var currentUri = Request.GetFullRequestUri();
         var viewBuilder = new CategoryHubViewBuilder(organisationContext);
         var viewModel = viewBuilder.Build(results.Value, currentUri);

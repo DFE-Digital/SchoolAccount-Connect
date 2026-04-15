@@ -1,4 +1,6 @@
 
+using System.Collections.ObjectModel;
+
 namespace SchoolAccount.Application.Features.Category.Models;
 
 public sealed class CategoryType
@@ -19,4 +21,5 @@ public sealed class CategoryType
 
     public CategoryTypeGrouping? TypeGrouping { get; set; }
 
+    public Collection<int> AllCategoryIds => [Id, ..Children];
 }
