@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Types;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeGroupingEntity

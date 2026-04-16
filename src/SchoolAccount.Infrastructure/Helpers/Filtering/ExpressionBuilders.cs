@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Globalization;
 using System.Linq.Expressions;
 
 namespace SchoolAccount.Infrastructure.Helpers.Filtering;
@@ -8,20 +7,16 @@ public static class ExpressionBuilders
 {
     public static Expression Equals(Expression property, Type type, object? value)
     {
-        var converted = value is not null 
-            ? Convert.ChangeType(value, type, null) 
-            : DBNull.Value;
-        
+        var converted = value is not null ? Convert.ChangeType(value, type, null) : DBNull.Value;
+
         return Expression.Equal(property, Expression.Constant(converted, type));
     }
 
     public static Expression Compare(ExpressionType comparison, Expression property, object? value)
     {
         var targetType = property.Type;
-        var converted = value is not null 
-            ? Convert.ChangeType(value, targetType, null) 
-            : DBNull.Value;
-        
+        var converted = value is not null ? Convert.ChangeType(value, targetType, null) : DBNull.Value;
+
         return Expression.MakeBinary(comparison, property, Expression.Constant(converted, targetType));
     }
 
@@ -39,7 +34,7 @@ public static class ExpressionBuilders
             var listType = typeof(List<>).MakeGenericType(elementType);
             var valList = Activator.CreateInstance(listType)!;
             var add = listType.GetMethod(nameof(IList.Add))!;
-            
+
             foreach (var v in values)
             {
                 add.Invoke(valList, [Convert.ChangeType(v, elementType, null)]);
@@ -53,13 +48,7 @@ public static class ExpressionBuilders
             );
             var lambda = Expression.Lambda(containsCall, anyParam);
 
-            return Expression.Call(
-                typeof(Enumerable),
-                nameof(Enumerable.Any),
-                [elementType],
-                property,
-                lambda
-            );
+            return Expression.Call(typeof(Enumerable), nameof(Enumerable.Any), [elementType], property, lambda);
         }
         else
         {
@@ -67,17 +56,13 @@ public static class ExpressionBuilders
             var listType = typeof(List<>).MakeGenericType(elementType);
             var valList = Activator.CreateInstance(listType)!;
             var add = listType.GetMethod(nameof(IList.Add))!;
-            
+
             foreach (var v in values)
             {
                 add.Invoke(valList, [Convert.ChangeType(v, elementType, null)]);
             }
 
-            return Expression.Call(
-                Expression.Constant(valList),
-                listType.GetMethod(nameof(IList.Contains))!,
-                property
-            );
+            return Expression.Call(Expression.Constant(valList), listType.GetMethod(nameof(IList.Contains))!, property);
         }
     }
 
@@ -93,7 +78,7 @@ public static class ExpressionBuilders
             object?[] ja => ja,
             IEnumerable e and not string => e.Cast<object?>(),
             null => [],
-            _ => [value]
+            _ => [value],
         };
 
         Expression? combined = null;
@@ -101,7 +86,7 @@ public static class ExpressionBuilders
         foreach (var v in values)
         {
             var toValue = v?.ToString();
-            
+
             if (string.IsNullOrWhiteSpace(toValue))
             {
                 continue;
@@ -114,9 +99,7 @@ public static class ExpressionBuilders
                 Expression.Constant(toValue)
             );
 
-            combined = combined != null
-                ? Expression.OrElse(combined, call)
-                : call;
+            combined = combined != null ? Expression.OrElse(combined, call) : call;
         }
 
         return combined ?? Expression.Constant(true);

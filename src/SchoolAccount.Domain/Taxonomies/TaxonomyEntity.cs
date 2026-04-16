@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Tags;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Taxonomies;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public partial class TaxonomyEntity

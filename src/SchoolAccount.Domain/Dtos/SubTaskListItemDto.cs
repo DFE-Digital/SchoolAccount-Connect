@@ -1,4 +1,4 @@
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
 
 namespace SchoolAccount.Domain.Dtos;
 

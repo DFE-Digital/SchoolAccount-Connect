@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Tags;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.SchoolTypes;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class SchoolTypeTagMappingEntity

@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
@@ -62,7 +61,7 @@ public record CalendarOfItemsViewModel(
     public bool HasTitle => !string.IsNullOrEmpty(Title);
     public bool HasDescription => !string.IsNullOrEmpty(Description);
     public bool ShowNavigator => ViewModes.HasFlag(CalendarOfItemsViewModes.Standalone);
-    
+
     public bool CanRenderFilter { get; init; } = true;
     public bool HasFilters => CanRenderFilter && Filters.Count > 0;
 }

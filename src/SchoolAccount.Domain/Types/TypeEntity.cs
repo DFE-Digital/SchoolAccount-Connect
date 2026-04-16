@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Types;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeEntity
@@ -22,10 +22,10 @@ public class TypeEntity
     public int? TypeGroupingId { get; set; }
 
     public TypeEntity? Parent { get; set; }
-    
+
     public virtual TypeGroupingEntity? TypeGrouping { get; set; }
 
     public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
-    
+
     public virtual ICollection<TypeEntity> Children { get; } = [];
 }

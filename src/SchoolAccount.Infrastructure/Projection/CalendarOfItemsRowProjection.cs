@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Subtasks;
 
 namespace SchoolAccount.Infrastructure.Projection;
 
@@ -40,7 +40,7 @@ public static class CalendarOfItemsRowProjection
                 Name = t.Type.Name,
                 DisplayValue = t.Type.Name,
                 Type = CalendarOfItemsExtensionNodeType.Type,
-            })
+            }),
         };
     }
 }

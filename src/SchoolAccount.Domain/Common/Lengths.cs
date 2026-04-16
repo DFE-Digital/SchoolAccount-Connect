@@ -1,4 +1,4 @@
-namespace SchoolAccount.Domain;
+namespace SchoolAccount.Domain.Common;
 
 public static class Lengths
 {

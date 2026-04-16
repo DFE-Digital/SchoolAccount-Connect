@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Tags;
+using SchoolAccount.Domain.Taxonomies;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Sources;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class SourceEntity

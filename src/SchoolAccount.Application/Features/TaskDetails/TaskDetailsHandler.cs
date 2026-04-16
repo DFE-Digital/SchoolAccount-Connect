@@ -3,7 +3,7 @@ using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.TaskDetails.ViewModels;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Helpers;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.ViewModels;
 using SchoolAccount.Kernel;
 
@@ -14,8 +14,8 @@ public sealed class TaskDetailsHandler(IApplicationDbContext applicationDbContex
 {
     public async Task<Result<TaskDetailsViewModel>> Handle(TaskDetailQuery query, CancellationToken cancellationToken)
     {
-        var taskEntity = await applicationDbContext.Tasks
-            .AsNoTracking()
+        var taskEntity = await applicationDbContext
+            .Tasks.AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == query.TaskId, cancellationToken);
 
         if (taskEntity == null)
@@ -23,8 +23,8 @@ public sealed class TaskDetailsHandler(IApplicationDbContext applicationDbContex
             return new TaskDetailsViewModel(dateTimeProvider);
         }
 
-        var subTaskEntities = await applicationDbContext.SubTasks
-            .AsNoTracking()
+        var subTaskEntities = await applicationDbContext
+            .SubTasks.AsNoTracking()
             .Where(st => st.IsDeleted != true)
             .Where(st => st.TaskId == query.TaskId)
             .ToListAsync(cancellationToken);

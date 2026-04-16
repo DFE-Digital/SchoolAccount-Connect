@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Taxonomies;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TaxonomyGroupingEntity
@@ -13,5 +13,5 @@ public class TaxonomyGroupingEntity
 
     public int? PageNo { get; set; }
 
-    public virtual ICollection<TaxonomyEntity> Taxonomies { get; } = [];
+    public virtual ICollection<Taxonomies.TaxonomyEntity> Taxonomies { get; } = [];
 }

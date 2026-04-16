@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolAccount.Domain.Entities;
 using SchoolAccount.Infrastructure.Configuration.Constants;
+using TaxonomyEntity = SchoolAccount.Domain.Taxonomies.TaxonomyEntity;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 

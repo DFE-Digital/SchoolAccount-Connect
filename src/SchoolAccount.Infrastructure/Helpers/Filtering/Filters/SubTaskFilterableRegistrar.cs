@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
-using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using Type = System.Type;
 
@@ -20,15 +20,16 @@ public class SubTaskFilterableRegistrar : IFilterableRegistrar<CalendarOfItemsFi
 
     public Type TypeBeingRegistered => typeof(SubTaskEntity);
 
-    public FieldSelector FieldSelectorsBeingRegistered => new()
-    {
-        [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
-        [Keys.Categories] =
-            (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
+    public FieldSelector FieldSelectorsBeingRegistered =>
+        new()
+        {
+            [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
+            [Keys.Categories] =
+                (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
             [Keys.State] = (Expression<Func<SubTaskEntity, WorkflowState>>)(x => x.WorkflowState),
-        [Keys.PhaseOfEducation] =
-            (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
-    };
+            [Keys.PhaseOfEducation] =
+                (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
+        };
 
     public void ConsolidateFilters(CalendarOfItemsFilter filter)
     {

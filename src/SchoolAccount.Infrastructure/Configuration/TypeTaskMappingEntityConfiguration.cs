@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Types;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 
 namespace SchoolAccount.Infrastructure.Configuration;
@@ -15,12 +15,14 @@ public class TypeTaskMappingEntityConfiguration : IEntityTypeConfiguration<TypeT
 
         builder.HasIndex(e => new { e.TaskId, e.TypeId }).IsUnique();
 
-        builder.HasOne(d => d.Task)
+        builder
+            .HasOne(d => d.Task)
             .WithMany(p => p.TypeTaskMappings)
             .HasForeignKey(d => d.TaskId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        builder.HasOne(d => d.Type)
+        builder
+            .HasOne(d => d.Type)
             .WithMany(p => p.TypeTaskMappings)
             .HasForeignKey(d => d.TypeId)
             .OnDelete(DeleteBehavior.ClientSetNull);

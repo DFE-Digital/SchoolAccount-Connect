@@ -1,7 +1,6 @@
 ﻿using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Entities;
 
-namespace SchoolAccount.Domain.Helpers
+namespace SchoolAccount.Domain.Subtasks
 {
     public static class SubTaskListItemHelper
     {

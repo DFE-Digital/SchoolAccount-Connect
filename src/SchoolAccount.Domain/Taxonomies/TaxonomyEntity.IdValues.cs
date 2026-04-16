@@ -1,4 +1,4 @@
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Taxonomies;
 
 public partial class TaxonomyEntity
 {

@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
-using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.SchoolTypes;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Specifications;

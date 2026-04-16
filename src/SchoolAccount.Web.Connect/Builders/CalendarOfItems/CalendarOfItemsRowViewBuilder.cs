@@ -2,7 +2,7 @@ using SchoolAccount.Application;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
@@ -23,7 +23,7 @@ public class CalendarOfItemsRowViewBuilder
             DateText = GenerateAvailableOrDueMessage(row),
         };
     }
-    
+
     private static string? GenerateAvailableOrDueMessage(CalendarOfItemsRow row, DateOnly? today = null)
     {
         today ??= DateTime.Today.ToDateOnly();
@@ -53,7 +53,7 @@ public class CalendarOfItemsRowViewBuilder
 
         return null;
     }
-    
+
     private static string DetermineUri(CalendarOfItemsRowType type, long id, string? queryExtensions)
     {
         return type switch

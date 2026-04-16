@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.ObjectModel;
-using System.Net;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -22,6 +20,7 @@ public class CalendarOfItemsAggregator(
 ) : ICalendarOfItemsAggregator
 {
     private readonly CalendarOfItemsAggregatorValidator _validator = new(queryFactoryResolver);
+
     private void ConsolidateFilters(CalendarOfItemsFilter filter)
     {
         foreach (var registrar in filterRegistry.Registrars.OfType<IFilterableRegistrar<CalendarOfItemsFilter>>())
@@ -73,7 +72,7 @@ public class CalendarOfItemsAggregator(
         {
             return validation.ToResult<CalendarOfItemsPagedResult>();
         }
-        
+
         ConsolidateFilters(criteria.Filter);
 
         var factories = queryFactoryResolver.GetFactoriesByType(criteria.ToQuery);

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Tasks;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Types;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeTaskMappingEntity

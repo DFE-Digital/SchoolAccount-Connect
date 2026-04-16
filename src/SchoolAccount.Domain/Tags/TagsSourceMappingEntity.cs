@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Sources;
+using SchoolAccount.Domain.Subtasks;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Tags;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TagsSourceMappingEntity

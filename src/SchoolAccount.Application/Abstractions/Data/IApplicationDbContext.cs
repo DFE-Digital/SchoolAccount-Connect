@@ -1,5 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.SchoolTypes;
+using SchoolAccount.Domain.Sources;
+using SchoolAccount.Domain.Subtasks;
+using SchoolAccount.Domain.Tags;
+using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Domain.Taxonomies;
+using SchoolAccount.Domain.Types;
 
 namespace SchoolAccount.Application.Abstractions.Data;
 

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Enums;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels
@@ -13,7 +13,7 @@ namespace SchoolAccount.Domain.ViewModels
         public Requirement? Requirement { get; }
         public bool HasLinks => !string.IsNullOrWhiteSpace(DigitalLink);
         public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
-        public bool IsOptional => Requirement == SchoolAccount.Domain.Enums.Requirement.Optional;
+        public bool IsOptional => Requirement == Common.Requirement.Optional;
         public string? AvailabilityLabel { get; private set; }
         public DateOnly? SortingDate { get; }
         public string? DueDateLabel { get; }

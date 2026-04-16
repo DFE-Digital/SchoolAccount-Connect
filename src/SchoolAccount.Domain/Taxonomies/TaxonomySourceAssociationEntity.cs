@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Sources;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Taxonomies;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TaxonomySourceAssociationEntity
@@ -15,5 +16,5 @@ public class TaxonomySourceAssociationEntity
 
     public virtual required SourceEntity Source { get; set; }
 
-    public virtual required TaxonomyEntity Taxonomy { get; set; }
+    public virtual required Taxonomies.TaxonomyEntity Taxonomy { get; set; }
 }

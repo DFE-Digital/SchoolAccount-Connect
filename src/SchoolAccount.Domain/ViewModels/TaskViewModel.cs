@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Enums;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.ViewModels

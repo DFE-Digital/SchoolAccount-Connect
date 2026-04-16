@@ -4,7 +4,7 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Shared.Filtering;
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;

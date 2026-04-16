@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
-using SchoolAccount.Domain.Enums;
+using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Tags;
+using SchoolAccount.Domain.Tasks;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Subtasks;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class SubTaskEntity

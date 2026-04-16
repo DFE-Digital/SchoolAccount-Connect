@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.SchoolTypes;
+using TaxonomyEntity = SchoolAccount.Domain.Taxonomies.TaxonomyEntity;
 
-namespace SchoolAccount.Domain.Entities;
+namespace SchoolAccount.Domain.Tags;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TagEntity

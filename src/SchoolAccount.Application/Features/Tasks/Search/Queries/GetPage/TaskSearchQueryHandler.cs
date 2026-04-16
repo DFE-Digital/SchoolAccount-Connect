@@ -3,7 +3,7 @@ using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Domain.Helpers;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
