@@ -1,30 +1,31 @@
+@using SchoolAccount.Application.Constants
 @{
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
 
-    var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString()).ToLowerInvariant();
+    var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
+        .ToLowerInvariant();
+
+    var redirectUrl =
+        $"/feedback/exit?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}&returnUrl={Uri.EscapeDataString(feedbackUrl)}";
 }
 
 <div class="dfe-connect-banner govuk-!-margin-top-4 govuk-!-margin-bottom-6"
-     data-feedback-component="connect-banner"
+     data-feedback-component="banner"
      data-feedback-post-url="/feedback/page-useful"
-     data-feedback-variant="connect.banner"
-     data-page-id="@pageId">
+     data-page-id="@pageId"
+     data-cta-type="@AnalyticsCtaTypes.Banner">
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">
         Help us improve DfE Connect
     </h2>
 
     <p class="govuk-body govuk-!-margin-bottom-3">
         To help us improve DfE Connect, we’d like to know more about your visit today.
-        <a href="@feedbackUrl"
+        <a href="@redirectUrl"
            class="govuk-link"
            target="_blank"
            rel="noopener noreferrer"
-           data-connect-banner-link
-           data-page-id="@pageId"
-           data-feedback-variant="connect.banner"
-           data-feedback-value="clicked.feedback.link"
-           data-feedback-action="connect.banner.clicked">
+           data-feedback-exit-link>
             Give your feedback (opens in a new tab)
         </a>.
     </p>
@@ -32,11 +33,7 @@
     <button type="button"
             class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             data-module="govuk-button"
-            data-connect-banner-dismiss
-            data-page-id="@pageId"
-            data-feedback-variant="connect.banner"
-            data-feedback-value="banner.dismissed"
-            data-feedback-action="connect.banner.dismissed">
+            data-feedback-dismiss>
         Cancel
     </button>
 </div>

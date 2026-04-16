@@ -1,16 +1,21 @@
+@using SchoolAccount.Application.Constants
 @{
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
         ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
 
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
         .ToLowerInvariant();
+
+    var redirectUrl =
+        $"/feedback/exit?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}&returnUrl={Uri.EscapeDataString(feedbackUrl)}";
 }
 
 <section class="dfe-page-feedback"
          aria-label="Page feedback"
          data-feedback-component="page-useful"
          data-feedback-post-url="/feedback/page-useful"
-         data-feedback-variant="feedback.yes.no">
+         data-page-id="@pageId"
+         data-cta-type="@AnalyticsCtaTypes.YesNo">
     <div class="govuk-width-container">
         <div class="dfe-page-feedback__initial" data-feedback-initial>
             <div class="dfe-page-feedback__row">
@@ -20,15 +25,13 @@
                     <div class="dfe-page-feedback__choices" role="group" aria-label="Do you find DfE Connect useful?">
                         <button type="button"
                                 class="dfe-page-feedback__choice"
-                                data-feedback-value="feedback.yes.pressed"
-                                data-page-id="@pageId">
+                                data-feedback-answer="@AnalyticsAnswers.Yes">
                             Yes
                         </button>
 
                         <button type="button"
                                 class="dfe-page-feedback__choice"
-                                data-feedback-value="feedback.no.pressed"
-                                data-page-id="@pageId">
+                                data-feedback-answer="@AnalyticsAnswers.No">
                             No
                         </button>
                     </div>
@@ -45,10 +48,10 @@
                 <p class="dfe-page-feedback__followup-body">
                     To help us improve DfE Connect, we'd like to know more about your visit today.
                     <a class="govuk-link"
-                       data-feedback-link
+                       data-feedback-exit-link
                        target="_blank"
                        rel="noopener noreferrer"
-                       href="@feedbackUrl">
+                       href="@redirectUrl">
                         Give your feedback (opens in a new tab)
                     </a>.
                 </p>

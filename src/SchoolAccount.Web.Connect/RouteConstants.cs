@@ -9,6 +9,7 @@ public static class RouteConstants
     public const string Support = Root + "support";
     public const string Error = Root + "error/{code}";
     public const string FeedBack = Root + "feedback/page-useful";
+    public const string FeedBackExit = "/feedback/exit";
 
     internal static class Start
     {
@@ -32,5 +33,4 @@ public static class RouteConstants
     {
         public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task?taskid={0}");
     }
-    
 }

@@ -88,8 +88,8 @@ public sealed class TrackAnalyticsTelemetryCommandHandler(
 
         counter.Add(1, metricTags);
 
-        logger.LogDebug(
-            "Analytics metric {Metric} tracked with TraceId {TraceId} and properties {@Properties}",
+        logger.LogInformation(
+            "Analytics event {EventName} tracked with TraceId {TraceId} and properties {@Properties}",
             command.Name,
             traceId,
             logProperties
@@ -102,7 +102,7 @@ public sealed class TrackAnalyticsTelemetryCommandHandler(
     {
         var traceId = requestContext.TraceId;
 
-        var properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         var hasClientTag = false;
 
         foreach (var (property, value) in command.Tags)
@@ -127,15 +127,15 @@ public sealed class TrackAnalyticsTelemetryCommandHandler(
 
         if (!hasClientTag)
         {
-            properties.TryAdd(AnalyticsTagNames.Client, "web");
+            properties[AnalyticsTagNames.Client] = "web";
         }
 
-        logger.LogDebug(
-            "Analytics event {EventName} tracked with TraceId {TraceId} and properties {@Properties}",
-            command.Name,
-            traceId,
-            properties
-        );
+        properties["TraceId"] = traceId!;
+
+        using (logger.BeginScope(properties))
+        {
+            logger.LogInformation("Analytics event {EventName} tracked", command.Name);
+        }
 
         return Task.FromResult(Result.Success());
     }

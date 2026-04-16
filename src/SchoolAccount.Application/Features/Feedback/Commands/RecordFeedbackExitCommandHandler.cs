@@ -6,18 +6,13 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Feedback.Commands;
 
-public sealed class RecordPageFeedbackCommandHandler(
+public sealed class RecordFeedbackExitCommandHandler(
     ICommandHandler<TrackAnalyticsTelemetryCommand> telemetryCommandHandler,
     IFeedbackTelemetryContextProvider feedbackTelemetryContextProvider
-) : ICommandHandler<RecordPageFeedbackCommand>
+) : ICommandHandler<RecordFeedbackExitCommand>
 {
-    public async Task<Result> Handle(RecordPageFeedbackCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RecordFeedbackExitCommand command, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(command.EventName))
-        {
-            return Result.Failure(Error.Problem("Feedback.EventNameRequired", "Event name is required."));
-        }
-
         if (string.IsNullOrWhiteSpace(command.PageId))
         {
             return Result.Failure(Error.Problem("Feedback.PageIdRequired", "Page id is required."));
@@ -28,33 +23,40 @@ public sealed class RecordPageFeedbackCommandHandler(
             return Result.Failure(Error.Problem("Feedback.CtaTypeRequired", "CTA type is required."));
         }
 
-        if (!IsAllowedEvent(command.EventName))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidEvent", "Unsupported feedback event."));
-        }
-
-        if (!IsAllowedCtaType(command.CtaType))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidCtaType", "Unsupported CTA type."));
-        }
-
-        if (command.EventName == AnalyticsEvents.CtaYesNoInteraction && !IsAllowedAnswer(command.SelectedAnswer))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidAnswer", "Selected answer must be yes or no."));
-        }
-
         var context = feedbackTelemetryContextProvider.GetContext();
 
-        var tags = BuildTags(command.PageId, command.CtaType, command.SelectedAnswer, context);
-
-        var result = await telemetryCommandHandler.Handle(
-            new TrackAnalyticsTelemetryCommand(command.EventName, AnalyticsTelemetryType.Event, tags.ToArray()),
+        var eventResult = await telemetryCommandHandler.Handle(
+            new TrackAnalyticsTelemetryCommand(
+                AnalyticsEvents.CtaFeedbackExit,
+                AnalyticsTelemetryType.Event,
+                BuildTags(command.PageId, command.CtaType, context).ToArray()
+            ),
             cancellationToken
         );
 
-        if (result.IsFailure)
+        if (eventResult.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return Result.Failure(eventResult.Error);
+        }
+
+        var metricResult = await telemetryCommandHandler.Handle(
+            new TrackAnalyticsTelemetryCommand(
+                AnalyticsMetrics.FeedbackResponse,
+                AnalyticsTelemetryType.Metric,
+                (AnalyticsTagNames.EventName, AnalyticsEvents.CtaFeedbackExit),
+                (AnalyticsTagNames.PageId, command.PageId),
+                (AnalyticsTagNames.CtaType, command.CtaType),
+                (AnalyticsTagNames.ExperimentName, AnalyticsExperiments.FeedbackBannerAdditive),
+                (AnalyticsTagNames.TreatmentGroup, context.TreatmentGroup),
+                (AnalyticsTagNames.BannerShown, context.BannerShown ? "true" : "false"),
+                (AnalyticsTagNames.Client, "web")
+            ),
+            cancellationToken
+        );
+
+        if (metricResult.IsFailure)
+        {
+            return Result.Failure(metricResult.Error);
         }
 
         return Result.Success();
@@ -63,7 +65,6 @@ public sealed class RecordPageFeedbackCommandHandler(
     private static List<(string Property, string Value)> BuildTags(
         string pageId,
         string ctaType,
-        string? selectedAnswer,
         FeedbackTelemetryContext context
     )
     {
@@ -76,11 +77,6 @@ public sealed class RecordPageFeedbackCommandHandler(
             (AnalyticsTagNames.BannerShown, context.BannerShown ? "true" : "false"),
             (AnalyticsTagNames.Client, "web"),
         };
-
-        if (!string.IsNullOrWhiteSpace(selectedAnswer))
-        {
-            tags.Add((AnalyticsTagNames.SelectedAnswer, selectedAnswer));
-        }
 
         if (!string.IsNullOrWhiteSpace(context.UserId))
         {
@@ -98,23 +94,5 @@ public sealed class RecordPageFeedbackCommandHandler(
         }
 
         return tags;
-    }
-
-    private static bool IsAllowedEvent(string eventName)
-    {
-        return eventName
-            is AnalyticsEvents.CtaYesNoInteraction
-                or AnalyticsEvents.CtaCancelled
-                or AnalyticsEvents.CtaDismissed;
-    }
-
-    private static bool IsAllowedCtaType(string ctaType)
-    {
-        return ctaType is AnalyticsCtaTypes.YesNo or AnalyticsCtaTypes.Banner;
-    }
-
-    private static bool IsAllowedAnswer(string? answer)
-    {
-        return answer is AnalyticsAnswers.Yes or AnalyticsAnswers.No;
     }
 }

@@ -12,6 +12,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
 using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Features.Feedback;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
@@ -54,7 +55,6 @@ internal static class DependencyInjection
         services.AddAppInsightsFilter();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
-        services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
         services.AddScoped<IRequestContext, RequestContext>();
 
         services
@@ -115,6 +115,7 @@ internal static class DependencyInjection
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IOrganisationContext, OrganisationContext>();
         services.AddScoped<ICookieConsentContext, CookieConsentContext>();
+        services.AddScoped<IFeedbackTelemetryContextProvider, FeedbackTelemetryContextProvider>();
     }
 
     private static void AddRequestGates(this IServiceCollection services)

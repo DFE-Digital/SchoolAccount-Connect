@@ -66,7 +66,7 @@
 
 @section BeforeContent {
     <govuk-phase-banner>
-        <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
+        <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
         This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
 
@@ -74,7 +74,7 @@
 
     @if (isAuthenticated)
     {
-        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectBanner);
+        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.FeedbackBanner);
 
         if (showConnectBanner)
         {
@@ -126,15 +126,7 @@ else
     @if (isAuthenticated)
     {
         var useV2 = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectFeedback);
-
-        if (useV2)
-        {
-            <partial name="_FeedbackV2"/>
-        }
-        else
-        {
-            <partial name="_Feedback"/>
-        }
+        <partial name="_FeedbackV2"/>
     }
 
     <govuk-footer>
