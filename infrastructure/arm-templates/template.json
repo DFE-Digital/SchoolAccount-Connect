@@ -424,7 +424,7 @@
                             },
                             {
                                 "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                                "value": "[concat('InstrumentationKey=', reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2015-05-01').InstrumentationKey,';IngestionEndpoint=https://westeurope-2.in.applicationinsights.azure.com/')]"
+                                "value": "[reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2020-02-02').ConnectionString]"
                             },
                             {
                                 "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
