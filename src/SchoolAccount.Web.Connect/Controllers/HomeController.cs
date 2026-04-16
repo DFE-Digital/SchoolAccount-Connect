@@ -5,8 +5,8 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
@@ -35,7 +35,7 @@ public sealed class HomeController(
         {
             return Problem(detail: calendarOfItemsResult.Error.Description);
         }
-        
+
         var query = new GetAllParentCategoriesQuery();
         var categoryResult = await categoryQueryBuilder.Handle(query, cancellationToken);
 
@@ -51,7 +51,12 @@ public sealed class HomeController(
 
         var currentUri = Request.GetFullRequestUri();
         var dashboardViewBuilder = new DashboardViewBuilder();
-        var viewModel = dashboardViewBuilder.Build(calendarOfItemsResult.Value, categoryResult.Value, organisationContext, currentUri);
+        var viewModel = dashboardViewBuilder.Build(
+            calendarOfItemsResult.Value,
+            categoryResult.Value,
+            organisationContext,
+            currentUri
+        );
 
         return View(viewModel);
     }

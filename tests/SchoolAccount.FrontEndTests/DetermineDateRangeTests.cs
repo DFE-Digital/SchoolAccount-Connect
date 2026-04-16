@@ -1,7 +1,7 @@
 using System.Globalization;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using Xunit;
 
@@ -119,16 +119,15 @@ public class DetermineDateRangeTests
             CalendarOfItemsViewModes viewModes,
             int viewPeriod,
             DateOnly date
-        ) : base(
-            CalendarOfItemsQueryTypes.None,
-            viewModes,
-            viewPeriod,
-            date,
-            1,
-            1,
-            CalendarOfItemsSortMode.NotSpecified
         )
-        {
-        }
+            : base(
+                CalendarOfItemsQueryTypes.None,
+                viewModes,
+                viewPeriod,
+                date,
+                1,
+                1,
+                CalendarOfItemsSortMode.NotSpecified
+            ) { }
     }
 }

@@ -4,7 +4,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 
 public abstract record CalendarOfItemsCustomQuery(
     CalendarOfItemsQueryTypes ToQuery,

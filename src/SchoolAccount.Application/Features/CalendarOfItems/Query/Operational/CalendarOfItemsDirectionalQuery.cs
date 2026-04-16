@@ -3,7 +3,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 
 public abstract record CalendarOfItemsDirectionalQuery(
     CalendarOfItemsQueryTypes ToQuery,

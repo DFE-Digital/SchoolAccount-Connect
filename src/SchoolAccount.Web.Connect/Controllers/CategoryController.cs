@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Category.Query;
-using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Categories;
 using SchoolAccount.Web.Connect.Extensions;
@@ -59,9 +56,7 @@ public class CategoryController(
         CancellationToken cancellationToken = default
     )
     {
-        var category = await exploreCategoryQueryHandler.Handle(
-            new GetCategoryByIdQuery(id),
-            cancellationToken);
+        var category = await exploreCategoryQueryHandler.Handle(new GetCategoryByIdQuery(id), cancellationToken);
 
         if (category.IsFailure)
         {
@@ -74,7 +69,8 @@ public class CategoryController(
                 query.PageSize,
                 query.PageNumber
             ),
-            cancellationToken);
+            cancellationToken
+        );
 
         if (results.IsFailure)
         {
@@ -91,15 +87,13 @@ public class CategoryController(
     [HttpGet(RouteConstants.Category.AllTasks)]
     public async Task<IActionResult> AllTasks(
         [FromQuery] CalendarQuery query,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetSubTasksByCategoriesCalendarOfItemsQuery(
-                [],
-                query.PageSize,
-                query.PageNumber
-            ),
-            cancellationToken);
+            new GetSubTasksByCategoriesCalendarOfItemsQuery([], query.PageSize, query.PageNumber),
+            cancellationToken
+        );
 
         if (results.IsFailure)
         {

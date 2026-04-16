@@ -3,7 +3,6 @@ using Microsoft.FeatureManagement;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Features.Feedback;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Telemetry;
 
 namespace SchoolAccount.Web.Connect.Telemetry;
 

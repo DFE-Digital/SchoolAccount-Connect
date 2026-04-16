@@ -7,7 +7,7 @@ using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 
 public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator aggregator)
     : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>

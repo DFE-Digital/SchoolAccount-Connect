@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.TaskDetails.ViewModels;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.ViewModels;

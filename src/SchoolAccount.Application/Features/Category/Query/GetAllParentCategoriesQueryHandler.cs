@@ -8,16 +8,16 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Category.Query;
 
-public class GetAllParentCategoriesQueryHandler(
-    IApplicationDbContext applicationDbContext
-) : IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult>
+public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicationDbContext)
+    : IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult>
 {
     public async Task<Result<CategoryPagedResult>> Handle(
         GetAllParentCategoriesQuery query,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
-        var result = await applicationDbContext.Types
-            .AsNoTracking()
+        var result = await applicationDbContext
+            .Types.AsNoTracking()
             .Where(x => x.TypeGrouping != null && x.TypeGrouping.Id == 1)
             .Select(x => new CategoryRow
             {

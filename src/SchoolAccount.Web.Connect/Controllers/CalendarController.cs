@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Extensions;
@@ -33,9 +30,7 @@ public class CalendarController(
             query.Filters,
             query.SortMode
         );
-        var result = await handler.Handle(
-            filter, 
-            cancellationToken);
+        var result = await handler.Handle(filter, cancellationToken);
 
         if (result.IsFailure)
         {

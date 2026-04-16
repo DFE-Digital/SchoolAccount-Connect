@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.TaskDetails.ViewModels;
+using SchoolAccount.Application.Features.TaskDetails;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Domain.ViewModels;
@@ -11,7 +11,7 @@ using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Controllers;
 using Xunit;
 
-namespace SchoolAccount.FrontEndTests.TaskPageTests;
+namespace SchoolAccount.FrontEndTests;
 
 public class TaskPageTests
 {

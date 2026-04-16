@@ -4,7 +4,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 
 public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggregator)
     : IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult>
@@ -22,7 +22,7 @@ public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggreg
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
             SortMode = query.SortMode,
-            Filter = query.Filter ?? new([])
+            Filter = query.Filter ?? new([]),
         };
 
         var result = await aggregator.Query(model, cancellationToken);

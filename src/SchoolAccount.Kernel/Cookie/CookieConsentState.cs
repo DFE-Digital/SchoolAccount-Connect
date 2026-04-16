@@ -1,9 +1,9 @@
-namespace SchoolAccount.Kernel;
+namespace SchoolAccount.Kernel.Cookie;
 
 public enum CookieConsentState
 {
     Undeclared = 0,
     Accepted = 1,
     Rejected = 2,
-    Invalid = 3
+    Invalid = 3,
 }

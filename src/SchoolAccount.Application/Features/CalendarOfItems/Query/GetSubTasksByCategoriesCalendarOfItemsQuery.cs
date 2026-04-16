@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 
@@ -14,17 +15,16 @@ public record GetSubTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCusto
         int pageSize = 10,
         int pageNumber = 1,
         DateOnly? date = null
-    ) : base(
-        CalendarOfItemsQueryTypes.SubTask,
-        BuildDateRange(date),
-        pageSize <= 0 ? 10 : pageSize,
-        pageNumber <= 0 ? 1 : pageNumber,
-        CalendarOfItemsSortMode.NotSpecified,
-        "No results found",
-        BuildFilter(categoryIds)
     )
-    {
-    }
+        : base(
+            CalendarOfItemsQueryTypes.SubTask,
+            BuildDateRange(date),
+            pageSize <= 0 ? 10 : pageSize,
+            pageNumber <= 0 ? 1 : pageNumber,
+            CalendarOfItemsSortMode.NotSpecified,
+            "No results found",
+            BuildFilter(categoryIds)
+        ) { }
 
     private static DateOnlyRange BuildDateRange(DateOnly? date)
     {
@@ -38,12 +38,14 @@ public record GetSubTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCusto
 
         if (categoryIds.Count > 0)
         {
-            options.Add(new FilterRequest
-            {
-                Field = "category",
-                Operator = ComparisonType.In,
-                Value = categoryIds
-            });
+            options.Add(
+                new FilterRequest
+                {
+                    Field = "category",
+                    Operator = ComparisonType.In,
+                    Value = categoryIds,
+                }
+            );
         }
 
         return new CalendarOfItemsFilter(options);
