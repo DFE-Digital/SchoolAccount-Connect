@@ -67,7 +67,13 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
-        This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
+        This is a new service. Help us improve it and  
+        <a href="@feedbackUrl"
+           class="govuk-link"
+           target="_blank"
+           rel="noopener noreferrer">
+            give your feedback (opens in a new tab)
+        </a>
     </govuk-phase-banner>
 
     @await RenderSectionAsync("BeforeContent", false)
