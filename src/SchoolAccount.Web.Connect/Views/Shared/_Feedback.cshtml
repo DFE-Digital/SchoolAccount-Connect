@@ -1,32 +1,66 @@
+@using SchoolAccount.Application.Constants
 @{
-    var feedbackUrl = "https://digital-forms.education.gov.uk/7_RplP8Gef/give-feedback-on-dfe-connect";
-    var pageId = Context.Request.Path.ToString().ToLowerInvariant();
+    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
+        ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+
+    var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
+        .ToLowerInvariant();
+
+    var redirectUrl =
+        $"/feedback/exit?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}&returnUrl={Uri.EscapeDataString(feedbackUrl)}";
 }
 
-<section class="dfe-footer-feedback"
-         aria-label="Tell us what you think of DfE Connect"
-         data-feedback-component="footer"
+<section class="dfe-page-feedback"
+         aria-label="Page feedback"
+         data-feedback-component="page-useful"
          data-feedback-post-url="/feedback/page-useful"
-         data-feedback-variant="feedback.button">
+         data-page-id="@pageId"
+         data-cta-type="@AnalyticsCtaTypes.YesNo">
     <div class="govuk-width-container">
-        <div class="dfe-footer-feedback__row">
-            <div class="dfe-footer-feedback__left">
-                <h2 class="dfe-footer-feedback__heading">
-                    Tell us what you think of DfE Connect
-                </h2>
-            </div>
+        <div class="dfe-page-feedback__initial" data-feedback-initial>
+            <div class="dfe-page-feedback__row">
+                <div class="dfe-page-feedback__left">
+                    <span class="dfe-page-feedback__question">Is this page useful?</span>
 
-            <div class="dfe-footer-feedback__right">
-                <a class="govuk-button dfe-footer-feedback__button"
-                   data-feedback-button
-                   data-page-id="@pageId"
-                   data-feedback-value="feedback.banner.opened"
-                   data-feedback-action="feedback.banner.opened"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   href="@feedbackUrl">
-                    Give your feedback (opens in a new tab)
-                </a>
+                    <div class="dfe-page-feedback__choices" role="group" aria-label="Is this page useful?">
+                        <button type="button"
+                                class="dfe-page-feedback__choice"
+                                data-feedback-answer="@AnalyticsAnswers.Yes">
+                            Yes
+                        </button>
+
+                        <button type="button"
+                                class="dfe-page-feedback__choice"
+                                data-feedback-answer="@AnalyticsAnswers.No">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dfe-page-feedback__followup govuk-!-display-none"
+             data-feedback-followup
+             aria-live="polite">
+            <div class="dfe-page-feedback__followup-panel">
+                <h2 class="dfe-page-feedback__followup-heading">Help us improve DfE Connect</h2>
+
+                <p class="dfe-page-feedback__followup-body">
+                    To help us improve DfE Connect, we'd like to know more about your visit today.
+                    <a class="govuk-link"
+                       data-feedback-exit-link
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       href="@redirectUrl">
+                        Give your feedback (opens in a new tab)
+                    </a>.
+                </p>
+
+                <button type="button"
+                        class="govuk-button govuk-button--secondary dfe-page-feedback__cancel"
+                        data-feedback-cancel>
+                    Cancel
+                </button>
             </div>
         </div>
     </div>

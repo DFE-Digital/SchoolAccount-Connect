@@ -125,8 +125,7 @@ else
 @section Footer {
     @if (isAuthenticated)
     {
-        var useV2 = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectFeedback);
-        <partial name="_FeedbackV2"/>
+        <partial name="_Feedback"/>
     }
 
     <govuk-footer>
