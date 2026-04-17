@@ -4,12 +4,15 @@ using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
+using SchoolAccount.Web.Connect.Models.Categories;
 
 namespace SchoolAccount.Web.Connect.Builders.Categories;
 
-public class CategoryHubViewBuilder(IOrganisationContext organisationContext)
+public class CategoryHubViewBuilder(
+    CalendarOfItemsViewBuilder calendarOfItemsViewBuilder
+)
 {
-    public CalendarOfItemsViewModel Build(
+    public CategoryHubViewModel Build(
         CalendarOfItemsPagedResult items,
         Uri currentUri,
         CategoryType? category = null
@@ -27,8 +30,6 @@ public class CategoryHubViewBuilder(IOrganisationContext organisationContext)
             CanRenderFilter = false
         };
 
-        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-
-        return calendarOfItemsViewBuilder.Build(options, items, currentUri);
+        return CategoryHubViewModel.FromCalendarOfItemsViewModel(calendarOfItemsViewBuilder.Build(options, items, currentUri));
     }
 }

@@ -2,11 +2,12 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
+using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Models.Categories;
 
 namespace SchoolAccount.Web.Connect.Builders.Categories;
 
-public class CategoryListViewBuilder()
+public class CategoryListViewBuilder(IOrganisationContext organisationContext)
 {
     private readonly CategoryRowItemViewBuilder _rowViewBuilder = new();
     private readonly PaginationViewBuilder _paginationViewBuilder = new();
@@ -55,6 +56,7 @@ public class CategoryListViewBuilder()
             _paginationViewBuilder.Build(result, currentUri)
         )
         {
+            Caption = organisationContext.Organisation.Name,
             NoResultsMessage = options.NoResultsMessage,
             Heading = options.Heading,
             SubHeading = options.SubHeading,

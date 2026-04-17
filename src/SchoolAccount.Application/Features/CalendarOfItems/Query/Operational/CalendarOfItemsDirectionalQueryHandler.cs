@@ -49,6 +49,7 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             PageSize = query.PageSize,
             SortMode = query.SortMode,
             Filter = filter,
+            CustomOrderByFunction = query.CustomOrderBy
         };
 
         return await aggregator.Query(model, cancellationToken);

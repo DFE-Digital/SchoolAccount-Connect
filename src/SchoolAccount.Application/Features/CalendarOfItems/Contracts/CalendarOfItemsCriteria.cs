@@ -14,4 +14,5 @@ public class CalendarOfItemsCriteria
     public CalendarOfItemsSortMode SortMode { get; init; }
     public CalendarOfItemsFilter Filter { get; init; } = new([]);
     public bool IncludeFilterOptions { get; init; } = true;
+    public CalendarOfItemsOrderFunction? CustomOrderByFunction { get; init; }
 }

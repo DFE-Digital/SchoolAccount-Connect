@@ -44,7 +44,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
 
         // Assert
         request.Should().NotBeNull();
-        request.QuerySelector(".govuk-heading-xl").Should().NotBeNull().And.HaveTextContent("Calendar of tasks");
+        request.QuerySelector(".govuk-heading-l").Should().NotBeNull().And.HaveTextContent("Calendar of tasks");
     }
 
     [Fact]

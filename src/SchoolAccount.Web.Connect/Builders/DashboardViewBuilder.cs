@@ -9,17 +9,17 @@ using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Builders;
 
-public class DashboardViewBuilder
+public class DashboardViewBuilder(
+    CalendarOfItemsViewBuilder calendarOfItemsViewBuilder,
+    CategoryListViewBuilder categoryListViewBuilder
+)
 {
     public DashboardViewModel Build(
         CalendarOfItemsPagedResult calendarOfItemsPagedResult,
         CategoryPagedResult categoryPagedResult,
-        IOrganisationContext organisationContext,
         Uri currentUri
     )
     {
-        var calendarOfItemsViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        var categoryListViewBuilder = new CategoryListViewBuilder();
         var dashboardViewItems = new Collection<DashboardViewItem>();
 
         dashboardViewItems.Add(

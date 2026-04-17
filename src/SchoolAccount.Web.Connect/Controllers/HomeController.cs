@@ -22,7 +22,7 @@ public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
     IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
-    IOrganisationContext organisationContext
+    DashboardViewBuilder dashboardViewBuilder
 ) : Controller
 {
     [HttpGet]
@@ -50,13 +50,7 @@ public sealed class HomeController(
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var dashboardViewBuilder = new DashboardViewBuilder();
-        var viewModel = dashboardViewBuilder.Build(
-            calendarOfItemsResult.Value,
-            categoryResult.Value,
-            organisationContext,
-            currentUri
-        );
+        var viewModel = dashboardViewBuilder.Build(calendarOfItemsResult.Value, categoryResult.Value, currentUri);
 
         return View(viewModel);
     }

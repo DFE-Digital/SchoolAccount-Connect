@@ -13,5 +13,6 @@ public abstract record CalendarOfItemsDirectionalQuery(
     int PageSize,
     int PageNumber,
     CalendarOfItemsSortMode SortMode,
-    CalendarOfItemsFilter? Filter = null
+    CalendarOfItemsFilter? Filter = null,
+    CalendarOfItemsOrderFunction? CustomOrderBy = null
 ) : IQuery<CalendarOfItemsPagedResult>;

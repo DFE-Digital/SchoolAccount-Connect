@@ -8,4 +8,5 @@ public enum CalendarOfItemsViewModes
     Backward = 1 << 1,
     Custom = 1 << 2,
     Standalone = 1 << 3,
+    Hub = 1 << 4,
 }

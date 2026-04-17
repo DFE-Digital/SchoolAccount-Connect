@@ -5,19 +5,26 @@
 }
 
 <div class="govuk-grid-row">
+    
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Welcome to DfE Connect</h1>
         <p class="govuk-body-l govuk-!-margin-bottom-8">Manage your tasks, access services and find related guidance to
             help you run your school and work with us.</p>
     </div>
-</div>
 
-@foreach (var view in Model.Value)
-{
-    <div class="govuk-grid-row">
+    @foreach (var view in Model.Value)
+    {
+        if (Model.ShowDividerLine(view))
+        {
+            <div class="govuk-grid-column-two-thirds">
+                <partial name="SVG/DeviderLine"></partial>
+            </div>
+        }
+
         <div class="govuk-grid-column-two-thirds">
             <partial name="@view.View" model="@view.ViewModel"/>
         </div>
-    </div>
-}
+    }
+    
+</div>
 

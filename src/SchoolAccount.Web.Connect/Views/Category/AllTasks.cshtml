@@ -1,6 +1,13 @@
 @using SchoolAccount.Web.Connect
-@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+@model SchoolAccount.Web.Connect.Models.Categories.CategoryHubViewModel
 @{
     ViewData["Title"] = "Explore Categories";
 }
-<partial name="@ViewAddressConstraints.Categories.Hub" model="@Model"/>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        
+        <partial name="@ViewAddressConstraints.Categories.Hub" model="@Model"/>
+        
+    </div>
+</div>

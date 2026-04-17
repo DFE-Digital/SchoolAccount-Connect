@@ -13,5 +13,6 @@ public abstract record CalendarOfItemsCustomQuery(
     int PageNumber,
     CalendarOfItemsSortMode SortMode,
     string NoResultMessage,
-    CalendarOfItemsFilter? Filter = null
+    CalendarOfItemsFilter? Filter = null,
+    CalendarOfItemsOrderFunction? CustomOrderBy = null
 ) : IQuery<CalendarOfItemsPagedResult>;

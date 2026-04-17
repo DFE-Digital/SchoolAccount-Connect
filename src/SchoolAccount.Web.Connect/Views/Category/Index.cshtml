@@ -3,4 +3,11 @@
 @{
     ViewData["Title"] = "Explore Categories";
 }
-<partial name="@ViewAddressConstraints.Categories.List" model="@Model"/>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        
+        <partial name="@ViewAddressConstraints.Categories.List" model="@Model"/>
+
+    </div>
+</div>

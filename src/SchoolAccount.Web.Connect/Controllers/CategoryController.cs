@@ -20,7 +20,8 @@ public class CategoryController(
     IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<GetCategoryByIdQuery, CategoryType> exploreCategoryQueryHandler,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemsQueryHandler,
-    IOrganisationContext organisationContext
+    CategoryHubViewBuilder categoryHubViewBuilder,
+    CategoryListViewBuilder categoryListViewBuilder
 ) : Controller
 {
     [HttpGet(RouteConstants.Category.Index)]
@@ -43,8 +44,7 @@ public class CategoryController(
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewBuilder = new CategoryListViewBuilder();
-        var viewModel = viewBuilder.BuildForPage(result.Value, CategoryListViewModes.Standalone, currentUri);
+        var viewModel = categoryListViewBuilder.BuildForPage(result.Value, CategoryListViewModes.Standalone, currentUri);
 
         return View(viewModel);
     }
@@ -56,15 +56,18 @@ public class CategoryController(
         CancellationToken cancellationToken = default
     )
     {
-        var category = await exploreCategoryQueryHandler.Handle(new GetCategoryByIdQuery(id), cancellationToken);
+        var category = await exploreCategoryQueryHandler.Handle(
+            new GetCategoryByIdQuery(id),
+            cancellationToken);
 
         if (category.IsFailure)
         {
-            throw new ApplicationException(category.Error.Description);
+            //throw new ApplicationException(category.Error.Description);
+            return NotFound();
         }
 
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetSubTasksByCategoriesCalendarOfItemsQuery(
+            new GetTasksByCategoriesCalendarOfItemsQuery(
                 category.Value.AllCategoryIds,
                 query.PageSize,
                 query.PageNumber
@@ -74,12 +77,12 @@ public class CategoryController(
 
         if (results.IsFailure)
         {
-            throw new ApplicationException(results.Error.Description);
+            //throw new ApplicationException(category.Error.Description);
+            return NotFound();
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewBuilder = new CategoryHubViewBuilder(organisationContext);
-        var viewModel = viewBuilder.Build(results.Value, currentUri, category.Value);
+        var viewModel = categoryHubViewBuilder.Build(results.Value, currentUri, category.Value);
 
         return View(viewModel);
     }
@@ -91,18 +94,21 @@ public class CategoryController(
     )
     {
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetSubTasksByCategoriesCalendarOfItemsQuery([], query.PageSize, query.PageNumber),
-            cancellationToken
-        );
+            new GetTasksByCategoriesCalendarOfItemsQuery(
+                [],
+                query.PageSize,
+                query.PageNumber
+            ),
+            cancellationToken);
 
         if (results.IsFailure)
         {
-            throw new ApplicationException(results.Error.Description);
+            //throw new ApplicationException(category.Error.Description);
+            return NotFound();
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewBuilder = new CategoryHubViewBuilder(organisationContext);
-        var viewModel = viewBuilder.Build(results.Value, currentUri);
+        var viewModel = categoryHubViewBuilder.Build(results.Value, currentUri);
 
         return View(viewModel);
     }

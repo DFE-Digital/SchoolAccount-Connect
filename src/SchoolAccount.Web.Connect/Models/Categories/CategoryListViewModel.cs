@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Category.Enums;
 
@@ -27,4 +28,7 @@ public record CategoryListViewModel(
     public string? Caption { get; init; }
     public bool HasCaption => !string.IsNullOrEmpty(Caption);
     public bool ShowPageHeading => HasCaption || HasHeading || HasSubHeading;
+    public bool IsStandalone => ViewModes.HasFlag(CategoryListViewModes.Standalone);
+    public string HeadingStyles => "-l";
+    public string SubHeadingStyles => IsStandalone ? "-l" : string.Empty;
 }

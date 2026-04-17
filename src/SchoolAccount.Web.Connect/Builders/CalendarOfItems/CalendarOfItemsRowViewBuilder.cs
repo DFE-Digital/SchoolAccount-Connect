@@ -9,7 +9,7 @@ namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 
 public class CalendarOfItemsRowViewBuilder
 {
-    public CalendarOfItemsRowItemViewModel Build(CalendarOfItemsViewModes mode, CalendarOfItemsRow row)
+    public CalendarOfItemsRowItemViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsRow row)
     {
         var url = DetermineUri(
             row.Type,
@@ -20,7 +20,9 @@ public class CalendarOfItemsRowViewBuilder
         return new CalendarOfItemsRowItemViewModel(row.Name, url)
         {
             Description = row.Description,
-            DateText = GenerateAvailableOrDueMessage(row),
+            DateText = options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)
+                ? GenerateAvailableOrDueMessage(row)
+                : null,
         };
     }
 

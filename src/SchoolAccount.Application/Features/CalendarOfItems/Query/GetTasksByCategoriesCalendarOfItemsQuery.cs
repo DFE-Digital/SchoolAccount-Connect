@@ -8,23 +8,25 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public record GetSubTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQuery
+public record GetTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQuery
 {
-    public GetSubTasksByCategoriesCalendarOfItemsQuery(
+    public GetTasksByCategoriesCalendarOfItemsQuery(
         Collection<int> categoryIds,
         int pageSize = 10,
         int pageNumber = 1,
         DateOnly? date = null
+    ) : base(
+        CalendarOfItemsQueryTypes.Task,
+        BuildDateRange(date),
+        pageSize <= 0 ? 10 : pageSize,
+        pageNumber <= 0 ? 1 : pageNumber,
+        CalendarOfItemsSortMode.NotSpecified,
+        "No results found",
+        BuildFilter(categoryIds),
+        x => x.OrderBy(o => o.Name)
     )
-        : base(
-            CalendarOfItemsQueryTypes.SubTask,
-            BuildDateRange(date),
-            pageSize <= 0 ? 10 : pageSize,
-            pageNumber <= 0 ? 1 : pageNumber,
-            CalendarOfItemsSortMode.NotSpecified,
-            "No results found",
-            BuildFilter(categoryIds)
-        ) { }
+    {
+    }
 
     private static DateOnlyRange BuildDateRange(DateOnly? date)
     {

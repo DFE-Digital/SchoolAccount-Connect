@@ -29,7 +29,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
                 .Payload.GroupBy(x => options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty)
                 .Select(x => new CalendarOfItemsRowGroupViewModel(
                     x.Key,
-                    x.Select(r => _rowViewBuilder.Build(options.ViewMode, r))
+                    x.Select(r => _rowViewBuilder.Build(options, r))
                 ))
                 .ToCollection();
         }
