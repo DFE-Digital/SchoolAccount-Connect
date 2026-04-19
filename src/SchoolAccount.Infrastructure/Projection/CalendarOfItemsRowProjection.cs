@@ -44,7 +44,7 @@ public static class CalendarOfItemsRowProjection
             }),
         };
     }
-    
+
     public static Expression<Func<TaskEntity, CalendarOfItemsRow>> FromTask()
     {
         return x => new CalendarOfItemsRow

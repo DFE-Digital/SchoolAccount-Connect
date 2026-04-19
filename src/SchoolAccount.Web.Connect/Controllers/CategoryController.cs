@@ -44,7 +44,11 @@ public class CategoryController(
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewModel = categoryListViewBuilder.BuildForPage(result.Value, CategoryListViewModes.Standalone, currentUri);
+        var viewModel = categoryListViewBuilder.BuildForPage(
+            result.Value,
+            CategoryListViewModes.Standalone,
+            currentUri
+        );
 
         return View(viewModel);
     }
@@ -56,9 +60,7 @@ public class CategoryController(
         CancellationToken cancellationToken = default
     )
     {
-        var category = await exploreCategoryQueryHandler.Handle(
-            new GetCategoryByIdQuery(id),
-            cancellationToken);
+        var category = await exploreCategoryQueryHandler.Handle(new GetCategoryByIdQuery(id), cancellationToken);
 
         if (category.IsFailure)
         {
@@ -94,12 +96,9 @@ public class CategoryController(
     )
     {
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetTasksByCategoriesCalendarOfItemsQuery(
-                [],
-                query.PageSize,
-                query.PageNumber
-            ),
-            cancellationToken);
+            new GetTasksByCategoriesCalendarOfItemsQuery([], query.PageSize, query.PageNumber),
+            cancellationToken
+        );
 
         if (results.IsFailure)
         {

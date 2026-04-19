@@ -16,7 +16,7 @@ internal static class CalendarOfItemsQueryableExtensions
         {
             return customOrderBy(query);
         }
-        
+
         return viewModes switch
         {
             CalendarOfItemsViewModes.Backward => sortMode switch

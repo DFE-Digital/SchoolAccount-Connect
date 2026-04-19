@@ -15,18 +15,17 @@ public record GetTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQu
         int pageSize = 10,
         int pageNumber = 1,
         DateOnly? date = null
-    ) : base(
-        CalendarOfItemsQueryTypes.Task,
-        BuildDateRange(date),
-        pageSize <= 0 ? 10 : pageSize,
-        pageNumber <= 0 ? 1 : pageNumber,
-        CalendarOfItemsSortMode.NotSpecified,
-        "No results found",
-        BuildFilter(categoryIds),
-        x => x.OrderBy(o => o.Name)
     )
-    {
-    }
+        : base(
+            CalendarOfItemsQueryTypes.Task,
+            BuildDateRange(date),
+            pageSize <= 0 ? 10 : pageSize,
+            pageNumber <= 0 ? 1 : pageNumber,
+            CalendarOfItemsSortMode.NotSpecified,
+            "No results found",
+            BuildFilter(categoryIds),
+            x => x.OrderBy(o => o.Name)
+        ) { }
 
     private static DateOnlyRange BuildDateRange(DateOnly? date)
     {

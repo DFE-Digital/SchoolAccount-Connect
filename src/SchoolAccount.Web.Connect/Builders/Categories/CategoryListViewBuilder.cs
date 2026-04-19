@@ -30,10 +30,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
         return Build(options, items, currentUri);
     }
 
-    private CategoryListViewModel Build(
-        CategoryListViewOptions options,
-        CategoryPagedResult result,
-        Uri currentUri)
+    private CategoryListViewModel Build(CategoryListViewOptions options, CategoryPagedResult result, Uri currentUri)
     {
         Collection<CategoryListRowGroupViewModel> rows = [];
 
@@ -41,10 +38,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
         {
             rows = result
                 .Payload.GroupBy(x => options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty)
-                .Select(x => new CategoryListRowGroupViewModel(
-                    x.Key,
-                    x.Select(_rowViewBuilder.Build)
-                ))
+                .Select(x => new CategoryListRowGroupViewModel(x.Key, x.Select(_rowViewBuilder.Build)))
                 .ToCollection();
         }
 

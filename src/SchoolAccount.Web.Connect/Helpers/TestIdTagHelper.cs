@@ -6,7 +6,7 @@ namespace SchoolAccount.Web.Connect.Helpers;
 public class TestIdTagHelper(IWebHostEnvironment env) : TagHelper
 {
     private const string TestIdTagName = "test-id";
-    
+
     [HtmlAttributeName(TestIdTagName)]
     public string? TestId { get; set; }
 

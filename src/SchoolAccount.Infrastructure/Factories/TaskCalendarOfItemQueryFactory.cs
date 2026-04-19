@@ -24,10 +24,9 @@ public class TaskCalendarOfItemQueryFactory(
     {
         var accessibleTags = applicationDbContext.SchoolTypeTagMappings.AsQueryable();
         return applicationDbContext
-            .Tasks
-            .AsNoTracking()
+            .Tasks.AsNoTracking()
             .Include(x => x.SubTasks)
-            .ThenInclude(x => x.TagsSourceMappings)
+                .ThenInclude(x => x.TagsSourceMappings)
             .Include(x => x.TypeTaskMappings)
             .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
             .Where(TaskEntitySpecifications.IsVisible())

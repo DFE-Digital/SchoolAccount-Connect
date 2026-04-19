@@ -12,9 +12,6 @@ public class CategoryRowItemViewBuilder
 
     public CategoryListRowItemViewModel Build(CategoryRow row)
     {
-        return new CategoryListRowItemViewModel(row.Name, DetermineUri(row.Id))
-        {
-            Description = row.Description,
-        };
+        return new CategoryListRowItemViewModel(row.Name, DetermineUri(row.Id)) { Description = row.Description };
     }
 }

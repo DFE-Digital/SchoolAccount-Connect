@@ -7,7 +7,7 @@ public static class ViewAddressConstraints
         public const string Widget = "~/Views/Shared/CalendarOfItems/Widget.cshtml";
         public const string Tab = "~/Views/Shared/CalendarOfItems/Tab.cshtml";
     }
-    
+
     internal static class Categories
     {
         public const string List = "~/Views/Shared/Category/CategoryList.cshtml";

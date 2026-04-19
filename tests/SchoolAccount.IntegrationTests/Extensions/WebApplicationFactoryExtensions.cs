@@ -6,7 +6,12 @@ namespace SchoolAccount.IntegrationTests.Extensions;
 
 internal static class WebApplicationFactoryExtensions
 {
-    public static async Task<IDocument> RequestPageAsync<T>(this WebApplicationFactory<T> factory, string uri, WebApplicationFactoryClientOptions? options = null) where T : class
+    public static async Task<IDocument> RequestPageAsync<T>(
+        this WebApplicationFactory<T> factory,
+        string uri,
+        WebApplicationFactoryClientOptions? options = null
+    )
+        where T : class
     {
         var client = factory.CreateClient(options ?? factory.ClientOptions);
         var requestUri = new Uri(uri, UriKind.Relative);
@@ -16,7 +21,8 @@ internal static class WebApplicationFactoryExtensions
         {
             var errorHtml = await response.Content.ReadAsStringAsync();
             throw new HttpRequestException(
-                $"Request to {uri} failed with {response.StatusCode}.\nResponse Content:\n{errorHtml}");
+                $"Request to {uri} failed with {response.StatusCode}.\nResponse Content:\n{errorHtml}"
+            );
         }
 
         var html = await response.Content.ReadAsStringAsync();

@@ -13,9 +13,9 @@ public static class TaskEntitySpecifications
         SchoolType type
     )
     {
-        return t => t.SubTasks
-            .Any(sub => sub.TagsSourceMappings
-                .Any(tsm =>
+        return t =>
+            t.SubTasks.Any(sub =>
+                sub.TagsSourceMappings.Any(tsm =>
                     schoolTypeMappings.Any(st => st.SchoolTypeId == (int)type && st.TagId == tsm.TagId)
                 )
             );
@@ -23,8 +23,9 @@ public static class TaskEntitySpecifications
 
     public static Expression<Func<TaskEntity, bool>> IsVisible()
     {
-        return t => t.SubTasks.Any(sub => 
-            sub.WorkflowState == WorkflowState.Published || 
-            sub.WorkflowState == WorkflowState.Expired);
+        return t =>
+            t.SubTasks.Any(sub =>
+                sub.WorkflowState == WorkflowState.Published || sub.WorkflowState == WorkflowState.Expired
+            );
     }
 }

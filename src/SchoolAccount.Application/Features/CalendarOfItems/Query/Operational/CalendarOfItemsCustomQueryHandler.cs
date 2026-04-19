@@ -23,7 +23,7 @@ public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggreg
             PageSize = query.PageSize,
             SortMode = query.SortMode,
             Filter = query.Filter ?? new([]),
-            CustomOrderByFunction = query.CustomOrderBy
+            CustomOrderByFunction = query.CustomOrderBy,
         };
 
         var result = await aggregator.Query(model, cancellationToken);

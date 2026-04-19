@@ -10,7 +10,7 @@ public static class HttpRequestExtensions
             Host = request.Host.Host,
             Port = request.Host.Port ?? -1,
             Path = request.Path,
-            Query = request.QueryString.ToUriComponent()
+            Query = request.QueryString.ToUriComponent(),
         };
 
         return builder.Uri;

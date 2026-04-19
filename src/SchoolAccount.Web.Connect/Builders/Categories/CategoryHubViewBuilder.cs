@@ -8,15 +8,9 @@ using SchoolAccount.Web.Connect.Models.Categories;
 
 namespace SchoolAccount.Web.Connect.Builders.Categories;
 
-public class CategoryHubViewBuilder(
-    CalendarOfItemsViewBuilder calendarOfItemsViewBuilder
-)
+public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsViewBuilder)
 {
-    public CategoryHubViewModel Build(
-        CalendarOfItemsPagedResult items,
-        Uri currentUri,
-        CategoryType? category = null
-    )
+    public CategoryHubViewModel Build(CalendarOfItemsPagedResult items, Uri currentUri, CategoryType? category = null)
     {
         var options = new CalendarOfItemViewOptions
         {
@@ -24,12 +18,16 @@ public class CategoryHubViewBuilder(
             Tabs = [],
             Description = $"Explore all tasks and support",
             Heading = category is not null ? category.DisplayName : "All tasks",
-            SubHeading = category is not null ? category.HubViewDescription : "See all your tasks, returns and policies from DfE.",
+            SubHeading = category is not null
+                ? category.HubViewDescription
+                : "See all your tasks, returns and policies from DfE.",
             LastUpdatedMessage = "Last updated: today",
             NoResultsMessage = "No results found",
-            CanRenderFilter = false
+            CanRenderFilter = false,
         };
 
-        return CategoryHubViewModel.FromCalendarOfItemsViewModel(calendarOfItemsViewBuilder.Build(options, items, currentUri));
+        return CategoryHubViewModel.FromCalendarOfItemsViewModel(
+            calendarOfItemsViewBuilder.Build(options, items, currentUri)
+        );
     }
 }

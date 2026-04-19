@@ -18,8 +18,7 @@ public static class AngleSharpExtensions
         var paginationContainer = assertions.Subject as IElement;
         paginationContainer.Should().NotBeNull("the pagination container was not found");
 
-        var labels = paginationContainer.QuerySelectorAll("a")
-            .Select(a => a.TextContent.Trim());
+        var labels = paginationContainer.QuerySelectorAll("a").Select(a => a.TextContent.Trim());
 
         labels.Should().Equal(expectedLabels);
     }
@@ -29,10 +28,14 @@ public static class AngleSharpExtensions
         var container = assertions.Subject as IElement;
         container.Should().NotBeNull("the tabs container was not found");
 
-        var tabs = container.QuerySelectorAll(".moj-sub-navigation__link")
-            .Select(t => t.TextContent.Trim());
+        var tabs = container.QuerySelectorAll(".moj-sub-navigation__link").Select(t => t.TextContent.Trim());
 
-        tabs.Should().BeEquivalentTo(expectedTabLabels, options => options.WithStrictOrdering(), "the tabs should match the expected labels in order");
+        tabs.Should()
+            .BeEquivalentTo(
+                expectedTabLabels,
+                options => options.WithStrictOrdering(),
+                "the tabs should match the expected labels in order"
+            );
     }
 
     public static void HaveSelectedTab(this ObjectAssertions assertions, string expectedLabel)

@@ -3,9 +3,7 @@ using X.PagedList;
 
 namespace SchoolAccount.Application.Features.Category.Contracts;
 
-public class CategoryPagedResult(
-    IPagedList<CategoryRow> payload)
-    : IPagedList
+public class CategoryPagedResult(IPagedList<CategoryRow> payload) : IPagedList
 {
     public IReadOnlyCollection<CategoryRow> Payload { get; } = payload;
     public int PageCount { get; } = payload.PageCount;

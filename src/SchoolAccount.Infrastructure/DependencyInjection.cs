@@ -101,7 +101,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     private static void AddFilterableServices(this IServiceCollection services)
     {
         services.Scan(scan =>
@@ -113,7 +113,7 @@ public static class DependencyInjection
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
-        
+
         services.AddScoped<FilterableFieldRegistry>();
     }
 }

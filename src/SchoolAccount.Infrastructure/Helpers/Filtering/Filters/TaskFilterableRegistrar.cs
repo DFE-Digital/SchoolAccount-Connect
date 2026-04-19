@@ -16,11 +16,11 @@ public class TaskFilterableRegistrar : IFilterableRegistrar
 
     public Type TypeBeingRegistered => typeof(TaskEntity);
 
-    public FieldSelector FieldSelectorsBeingRegistered => new()
-    {
-        [Keys.Categories] =
-            (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.TypeTaskMappings
-                .Select(ttm => ttm.TypeId)),
-        [Keys.State] = (Expression<Func<TaskEntity, WorkflowState>>)(x => x.WorkflowState),
-    };
+    public FieldSelector FieldSelectorsBeingRegistered =>
+        new()
+        {
+            [Keys.Categories] =
+                (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.TypeTaskMappings.Select(ttm => ttm.TypeId)),
+            [Keys.State] = (Expression<Func<TaskEntity, WorkflowState>>)(x => x.WorkflowState),
+        };
 }

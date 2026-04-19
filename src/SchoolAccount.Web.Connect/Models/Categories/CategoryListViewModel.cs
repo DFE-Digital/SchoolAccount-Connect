@@ -17,7 +17,8 @@ public record CategoryListViewModel(
     string? Description,
     CategoryListViewModes ViewModes,
     ICollection<CategoryListRowGroupViewModel> Categories,
-    PaginationViewModel Pagination)
+    PaginationViewModel Pagination
+)
 {
     public string? Heading { get; init; }
     public bool HasHeading => !string.IsNullOrEmpty(Heading);

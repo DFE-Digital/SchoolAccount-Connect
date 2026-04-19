@@ -13,12 +13,12 @@ public static class DateOnlyExtensions
     }
 
     public static DateOnly Today => new DateOnly(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
-    
+
     public static string ToGdsDateString(this DateOnly? date)
     {
         return date?.ToString(FormattingConstants.DateMonthYearFormat, null) ?? string.Empty;
     }
-    
+
     public static string ToGdsMonthString(this DateOnly? date)
     {
         return date?.ToString(FormattingConstants.MonthYearFormat, null) ?? string.Empty;

@@ -4,10 +4,7 @@ using SchoolAccount.Application.Features.Shared.Filtering;
 
 namespace SchoolAccount.Web.Connect.Models;
 
-public record FilterCheckboxViewModel(
-    Filterable Filter,
-    Collection<FilterableItem> Children
-)
+public record FilterCheckboxViewModel(Filterable Filter, Collection<FilterableItem> Children)
 {
     public static FilterCheckboxViewModel Parent(Filterable filterable)
     {

@@ -10,8 +10,8 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 public class CalendarOfItemsPagedResult(
     CalendarOfItemsCriteria criteria,
     IPagedList<CalendarOfItemsRow> payload,
-    Collection<Filterable> filter)
-    : IPagedList
+    Collection<Filterable> filter
+) : IPagedList
 {
     public CalendarOfItemsViewModes ViewModes { get; } = criteria.ViewModes;
     public DateTime GeneratedDate { get; } = DateTime.UtcNow;
