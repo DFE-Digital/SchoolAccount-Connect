@@ -16,7 +16,12 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
         CancellationToken cancellationToken
     )
     {
-        var result = await applicationDbContext
+        var extraCategory = new CategoryRow
+        {
+            Name = "All tasks"
+        };
+
+        var dbCategories = await applicationDbContext
             .Types.AsNoTracking()
             .Where(x => x.TypeGrouping != null && x.TypeGrouping.Id == 1)
             .Select(x => new CategoryRow
@@ -25,7 +30,12 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
                 Name = x.DisplayName,
                 Description = x.Description,
             })
-            .PaginateAsync(query.PageSize, query.PageNumber, cancellationToken);
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
+
+        var result = new[] { extraCategory }
+            .Concat(dbCategories)
+            .PaginateForExtraItem(query.PageSize, query.PageNumber);
 
         return Result.Success(new CategoryPagedResult(result));
     }

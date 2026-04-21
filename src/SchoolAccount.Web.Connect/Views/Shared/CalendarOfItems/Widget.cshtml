@@ -1,61 +1,29 @@
 @using SchoolAccount.Web.Connect
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
-<div class="govuk-grid-row">
-    
-    <form method="get">
-        
-        <input type="hidden" asp-for="ViewModes" />
-        
-        @if (Model.ShowPageHeading)
-        {
-            <div class="govuk-grid-column-two-thirds">
-                @if (Model.HasCaption)
-                {
-                    <p class="govuk-caption govuk-caption-l">@Model.Caption</p>
-                }
-                @if (Model.HasHeading)
-                {
-                    <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Heading</h1>
-                }
-                @if (Model.HasSubHeading)
-                {
-                    <p class="govuk-body">@Model.SubHeading</p>
-                }
-            </div>
-        }
+<form method="get">
 
-        <div class="govuk-grid-column-two-thirds @(Model.IsStandalone ? "govuk-!-margin-top-5" : string.Empty)">
-            @if (Model.HasTabs)
-            {
-                <div class="dfe-tabs">
-                    
-                    <moj-sub-navigation>
-                        @foreach (var tab in Model.Tabs)
-                        {
-                            <moj-sub-navigation-item href="@tab.Href" current="@tab.IsSelected">@tab.Label</moj-sub-navigation-item>
-                        }
-                    </moj-sub-navigation>
+    <input type="hidden" asp-for="ViewModes"/>
+    @if (Model.HasTabs)
+    {
+        <div class="dfe-tabs">
 
-                    <div class="dfe-tabs__panel">
-                        <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
-                    </div>
+            <moj-sub-navigation>
+                @foreach (var tab in Model.Tabs)
+                {
+                    <moj-sub-navigation-item href="@tab.Href"
+                                             current="@tab.IsSelected">@tab.Label</moj-sub-navigation-item>
+                }
+            </moj-sub-navigation>
 
-                </div>
-            }
-            else
-            {
+            <div class="dfe-tabs__panel">
                 <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
-            }
-        </div>
-
-        @if (Model.HasFilters)
-        {
-            <div class="govuk-grid-column-one-third">
-                <partial name="_Filtration" model="Model.Filters"/>
             </div>
-        }
 
-    </form>
-
-</div>
+        </div>
+    }
+    else
+    {
+        <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
+    }
+</form>

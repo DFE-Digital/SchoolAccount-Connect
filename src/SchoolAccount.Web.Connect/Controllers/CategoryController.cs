@@ -8,7 +8,6 @@ using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Category.Query;
-using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Categories;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;

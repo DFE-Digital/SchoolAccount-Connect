@@ -41,7 +41,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             options.Tabs ?? [],
             rows,
             _paginationViewBuilder.Build(result, currentUri),
-            FiltrationViewModel.Build(currentUri, result.Filter)
+            FiltrationViewModel.Build(options.ViewMode, currentUri, result.Filter)
         )
         {
             GeneratedAt = result.GeneratedDate,

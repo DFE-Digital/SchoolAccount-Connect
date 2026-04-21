@@ -1,25 +1,8 @@
-@model SchoolAccount.Web.Connect.Models.Categories.CategoryHubViewModel
+@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
 <form method="get">
-            
     <input type="hidden" asp-for="@Model.ViewModes"/>
         
-    @if (Model.ShowPageHeading)
-    {
-        if (Model.HasCaption)
-        {
-            <p class="govuk-caption govuk-caption@(Model.HeadingStyles)">@Model.Caption</p>
-        }
-        if (Model.HasHeading)
-        {
-            <h1 class="govuk-heading govuk-heading@(Model.HeadingStyles) govuk-!-padding-top-0 @(!Model.IsStandalone ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Heading</h1>
-        }
-        if (Model.HasSubHeading)
-        {
-            <p class="govuk-body">@Model.SubHeading</p>
-        }
-    }
-
     <ul class="govuk-task-list">
         @if (Model.Pagination.TotalItemCount > 0)
         {
@@ -48,10 +31,12 @@
                                 <strong>@row.DateText</strong>
                             </div>
                         </div>
-
-                        <div class="govuk-task-list__status">
-                            <partial name="SVG/ArrowRight"/>
-                        </div>
+                        @if (row.ShowTag)
+                        {
+                            <div class="govuk-task-list__status">
+                                <govuk-tag class="@row.TagTheme">@row.TagValue</govuk-tag>
+                            </div>
+                        }
                     </li>
                 }
             }
@@ -64,5 +49,4 @@
         }
     </ul>
     <partial name="_Pagination" model="@Model.Pagination"/>
-
 </form>

@@ -1,82 +1,94 @@
 @using SchoolAccount.Application.Features.Category.Enums
 @model SchoolAccount.Web.Connect.Models.Categories.CategoryListViewModel
 
-<form method="get">
-    
-    <input type="hidden" asp-for="ViewModes"/>
-    
-    @if (Model.ShowPageHeading)
-    {
-        if (Model.IsStandalone && Model.HasCaption)
-        {
-            <p class="govuk-caption govuk-caption@(Model.HeadingStyles)">@Model.Caption</p>
-        }
-
-        if (Model.HasHeading)
-        {
-            <h1 class="govuk-heading govuk-heading@(Model.HeadingStyles) govuk-!-padding-top-0 @(!Model.IsStandalone ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Heading</h1>
-        }
-
-        if (Model.HasSubHeading)
-        {
-            <p class="govuk-body">@Model.SubHeading</p>
-        }
+<style>
+    .govuk-task-list__item--with-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-    
-    <ul class="govuk-task-list">
-        <li class="govuk-task-list__item govuk-task-list__item--with-link">
-            <a class="govuk-link govuk-task-list__link" href="/categories/all-tasks">
-                All tasks
-            </a>
-            <div class="govuk-task-list__status">
-                <partial name="SVG/ArrowRight"/>
-            </div>
-        </li>
-        @if (Model.Pagination.TotalItemCount > 0)
+
+    .govuk-task-list__name-and-hint {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .govuk-task-list__status {
+        flex-shrink: 0;
+        margin-left: 15px;
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<input type="hidden" asp-for="ViewModes"/>
+
+@if (!Model.ShowPageHeading)
+{
+    @if (Model.HasTitle)
+    {
+        <h2 class="govuk-heading govuk-heading-l govuk-!-margin-top-2 govuk-!-margin-bottom-1">@Model.Title</h2>
+    }
+
+    @if (Model.HasDescription)
+    {
+        <p class="govuk-body govuk-body-l ">@Model.Description</p>
+    }
+}
+
+<ul class="govuk-task-list ">
+    @if (Model.Pagination.TotalItemCount > 0)
+    {
+        @foreach (var group in Model.Categories)
         {
-            foreach (var group in Model.Categories)
+            if (group.HasDisplayValue)
             {
-                if (group.HasDisplayValue)
-                {
-                    <li class="govuk-task-list__item dfe-task-list__group">
-                        <div class="govuk-task-list__name-and-hint">
-                            <strong>@group.DisplayValue</strong>
-                        </div>
-                    </li>
-                }
+                <li class="govuk-task-list__item dfe-task-list__group">
+                    <div class="govuk-task-list__name-and-hint">
+                        <strong>@group.DisplayValue</strong>
+                    </div>
+                </li>
+            }
 
-                foreach (var row in group)
-                {
-                    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                        <div class="govuk-task-list__name-and-hint">
-                            <a class="govuk-link govuk-task-list__link" href="@row.Url">
-                                @row.Name
-                            </a>
+            foreach (var row in group)
+            {
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" href="@row.Url">
+                            @row.Name
+                        </a>
 
-                            @if (!string.IsNullOrEmpty(row.Description))
-                            {
-                                <div class="govuk-task-list__hint">
-                                    @row.Description
-                                </div>
-                            }
-                        </div>
+                        @if (!string.IsNullOrEmpty(row.Description))
+                        {
+                            <div class="govuk-task-list__hint">
+                                @row.Description
+                            </div>
+                        }
+                    </div>
 
-                        <div class="govuk-task-list__status">
-                            <partial name="SVG/ArrowRight"/>
-                        </div>
-                    </li>
-                }
+                    <div class="govuk-task-list__status">
+                        <partial name="SVG/ChevronRight"/>
+                    </div>
+                </li>
             }
         }
-        else if (Model.HasNoResultsMessage)
-        {
-            <p class="govuk-body">@Model.NoResultsMessage</p>
-        }
-    </ul>
-    
-    @if (Model.ViewModes != CategoryListViewModes.None)
-    {
-        <partial name="_Pagination" model="@Model.Pagination"/>
     }
-        
-</form>
+    else if (Model.HasNoResultsMessage)
+    {
+        <li class="govuk-task-list__item">
+            <p class="govuk-body">@Model.NoResultsMessage</p>
+        </li>
+    }
+</ul>
+@if (Model.ViewModes != CategoryListViewModes.None)
+{
+    <partial name="_Pagination" model="@Model.Pagination"/>
+}
+
+@if (Model.ShowNavigator)
+{
+    <div class="govuk-body">
+        <a class="govuk-link" asp-controller="Category" asp-action="Index">@Model.CallToActionMessage</a>
+        <partial name="SVG/ArrowRight"/>
+    </div>
+}

@@ -10,6 +10,7 @@ public static class RouteConstants
     public const string Error = Root + "error/{code}";
     public const string FeedBack = Root + "feedback/page-useful";
     public const string FeedBackExit = "/feedback/exit";
+    public const string ContactUs = "https://customerhelpportal.education.gov.uk/";
 
     internal static class Start
     {
@@ -33,4 +34,5 @@ public static class RouteConstants
     {
         public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task?taskid={0}");
     }
+    
 }

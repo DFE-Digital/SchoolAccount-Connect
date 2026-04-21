@@ -3,6 +3,7 @@
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
 @using SchoolAccount.Kernel.Cookie
+@using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Extensions
 @inject IFeatureManager FeatureManager
 @inject ICookieConsentContext CookieConsent
@@ -18,6 +19,7 @@
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
 
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
+    var showRightHandSide = ViewData["ShowRightHandSide"] as bool? ?? true;
 }
 
 @section Head {
@@ -67,7 +69,7 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
-        This is a new service. Help us improve it and  
+        This is a new service. Help us improve it and
         <a href="@feedbackUrl"
            class="govuk-link"
            target="_blank"
@@ -96,22 +98,35 @@
 
 @await RenderSectionAsync("Header", false)
 
-@if (IsSectionDefined("RightSide"))
+@if (IsSectionDefined("PageHeading"))
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @RenderBody()
-        </div>
-        <div class="govuk-grid-column-one-third">
-            @await RenderSectionAsync("RightSide")
+            @await RenderSectionAsync("PageHeading", required: false)
         </div>
     </div>
 }
-else
-{
-    IgnoreSection("RightSide");
-    @RenderBody()
-}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @RenderBody()
+    </div>
+    @if (showRightHandSide)
+    {
+        <div class="govuk-grid-column-one-third govuk-!-margin-top-0">
+            <partial name="SVG/DividerLine"></partial>
+
+            @if (IsSectionDefined("RightSide"))
+            {
+                <div class="govuk-!-margin-bottom-6">
+                    @await RenderSectionAsync("RightSide")
+                </div>
+            }
+            
+            <partial name="_ContactUs"/>
+        </div>
+    }
+</div>
 
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
@@ -139,7 +154,12 @@ else
             <govuk-footer-meta-items>
                 <govuk-footer-meta-item href="/privacy">Privacy</govuk-footer-meta-item>
                 <govuk-footer-meta-item href="/cookies">Cookies</govuk-footer-meta-item>
-                <govuk-footer-meta-item href="/accessibility">Accessibility</govuk-footer-meta-item>
+                <govuk-footer-meta-item
+                    href="@RouteConstants.ContactUs"
+                    link-target="_blank"
+                    link-rel="noopener noreferrer">
+                    Contact us (opens in a new tab)
+                </govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
     </govuk-footer>

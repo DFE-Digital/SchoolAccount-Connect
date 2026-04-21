@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Category.Enums;
 
@@ -13,13 +12,17 @@ public class CategoryListRowGroupViewModel(string value, IEnumerable<CategoryLis
 }
 
 public record CategoryListViewModel(
-    string? Title,
-    string? Description,
     CategoryListViewModes ViewModes,
     ICollection<CategoryListRowGroupViewModel> Categories,
     PaginationViewModel Pagination
 )
 {
+    private readonly string _callToActionMessage = "See the full list of categories";
+    
+    public string? Title { get; init; }
+    public bool HasTitle => !string.IsNullOrEmpty(Title);
+    public string? Description { get; init; }
+    public bool HasDescription => !string.IsNullOrEmpty(Description);
     public string? Heading { get; init; }
     public bool HasHeading => !string.IsNullOrEmpty(Heading);
     public string? SubHeading { get; init; }
@@ -27,9 +30,22 @@ public record CategoryListViewModel(
     public string? NoResultsMessage { get; init; }
     public bool HasNoResultsMessage => !string.IsNullOrEmpty(NoResultsMessage);
     public string? Caption { get; init; }
-    public bool HasCaption => !string.IsNullOrEmpty(Caption);
-    public bool ShowPageHeading => HasCaption || HasHeading || HasSubHeading;
+    public bool DisplayCaption => !string.IsNullOrEmpty(Caption) && ViewModes.HasFlag(CategoryListViewModes.Standalone);
+    public bool ShowPageHeading => DisplayCaption || HasHeading || HasSubHeading;
     public bool IsStandalone => ViewModes.HasFlag(CategoryListViewModes.Standalone);
     public string HeadingStyles => "-l";
     public string SubHeadingStyles => IsStandalone ? "-l" : string.Empty;
+    public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.None) && Pagination.PageCount > 1;
+    
+    public string? CallToActionMessage
+    {
+        get => _callToActionMessage;
+        init
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _callToActionMessage = value;
+            }
+        }
+    }
 }

@@ -21,9 +21,25 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
         var options = new CategoryListViewOptions
         {
             ViewMode = viewModes,
-            Title = "Explore Categories",
-            Heading = "Explore Categories",
+            Heading = "Explore categories",
             SubHeading = "View required tasks and optional guidance by category.",
+            NoResultsMessage = "No results found",
+        };
+
+        return Build(options, items, currentUri);
+    }
+    
+    public CategoryListViewModel BuildForDashboard(
+        CategoryPagedResult items,
+        CategoryListViewModes viewModes,
+        Uri currentUri
+    )
+    {
+        var options = new CategoryListViewOptions
+        {
+            ViewMode = viewModes,
+            Title = "Explore categories",
+            Description = "View required tasks and optional guidance by category.",
             NoResultsMessage = "No results found",
         };
 
@@ -43,8 +59,6 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
         }
 
         return new CategoryListViewModel(
-            options.Title,
-            options.Description,
             options.ViewMode,
             rows,
             _paginationViewBuilder.Build(result, currentUri)
@@ -56,6 +70,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
             SubHeading = options.SubHeading,
             Title = options.Title,
             Description = options.Description,
+            CallToActionMessage = options.CallToActionMessage,
         };
     }
 }
