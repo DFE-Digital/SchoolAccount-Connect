@@ -1,26 +1,6 @@
 @using SchoolAccount.Application.Features.Category.Enums
 @model SchoolAccount.Web.Connect.Models.Categories.CategoryListViewModel
 
-<style>
-    .govuk-task-list__item--with-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .govuk-task-list__name-and-hint {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .govuk-task-list__status {
-        flex-shrink: 0;
-        margin-left: 15px;
-        display: flex;
-        align-items: center;
-    }
-</style>
-
 <input type="hidden" asp-for="ViewModes"/>
 
 @if (!Model.ShowPageHeading)
@@ -53,7 +33,7 @@
             foreach (var row in group)
             {
                 <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                    <div class="govuk-task-list__name-and-hint">
+                    <div class="govuk-task-list__name-and-hint ">
                         <a class="govuk-link govuk-task-list__link" href="@row.Url">
                             @row.Name
                         </a>

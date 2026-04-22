@@ -1,0 +1,23 @@
+﻿@model SchoolAccount.Web.Connect.Models.Shared.ListItemViewModel
+
+<li class="govuk-task-list__item govuk-task-list__item--with-link">
+    <div class="govuk-task-list__name-and-hint">
+        <a class="govuk-link govuk-task-list__link"
+           href="@Model.Url"
+           link-target="_blank"
+           link-rel="noopener noreferrer">
+            @Model.Name
+        </a>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <div class="govuk-task-list__hint">
+                @Model.Description
+            </div>
+        }
+    </div>
+
+    <div class="govuk-task-list__status">
+        <partial name="SVG/ChevronRight"/>
+    </div>
+</li>

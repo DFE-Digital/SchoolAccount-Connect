@@ -881,3 +881,32 @@ header.dfe-connect-header .dfe-connect-header__nav-list {
     border-top: none !important;
     margin-top: var(--govuk-spacing-responsive--4);
 }
+
+ .govuk-task-list__item--with-link {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+.govuk-task-list__name-and-hint {
+    flex: 1;
+    min-width: 0;
+}
+
+.govuk-task-list__status {
+    flex-shrink: 0;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.govuk-task-list {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    
+}
+
+.govuk-heading-m {
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
