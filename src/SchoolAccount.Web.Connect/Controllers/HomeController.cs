@@ -76,6 +76,13 @@ public sealed class HomeController(
     {
         return View("Support");
     }
+    
+    [HttpGet(RouteConstants.Cookies)]
+    [AllowAnonymous]
+    public IActionResult Cookies()
+    {
+        return View("Cookies");
+    }
 
     [HttpGet(RouteConstants.Maintenance)]
     [FeatureGate(FeatureFlagConstants.MaintenanceMode)]

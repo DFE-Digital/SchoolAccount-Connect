@@ -1,5 +1,23 @@
 ﻿(function () {
+    
+    // ------------------------------------------------------
+    // Cookie consent
+    // ------------------------------------------------------
+    function setConsent(value) {
+        var parts = [
+            cookieConsentConfig.cookieName + "=" + value,
+            "Path=/",
+            "Max-Age=" + (60 * 60 * 24 * 365),
+            "SameSite=Lax"
+        ];
 
+        if (location.protocol === "https:") {
+            parts.push("Secure");
+        }
+
+        document.cookie = parts.join("; ");
+    }
+    
     // ------------------------------------------------------
     // Cookie banner
     // ------------------------------------------------------
@@ -10,33 +28,45 @@
         var acceptBtn = document.getElementById("dfe-cta-acceptCookies");
         var declineBtn = document.getElementById("dfe-cta-declineCookies");
 
-        function setConsent(value) {
-            var parts = [
-                cookieConsentConfig.cookieName + "=" + value,
-                "Path=/",
-                "Max-Age=" + (60 * 60 * 24 * 365),
-                "SameSite=Lax"
-            ];
-
-            if (location.protocol === "https:") {
-                parts.push("Secure");
-            }
-
-            document.cookie = parts.join("; ");
-            banner.style.display = "none";
-        }
-
         if (acceptBtn) {
             acceptBtn.addEventListener("click", function () {
                 setConsent(cookieConsentConfig.acceptedValue);
+                banner.style.display = "none";
             });
         }
 
         if (declineBtn) {
             declineBtn.addEventListener("click", function () {
                 setConsent(cookieConsentConfig.rejectedValue);
+                banner.style.display = "none";
             });
         }
+    }
+
+    // ------------------------------------------------------
+    // Cookies page form
+    // ------------------------------------------------------
+    var cookiesForm = document.getElementById("dfe-cookies-form");
+    var cookiesNotification = document.getElementById("cookiesNotification");
+
+    if (cookiesForm && cookieConsentConfig) {
+        cookiesForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            var selected = cookiesForm.querySelector("input[name=\"analytics-cookies\"]:checked");
+            if (!selected) return;
+
+            var value = selected.value === "yes"
+                ? cookieConsentConfig.acceptedValue
+                : cookieConsentConfig.rejectedValue;
+
+            setConsent(value);
+
+            if (cookiesNotification) {
+                cookiesNotification.style.display = "";
+                cookiesNotification.focus();
+            }
+        });
     }
 
     // ------------------------------------------------------

@@ -7,6 +7,7 @@ public static class RouteConstants
     public const string Root = "/";
     public const string Maintenance = Root + "maintenance";
     public const string Support = Root + "support";
+    public const string Cookies = Root + "cookies";
     public const string Error = Root + "error/{code}";
     public const string FeedBack = Root + "feedback/page-useful";
     public const string FeedBackExit = "/feedback/exit";
