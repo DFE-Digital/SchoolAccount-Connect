@@ -33,7 +33,15 @@ public class DfeCardTagHelper : TagHelper
         var h3 = new TagBuilder("h3");
         h3.AddCssClass("govuk-heading-s");
 
-        var a = new TagBuilder("a") { Attributes = { ["href"] = url } };
+        var a = new TagBuilder("a")
+        {
+            Attributes =
+            {
+                ["href"] = url,
+                ["target"] = "_blank",
+                ["rel"] = "noopener noreferrer",
+            },
+        };
 
         a.AddCssClass(baseLinkClasses);
         a.InnerHtml.AppendHtml(title);
@@ -46,10 +54,10 @@ public class DfeCardTagHelper : TagHelper
 
         divContainer.InnerHtml.AppendHtml(h3);
         divContainer.InnerHtml.AppendHtml(p);
-
         divCard.InnerHtml.AppendHtml(divContainer);
 
         output.Content.SetHtmlContent(divCard);
+        
         await Task.CompletedTask;
     }
 }

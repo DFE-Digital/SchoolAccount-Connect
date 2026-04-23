@@ -10,6 +10,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <!--https://github.com/advisories/GHSA-w3x6-4m5h-cxqf-->
+    <PackageReference Include="System.Security.Cryptography.Xml" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
+    <ProjectReference Include="..\SchoolAccount.AuthenticationTests\SchoolAccount.AuthenticationTests.csproj" />
   </ItemGroup>
 </Project>

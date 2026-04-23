@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.TaskDetails.ViewModels;
+using SchoolAccount.Application.Features.TaskDetails;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Domain.ViewModels;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Controllers;
 using Xunit;
 
-namespace SchoolAccount.FrontEndTests.TaskPageTests;
+namespace SchoolAccount.FrontEndTests;
 
 public class TaskPageTests
 {
@@ -99,10 +100,10 @@ public class TaskPageTests
                 new DateOnly(2026, 02, 01),
                 new DateTime(2026, 02, 01),
                 new DateOnly(2026, 02, 01),
-                RequirementId: 2,
+                Requirement: Requirement.Conditional,
                 true,
                 true,
-                (int)WorkflowStateValues.Expired
+                WorkflowState.Expired
             )
         );
     }

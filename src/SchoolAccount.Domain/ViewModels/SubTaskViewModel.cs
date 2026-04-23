@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Kernel;
 
@@ -9,11 +10,10 @@ namespace SchoolAccount.Domain.ViewModels
         public string Name { get; }
         public string Description { get; }
         public string? DigitalLink { get; }
-        public int? RequirementId { get; }
+        public Requirement? Requirement { get; }
         public bool HasLinks => !string.IsNullOrWhiteSpace(DigitalLink);
         public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
-        public bool IsOptional =>
-            RequirementId.HasValue ? RequirementId.Value == (int)RequirementValues.Optional : false;
+        public bool IsOptional => Requirement == Common.Requirement.Optional;
         public string? AvailabilityLabel { get; private set; }
         public DateOnly? SortingDate { get; }
         public string? DueDateLabel { get; }
@@ -21,7 +21,7 @@ namespace SchoolAccount.Domain.ViewModels
         private bool? DueDateIsExact { get; }
         private DateOnly? DueDate { get; }
         private DateOnly? StartDate { get; }
-        private int WorkflowStateId { get; }
+        private WorkflowState WorkflowState { get; }
         private bool HasExactStartDate { get; }
         private bool DoesntHaveExactStartDate { get; }
         private bool DoesntHaveStartButHasDueDate { get; }
@@ -37,10 +37,10 @@ namespace SchoolAccount.Domain.ViewModels
             StartDate = subTask.StartDate;
             StartDateIsExact = subTask.StartDateExact;
             DueDateIsExact = subTask.DueDateIsExact;
-            RequirementId = subTask.RequirementId;
+            Requirement = subTask.Requirement;
             DigitalLink = subTask.DigitalLink;
             DueDateIsExact = subTask.DueDateIsExact;
-            WorkflowStateId = subTask.WorkflowStateId;
+            WorkflowState = subTask.WorkflowState;
             HasExactStartDate = StartDate.HasValue && StartDateIsExact.HasValue && StartDateIsExact.Value == true;
             DoesntHaveExactStartDate =
                 StartDate.HasValue && StartDateIsExact.HasValue && StartDateIsExact.Value == false;
@@ -62,17 +62,17 @@ namespace SchoolAccount.Domain.ViewModels
 
         private void SetAvailabilityForPublishedTasks()
         {
-            if (WorkflowStateId == (int)WorkflowStateValues.Published)
+            if (WorkflowState == WorkflowState.Published)
             {
                 SetAvailabilityLabelWhenPublishedAndHasExactStartDate();
                 SetAvailabilityLabelWhenPublishedAndDoesntHaveStartDate();
-                SetAvailabilityLabelWhenPublisheddAndDoesntHaveExactStartDate();
+                SetAvailabilityLabelWhenPublishedAndDoesntHaveExactStartDate();
             }
         }
 
         private void SetAvailabilityForExpiredTasks()
         {
-            if (WorkflowStateId == (int)WorkflowStateValues.Expired)
+            if (WorkflowState == WorkflowState.Expired)
             {
                 SetAvailabilityLabelWhenExpiredAndHasExactStartDate();
                 SetAvailabilityLabelWhenExpiredAndDoesntHaveExactStartDate();
@@ -115,7 +115,7 @@ namespace SchoolAccount.Domain.ViewModels
             }
         }
 
-        private void SetAvailabilityLabelWhenPublisheddAndDoesntHaveExactStartDate()
+        private void SetAvailabilityLabelWhenPublishedAndDoesntHaveExactStartDate()
         {
             if (DoesntHaveExactStartDate)
             {

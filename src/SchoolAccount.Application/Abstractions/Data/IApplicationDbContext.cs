@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Models.Entities;
+using SchoolAccount.Domain.SchoolTypes;
+using SchoolAccount.Domain.Sources;
+using SchoolAccount.Domain.Subtasks;
+using SchoolAccount.Domain.Tags;
+using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Domain.Taxonomies;
+using SchoolAccount.Domain.Types;
 
 namespace SchoolAccount.Application.Abstractions.Data;
 
@@ -10,7 +15,6 @@ public interface IApplicationDbContext
     DbSet<SubTaskEntity> SubTasks { get; }
     DbSet<SchoolTypeTagMappingEntity> SchoolTypeTagMappings { get; set; }
     DbSet<TagsSourceMappingEntity> TagsSourceMappings { get; set; }
-    DbSet<WorkflowStateEntity> WorkflowStates { get; set; }
     DbSet<SchoolTypeEntity> SchoolTypes { get; set; }
     DbSet<SourceEntity> Sources { get; set; }
     DbSet<TagEntity> Tags { get; set; }

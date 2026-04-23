@@ -8,6 +8,9 @@ indent_style = space
 indent_size = 4
 max_line_length = 120
 
+# Resharper rules
+resharper_class_with_virtual_members_never_inherited_global_highlighting = none
+
 # .NET Code Analyzers rules
 
 # CA1515: Consider making public types internal

@@ -3,17 +3,19 @@ using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
-using SchoolAccount.Domain.Entities;
+using SchoolAccount.Domain.Tags;
+using SchoolAccount.Domain.Types;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
-using SchoolAccount.Infrastructure.Helpers.Filtering.Models;
+using TaxonomyEntity = SchoolAccount.Domain.Taxonomies.TaxonomyEntity;
 
 namespace SchoolAccount.Infrastructure.Helpers.Filtering.Filters;
 
-public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext) : IFilterableFactory
+public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext)
+    : IFilterableFactory<CalendarOfItemsRow>
 {
     private static List<FilterableItem> BuildTagTree(
         List<TagEntity> tags,
-        List<Tuple<long, IEnumerable<long>>>? byTags = null
+        List<Tuple<long?, IEnumerable<long>>>? byTags = null
     )
     {
         return tags.Select(x => new FilterableItem()
@@ -28,7 +30,7 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
     private static List<FilterableItem> BuildTypeTree(
         List<TypeEntity> types,
         int? parentId = null,
-        List<Tuple<long, IEnumerable<long>>>? byTypes = null
+        List<Tuple<long?, IEnumerable<long>>>? byTypes = null
     )
     {
         return types
@@ -64,8 +66,7 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
                 Values = BuildTagTree(
                         await applicationDbContext
                             .Tags.Where(x => x.Taxonomy.Name == TaxonomyEntity.IdValues.PhaseOfEducation)
-                            .ToListAsync(),
-                        byTags
+                            .ToListAsync()
                     )
                     .ToCollection(),
             }
@@ -83,8 +84,7 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             new Filterable(SubTaskFilterableRegistrar.Keys.Categories, "Categories")
             {
                 Values = BuildTypeTree(
-                        await applicationDbContext.Types.Where(x => x.ParentTypeId == null).ToListAsync(),
-                        byTypes: byTypes
+                        await applicationDbContext.Types.Where(x => x.ParentTypeId == null).ToListAsync()
                     )
                     .ToCollection(),
             }

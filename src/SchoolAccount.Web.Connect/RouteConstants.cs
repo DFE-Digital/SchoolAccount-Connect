@@ -7,8 +7,15 @@ public static class RouteConstants
     public const string Root = "/";
     public const string Maintenance = Root + "maintenance";
     public const string Support = Root + "support";
+    public const string Cookies = Root + "cookies";
     public const string Error = Root + "error/{code}";
     public const string FeedBack = Root + "feedback/page-useful";
+    public const string FeedBackExit = "/feedback/exit";
+    public const string ContactUs = "https://customerhelpportal.education.gov.uk/";
+    public const string PrivacyPolicy =
+        "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04";
+
+    public const string AccessibilityStatement = "https://accessibility-statements.education.gov.uk/s/21";
 
     internal static class Start
     {
@@ -19,6 +26,13 @@ public static class RouteConstants
     internal static class Calendar
     {
         public const string Index = Root + "calendar";
+    }
+
+    internal static class Category
+    {
+        public const string Index = Root + "categories";
+        public const string Hub = Root + "categories/{id}";
+        public const string AllTasks = Root + "categories/all-tasks";
     }
 
     internal static class Task

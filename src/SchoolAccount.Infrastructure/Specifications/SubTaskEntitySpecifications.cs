@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
-using SchoolAccount.Domain.Entities;
-using SchoolAccount.Domain.Models.Entities;
+using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.SchoolTypes;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Specifications;
@@ -20,13 +21,11 @@ public static class SubTaskEntitySpecifications
 
     public static Expression<Func<SubTaskEntity, bool>> IsMandatory()
     {
-        return s => s.RequirementId == RequirementEntity.IdValues.Mandatory;
+        return s => s.Requirement == Requirement.Mandatory;
     }
 
     public static Expression<Func<SubTaskEntity, bool>> IsVisible()
     {
-        return s =>
-            s.WorkflowState.Id == WorkflowStateEntity.IdValues.Published
-            || s.WorkflowState.Id == WorkflowStateEntity.IdValues.Expired;
+        return s => s.WorkflowState == WorkflowState.Published || s.WorkflowState == WorkflowState.Expired;
     }
 }

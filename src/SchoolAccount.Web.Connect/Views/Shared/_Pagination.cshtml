@@ -17,7 +17,7 @@
                     <govuk-pagination-ellipsis />
                     break;
                 case PaginationItemViewModel pageItem:
-                    <govuk-pagination-item current="@pageItem.IsCurrent" href="@Html.Raw(pageItem.Url)">
+                    <govuk-pagination-item current="@pageItem.IsCurrent" href="@Html.Raw(pageItem.Uri)">
                         @pageItem.PageNumber
                     </govuk-pagination-item>
                     break;

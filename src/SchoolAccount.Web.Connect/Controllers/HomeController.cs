@@ -3,23 +3,56 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Category.Contracts;
+using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
+using SchoolAccount.Kernel;
+using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
-    IDashboardViewBuilder dashboardViewBuilder
+    IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
+    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
+    DashboardViewBuilder dashboardViewBuilder
 ) : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index([FromQuery] int? pageNumber, CancellationToken cancellationToken)
     {
-        var result = await dashboardViewBuilder.Build(cancellationToken);
-        return result.IsFailure ? Problem(detail: result.Error.Description) : View(result);
+        var calendarOfItemsQuery = new GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnlyExtensions.Today);
+        var calendarOfItemsResult = await calendarOfItemQueryBuilder.Handle(calendarOfItemsQuery, cancellationToken);
+
+        if (calendarOfItemsResult.IsFailure)
+        {
+            return Problem(detail: calendarOfItemsResult.Error.Description);
+        }
+
+        var query = new GetAllParentCategoriesQuery();
+        var categoryResult = await categoryQueryBuilder.Handle(query, cancellationToken);
+
+        if (categoryResult.IsFailure)
+        {
+            throw new ApplicationException(categoryResult.Error.Description);
+        }
+
+        if (categoryResult.Value.Payload.Count == 0)
+        {
+            throw new ApplicationException(categoryResult.Error.Description);
+        }
+
+        var currentUri = Request.GetFullRequestUri();
+        var viewModel = dashboardViewBuilder.Build(calendarOfItemsResult.Value, categoryResult.Value, currentUri);
+
+        return View(viewModel);
     }
 
     [HttpGet("home/task-search")]
@@ -42,6 +75,13 @@ public sealed class HomeController(
     public IActionResult Support()
     {
         return View("Support");
+    }
+    
+    [HttpGet(RouteConstants.Cookies)]
+    [AllowAnonymous]
+    public IActionResult Cookies()
+    {
+        return View("Cookies");
     }
 
     [HttpGet(RouteConstants.Maintenance)]

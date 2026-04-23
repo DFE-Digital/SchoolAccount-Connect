@@ -1,63 +1,41 @@
 (function () {
-    function postTelemetry(postUrl, payload) {
-        fetch(postUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(function () { });
+    const connectBannerDismissedKey = "connect_banner_hidden";
 
-        try {
-            if (window.appInsights && typeof window.appInsights.trackEvent === 'function') {
-                window.appInsights.trackEvent(
-                    { name: 'page_feedback_response' },
-                    payload
-                );
-            }
-        } catch (e) {
-        }
+    function isBannerDismissed() {
+        return sessionStorage.getItem(connectBannerDismissedKey) === "true";
     }
 
-    function initialiseFooterFeedback(root) {
-        var button = root.querySelector('[data-feedback-button]');
-        if (!button) {
-            return;
-        }
+    function dismissBanner() {
+        sessionStorage.setItem(connectBannerDismissedKey, "true");
+    }
 
-        var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
-        var variant = root.getAttribute('data-feedback-variant') || 'feedback-button';
-
-        button.addEventListener('click', function () {
-            var payload = {
-                pageId: this.getAttribute('data-page-id'),
-                value: this.getAttribute('data-feedback-value') || 'clicked',
-                variant: variant,
-                action: this.getAttribute('data-feedback-action') || 'feedback.clicked'
-            };
-
-            postTelemetry(postUrl, payload);
-        });
+    function postFeedback(postUrl, payload) {
+        fetch(postUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }).catch(function () { });
     }
 
     function initialisePageUsefulFeedback(root) {
-        var initial = root.querySelector('[data-feedback-initial]');
-        var followup = root.querySelector('[data-feedback-followup]');
-        var buttons = root.querySelectorAll('[data-feedback-value]');
-        var cancelButton = root.querySelector('[data-feedback-cancel]');
-        var feedbackLink = root.querySelector('[data-feedback-link]');
+        var initial = root.querySelector("[data-feedback-initial]");
+        var followup = root.querySelector("[data-feedback-followup]");
+        var buttons = root.querySelectorAll("[data-feedback-answer]");
+        var cancelButton = root.querySelector("[data-feedback-cancel]");
+        var feedbackLink = root.querySelector("[data-feedback-exit-link]");
 
-        var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
-        var variant = root.getAttribute('data-feedback-variant') || 'feedback.yes.no';
-
-        var selectedValue = null;
-        var selectedPageId = null;
+        var postUrl = root.getAttribute("data-feedback-post-url") || "/feedback/page-useful";
+        var pageId = root.getAttribute("data-page-id");
+        var ctaType = root.getAttribute("data-cta-type");
+        var selectedAnswer = null;
 
         function showFollowup() {
             if (!initial || !followup) {
                 return;
             }
 
-            initial.classList.add('govuk-!-display-none');
-            followup.classList.remove('govuk-!-display-none');
+            initial.classList.add("govuk-!-display-none");
+            followup.classList.remove("govuk-!-display-none");
         }
 
         function showInitial() {
@@ -65,33 +43,31 @@
                 return;
             }
 
-            followup.classList.add('govuk-!-display-none');
-            initial.classList.remove('govuk-!-display-none');
+            followup.classList.add("govuk-!-display-none");
+            initial.classList.remove("govuk-!-display-none");
 
             buttons.forEach(function (button) {
-                button.classList.remove('dfe-page-feedback__choice--selected');
+                button.classList.remove("dfe-page-feedback__choice--selected");
             });
 
-            selectedValue = null;
-            selectedPageId = null;
+            selectedAnswer = null;
         }
 
         buttons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                selectedValue = this.getAttribute('data-feedback-value');
-                selectedPageId = this.getAttribute('data-page-id');
+            button.addEventListener("click", function () {
+                selectedAnswer = this.getAttribute("data-feedback-answer");
 
                 buttons.forEach(function (b) {
-                    b.classList.remove('dfe-page-feedback__choice--selected');
+                    b.classList.remove("dfe-page-feedback__choice--selected");
                 });
 
-                this.classList.add('dfe-page-feedback__choice--selected');
+                this.classList.add("dfe-page-feedback__choice--selected");
 
-                postTelemetry(postUrl, {
-                    pageId: selectedPageId,
-                    value: selectedValue,
-                    variant: variant,
-                    action: 'feedback.response'
+                postFeedback(postUrl, {
+                    eventName: "connect_cta_yes_no_interaction",
+                    pageId: pageId,
+                    ctaType: ctaType,
+                    selectedAnswer: selectedAnswer
                 });
 
                 showFollowup();
@@ -99,87 +75,143 @@
         });
 
         if (cancelButton) {
-            cancelButton.addEventListener('click', function () {
-                if (selectedValue && selectedPageId) {
-                    postTelemetry(postUrl, {
-                        pageId: selectedPageId,
-                        value: selectedValue,
-                        variant: variant,
-                        action: 'feedback.cancel.pressed'
-                    });
-                }
+            cancelButton.addEventListener("click", function () {
+                postFeedback(postUrl, {
+                    eventName: "connect_cta_cancelled",
+                    pageId: pageId,
+                    ctaType: ctaType,
+                    selectedAnswer: selectedAnswer
+                });
 
                 showInitial();
             });
         }
 
         if (feedbackLink) {
-            feedbackLink.addEventListener('click', function () {
-                if (selectedValue && selectedPageId) {
-                    postTelemetry(postUrl, {
-                        pageId: selectedPageId,
-                        value: selectedValue,
-                        variant: variant,
-                        action: 'feedback.clicked'
-                    });
-                }
+            feedbackLink.addEventListener("click", function () {
+                showInitial();
             });
         }
     }
 
-    function initialiseConnectBanner(root) {
-        var feedbackLink = root.querySelector('[data-connect-banner-link]');
-        var dismissButton = root.querySelector('[data-connect-banner-dismiss]');
+    function initialisePageUsefulFeedback(root) {
+        var initial = root.querySelector("[data-feedback-initial]");
+        var followup = root.querySelector("[data-feedback-followup]");
+        var buttons = root.querySelectorAll("[data-feedback-answer]");
+        var cancelButton = root.querySelector("[data-feedback-cancel]");
+        var feedbackLink = root.querySelector("[data-feedback-exit-link]");
 
-        var postUrl = root.getAttribute('data-feedback-post-url') || '/feedback/page-useful';
-        var variant = root.getAttribute('data-feedback-variant') || 'feedback-banner';
-        var pageId = root.getAttribute('data-page-id');
+        var postUrl = root.getAttribute("data-feedback-post-url") || "/feedback/page-useful";
+        var pageId = root.getAttribute("data-page-id");
+        var ctaType = root.getAttribute("data-cta-type");
+        var selectedAnswer = null;
 
-        if (pageId) {
-            postTelemetry(postUrl, {
-                pageId: pageId,
-                value: 'shown',
-                variant: variant,
-                action: 'feedback.shown'
+        function showFollowup() {
+            if (!initial || !followup) {
+                return;
+            }
+
+            initial.classList.add("govuk-!-display-none");
+            followup.classList.remove("govuk-!-display-none");
+        }
+
+        function showInitial() {
+            if (!initial || !followup) {
+                return;
+            }
+
+            followup.classList.add("govuk-!-display-none");
+            initial.classList.remove("govuk-!-display-none");
+
+            buttons.forEach(function (button) {
+                button.classList.remove("dfe-page-feedback__choice--selected");
+            });
+
+            selectedAnswer = null;
+        }
+
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                selectedAnswer = this.getAttribute("data-feedback-answer");
+
+                buttons.forEach(function (b) {
+                    b.classList.remove("dfe-page-feedback__choice--selected");
+                });
+
+                this.classList.add("dfe-page-feedback__choice--selected");
+
+                postFeedback(postUrl, {
+                    eventName: "connect_cta_yes_no_interaction",
+                    pageId: pageId,
+                    ctaType: ctaType,
+                    selectedAnswer: selectedAnswer
+                });
+
+                showFollowup();
+            });
+        });
+
+        if (cancelButton) {
+            cancelButton.addEventListener("click", function () {
+                postFeedback(postUrl, {
+                    eventName: "connect_cta_cancelled",
+                    pageId: pageId,
+                    ctaType: ctaType,
+                    selectedAnswer: selectedAnswer
+                });
+
+                showInitial();
             });
         }
 
         if (feedbackLink) {
-            feedbackLink.addEventListener('click', function () {
-                postTelemetry(postUrl, {
-                    pageId: this.getAttribute('data-page-id') || pageId,
-                    value: this.getAttribute('data-feedback-value') || 'clicked',
-                    variant: this.getAttribute('data-feedback-variant') || variant,
-                    action: this.getAttribute('data-feedback-action') || 'feedback.clicked'
-                });
-            });
-        }
-
-        if (dismissButton) {
-            dismissButton.addEventListener('click', function () {
-                postTelemetry(postUrl, {
-                    pageId: this.getAttribute('data-page-id') || pageId,
-                    value: this.getAttribute('data-feedback-value') || 'dismissed',
-                    variant: this.getAttribute('data-feedback-variant') || variant,
-                    action: this.getAttribute('data-feedback-action') || 'feedback.dismissed'
-                });
-
-                root.classList.add('govuk-!-display-none');
+            feedbackLink.addEventListener("click", function () {
+                showInitial();
             });
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('[data-feedback-component="footer"]').forEach(function (root) {
-            initialiseFooterFeedback(root);
-        });
+    function initialiseBanner(root) {
+        if (isBannerDismissed()) {
+            root.classList.add("govuk-!-display-none");
+            return;
+        }
 
+        var dismissButton = root.querySelector("[data-feedback-dismiss]");
+        var feedbackLink = root.querySelector("[data-feedback-exit-link]");
+        var postUrl = root.getAttribute("data-feedback-post-url") || "/feedback/page-useful";
+        var pageId = root.getAttribute("data-page-id");
+        var ctaType = root.getAttribute("data-cta-type");
+
+        if (dismissButton) {
+            dismissButton.addEventListener("click", function () {
+                postFeedback(postUrl, {
+                    eventName: "connect_cta_dismissed",
+                    pageId: pageId,
+                    ctaType: ctaType,
+                    selectedAnswer: null
+                });
+
+                dismissBanner();
+                root.classList.add("govuk-!-display-none");
+            });
+        }
+
+        if (feedbackLink) {
+            feedbackLink.addEventListener("click", function () {
+                dismissBanner();
+                root.classList.add("govuk-!-display-none");
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('[data-feedback-component="page-useful"]').forEach(function (root) {
             initialisePageUsefulFeedback(root);
         });
 
-        document.querySelectorAll('[data-feedback-component="connect-banner"]').forEach(function (root) {
-            initialiseConnectBanner(root);
+        document.querySelectorAll('[data-feedback-component="banner"]').forEach(function (root) {
+            initialiseBanner(root);
         });
     });
 })();

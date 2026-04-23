@@ -2,9 +2,11 @@
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
-@using SchoolAccount.Web.Connect.Constants
+@using SchoolAccount.Kernel.Cookie
+@using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Extensions
 @inject IFeatureManager FeatureManager
+@inject ICookieConsentContext CookieConsent
 
 @* ReSharper disable Razor.LayoutNotResolved *@
 @* ReSharper disable Razor.SectionNotResolved *@
@@ -12,10 +14,13 @@
 @{
     Layout = "_GovUkPageTemplate";
     ViewBag.Title = $"{ViewData["Title"]} - {ApplicationConstants.DfeConnect}";
-    var consentCookieSet = Context.Request.Cookies.ContainsKey(CookieConsentStates.CookieName);
+
     var feedbackUrl = (string?)ViewData["FeedbackUrl"]
                       ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
+    var showRightHandSide = ViewData["ShowRightHandSide"] as bool? ?? true;
+    var cookieRedirect = (string?)ViewData["CookieRedirect"] ?? "https://dfeconnect.education.gov.uk/Home/Cookies";
 }
 
 @section Head {
@@ -26,30 +31,36 @@
 }
 
 @section BodyStart {
-    @if (!consentCookieSet)
+    @if (!CookieConsent.IsSet)
     {
         <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
             <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>Cookies
-                    on @ApplicationConstants.DfeConnect</govuk-cookie-banner-message-heading>
+                <govuk-cookie-banner-message-heading>
+                    Cookies on @ApplicationConstants.DfeConnect
+                </govuk-cookie-banner-message-heading>
                 <govuk-cookie-banner-message-content>
                     <p class="govuk-body">We use some essential cookies to make this service work.</p>
-                    <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the
-                        service and make improvements.</p>
+                    <p class="govuk-body">
+                        We’d also like to use analytics cookies so we can understand how you use the
+                        service and make improvements.
+                    </p>
                 </govuk-cookie-banner-message-content>
                 <govuk-cookie-banner-message-actions>
-                    <govuk-cookie-banner-message-action text="Accept analytics cookies" type="button"
-                                                        id="dfe-cta-acceptCookies"/>
-                    <govuk-cookie-banner-message-action text="Reject analytics cookies" type="button"
-                                                        id="dfe-cta-declineCookies"/>
-                    <govuk-cookie-banner-message-action-link text="View cookies" href="/cookies"/>
+                    <govuk-cookie-banner-message-action
+                        text="Accept analytics cookies"
+                        type="button"
+                        id="dfe-cta-acceptCookies"/>
+                    <govuk-cookie-banner-message-action
+                        text="Reject analytics cookies"
+                        type="button"
+                        id="dfe-cta-declineCookies"/>
+                    <govuk-cookie-banner-message-action-link
+                        text="View cookies"
+                        href="@cookieRedirect"/>
                 </govuk-cookie-banner-message-actions>
             </govuk-cookie-banner-message>
         </govuk-cookie-banner>
     }
-}
-
-@section BodyEnd {
 }
 
 @section Header {
@@ -58,47 +69,77 @@
 
 @section BeforeContent {
     <govuk-phase-banner>
-        <govuk-phase-banner-tag>Alpha</govuk-phase-banner-tag>
-        This is a new service - your <a href="@feedbackUrl" class="govuk-link">feedback</a> will help us to improve it.
+        <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
+        This is a new service. Help us improve it and
+        <a href="@feedbackUrl"
+           class="govuk-link"
+           target="_blank"
+           rel="noopener noreferrer">
+            give your feedback (opens in a new tab)
+        </a>
     </govuk-phase-banner>
 
     @await RenderSectionAsync("BeforeContent", false)
 
     @if (isAuthenticated)
     {
-        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectBanner);
+        var showConnectBanner = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.FeedbackBanner);
+
         if (showConnectBanner)
         {
-            <partial name="_ConnectBanner" view-data='new ViewDataDictionary(ViewData)
-                     {
-                         ["FeedbackUrl"] = feedbackUrl
-                     }'/>
+            <partial
+                name="_ConnectBanner"
+                view-data='new ViewDataDictionary(ViewData)
+                {
+                    ["FeedbackUrl"] = feedbackUrl
+                }'/>
         }
     }
 }
 
-
 @await RenderSectionAsync("Header", false)
 
-@if (IsSectionDefined("RightSide"))
+@if (IsSectionDefined("PageHeading"))
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @RenderBody()
-        </div>
-        <div class="govuk-grid-column-one-third">
-            @await RenderSectionAsync("RightSide")
+            @await RenderSectionAsync("PageHeading", required: false)
         </div>
     </div>
 }
-else
-{
-    IgnoreSection("RightSide");
-    @RenderBody()
-}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @RenderBody()
+    </div>
+    @if (showRightHandSide)
+    {
+        <div class="govuk-grid-column-one-third govuk-!-margin-top-0">
+            <partial name="SVG/DividerLine"></partial>
+
+            @if (IsSectionDefined("RightSide"))
+            {
+                <div class="govuk-!-margin-bottom-6">
+                    @await RenderSectionAsync("RightSide")
+                </div>
+            }
+
+            <partial name="_ContactUs"/>
+        </div>
+    }
+</div>
 
 @Html.GovUkFrontendScriptImports()
 @Html.MojFrontendScriptImports()
+
+<script>
+    window.cookieConsentConfig = {
+        cookieName: "@CookieConsentConstants.CookieName",
+        acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
+        rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
+    };
+</script>
+
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script src="~/js/feedback.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
@@ -106,24 +147,29 @@ else
 @section Footer {
     @if (isAuthenticated)
     {
-        var useV2 = await FeatureManager.IsEnabledAsync(FeatureFlagConstants.ConnectFeedback);
-
-        if (useV2)
-        {
-            <partial name="_FeedbackV2"/>
-        }
-        else
-        {
-            <partial name="_Feedback"/>
-        }
+        <partial name="_Feedback"/>
     }
 
     <govuk-footer>
         <govuk-footer-meta>
             <govuk-footer-meta-items>
-                <govuk-footer-meta-item href="/privacy">Privacy</govuk-footer-meta-item>
-                <govuk-footer-meta-item href="/cookies">Cookies</govuk-footer-meta-item>
-                <govuk-footer-meta-item href="/accessibility">Accessibility</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@cookieRedirect">Cookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.PrivacyPolicy"
+                                        link-target="_blank"
+                                        link-rel="noopener noreferrer">
+                    Privacy notice (opens in a new tab)
+                </govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.AccessibilityStatement"
+                                        link-target="_blank"
+                                        link-rel="noopener noreferrer"
+                >Accessibility statement
+                </govuk-footer-meta-item>
+                <govuk-footer-meta-item
+                    href="@RouteConstants.ContactUs"
+                    link-target="_blank"
+                    link-rel="noopener noreferrer">
+                    Contact us (opens in a new tab)
+                </govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
     </govuk-footer>

@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.ObjectModel;
-using System.Net;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Domain.Subtasks;
+using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Infrastructure.Extensions;
 using SchoolAccount.Infrastructure.Helpers.Filtering;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
@@ -23,12 +23,34 @@ public class CalendarOfItemsAggregator(
 {
     private readonly CalendarOfItemsAggregatorValidator _validator = new(queryFactoryResolver);
 
-    private void ConsolidateFilters(CalendarOfItemsFilter filter)
+    private void ConsolidateFilters(CalendarOfItemsCriteria criteria)
     {
-        foreach (var validator in filterRegistry.Registrars)
+        var types = MapTypeToEntity((FilterableEntities)criteria.ToQuery);
+        foreach (
+            var registrar in filterRegistry
+                .Registrars.Where(x => types.Contains(x.TypeBeingRegistered))
+                .OfType<IFilterableRegistrar<CalendarOfItemsFilter>>()
+        )
         {
-            validator.ConsolidateFilters(filter);
+            registrar.ConsolidateFilters(criteria.Filter);
         }
+    }
+
+    private static List<Type> MapTypeToEntity(FilterableEntities entity)
+    {
+        var types = new List<Type>();
+
+        if (entity.HasFlag(FilterableEntities.SubTask))
+        {
+            types.Add(typeof(SubTaskEntity));
+        }
+
+        if (entity.HasFlag(FilterableEntities.Task))
+        {
+            types.Add(typeof(TaskEntity));
+        }
+
+        return types;
     }
 
     private async Task<List<Filterable>> ProduceAndCorrelateFilter(
@@ -36,7 +58,11 @@ public class CalendarOfItemsAggregator(
         IQueryable<CalendarOfItemsRow> query
     )
     {
-        var filters = await FilterFields.GetAvailableFiltersAsync(FilterableEntities.SubTask, filterFactories, query);
+        var filters = await FilterFields.GetAvailableFiltersAsync(
+            (FilterableEntities)criteria.ToQuery,
+            filterFactories,
+            query
+        );
 
         if (filters.Count == 0)
         {
@@ -75,7 +101,7 @@ public class CalendarOfItemsAggregator(
             return validation.ToResult<CalendarOfItemsPagedResult>();
         }
 
-        ConsolidateFilters(criteria.Filter);
+        ConsolidateFilters(criteria);
 
         var factories = queryFactoryResolver.GetFactoriesByType(criteria.ToQuery);
 
@@ -85,7 +111,7 @@ public class CalendarOfItemsAggregator(
             .Where(CalendarOfItemsRowSpecifications.IsWithinDateRange(criteria.Range));
 
         var result = await query
-            .WithSorting(criteria.ViewModes, criteria.SortMode)
+            .WithSorting(criteria.ViewModes, criteria.SortMode, criteria.CustomOrderByFunction)
             .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
         var filters = criteria.IncludeFilterOptions

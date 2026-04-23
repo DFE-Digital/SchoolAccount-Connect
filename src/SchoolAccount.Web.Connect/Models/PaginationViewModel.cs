@@ -7,15 +7,15 @@ public record PaginationViewModel(IReadOnlyList<IPaginationItem> Items) : IPaged
 {
     private bool? _showPagination;
 
-    public string? PreviousUrl { get; init; }
-    public string? NextUrl { get; init; }
+    public Uri? PreviousUrl { get; init; }
+    public Uri? NextUrl { get; init; }
 
     public bool ShowPagination =>
         _showPagination ??= Items.OfType<PaginationItemViewModel>().Select(i => i.PageNumber).Distinct().Count() > 1;
 
-    public bool ShowPrevious => !string.IsNullOrEmpty(PreviousUrl);
+    public bool ShowPrevious => PreviousUrl is not null;
 
-    public bool ShowNext => !string.IsNullOrEmpty(NextUrl);
+    public bool ShowNext => NextUrl is not null;
 
     public int PageCount { get; set; }
     public int TotalItemCount { get; set; }

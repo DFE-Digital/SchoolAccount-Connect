@@ -9,7 +9,6 @@ using SchoolAccount.Infrastructure.Abstraction;
 using SchoolAccount.Infrastructure.Aggregators;
 using SchoolAccount.Infrastructure.Helpers.Filtering;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
-using SchoolAccount.Infrastructure.Mapping;
 using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.Infrastructure.Time;
 using SchoolAccount.Kernel;
@@ -26,7 +25,6 @@ public static class DependencyInjection
     {
         services.AddDatabase(configuration, logger);
         services.AddHealthChecks(configuration, logger);
-        services.AddMappers();
         services.AddServices();
         services.AddFilterableServices();
         services.AddCalendarOfItemsEngine();
@@ -83,22 +81,9 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddMappers(this IServiceCollection services)
-    {
-        services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(IDomainEntityToDatabaseEntityMapper<,>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-        );
-
-        return services;
-    }
-
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         return services;
     }
 
@@ -117,7 +102,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static void AddFilterableServices(this IServiceCollection services)
+    private static void AddFilterableServices(this IServiceCollection services)
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))

@@ -17,4 +17,5 @@ public class CalendarOfItemViewOptions
     public string Title { get; init; } = null!;
     public string Description { get; init; } = null!;
     public string? LastUpdatedMessage { get; init; }
+    public bool CanRenderFilter { get; init; } = true;
 }

@@ -186,9 +186,6 @@ a.dfe-nav-link {
     }
 }
 
-@media (max-width: 768px) {
-}
-
 /* defaultas */
 
 .govuk-link:link {
@@ -470,10 +467,6 @@ header.dfe-connect-header .dfe-connect-header__service {
     border-bottom: 1px solid var(--dfe-blue);
 }
 
-header.dfe-connect-header .dfe-connect-header__service-inner {
-    padding: 8px 0;
-}
-
 header.dfe-connect-header .dfe-connect-header__service-row--desktop {
     display: flex;
     align-items: center;
@@ -525,7 +518,6 @@ header.dfe-connect-header .dfe-connect-header__nav-link:hover {
 
 header.dfe-connect-header
 .dfe-connect-header__nav-item--active .dfe-connect-header__nav-link {
-    font-weight: 700;
     border-bottom: 3px solid var(--dfe-blue);
 }
 
@@ -607,6 +599,7 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-list {
 
 header.dfe-connect-header .dfe-connect-header__mobile-nav-item {
     border-top: 1px solid var(--dfe-border);
+    margin-bottom: 0 !important;
 }
 
 header.dfe-connect-header .dfe-connect-header__mobile-nav-link {
@@ -712,6 +705,26 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
         max-width: 64px;
     }
 }
+
+header.dfe-connect-header .dfe-connect-header__nav-item .dfe-connect-header__nav-link {
+    padding: var(--govuk-spacing-responsive--3) 0 !important;
+    display: block;
+}
+
+header.dfe-connect-header .dfe-connect-header__nav-item--active .dfe-connect-header__nav-link {
+    padding-bottom: var(--govuk-spacing-responsive--2) !important;
+    border-bottom-width: var(--govuk-spacing-responsive--1);
+}
+
+header.dfe-connect-header .dfe-connect-header__service-row--desktop {
+    margin-bottom: -1px;
+}
+
+header.dfe-connect-header .dfe-connect-header__service-nav,
+header.dfe-connect-header .dfe-connect-header__nav-list {
+    gap: var(--govuk-spacing-responsive--6);
+}
+
 /* =========================================
    Old footer feedback strip (A/B control)
    ========================================= */
@@ -867,4 +880,33 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
 .dfe-task-list__group {
     border-top: none !important;
     margin-top: var(--govuk-spacing-responsive--4);
+}
+
+ .govuk-task-list__item--with-link {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+.govuk-task-list__name-and-hint {
+    flex: 1;
+    min-width: 0;
+}
+
+.govuk-task-list__status {
+    flex-shrink: 0;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.govuk-task-list {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    
+}
+
+.govuk-heading-m {
+    margin-bottom: 10px;
+    margin-top: 20px;
 }

@@ -19,16 +19,26 @@ public static class DateTimeExtensions
 
     public static string ToGdsDateString(this DateTime date, bool includeTime = false)
     {
-        var formatted = date.ToString("d MMMM yyyy", null);
+        var formatted = date.ToString(FormattingConstants.DateMonthYearFormat, null);
 
         if (!includeTime)
         {
             return formatted;
         }
 
-        var time = date.ToString("h:mmtt", null).ToLower(null);
+        var time = date.ToString(FormattingConstants.TimeFormat, null).ToLower(null);
         formatted += $" at {time}";
 
         return formatted;
+    }
+
+    public static string ToGdsDateString(this DateTime? date, bool includeTime = false)
+    {
+        return date is null ? string.Empty : ((DateTime)date).ToGdsDateString(includeTime);
+    }
+
+    public static string ToGdsMonthString(this DateTime? date)
+    {
+        return date?.ToString(FormattingConstants.MonthYearFormat, null) ?? string.Empty;
     }
 }

@@ -1,0 +1,25 @@
+@using SchoolAccount.Web.Connect
+@model SchoolAccount.Web.Connect.Models.Categories.CategoryHubViewModel
+@{
+    ViewData["Title"] = "Explore categories";
+}
+
+@section PageHeading{
+    @if (Model.ShowPageHeading)
+    {
+        @if (Model.HasCaption)
+        {
+            <p class="govuk-caption govuk-caption-l">@Model.Caption</p>
+        }
+        @if (Model.HasHeading)
+        {
+            <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Heading</h1>
+        }
+        @if (Model.HasSubHeading)
+        {
+            <p class="govuk-body">@Model.SubHeading</p>
+        }
+    }
+}
+
+<partial name="@ViewAddressConstraints.Categories.Hub" model="@Model"/>

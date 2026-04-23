@@ -11,11 +11,16 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using SchoolAccount.Application.Abstractions.Telemetry;
+using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Features.Feedback;
 using SchoolAccount.Kernel;
+using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Builders;
-using SchoolAccount.Web.Connect.Builders.Interfaces;
+using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
+using SchoolAccount.Web.Connect.Builders.Categories;
 using SchoolAccount.Web.Connect.Extensions;
+using SchoolAccount.Web.Connect.Filters;
 using SchoolAccount.Web.Connect.Infrastructure;
 using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
@@ -50,16 +55,18 @@ internal static class DependencyInjection
         services.AddFeatureToggle();
         services.AddApplicationTelemetry(configurationManager, environment, bootstrapLogger);
         services.AddRequestGates();
+        services.AddAppInsightsFilter();
+        services.AddViewBuilders();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
-        services.AddScoped<IFeedbackTelemetryService, FeedbackTelemetryService>();
+        services.AddScoped<IRequestContext, RequestContext>();
 
-        services.AddScoped<IPaginationViewBuilder, PaginationViewBuilder>();
-        services.AddScoped<IDashboardViewBuilder, DashboardViewBuilder>();
-        services.AddScoped<ICalendarOfItemsViewBuilder, CalendarOfItemsViewBuilder>();
-        services.AddScoped<ICalendarOfItemsRowViewBuilder, CalendarOfItemsRowViewBuilder>();
-
-        services.AddControllersWithViews().AddMicrosoftIdentityUI();
+        services
+            .AddControllersWithViews(options =>
+            {
+                options.Filters.AddService<AppInsightsFilter>();
+            })
+            .AddMicrosoftIdentityUI();
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();
@@ -111,6 +118,8 @@ internal static class DependencyInjection
     {
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IOrganisationContext, OrganisationContext>();
+        services.AddScoped<ICookieConsentContext, CookieConsentContext>();
+        services.AddScoped<IFeedbackTelemetryContextProvider, FeedbackTelemetryContextProvider>();
     }
 
     private static void AddRequestGates(this IServiceCollection services)
@@ -191,12 +200,26 @@ internal static class DependencyInjection
             .ConfigureResource(resource => resource.AddService(environment.ApplicationName))
             .WithMetrics(metrics =>
             {
-                metrics.AddMeter("SchoolAccount.Feedback");
+                metrics.AddMeter(MeterConstants.SchoolAccountFeedback);
+                metrics.AddMeter(MeterConstants.SchoolAccountAnalytics);
             });
     }
 
     public static void AddMiddleware(this WebApplication app)
     {
         app.UseMiddleware<RequestGateMiddleware>();
+    }
+
+    private static void AddAppInsightsFilter(this IServiceCollection services)
+    {
+        services.AddScoped<AppInsightsFilter>();
+    }
+
+    private static void AddViewBuilders(this IServiceCollection services)
+    {
+        services.AddScoped<DashboardViewBuilder>();
+        services.AddScoped<CalendarOfItemsViewBuilder>();
+        services.AddScoped<CategoryHubViewBuilder>();
+        services.AddScoped<CategoryListViewBuilder>();
     }
 }

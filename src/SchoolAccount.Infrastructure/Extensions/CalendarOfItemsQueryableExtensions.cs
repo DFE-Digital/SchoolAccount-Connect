@@ -8,9 +8,15 @@ internal static class CalendarOfItemsQueryableExtensions
     internal static IQueryable<CalendarOfItemsRow> WithSorting(
         this IQueryable<CalendarOfItemsRow> query,
         CalendarOfItemsViewModes viewModes,
-        CalendarOfItemsSortMode sortMode
+        CalendarOfItemsSortMode sortMode,
+        CalendarOfItemsOrderFunction? customOrderBy = null
     )
     {
+        if (customOrderBy is not null)
+        {
+            return customOrderBy(query);
+        }
+
         return viewModes switch
         {
             CalendarOfItemsViewModes.Backward => sortMode switch
