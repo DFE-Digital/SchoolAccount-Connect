@@ -12,6 +12,10 @@ public static class RouteConstants
     public const string FeedBack = Root + "feedback/page-useful";
     public const string FeedBackExit = "/feedback/exit";
     public const string ContactUs = "https://customerhelpportal.education.gov.uk/";
+    public const string PrivacyPolicy =
+        "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04";
+
+    public const string AccessibilityStatement = "https://accessibility-statements.education.gov.uk/s/21";
 
     internal static class Start
     {
@@ -35,5 +39,4 @@ public static class RouteConstants
     {
         public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task?taskid={0}");
     }
-    
 }
