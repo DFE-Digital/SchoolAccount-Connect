@@ -411,6 +411,10 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
+                              "name": "ASPNETCORE_ENVIRONMENT",
+                              "value": "[parameters('environmentTag')]"
+                            },
+                            {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2015-05-01').InstrumentationKey]"
                             },
@@ -424,6 +428,10 @@
                             },
                             {
                                 "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                "value": "[reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2020-02-02').ConnectionString]"
+                            },
+                            {
+                                "name": "ApplicationInsights__ConnectionString",
                                 "value": "[reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2020-02-02').ConnectionString]"
                             },
                             {
@@ -565,14 +573,6 @@
                             {
                                 "name": "DfeSignIn__DiscoverRolesWithPublicApi",
                                 "value": "false"
-                            },
-                            {
-                              "name": "ApplicationInsights__ConnectionString",
-                              "value": "[concat('InstrumentationKey=', reference(resourceId('Microsoft.Insights/components', parameters('sharedAppInsightsName')), '2015-05-01').InstrumentationKey,';IngestionEndpoint=https://westeurope-2.in.applicationinsights.azure.com/')]"
-                            },
-                            {
-                              "name": "ASPNETCORE_ENVIRONMENT",
-                              "value": "[parameters('environmentTag')]"
                             }
                         ]
                     }
