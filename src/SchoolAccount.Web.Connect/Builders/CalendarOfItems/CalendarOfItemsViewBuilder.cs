@@ -109,7 +109,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             ViewMode = CalendarOfItemsViewModes.Custom | CalendarOfItemsViewModes.Standalone,
             Tabs = [],
             Title = "Upcoming tasks",
-            Description = "These are all the required tasks that you must complete for your school each month.",
+            Description = "These are the next required tasks that you must complete for your school.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null
