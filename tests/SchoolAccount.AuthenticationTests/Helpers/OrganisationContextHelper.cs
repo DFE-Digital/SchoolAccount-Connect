@@ -27,7 +27,7 @@ public static class OrganisationContextHelper
 
         organisation.Name.Returns(name);
         context.Organisation.Returns(organisation);
-        context.IsAuthenticated.Returns(isAuthenticated);
+        context.IsAuthorised.Returns(isAuthenticated);
         context.IsValid.Returns(true);
 
         return context;

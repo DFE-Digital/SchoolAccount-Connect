@@ -15,4 +15,6 @@ public sealed class ErrorViewModel
     public IEnumerable<string> Messages { get; set; } = [];
 
     public string? OriginalPath { get; set; }
+    
+    public string? SignOutUrl { get; init; }
 }

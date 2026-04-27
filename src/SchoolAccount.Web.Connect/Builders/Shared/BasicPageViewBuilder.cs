@@ -7,7 +7,7 @@ public class BasicPageViewBuilder (IOrganisationContext organisationContext)
 {
     public BasicPageViewModel Build()
     {
-        if (organisationContext.IsAuthenticated != true)
+        if (!organisationContext.IsAuthorised)
         {
             return new BasicPageViewModel();
         }

@@ -20,7 +20,7 @@ public class OrganisationContext(
     private OrganisationClaim? Claim { get; } = contextAccessor.GetOrganisation();
 
     public bool IsValid => Claim is not null;
-    public bool IsAuthenticated => IsValid && Provider is not NullProvider;
+    public bool IsAuthorised => IsValid && Provider is not NullProvider;
 
     public SchoolType Type => _schoolType ??= DetermineSchoolType();
 

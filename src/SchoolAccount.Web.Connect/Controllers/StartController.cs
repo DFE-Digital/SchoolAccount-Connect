@@ -15,14 +15,14 @@ public class StartController : Controller
 
     [Authorize]
     [HttpGet(RouteConstants.Start.MatAcceptance)]
-    public IActionResult MatAcceptance(string? returnAddress)
+    public IActionResult MatAcceptance([FromQuery] string? returnAddress)
     {
         return View(new MatAcceptanceViewModel { LocalReturnAddress = returnAddress });
     }
 
     [Authorize]
     [HttpPost(RouteConstants.Start.MatAcceptance)]
-    public IActionResult MatAcceptanceApprove(string? returnAddress)
+    public IActionResult MatAcceptanceApprove([FromQuery] string? returnAddress)
     {
         HttpContext.Session.SetString(SessionKeyConstants.MatAccepted, bool.TrueString);
         return RedirectToRoute(returnAddress ?? RouteConstants.Root);

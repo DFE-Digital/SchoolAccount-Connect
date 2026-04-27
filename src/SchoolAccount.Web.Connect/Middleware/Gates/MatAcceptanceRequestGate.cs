@@ -13,6 +13,7 @@ public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationCon
     {
         if (
             !userContext.IsAuthenticated
+            || !organisationContext.IsAuthorised
             || organisationContext.Organisation is not TrustOrganisation
             || context.Request.Path.StartsWithSegments(
                 RouteConstants.Start.MatAcceptance,
