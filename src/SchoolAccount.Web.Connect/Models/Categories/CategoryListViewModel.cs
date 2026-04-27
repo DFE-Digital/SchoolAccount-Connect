@@ -36,7 +36,7 @@ public record CategoryListViewModel(
     public bool IsStandalone => ViewModes.HasFlag(CategoryListViewModes.Standalone);
     public string HeadingStyles => "-l";
     public string SubHeadingStyles => IsStandalone ? "-l" : string.Empty;
-    public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.None) && Pagination.PageCount > 1;
+    public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.Dashboard) && Pagination.PageCount > 1;
     
     public string? CallToActionMessage
     {

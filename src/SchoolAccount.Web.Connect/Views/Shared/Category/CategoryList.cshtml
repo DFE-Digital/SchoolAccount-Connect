@@ -60,7 +60,7 @@
         </li>
     }
 </ul>
-@if (Model.ViewModes != CategoryListViewModes.None)
+@if (Model.IsStandalone)
 {
     <partial name="_Pagination" model="@Model.Pagination"/>
 }

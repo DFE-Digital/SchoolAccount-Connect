@@ -63,7 +63,6 @@ public class CategoryController(
 
         if (category.IsFailure)
         {
-            //throw new ApplicationException(category.Error.Description);
             return NotFound();
         }
 
@@ -78,7 +77,6 @@ public class CategoryController(
 
         if (results.IsFailure)
         {
-            //throw new ApplicationException(category.Error.Description);
             return NotFound();
         }
 
@@ -101,7 +99,6 @@ public class CategoryController(
 
         if (results.IsFailure)
         {
-            //throw new ApplicationException(category.Error.Description);
             return NotFound();
         }
 

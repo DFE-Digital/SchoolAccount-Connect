@@ -44,13 +44,15 @@ public class CategoryListViewBuilderTests
         var items = new CategoryPagedResult(emptyPagedList);
 
         // Act
-        var viewModel = viewBuilder.BuildForPage(items, CategoryListViewModes.None, currentUri);
+        var viewModel = viewBuilder.BuildForPage(items, CategoryListViewModes.Standalone, currentUri);
 
         // Assert
         viewModel.Heading.Should().Be("Explore categories");
         viewModel.SubHeading.Should().Be("View required tasks and optional guidance by category.");
         viewModel.Description.Should().BeNullOrEmpty();
         viewModel.NoResultsMessage.Should().Be("No results found");
+        viewModel.ShowNavigator.Should().BeFalse();
+        viewModel.IsStandalone.Should().BeTrue();
     }
     
     [Fact]
@@ -87,7 +89,7 @@ public class CategoryListViewBuilderTests
         var items = new CategoryPagedResult(emptyPagedList);
 
         // Act
-        var viewModel = viewBuilder.BuildForDashboard(items, CategoryListViewModes.None, currentUri);
+        var viewModel = viewBuilder.BuildForDashboard(items, CategoryListViewModes.Dashboard, currentUri);
 
         // Assert
         viewModel.Categories.Should().BeEmpty();
@@ -106,7 +108,7 @@ public class CategoryListViewBuilderTests
         var items = new CategoryPagedResult(emptyPagedList);
 
         // Act
-        var viewModel = viewBuilder.BuildForDashboard(items, CategoryListViewModes.None, currentUri);
+        var viewModel = viewBuilder.BuildForDashboard(items, CategoryListViewModes.Dashboard, currentUri);
 
         // Assert
         viewModel.Title.Should().Be("Explore categories");
@@ -114,5 +116,7 @@ public class CategoryListViewBuilderTests
         viewModel.Heading.Should().BeNullOrEmpty();
         viewModel.SubHeading.Should().BeNullOrEmpty();
         viewModel.NoResultsMessage.Should().Be("No results found");
+        viewModel.ShowNavigator.Should().BeFalse();
+        viewModel.IsStandalone.Should().BeFalse();
     }
 }
