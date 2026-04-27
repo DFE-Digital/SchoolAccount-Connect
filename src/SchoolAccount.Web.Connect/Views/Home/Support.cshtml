@@ -7,20 +7,30 @@
     <h1 class="govuk-heading-l">
         Support
     </h1>
-    <p class="govuk-body-l">Resources and guidance that can help guide your decisions or provide support with your
+    <p class="govuk-body">Resources and guidance that can help guide your decisions or provide support with your
         mandatory tasks. All links open in new tabs.</p>
 }
 
-<h2 class="govuk-heading-m">
-    Networks
-</h2>
-<p class="govuk-body">
-    Networks help you connect and share information with other professionals. There are many school business
-    professional networks you can
-    <a class="govuk-link"
-       href="https://www.gov.uk/government/publications/join-or-create-a-network-for-school-business-professionals"
-       target="_blank">find, join or create create a network to support your work activities.</a>
-</p>
+<div class="govuk-grid-row" id="networks-section">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">
+            Networks
+        </h2>
+        <p class="govuk-body">
+            Networks help professionals connect and share information with each other. There are many school business
+            professional networks that provide support on work activities, including finance and buying for schools.
+        </p>
+
+        <ul class="govuk-task-list">
+            <partial name="_ListItem" model='new ListItemViewModel
+                     (
+                         "Find, join or create a network",
+                         "https://www.gov.uk/government/publications/join-or-create-a-network-for-school-business-professionals"
+                     )'
+            />
+        </ul>
+    </div>
+</div>
 
 <div class="govuk-grid-row" id="data-and-insights-section">
     <div class="govuk-grid-column-full">

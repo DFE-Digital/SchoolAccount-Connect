@@ -20,7 +20,6 @@
 
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
     var showRightHandSide = ViewData["ShowRightHandSide"] as bool? ?? true;
-    var cookieRedirect = (string?)ViewData["CookieRedirect"] ?? "https://dfeconnect.education.gov.uk/Home/Cookies";
 }
 
 @section Head {
@@ -56,7 +55,7 @@
                         id="dfe-cta-declineCookies"/>
                     <govuk-cookie-banner-message-action-link
                         text="View cookies"
-                        href="@cookieRedirect"/>
+                        href="@RouteConstants.Cookies"/>
                 </govuk-cookie-banner-message-actions>
             </govuk-cookie-banner-message>
         </govuk-cookie-banner>
@@ -153,7 +152,7 @@
     <govuk-footer>
         <govuk-footer-meta>
             <govuk-footer-meta-items>
-                <govuk-footer-meta-item href="@cookieRedirect">Cookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.Cookies">Cookies</govuk-footer-meta-item>
                 <govuk-footer-meta-item href="@RouteConstants.PrivacyPolicy"
                                         link-target="_blank"
                                         link-rel="noopener noreferrer">
@@ -162,7 +161,7 @@
                 <govuk-footer-meta-item href="@RouteConstants.AccessibilityStatement"
                                         link-target="_blank"
                                         link-rel="noopener noreferrer"
-                >Accessibility statement
+                >Accessibility statement (opens in a new tab)
                 </govuk-footer-meta-item>
                 <govuk-footer-meta-item
                     href="@RouteConstants.ContactUs"
