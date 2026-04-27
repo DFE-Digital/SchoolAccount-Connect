@@ -17,15 +17,17 @@ public static class OrganisationContextHelper
 
         return context;
     }
+    
     public static IOrganisationContext CreateSimpleOrganisationContext(
-        string name = "Test School")
+        string name = "Test School",
+        bool isAuthenticated = true)
     {
         var context = Substitute.For<IOrganisationContext>();
         var organisation = Substitute.For<IOrganisation>();
 
         organisation.Name.Returns(name);
         context.Organisation.Returns(organisation);
-        context.IsAuthenticated.Returns(true);
+        context.IsAuthenticated.Returns(isAuthenticated);
         context.IsValid.Returns(true);
 
         return context;

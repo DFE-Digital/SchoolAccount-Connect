@@ -1,13 +1,17 @@
-﻿@{
+﻿@model SchoolAccount.Web.Connect.Models.Shared.BasicPageViewModel
+
+@{
     ViewData["Title"] = "Maintenance";
 }
 
 @section PageHeading{
-
-    <h1 class="govuk-heading-l">
+    @if (Model.HasOrganisationName)
+    {
+        <p class="govuk-caption govuk-caption-l">@Model.OrganisationName</p>
+    }
+    <h1 class="govuk-heading-l govuk-!-padding-top-0">
         Maintenance
     </h1>
-
     <p class="govuk-body">
         DfE Connect is currently unavailable for maintenance. The service should be available again shortly.
     </p>

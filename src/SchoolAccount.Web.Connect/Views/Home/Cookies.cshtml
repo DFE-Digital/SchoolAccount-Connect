@@ -1,5 +1,6 @@
 ﻿@using SchoolAccount.Kernel.Cookie
 @inject ICookieConsentContext CookieConsent
+@model SchoolAccount.Web.Connect.Models.Shared.BasicPageViewModel
 
 @{
     ViewData["Title"] = "Cookies";
@@ -25,7 +26,11 @@
         </div>
     </div>
     
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">Cookies</h1>
+    @if (Model.HasOrganisationName)
+    {
+        <p class="govuk-caption govuk-caption-l">@Model.OrganisationName</p>
+    }
+    <h1 class="govuk-heading-l govuk-!-padding-top-0">Cookies</h1>
     <p class="govuk-body">
         Cookies are small files saved on your phone, tablet or computer when you visit a website.
     </p>

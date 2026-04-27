@@ -1,14 +1,22 @@
 ﻿@using SchoolAccount.Web.Connect.Models.Shared
+@model SchoolAccount.Web.Connect.Models.Shared.BasicPageViewModel
+
 @{
     ViewData["Title"] = "Support";
 }
 
 @section PageHeading{
-    <h1 class="govuk-heading-l">
+    @if (Model.HasOrganisationName)
+    {
+        <p class="govuk-caption govuk-caption-l">@Model.OrganisationName</p>
+    }
+    <h1 class="govuk-heading-l govuk-!-padding-top-0">
         Support
     </h1>
-    <p class="govuk-body">Resources and guidance that can help guide your decisions or provide support with your
-        mandatory tasks. All links open in new tabs.</p>
+    <p class="govuk-body">
+        Resources and guidance that can help guide your decisions or provide support with your mandatory tasks.
+        All links open in new tabs.
+    </p>
 }
 
 <div class="govuk-grid-row" id="networks-section">

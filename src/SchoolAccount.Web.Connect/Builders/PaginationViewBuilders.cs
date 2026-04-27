@@ -1,6 +1,6 @@
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.Interfaces;
+using SchoolAccount.Web.Connect.Models.Shared;
 using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Builders;

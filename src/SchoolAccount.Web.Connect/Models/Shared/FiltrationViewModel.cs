@@ -2,7 +2,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Web.Connect.Extensions;
 
-namespace SchoolAccount.Web.Connect.Models;
+namespace SchoolAccount.Web.Connect.Models.Shared;
 
 public class FiltrationViewModel(CalendarOfItemsViewModes viewModes, Uri baseUrl, IEnumerable<Filterable> items) : List<Filterable>(items)
 {

@@ -1,6 +1,6 @@
 using X.PagedList;
 
-namespace SchoolAccount.Web.Connect.Models;
+namespace SchoolAccount.Web.Connect.Models.Shared;
 
 public class Pagination : IPagedList
 {

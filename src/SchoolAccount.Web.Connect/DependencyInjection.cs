@@ -19,6 +19,7 @@ using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
+using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Filters;
 using SchoolAccount.Web.Connect.Infrastructure;
@@ -221,5 +222,6 @@ internal static class DependencyInjection
         services.AddScoped<CalendarOfItemsViewBuilder>();
         services.AddScoped<CategoryHubViewBuilder>();
         services.AddScoped<CategoryListViewBuilder>();
+        services.AddScoped<BasicPageViewBuilder>();
     }
 }

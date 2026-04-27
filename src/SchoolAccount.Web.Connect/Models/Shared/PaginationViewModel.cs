@@ -1,7 +1,7 @@
 ﻿using SchoolAccount.Web.Connect.Models.Interfaces;
 using X.PagedList;
 
-namespace SchoolAccount.Web.Connect.Models;
+namespace SchoolAccount.Web.Connect.Models.Shared;
 
 public record PaginationViewModel(IReadOnlyList<IPaginationItem> Items) : IPagedList
 {

@@ -11,8 +11,8 @@ using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Domain.Dtos;
-using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders;
+using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -22,7 +22,8 @@ public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
     IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
-    DashboardViewBuilder dashboardViewBuilder
+    DashboardViewBuilder dashboardViewBuilder,
+    BasicPageViewBuilder basicPageViewBuilder
 ) : Controller
 {
     [HttpGet]
@@ -74,14 +75,18 @@ public sealed class HomeController(
     [HttpGet(RouteConstants.Support)]
     public IActionResult Support()
     {
-        return View("Support");
+        var model = basicPageViewBuilder.Build();
+
+        return View("Support", model);
     }
     
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
     public IActionResult Cookies()
     {
-        return View("Cookies");
+        var model = basicPageViewBuilder.Build();
+        
+        return View("Cookies", model);
     }
 
     [HttpGet(RouteConstants.Maintenance)]
@@ -89,6 +94,8 @@ public sealed class HomeController(
     [AllowAnonymous]
     public IActionResult Maintenance()
     {
-        return View();
+        var model = basicPageViewBuilder.Build();
+        
+        return View("Maintenance", model);
     }
 }

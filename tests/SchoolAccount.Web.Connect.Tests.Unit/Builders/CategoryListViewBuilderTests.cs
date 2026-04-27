@@ -58,7 +58,7 @@ public class CategoryListViewBuilderTests
     {
         // Arrange
         var schoolName = "Test School";
-        var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext();
+        var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext(schoolName);
 
         var emptyPagedList = new StaticPagedList<CategoryRow>(new List<CategoryRow>(), 1, 10, 0);
         var viewBuilder = new CategoryListViewBuilder(organisationContext);

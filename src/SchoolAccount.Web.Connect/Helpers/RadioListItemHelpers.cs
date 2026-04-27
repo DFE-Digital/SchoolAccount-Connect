@@ -1,5 +1,6 @@
 ﻿using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Models;
+using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Helpers;
 

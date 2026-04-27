@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering;
 
-namespace SchoolAccount.Web.Connect.Models;
+namespace SchoolAccount.Web.Connect.Models.Shared;
 
 public record FilterCheckboxViewModel(Filterable Filter, Collection<FilterableItem> Children)
 {
