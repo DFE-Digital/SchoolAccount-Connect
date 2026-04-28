@@ -128,20 +128,22 @@
     }
 </div>
 
-@Html.GovUkFrontendScriptImports()
-@Html.MojFrontendScriptImports()
+@section BodyEnd {
+    @Html.GovUkFrontendScriptImports()
 
-<script>
-    window.cookieConsentConfig = {
-        cookieName: "@CookieConsentConstants.CookieName",
-        acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
-        rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
-    };
-</script>
+    <script>
+        window.cookieConsentConfig = {
+            cookieName: "@CookieConsentConstants.CookieName",
+            acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
+            rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
+        };
+    </script>
 
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script src="~/js/feedback.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/feedback.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+}
 
 @section Footer {
     @if (isAuthenticated)
