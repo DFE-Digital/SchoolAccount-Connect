@@ -40,6 +40,7 @@
     <Project Path="tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
     <Project Path="tests/SchoolAccount.Domain.Tests.Unit/SchoolAccount.Domain.Tests.Unit.csproj" />
     <Project Path="tests/SchoolAccount.FrontEndTests/SchoolAccount.FrontEndTests.csproj" />
+    <Project Path="tests/SchoolAccount.InfrastructureTests/SchoolAccount.InfrastructureTests.csproj" />
     <Project Path="tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
     <Project Path="tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
   </Folder>
