@@ -93,15 +93,20 @@ html {
     height: 30px;
 }
 
-.govuk-footer__copyright-logo:before {
-    mask-image: url("/lib/dfe-frontend/assets/image/dfe-crest.svg");
-    background: var(--govuk-colour--dark-grey);
+.govuk-footer__copyright-logo::before {
+    content: none !important;
+    display: none !important;
 }
 
-.govuk-footer__crown {
-    display: none;
+.govuk-footer__copyright-logo {
+    display: inline-block !important;
+    min-width: 125px !important;
+    padding-top: 112px !important;
+    background-image: url("/lib/dfe-frontend/assets/image/dfe-crest.svg") !important;
+    background-repeat: no-repeat !important;
+    background-position: 50% 0 !important;
+    background-size: 125px 102px !important;
 }
-
 /* Top Navigation */
 
 .dfe-header-container {
@@ -368,6 +373,7 @@ header.dfe-connect-header .dfe-connect-header__signout {
     text-decoration: underline;
     white-space: nowrap;
     padding-left: 12px;
+    padding-right: 12px;
 }
 
 /* ------------------------------------------------------------
@@ -647,9 +653,7 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
     }
 
     header.dfe-connect-header .dfe-connect-header__search-toggle {
-        width: 36px;
-        border-left: 0;
-        border-right: 0;
+        width: 36px;        
     }
 
     header.dfe-connect-header .dfe-connect-header__signout {
