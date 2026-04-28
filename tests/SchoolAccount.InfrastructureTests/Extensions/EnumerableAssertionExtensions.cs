@@ -10,7 +10,8 @@ public static class EnumerableAssertionExtensions
         Func<TSource, TKey> selector,
         bool isAscending,
         string because = "",
-        params object[] becauseArgs)
+        params object[] becauseArgs
+    )
     {
         return isAscending
             ? assertions.Subject.Select(selector).Should().BeInAscendingOrder(because, becauseArgs)

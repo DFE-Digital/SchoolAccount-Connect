@@ -66,7 +66,7 @@ public sealed class FilterRequestBuilder
             Field = _field,
             Value = _value,
             Operator = _comparisonType,
-            Children = _children.Select(x => x.Build()).ToCollection()
+            Children = _children.Select(x => x.Build()).ToCollection(),
         };
     }
 

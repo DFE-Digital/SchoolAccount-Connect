@@ -10,10 +10,10 @@ internal sealed class TestAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumera
 {
     internal TestAsyncEnumerable(IEnumerable<T> enumerable)
         : base(enumerable) { }
- 
+
     internal TestAsyncEnumerable(Expression expression)
         : base(expression) { }
- 
+
     IQueryProvider IQueryable.Provider => new TestAsyncQueryProvider<T>(this);
 
     public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)

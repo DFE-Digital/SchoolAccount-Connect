@@ -43,7 +43,7 @@ public partial class CalendarOfItemsAggregatorTests
                 SortMode = sortMode,
                 Filter = filter ?? new CalendarOfItemsFilter([]),
                 IncludeFilterOptions = includeFilterOptions,
-                CustomOrderByFunction = customOrderByFunction
+                CustomOrderByFunction = customOrderByFunction,
             };
         }
 
@@ -51,7 +51,8 @@ public partial class CalendarOfItemsAggregatorTests
         {
             public static ICalendarOfItemsQueryFactory Query(
                 CalendarOfItemsQueryTypes type,
-                IEnumerable<CalendarOfItemsRow> rows)
+                IEnumerable<CalendarOfItemsRow> rows
+            )
             {
                 var factory = Substitute.For<ICalendarOfItemsQueryFactory>();
                 factory.IsQueryableFor(type).Returns(true);
@@ -75,7 +76,8 @@ public partial class CalendarOfItemsAggregatorTests
         public static CalendarOfItemsAggregator Aggregator(
             IEnumerable<ICalendarOfItemsQueryFactory> factories,
             FilterableFieldRegistry? registry = null,
-            IEnumerable<IFilterableFactory>? filterFactories = null)
+            IEnumerable<IFilterableFactory>? filterFactories = null
+        )
         {
             var resolver = new CalendarOfItemsQueryFactoryResolver(factories);
             var reg = registry ?? new FilterableFieldRegistry([]);

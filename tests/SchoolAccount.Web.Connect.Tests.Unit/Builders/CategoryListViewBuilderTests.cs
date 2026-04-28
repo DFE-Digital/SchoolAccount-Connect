@@ -31,7 +31,7 @@ public class CategoryListViewBuilderTests
         viewModel.Categories.Should().BeEmpty();
         viewModel.NoResultsMessage.Should().NotBeNullOrEmpty();
     }
-    
+
     [Fact]
     public void BuildForPage_successfully_sets_the_correct_text_for_the_Page_view()
     {
@@ -54,7 +54,7 @@ public class CategoryListViewBuilderTests
         viewModel.ShowNavigator.Should().BeFalse();
         viewModel.IsStandalone.Should().BeTrue();
     }
-    
+
     [Fact]
     public void BuildForPage_successfully_sets_the_correct_caption_for_the_Page_view()
     {
@@ -72,11 +72,10 @@ public class CategoryListViewBuilderTests
         var viewModel = viewBuilder.BuildForPage(items, CategoryListViewModes.None, currentUri);
 
         // Assert
-        organisationContext.Organisation.Name
-            .Should().Be(schoolName);
+        organisationContext.Organisation.Name.Should().Be(schoolName);
         viewModel.Caption.Should().Be(schoolName);
     }
-    
+
     [Fact]
     public void BuildForDashboard_successfully_handles_an_empty_list_of_items()
     {
@@ -95,7 +94,7 @@ public class CategoryListViewBuilderTests
         viewModel.Categories.Should().BeEmpty();
         viewModel.NoResultsMessage.Should().NotBeNullOrEmpty();
     }
-    
+
     [Fact]
     public void BuildForDashboard_successfully_sets_the_correct_text_for_the_Dashboard_view()
     {

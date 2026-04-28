@@ -9,7 +9,7 @@ public sealed class CalendarOfItemsRowStatusBuilder
     private CalendarOfItemsRowType? _type;
     private string? _theme;
     private long? _entityId;
-        
+
     internal CalendarOfItemsRowStatusBuilder(string displayValue)
     {
         _displayValue = displayValue;
@@ -40,7 +40,7 @@ public sealed class CalendarOfItemsRowStatusBuilder
             DisplayValue = _displayValue,
             Type = _type,
             Theme = _theme,
-            EntityId = _entityId
+            EntityId = _entityId,
         };
     }
 

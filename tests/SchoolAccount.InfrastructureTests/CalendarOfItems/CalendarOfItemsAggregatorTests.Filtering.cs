@@ -16,9 +16,7 @@ public partial class CalendarOfItemsAggregatorTests
         // Arrange
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
         var sut = Make.Aggregator([queryFactory]);
         var criteria = Make.Criteria(includeFilterOptions: false);
@@ -28,9 +26,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result.IsSuccess.Should().BeTrue(because: "Operation should still successfully complete");
-        result
-            .Value.Filter.Should()
-            .BeEmpty(because: "Only returns a filterable items list when requested for");
+        result.Value.Filter.Should().BeEmpty(because: "Only returns a filterable items list when requested for");
     }
 
     [Fact]
@@ -40,14 +36,9 @@ public partial class CalendarOfItemsAggregatorTests
         var emulationOfNoFilterableFactories = Substitute.For<IFilterableFactory<CalendarOfItemsRow>>();
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
-        var sut = Make.Aggregator(
-            [queryFactory],
-            filterFactories: [emulationOfNoFilterableFactories]
-        );
+        var sut = Make.Aggregator([queryFactory], filterFactories: [emulationOfNoFilterableFactories]);
         var criteria = Make.Criteria(includeFilterOptions: true);
 
         // Act
@@ -65,21 +56,15 @@ public partial class CalendarOfItemsAggregatorTests
     public async Task Ensure_filterable_items_within_catalog_are_present_when_requested()
     {
         // Arrange
-        Filterable filterableOptions = FilterableExtensions.Create("Status")
-            .WithValues(
-                FilterableItemExtensions.Create("Active").UnSelected()
-            );
+        Filterable filterableOptions = FilterableExtensions
+            .Create("Status")
+            .WithValues(FilterableItemExtensions.Create("Active").UnSelected());
         var filterFactory = Make.Factory.Filterable(filterableOptions);
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
-        var sut = Make.Aggregator(
-            [queryFactory],
-            filterFactories: [filterFactory]
-        );
+        var sut = Make.Aggregator([queryFactory], filterFactories: [filterFactory]);
         var criteria = Make.Criteria(includeFilterOptions: true);
 
         // Act
@@ -88,7 +73,8 @@ public partial class CalendarOfItemsAggregatorTests
         // Assert
         result.IsSuccess.Should().BeTrue(because: "Operation should still successfully complete");
         result
-            .Value.Filter.Should().ContainSingle()
+            .Value.Filter.Should()
+            .ContainSingle()
             .Which.Field.Should()
             .Be(
                 filterableOptions.Field,
@@ -100,21 +86,15 @@ public partial class CalendarOfItemsAggregatorTests
     public async Task If_a_filter_query_doesnt_match_item_in_filter_catelog_nothing_is_selected()
     {
         // Arrange
-        Filterable filterable = FilterableExtensions.Create("Status")
-                .WithValues(
-                    FilterableItemExtensions.Create("Archived")
-                );
+        Filterable filterable = FilterableExtensions
+            .Create("Status")
+            .WithValues(FilterableItemExtensions.Create("Archived"));
         var filterFactory = Make.Factory.Filterable(filterable);
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
-        var sut = Make.Aggregator(
-            [queryFactory],
-            filterFactories: [filterFactory]
-        );
+        var sut = Make.Aggregator([queryFactory], filterFactories: [filterFactory]);
         var criteria = Make.Criteria(
             includeFilterOptions: true,
             filter: CalendarOfItemsFilterExtensions.Create(
@@ -127,17 +107,20 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result.IsSuccess.Should().BeTrue(because: "Operation should still successfully complete");
-        result.Value.Filter.Should().BeEquivalentTo(
-            [filterable],
-            because: "There should only be one item within the list as only one was registered and nothing should " +
-                     "be selected"
-        );
         result
-            .Value.Filter
-            .Should().ContainSingle(f => f.Field == "Status")
-            .Which.Values
-            .Should().ContainSingle(v => v.Value == "Archived")
-            .Which.IsSelected.Should().BeFalse();
+            .Value.Filter.Should()
+            .BeEquivalentTo(
+                [filterable],
+                because: "There should only be one item within the list as only one was registered and nothing should "
+                    + "be selected"
+            );
+        result
+            .Value.Filter.Should()
+            .ContainSingle(f => f.Field == "Status")
+            .Which.Values.Should()
+            .ContainSingle(v => v.Value == "Archived")
+            .Which.IsSelected.Should()
+            .BeFalse();
     }
 
     [Fact]
@@ -145,26 +128,16 @@ public partial class CalendarOfItemsAggregatorTests
     {
         // Arrange
         var filterFactory = Make.Factory.Filterable(
-            FilterableExtensions.Create("Status")
-                .WithValues(
-                    FilterableItemExtensions.Create("Active")
-                )
+            FilterableExtensions.Create("Status").WithValues(FilterableItemExtensions.Create("Active"))
         );
         var factoryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
-        var sut = Make.Aggregator(
-            [factoryFactory],
-            filterFactories: [filterFactory]
-        );
+        var sut = Make.Aggregator([factoryFactory], filterFactories: [filterFactory]);
         var criteria = Make.Criteria(
             includeFilterOptions: true,
-            filter: CalendarOfItemsFilterExtensions.Create(
-                FilterRequestExtensions.Create("Status").WithValue("Active")
-            )
+            filter: CalendarOfItemsFilterExtensions.Create(FilterRequestExtensions.Create("Status").WithValue("Active"))
         );
 
         // Act
@@ -172,11 +145,13 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result.IsSuccess.Should().BeTrue(because: "Operation should still successfully complete");
-        result.Value.Filter
-            .Should().ContainSingle(f => f.Field == "Status")
-            .Which.Values
-            .Should().ContainSingle(v => v.Value == "Active")
-            .Which.IsSelected.Should().BeFalse();
+        result
+            .Value.Filter.Should()
+            .ContainSingle(f => f.Field == "Status")
+            .Which.Values.Should()
+            .ContainSingle(v => v.Value == "Active")
+            .Which.IsSelected.Should()
+            .BeFalse();
     }
 
     [Fact]
@@ -185,14 +160,16 @@ public partial class CalendarOfItemsAggregatorTests
         // Arrange
         List<Filterable> filterables =
         [
-            FilterableExtensions.Create("Status")
+            FilterableExtensions
+                .Create("Status")
                 .WithValues(
                     FilterableItemExtensions.Create("Active"),
                     FilterableItemExtensions.Create("Inactive"),
                     FilterableItemExtensions.Create("Urgent"),
                     FilterableItemExtensions.Create("Dismissed")
                 ),
-            FilterableExtensions.Create("Colours")
+            FilterableExtensions
+                .Create("Colours")
                 .WithValues(
                     FilterableItemExtensions.Create("Red"),
                     FilterableItemExtensions.Create("Blue"),
@@ -203,46 +180,46 @@ public partial class CalendarOfItemsAggregatorTests
                     FilterableItemExtensions.Create("Black"),
                     FilterableItemExtensions.Create("White")
                 ),
-            FilterableExtensions.Create("SchoolType")
+            FilterableExtensions
+                .Create("SchoolType")
                 .WithDisplayName("School Type")
                 .WithValues(
                     FilterableItemExtensions.Create("Primary"),
                     FilterableItemExtensions.Create("Secondary"),
                     FilterableItemExtensions.Create("College"),
                     FilterableItemExtensions.Create("University")
-                )
+                ),
         ];
         var filterFactory = Make.Factory.Filterable(filterables.ToArray());
         var factoryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
-            [
-                CalendarOfItemsRowExtensions.Create(Today)
-            ]
+            [CalendarOfItemsRowExtensions.Create(Today)]
         );
-        var sut = Make.Aggregator(
-            [factoryFactory],
-            filterFactories: [filterFactory]
-        );
+        var sut = Make.Aggregator([factoryFactory], filterFactories: [filterFactory]);
         var criteria = Make.Criteria(
             includeFilterOptions: true,
             filter: CalendarOfItemsFilterExtensions.Create(
                 FilterRequestExtensions.Create("Status").WithValues("Active")
             )
         );
-        
+
         // Act
         var result = await sut.Query(criteria, CancellationToken.None);
 
         // Assert
-        result.Value.Filter.Should().BeEquivalentTo(
-            filterables,
-            because: "There should only be one item within the list as only one was registered and nothing should " +
-                     "be selected"
-        );
-        result.Value.Filter
-            .Should().Contain(f => f.Field == "SchoolType")
-            .Which.Values
-            .Should().Contain(v => v.Value == "Primary")
-            .Which.IsSelected.Should().BeFalse();
+        result
+            .Value.Filter.Should()
+            .BeEquivalentTo(
+                filterables,
+                because: "There should only be one item within the list as only one was registered and nothing should "
+                    + "be selected"
+            );
+        result
+            .Value.Filter.Should()
+            .Contain(f => f.Field == "SchoolType")
+            .Which.Values.Should()
+            .Contain(v => v.Value == "Primary")
+            .Which.IsSelected.Should()
+            .BeFalse();
     }
 }

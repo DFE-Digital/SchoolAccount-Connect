@@ -8,6 +8,7 @@ public static class FilterableItemExtensions
     {
         return new FilterableItemBuilder(displayValue, value);
     }
+
     public static FilterableItemBuilder Create(string value)
     {
         return new FilterableItemBuilder(value, value);

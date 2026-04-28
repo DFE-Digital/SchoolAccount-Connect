@@ -23,7 +23,7 @@ public class CategoryHubViewBuilderTests
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        
+
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/all-tasks");
 
@@ -35,7 +35,7 @@ public class CategoryHubViewBuilderTests
         // Assert
         viewModel.Items.Should().BeEmpty();
     }
-    
+
     [Fact]
     public void Successfully_sets_the_correct_text_for_AllTasks_view_when_category_is_null()
     {
@@ -44,7 +44,7 @@ public class CategoryHubViewBuilderTests
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        
+
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/all-tasks");
 
@@ -60,7 +60,7 @@ public class CategoryHubViewBuilderTests
         viewModel.Description.Should().Be("Explore all tasks and support");
         viewModel.NoResultsMessage.Should().Be("No results found");
     }
-    
+
     [Fact]
     public void Successfully_sets_the_correct_text_for_Category_when_category_is_set()
     {
@@ -69,19 +69,19 @@ public class CategoryHubViewBuilderTests
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
-        
+
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/1");
 
         var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
-        
+
         var category = new CategoryType
         {
             Id = 1,
             Name = "NewCategory",
             DisplayName = "New Category",
             Description = "Description",
-            HubViewDescription = "HubViewDescription"
+            HubViewDescription = "HubViewDescription",
         };
 
         // Act

@@ -28,7 +28,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
 
         return Build(options, items, currentUri);
     }
-    
+
     public CategoryListViewModel BuildForDashboard(
         CategoryPagedResult items,
         CategoryListViewModes viewModes,
@@ -58,11 +58,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
                 .ToCollection();
         }
 
-        return new CategoryListViewModel(
-            options.ViewMode,
-            rows,
-            _paginationViewBuilder.Build(result, currentUri)
-        )
+        return new CategoryListViewModel(options.ViewMode, rows, _paginationViewBuilder.Build(result, currentUri))
         {
             Caption = organisationContext.Organisation.Name,
             NoResultsMessage = options.NoResultsMessage,

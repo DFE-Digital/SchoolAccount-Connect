@@ -32,7 +32,11 @@ public class DashboardViewBuilder(
         dashboardViewItems.Add(
             new DashboardViewItem(
                 ViewAddressConstraints.Categories.List,
-                categoryListViewBuilder.BuildForDashboard(categoryPagedResult, CategoryListViewModes.Dashboard, currentUri)
+                categoryListViewBuilder.BuildForDashboard(
+                    categoryPagedResult,
+                    CategoryListViewModes.Dashboard,
+                    currentUri
+                )
             )
         );
 

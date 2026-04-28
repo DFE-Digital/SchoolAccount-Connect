@@ -18,7 +18,7 @@ public class CalendarOfItemsRowCollectionBuilder
     {
         _range = range;
     }
-    
+
     public class CalendarOfItemsRowOptions
     {
         public string? Name { get; set; }
@@ -26,32 +26,41 @@ public class CalendarOfItemsRowCollectionBuilder
         public CalendarOfItemsRowType? Type { get; set; }
     }
 
-    public CalendarOfItemsRowCollectionBuilder Populate(int numberOfRowsToCreate, 
-        Action<CalendarOfItemsRowOptions>? configure = null, Func<int, bool>? where = null, int startId = 1)
+    public CalendarOfItemsRowCollectionBuilder Populate(
+        int numberOfRowsToCreate,
+        Action<CalendarOfItemsRowOptions>? configure = null,
+        Func<int, bool>? where = null,
+        int startId = 1
+    )
     {
         configure ??= _ => { };
         for (var i = 0; i < numberOfRowsToCreate; i++)
         {
             var id = startId + i;
             var options = new CalendarOfItemsRowOptions();
-            
+
             if (where is null || where(id))
             {
                 configure(options);
             }
 
-            Add(CalendarOfItemsRowExtensions.Create(
-                startId + i,
-                options.Name ?? _faker?.Name.FullName() ?? string.Empty,
-                options.Date ?? _faker?.Date.BetweenDateOnly(_range.Start, _range.End) ?? _range.Start,
-                options.Type ?? CalendarOfItemsRowType.None));
+            Add(
+                CalendarOfItemsRowExtensions.Create(
+                    startId + i,
+                    options.Name ?? _faker?.Name.FullName() ?? string.Empty,
+                    options.Date ?? _faker?.Date.BetweenDateOnly(_range.Start, _range.End) ?? _range.Start,
+                    options.Type ?? CalendarOfItemsRowType.None
+                )
+            );
         }
 
         return this;
     }
 
-    public CalendarOfItemsRowCollectionBuilder Populate(int numberOfRowsToCreate,
-        Func<int, Faker, DateOnlyRange, CalendarOfItemsRowBuilder> row)
+    public CalendarOfItemsRowCollectionBuilder Populate(
+        int numberOfRowsToCreate,
+        Func<int, Faker, DateOnlyRange, CalendarOfItemsRowBuilder> row
+    )
     {
         for (var i = 0; i < numberOfRowsToCreate; i++)
         {
@@ -85,8 +94,10 @@ public class CalendarOfItemsRowCollectionBuilder
         return this;
     }
 
-    public CalendarOfItemsRowCollectionBuilder Apply(Func<CalendarOfItemsRowBuilder, bool> predicate,
-        Action<CalendarOfItemsRowBuilder> action)
+    public CalendarOfItemsRowCollectionBuilder Apply(
+        Func<CalendarOfItemsRowBuilder, bool> predicate,
+        Action<CalendarOfItemsRowBuilder> action
+    )
     {
         foreach (var row in _rows.Where(predicate))
         {
@@ -96,8 +107,10 @@ public class CalendarOfItemsRowCollectionBuilder
         return this;
     }
 
-    public CalendarOfItemsRowCollectionBuilder Apply(Func<CalendarOfItemsRowBuilder, bool> predicate,
-        Action<CalendarOfItemsRowBuilder, Faker> action)
+    public CalendarOfItemsRowCollectionBuilder Apply(
+        Func<CalendarOfItemsRowBuilder, bool> predicate,
+        Action<CalendarOfItemsRowBuilder, Faker> action
+    )
     {
         foreach (var row in _rows.Where(predicate))
         {
@@ -106,12 +119,12 @@ public class CalendarOfItemsRowCollectionBuilder
 
         return this;
     }
-    
+
     public CalendarOfItemsRowCollectionBuilder Apply(Action<CalendarOfItemsRowBuilder, Faker> action)
     {
         return Apply(_ => true, action);
     }
-    
+
     public CalendarOfItemsRowCollectionBuilder Apply(Action<CalendarOfItemsRowBuilder> action)
     {
         return Apply(_ => true, action);
@@ -123,7 +136,7 @@ public class CalendarOfItemsRowCollectionBuilder
         {
             action(_rows[index]);
         }
-        
+
         return this;
     }
 
@@ -133,7 +146,7 @@ public class CalendarOfItemsRowCollectionBuilder
         {
             action(_rows[index], _faker);
         }
-        
+
         return this;
     }
 

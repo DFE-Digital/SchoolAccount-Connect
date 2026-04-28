@@ -9,7 +9,7 @@ public static class CalendarOfItemsFilterExtensions
     {
         return new CalendarOfItemsFilter(filters.Select(x => x.Build()));
     }
-    
+
     public static CalendarOfItemsFilter Create(params FilterRequestBuilder[] filters)
     {
         return new CalendarOfItemsFilter(filters.Select(x => x.Build()));

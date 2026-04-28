@@ -16,10 +16,7 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
         CancellationToken cancellationToken
     )
     {
-        var extraCategory = new CategoryRow
-        {
-            Name = "All tasks"
-        };
+        var extraCategory = new CategoryRow { Name = "All tasks" };
 
         var dbCategories = await applicationDbContext
             .Types.AsNoTracking()

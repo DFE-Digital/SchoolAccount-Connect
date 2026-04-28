@@ -9,7 +9,6 @@ public sealed class CalendarOfItemsExtensionNodeBuilder
     private string? _displayValue;
     private CalendarOfItemsExtensionNodeType _type = CalendarOfItemsExtensionNodeType.NotSpecified;
 
-        
     internal CalendarOfItemsExtensionNodeBuilder(long id)
     {
         _id = id;
@@ -40,7 +39,7 @@ public sealed class CalendarOfItemsExtensionNodeBuilder
             Id = _id,
             Name = _name,
             DisplayValue = _displayValue,
-            Type = _type
+            Type = _type,
         };
     }
 

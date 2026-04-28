@@ -15,7 +15,10 @@ public partial class CalendarOfItemsAggregatorTests
 
         CalendarOfItemsRow rowOnStartBoundary = CalendarOfItemsRowExtensions.Create(1, DefaultRange.Start);
         CalendarOfItemsRow rowOnEndBoundary = CalendarOfItemsRowExtensions.Create(2, DefaultRange.End);
-        CalendarOfItemsRow rowOneDayBeforeStart = CalendarOfItemsRowExtensions.Create(3, DefaultRange.Start.AddDays(-1));
+        CalendarOfItemsRow rowOneDayBeforeStart = CalendarOfItemsRowExtensions.Create(
+            3,
+            DefaultRange.Start.AddDays(-1)
+        );
         CalendarOfItemsRow rowOneDayAfterEnd = CalendarOfItemsRowExtensions.Create(4, DefaultRange.End.AddDays(1));
 
         var factory = Make.Factory.Query(
@@ -42,13 +45,13 @@ public partial class CalendarOfItemsAggregatorTests
     {
         // Arrange
         var criteria = Make.Criteria();
-        
+
         CalendarOfItemsRow rowThatIsEmpty = CalendarOfItemsRowExtensions.Create();
         CalendarOfItemsRow rowWithDate = CalendarOfItemsRowExtensions.Create(Today);
-        
+
         var factory = Make.Factory.Query(CalendarOfItemsQueryTypes.SubTask, [rowThatIsEmpty, rowWithDate]);
         var sut = Make.Aggregator([factory]);
-        
+
         // Act
         var result = await sut.Query(criteria, CancellationToken.None);
 
@@ -57,7 +60,7 @@ public partial class CalendarOfItemsAggregatorTests
             .Value.Payload.Should()
             .BeEquivalentTo(
                 [rowWithDate],
-                because:"Has only one as the other row is not in scope as it has a missing date"
+                because: "Has only one as the other row is not in scope as it has a missing date"
             );
     }
 }

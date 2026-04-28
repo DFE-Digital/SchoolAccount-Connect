@@ -20,13 +20,13 @@ public sealed class FilterableItemBuilder
 
     public FilterableItemBuilder IsSelected()
     {
-        _isSelected =  true;
+        _isSelected = true;
         return this;
     }
 
     public FilterableItemBuilder UnSelected()
     {
-        _isSelected =  false;
+        _isSelected = false;
         return this;
     }
 
@@ -63,7 +63,7 @@ public sealed class FilterableItemBuilder
         _children.AddRange(children.Select(x => x.Build()));
         return this;
     }
-    
+
     public FilterableItem Build()
     {
         return new FilterableItem
@@ -72,7 +72,7 @@ public sealed class FilterableItemBuilder
             Value = _value,
             IsSelected = _isSelected,
             Children = _children?.ToCollection() ?? null,
-            Count = _count
+            Count = _count,
         };
     }
 

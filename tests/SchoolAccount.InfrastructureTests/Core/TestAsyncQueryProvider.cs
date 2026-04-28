@@ -6,12 +6,12 @@ namespace SchoolAccount.InfrastructureTests.Core;
 internal sealed class TestAsyncQueryProvider<T> : IAsyncQueryProvider
 {
     private readonly IQueryProvider _inner;
- 
+
     internal TestAsyncQueryProvider(IQueryProvider inner)
     {
         _inner = inner;
     }
- 
+
     public IQueryable CreateQuery(Expression expression)
     {
         return new TestAsyncEnumerable<T>(expression);
@@ -37,16 +37,17 @@ internal sealed class TestAsyncQueryProvider<T> : IAsyncQueryProvider
     public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
- 
+
         var resultType = typeof(TResult).GetGenericArguments().First();
         var executionResult = typeof(IQueryProvider)
             .GetMethod(nameof(Execute), 1, [typeof(Expression)])!
             .MakeGenericMethod(resultType)
             .Invoke(this, [expression]);
- 
-        return (TResult)typeof(Task)
-            .GetMethod(nameof(Task.FromResult))!
-            .MakeGenericMethod(resultType)
-            .Invoke(null, [executionResult])!;
+
+        return (TResult)
+            typeof(Task)
+                .GetMethod(nameof(Task.FromResult))!
+                .MakeGenericMethod(resultType)
+                .Invoke(null, [executionResult])!;
     }
 }

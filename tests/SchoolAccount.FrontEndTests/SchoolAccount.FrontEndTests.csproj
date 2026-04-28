@@ -3,7 +3,8 @@
     <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NSubstitute" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" /><!-- https://github.com/advisories/GHSA-9mv3-2cwr-p262 -->
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" />
+    <!-- https://github.com/advisories/GHSA-9mv3-2cwr-p262 -->
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

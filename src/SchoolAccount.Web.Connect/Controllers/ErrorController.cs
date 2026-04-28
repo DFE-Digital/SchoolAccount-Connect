@@ -22,9 +22,9 @@ public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEn
             ShowException = !environment.IsProduction(),
             Exception = exceptionFeature?.Error,
             OriginalPath = reExecute?.OriginalPath ?? exceptionFeature?.Path ?? HttpContext.Request.Path,
-            SignOutUrl = Url.Action("SignOut", "Account", new { area = "MicrosoftIdentity" })
+            SignOutUrl = Url.Action("SignOut", "Account", new { area = "MicrosoftIdentity" }),
         };
-        
+
         switch (exceptionFeature?.Error)
         {
             case ProviderAuthorisationException:
@@ -39,7 +39,7 @@ public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEn
         return View(
             code is >= StatusCodes.Status400BadRequest and < StatusCodes.Status500InternalServerError
                 ? "Error/NotFound"
-                : "Error/ServiceFailure", 
+                : "Error/ServiceFailure",
             model
         );
     }

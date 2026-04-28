@@ -31,15 +31,12 @@ public sealed class FilterableBuilder
         _items.AddRange(items);
         return this;
     }
-    
+
     public Filterable Build()
     {
-        return new Filterable(
-            _id,
-            _displayName ?? string.Empty
-        )
+        return new Filterable(_id, _displayName ?? string.Empty)
         {
-            Values = _items.Select(x => x.Build()).ToCollection()
+            Values = _items.Select(x => x.Build()).ToCollection(),
         };
     }
 

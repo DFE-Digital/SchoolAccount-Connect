@@ -17,7 +17,6 @@ public partial class CalendarOfItemsAggregatorTests
         var criteria = Make.Criteria();
 
         // Assert
-        await sut.Invoking(s => s.Query(criteria, cts.Token))
-            .Should().ThrowAsync<OperationCanceledException>();
+        await sut.Invoking(s => s.Query(criteria, cts.Token)).Should().ThrowAsync<OperationCanceledException>();
     }
 }

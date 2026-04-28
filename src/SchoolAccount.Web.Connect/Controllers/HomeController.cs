@@ -79,13 +79,13 @@ public sealed class HomeController(
 
         return View("Support", model);
     }
-    
+
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
     public IActionResult Cookies()
     {
         var model = basicPageViewBuilder.Build();
-        
+
         return View("Cookies", model);
     }
 
@@ -95,7 +95,7 @@ public sealed class HomeController(
     public IActionResult Maintenance()
     {
         var model = basicPageViewBuilder.Build();
-        
+
         return View("Maintenance", model);
     }
 }

@@ -23,7 +23,7 @@ public class BasicPageViewBuilderTests
         viewModel.OrganisationName.Should().BeNull();
         viewModel.HasOrganisationName.Should().BeFalse();
     }
-    
+
     [Fact]
     public void Build_does_not_add_the_OrganisationName_when_authentication_is_false()
     {
@@ -39,7 +39,7 @@ public class BasicPageViewBuilderTests
         viewModel.OrganisationName.Should().BeNull();
         viewModel.HasOrganisationName.Should().BeFalse();
     }
-    
+
     [Fact]
     public void Build_successfully_adds_the_OrganisationName_when_authentication_is_true()
     {

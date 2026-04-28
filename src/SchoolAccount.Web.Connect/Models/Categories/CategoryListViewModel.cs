@@ -19,7 +19,7 @@ public record CategoryListViewModel(
 )
 {
     private readonly string _callToActionMessage = "See the full list of categories";
-    
+
     public string? Title { get; init; }
     public bool HasTitle => !string.IsNullOrEmpty(Title);
     public string? Description { get; init; }
@@ -37,7 +37,7 @@ public record CategoryListViewModel(
     public string HeadingStyles => "-l";
     public string SubHeadingStyles => IsStandalone ? "-l" : string.Empty;
     public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.Dashboard) && Pagination.PageCount > 1;
-    
+
     public string? CallToActionMessage
     {
         get => _callToActionMessage;

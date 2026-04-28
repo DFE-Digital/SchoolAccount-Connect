@@ -16,20 +16,22 @@ public partial class CalendarOfItemsAggregatorTests
         var queryFactory = Make.Factory.Query(CalendarOfItemsQueryTypes.SubTask, []);
         var sut = Make.Aggregator([queryFactory]);
         var criteria = Make.Criteria(toQuery: CalendarOfItemsQueryTypes.None);
-        
+
         // Act
         var result = await sut.Query(criteria, CancellationToken.None);
 
         // Assert
-        result.IsSuccess
-            .Should()
+        result
+            .IsSuccess.Should()
             .BeFalse(because: "There was no provided ToQuery property within the criteria which is required");
 
-        queryFactory.ShouldHave()
+        queryFactory
+            .ShouldHave()
             .NotReceived(
                 x => x.Query(Arg.Any<CalendarOfItemsFilter>(), Arg.Any<FieldSelectorMapping>()),
-                because: "No factory should of been called to commence a query");
-        
+                because: "No factory should of been called to commence a query"
+            );
+
         result.Error.Should().NotBeNull(because: "A error response should of been returned");
     }
 }
