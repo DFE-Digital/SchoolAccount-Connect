@@ -8,7 +8,7 @@ trigger:
 
 variables:
   - group: 'Shared Resources - S268Dev'
-  - group: 'Shared Resources - Test'
+  - group: 'Shared Resources - S268Test'
   - group: 'Shared Resources - UAT'
   - group: 'Shared Resources - PreProd'
   - group: 'Shared Resources - Prod'
@@ -38,7 +38,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - Test'
+      - group: 'Shared Resources - S268Test'
       - group: 'Alert Thresholds - Test'
     jobs:
       - template: job-templates/deploy.yml
