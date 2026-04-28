@@ -7,13 +7,13 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
 public record GetSubTasksNextTenItemsCalendarOfItemsQuery : CalendarOfItemsCustomQuery
 {
-    public GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnly date, int pageNumber = 1)
+    public GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnly date)
         : base(
             CalendarOfItemsQueryTypes.SubTask,
-            new DateOnlyRange(date.StartOfMonth(), date.EndOfMonth()),
+            new DateOnlyRange(date.StartOfMonth(), date.AddMonths(12).EndOfMonth()),
             10,
-            pageNumber < 0 ? 1 : pageNumber,
+            1,
             CalendarOfItemsSortMode.NotSpecified,
-            $"No required tasks for {date:MMMM yyyy}"
+            $"No tasks coming up over the next 12 months"
         ) { }
 }

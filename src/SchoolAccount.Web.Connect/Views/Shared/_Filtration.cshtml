@@ -35,7 +35,7 @@
         <input type="hidden" name="ViewModes" value="@Model.ViewModes"/>
         <div class="moj-filter__header">
             <div class="moj-filter__header-title">
-                <h2 class="govuk-heading-m">Filter</h2>
+                <h2 class="govuk-heading-m govuk-!-margin-top-0">Filter</h2>
             </div>
         </div>
 
@@ -45,13 +45,6 @@
                 <div class="moj-filter__selected-heading">
                     <div class="moj-filter__heading-title">
                         <h2 class="govuk-heading-m">Selected filters</h2>
-                    </div>
-                    <div class="moj-filter__heading-action">
-                        <p>
-                            <a href="@Model.GetUriWithoutFilters()" class="govuk-link govuk-link--no-visited-state">
-                                Clear filters
-                            </a>
-                        </p>
                     </div>
                 </div>
                 @foreach (var item in Model.SelectedItems)
@@ -88,9 +81,15 @@
                         }
                     </govuk-accordion>
 
-                    <button type="submit" class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" data-test-id="submit-button">
-                        Apply filters
-                    </button>
+                    <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-0">
+                        <button type="submit" class="govuk-button" data-module="govuk-button" data-test-id="submit-button">
+                            Apply filters
+                        </button>
+                        <a href="@Model.GetUriWithoutFilters()" class="govuk-link govuk-link--no-visited-state">
+                            Clear filters
+                        </a>
+                    </div>
+                    
                 </div>
 
             </div>

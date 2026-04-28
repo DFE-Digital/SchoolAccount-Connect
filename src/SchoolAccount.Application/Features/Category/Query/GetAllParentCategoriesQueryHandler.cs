@@ -4,6 +4,7 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Models;
+using SchoolAccount.Application.Specifications;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Category.Query;
@@ -20,7 +21,7 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
 
         var dbCategories = await applicationDbContext
             .Types.AsNoTracking()
-            .Where(x => x.TypeGrouping != null && x.TypeGrouping.Id == 1)
+            .Where(TypeSpecifications.OnlyActiveHubTypes())
             .Select(x => new CategoryRow
             {
                 Id = x.Id,
