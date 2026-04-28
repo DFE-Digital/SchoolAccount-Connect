@@ -12,21 +12,28 @@ public class MojSubNavigationItemTagHelper : TagHelper
     [HtmlAttributeName("current")]
     public bool Current { get; set; } = false;
 
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var a = new TagBuilder("a");
         a.AddCssClass("moj-sub-navigation__link");
         a.Attributes["href"] = Href;
+        a.Attributes["role"] = "tab";
 
         if (Current)
         {
-            a.Attributes["aria-current"] = "page";
+            a.Attributes["aria-current"] = "true";
+            a.Attributes["aria-selected"] = "true";
+        }
+        else
+        {
+            a.Attributes["aria-selected"] = "false";
         }
 
-        a.InnerHtml.AppendHtml(output.GetChildContentAsync().Result);
+        a.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 
         var li = new TagBuilder("li");
         li.AddCssClass("moj-sub-navigation__item");
+        li.Attributes["role"] = "presentation";
         li.InnerHtml.AppendHtml(a);
 
         output.TagName = null;
