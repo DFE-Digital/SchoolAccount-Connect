@@ -17,6 +17,19 @@ public static class OrganisationContextHelper
 
         return context;
     }
+    
+    public static IOrganisationContext CreateContext(bool canAccess, SchoolType schoolType, IOrganisation organisation)
+    {
+        var provider = Substitute.For<IProvider>();
+        provider.CanAccess().Returns(canAccess);
+
+        var context = Substitute.For<IOrganisationContext>();
+        context.Type.Returns(schoolType);
+        context.Provider.Returns(provider);
+        context.Organisation.Returns(organisation);
+
+        return context;
+    }
 
     public static IOrganisationContext CreateSimpleOrganisationContext(
         string name = "Test School",
