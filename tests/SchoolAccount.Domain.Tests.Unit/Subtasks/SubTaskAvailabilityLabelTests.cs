@@ -9,13 +9,13 @@ using static SchoolAccount.Domain.Common.WorkflowState;
 
 namespace SchoolAccount.Domain.Tests.Unit.Subtasks;
 
-public class AvailabilityCalculatorTests
+public class SubTaskAvailabilityLabelTests
 {
     private static readonly DateTime UtcNow = new(2026, 4, 10, 12, 0, 0, DateTimeKind.Utc);
     private static readonly DateOnly Today = DateOnly.FromDateTime(UtcNow);
     private readonly SubTaskAvailabilityLabel _sut;
 
-    public AvailabilityCalculatorTests()
+    public SubTaskAvailabilityLabelTests()
     {
         var dateTimeProvider = Substitute.For<IDateTimeProvider>();
         dateTimeProvider.UtcNow.Returns(UtcNow);

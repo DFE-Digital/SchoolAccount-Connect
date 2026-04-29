@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using SchoolAccount.Domain.Common;
-using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Kernel;
+using static SchoolAccount.Domain.Common.Requirement;
 
-namespace SchoolAccount.Domain.ViewModels
+namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage
 {
     public class SubTaskViewModel
     {
@@ -13,7 +13,7 @@ namespace SchoolAccount.Domain.ViewModels
         public Requirement? Requirement { get; }
         public bool HasLinks => !string.IsNullOrWhiteSpace(DigitalLink);
         public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
-        public bool IsOptional => Requirement == Common.Requirement.Optional;
+        public bool IsOptional => Requirement == Optional;
         public string? AvailabilityLabel { get; private set; }
         public DateOnly? SortingDate { get; }
         public string? DueDateLabel { get; }

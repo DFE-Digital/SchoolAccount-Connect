@@ -10,7 +10,6 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
-using SchoolAccount.Domain.Dtos;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;

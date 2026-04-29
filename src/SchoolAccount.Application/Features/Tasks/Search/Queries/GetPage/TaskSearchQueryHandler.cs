@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Application.Features.Tasks.GetById;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 

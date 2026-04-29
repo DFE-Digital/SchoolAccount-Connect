@@ -1,6 +1,6 @@
 using SchoolAccount.Domain.Common;
 
-namespace SchoolAccount.Domain.Dtos;
+namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 
 public record SubTaskListItemDto(
     long Id,

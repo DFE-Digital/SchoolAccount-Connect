@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Kernel;
+using static System.Globalization.CultureInfo;
 
 namespace SchoolAccount.Domain.Subtasks;
 
@@ -55,4 +58,33 @@ public class SubTaskEntity
     public virtual required TaskEntity Task { get; set; }
 
     public virtual ICollection<TagsSourceMappingEntity> TagsSourceMappings { get; } = [];
+
+    [NotMapped]
+    public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
+
+    [NotMapped]
+    public bool HasLink => !string.IsNullOrWhiteSpace(DigitalTaskLink);
+
+    [NotMapped]
+    public bool IsOptional => Requirement == Requirement.Optional;
+
+    [NotMapped]
+    public DateOnly? SortingDate => DueDate ?? StartDate;
+
+    public string GenerateAvailabilityLabel(IDateTimeProvider dateTimeProvider)
+    {
+        var availabilityLabel = new SubTaskAvailabilityLabel(dateTimeProvider);
+
+        return availabilityLabel.Generate(WorkflowState, StartDate, StartDateIsExact, DueDate);
+    }
+
+    public string GenerateDueDateLabel()
+    {
+        return SubTaskDueDateLabel.Generate(DueDate, DueDateIsExact);
+    }
+
+    public bool HasStartAndDueDate()
+    {
+        return StartDate.HasValue && DueDate.HasValue;
+    }
 }

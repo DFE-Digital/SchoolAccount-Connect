@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Types;
+using static SchoolAccount.Domain.Common.WorkflowState;
 
 namespace SchoolAccount.Domain.Tasks;
 
@@ -47,4 +49,22 @@ public class TaskEntity
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
 
     public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
+
+    [NotMapped]
+    public DateTime? SubTaskLastUpdated =>
+        SubTasks.OrderByDescending(st => st.DateUpdated).FirstOrDefault()?.DateUpdated;
+
+    [NotMapped]
+    public IEnumerable<SubTaskEntity> ExpiredSubTasks =>
+        SubTasks
+            .Where(subtask => subtask.WorkflowState == Expired)
+            .Where(subtask => subtask.HasStartAndDueDate())
+            .OrderByDescending(st => st.SortingDate);
+
+    [NotMapped]
+    public IEnumerable<SubTaskEntity> PublishedSubTasks =>
+        SubTasks
+            .Where(subtask => subtask.WorkflowState == Published)
+            .Where(subtask => subtask.HasStartAndDueDate())
+            .OrderByDescending(subtask => subtask.SortingDate);
 }

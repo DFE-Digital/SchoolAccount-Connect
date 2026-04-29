@@ -5,7 +5,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using Xunit;
 
-namespace SchoolAccount.FrontEndTests;
+namespace SchoolAccount.Application.Tests.Unit;
 
 public class DetermineDateRangeTests
 {

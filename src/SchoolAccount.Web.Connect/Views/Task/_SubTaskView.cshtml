@@ -1,34 +1,44 @@
-﻿@using SchoolAccount.Domain.ViewModels
-@model SubTaskViewModel
+﻿@model SchoolAccount.Application.Features.Tasks.GetById.TaskResponseSubTask
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Task";
 }
 
-@if (!@Model.HasLinks)
-{    
-    <p> 
-        @Model.Name
-        @if (@Model.IsOptional)
+<li class="govuk-task-list__item @(Model.HasLink ? "govuk-task-list__item--with-link" : "")">
+    <div class="govuk-task-list__name-and-hint">
+        @if (Model.HasLink)
         {
-            <text> (optional)</text>
+            <a class="govuk-link govuk-task-list__link" href="@Model.DigitalLink">
+                @Model.Name
+                @if (Model.IsOptional)
+                {
+                    <text> (optional)</text>
+                }
+            </a>
         }
-    </p>
-}
-else
-{
-    <a class="govuk-link govuk-task-list__link" href="@Model.DigitalLink">
-        @Model.Name
-        @if (@Model.IsOptional)
+        else
         {
-            <text> (optional)</text>
+            <span>
+                @Model.Name
+                @if (Model.IsOptional)
+                {
+                    <text> (optional)</text>
+                }
+            </span>
         }
-    </a>
-}
-@if (@Model.HasDescription)
-{
-    <p>@Model.Description</p>
-}
 
-<p>@Model.AvailabilityLabel <strong>@Model.DueDateLabel</strong></p>
+        @if (Model.HasDescription)
+        {
+            <div class="govuk-task-list__hint">
+                @Model.Description
+            </div>
+        }
 
+        @if (Model.HasLink)
+        {
+            <div class="govuk-task-list__hint">
+                @Model.AvailabilityLabel <strong>@Model.DueDateLabel</strong>
+            </div>
+        }
+    </div>
+</li>

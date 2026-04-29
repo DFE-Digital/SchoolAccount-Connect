@@ -37,6 +37,6 @@ public static class RouteConstants
 
     internal static class Task
     {
-        public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task?taskid={0}");
+        public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task/{0}");
     }
 }

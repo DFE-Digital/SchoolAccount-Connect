@@ -57,7 +57,23 @@ stages:
               command: 'test'
               projects: 'tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj'
               arguments: '--configuration Release --no-restore --no-build'
-              testRunTitle: 'Connect Web Tests'
+              testRunTitle: 'Web Tests'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Connect Application Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'tests/SchoolAccount.Application.Tests.Unit/SchoolAccount.Application.Tests.Unit.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Application Tests'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Connect Domain Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'tests/SchoolAccount.Domain.Tests.Unit/SchoolAccount.Domain.Tests.Unit.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Domain Tests'
               
           - task: DotNetCoreCLI@2
             displayName: 'Run Integration Tests'

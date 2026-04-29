@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SchoolAccount.Kernel\SchoolAccount.Kernel.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
 </Project>

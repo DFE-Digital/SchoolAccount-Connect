@@ -30,8 +30,4 @@
       <_Parameter1>SchoolAccount.ConformanceTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Constants\" />
-  </ItemGroup>
 </Project>

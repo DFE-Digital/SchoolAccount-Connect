@@ -1,6 +1,6 @@
-﻿using SchoolAccount.Domain.Dtos;
+using SchoolAccount.Domain.Subtasks;
 
-namespace SchoolAccount.Domain.Subtasks
+namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage
 {
     public static class SubTaskListItemHelper
     {
