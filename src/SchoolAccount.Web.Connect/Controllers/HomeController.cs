@@ -19,7 +19,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [Authorize]
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
-    IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
+    IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
     BasicPageViewBuilder basicPageViewBuilder
@@ -36,7 +36,7 @@ public sealed class HomeController(
             return Problem(detail: calendarOfItemsResult.Error.Description);
         }
 
-        var query = new GetAllParentCategoriesQuery();
+        var query = new GetAllParentCategoriesThatHaveAssociatedTasksQuery();
         var categoryResult = await categoryQueryBuilder.Handle(query, cancellationToken);
 
         if (categoryResult.IsFailure)

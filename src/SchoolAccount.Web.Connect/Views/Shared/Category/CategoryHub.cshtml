@@ -1,3 +1,4 @@
+@using SchoolAccount.Web.Connect.Models.Shared
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
 <form method="get">
@@ -19,25 +20,13 @@
 
                 foreach (var row in group)
                 {
-                    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                        <div class="govuk-task-list__name-and-hint">
-                            <a class="govuk-link govuk-task-list__link" href="@row.Url">
-                                @row.Name
-                            </a>
-                            <div class="govuk-task-list__hint">
-                                @row.Description
-                            </div>
-                            <div class="govuk-task-list__hint">
-                                <strong>@row.DateText</strong>
-                            </div>
-                        </div>
-                        @if (row.ShowTag)
-                        {
-                            <div class="govuk-task-list__status">
-                                <govuk-tag class="@row.TagTheme">@row.TagValue</govuk-tag>
-                            </div>
-                        }
-                    </li>
+                    <partial name="_ListItem" model='new ListItemViewModel
+                             (
+                                 name: @row.Name,
+                                 url: @row.Url,
+                                 description: @row.Description
+                             )'
+                    />
                 }
             }
         }

@@ -9,11 +9,11 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Category.Query;
 
-public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicationDbContext)
-    : IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult>
+public class GetAllParentCategoriesThatHaveAssociatedTasksQueryHandler(IApplicationDbContext applicationDbContext)
+    : IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult>
 {
     public async Task<Result<CategoryPagedResult>> Handle(
-        GetAllParentCategoriesQuery query,
+        GetAllParentCategoriesThatHaveAssociatedTasksQuery thatHaveAssociatedTasksQuery,
         CancellationToken cancellationToken
     )
     {
@@ -22,6 +22,7 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
         var dbCategories = await applicationDbContext
             .Types.AsNoTracking()
             .Where(TypeSpecifications.OnlyActiveHubTypes())
+            .Where(TypeSpecifications.HasAssociatedTasks())
             .Select(x => new CategoryRow
             {
                 Id = x.Id,
@@ -33,7 +34,7 @@ public class GetAllParentCategoriesQueryHandler(IApplicationDbContext applicatio
 
         var result = new[] { extraCategory }
             .Concat(dbCategories)
-            .PaginateForExtraItem(query.PageSize, query.PageNumber);
+            .PaginateForExtraItem(thatHaveAssociatedTasksQuery.PageSize, thatHaveAssociatedTasksQuery.PageNumber);
 
         return Result.Success(new CategoryPagedResult(result));
     }

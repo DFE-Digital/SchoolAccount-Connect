@@ -5,6 +5,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.AuthenticationTests.Helpers;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
@@ -40,7 +41,9 @@ public class CategoryHubViewBuilderTests
     public void Successfully_sets_the_correct_text_for_AllTasks_view_when_category_is_null()
     {
         // Arrange
-        var organisationContext = Substitute.For<IOrganisationContext>();
+        var schoolName = "Test School";
+        var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext(schoolName);
+        
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
@@ -54,7 +57,7 @@ public class CategoryHubViewBuilderTests
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);
 
         // Assert
-        viewModel.Caption.Should().Be("Category");
+        viewModel.Caption.Should().Be("Test School");
         viewModel.Heading.Should().Be("All tasks");
         viewModel.SubHeading.Should().Be("See all your tasks, returns and policies from DfE.");
         viewModel.Description.Should().Be("Explore all tasks and support");
@@ -65,7 +68,9 @@ public class CategoryHubViewBuilderTests
     public void Successfully_sets_the_correct_text_for_Category_when_category_is_set()
     {
         // Arrange
-        var organisationContext = Substitute.For<IOrganisationContext>();
+        var schoolName = "Test School";
+        var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext(schoolName);
+        
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
@@ -88,7 +93,7 @@ public class CategoryHubViewBuilderTests
         var viewModel = categoryHubViewBuilder.Build(items, currentUri, category);
 
         // Assert
-        viewModel.Caption.Should().Be("Category");
+        viewModel.Caption.Should().Be("Test School");
         viewModel.Heading.Should().Be(category.DisplayName);
         viewModel.SubHeading.Should().Be(category.HubViewDescription);
         viewModel.Description.Should().Be("Explore all tasks and support");

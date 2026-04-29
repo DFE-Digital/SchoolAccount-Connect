@@ -16,7 +16,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 
 [Authorize]
 public class CategoryController(
-    IQueryHandler<GetAllParentCategoriesQuery, CategoryPagedResult> categoryQueryBuilder,
+    IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<GetCategoryByIdQuery, CategoryType> exploreCategoryQueryHandler,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemsQueryHandler,
     CategoryHubViewBuilder categoryHubViewBuilder,
@@ -29,7 +29,7 @@ public class CategoryController(
         CancellationToken cancellationToken = default
     )
     {
-        var categoryQuery = new GetAllParentCategoriesQuery(query.PageNumber, query.PageSize);
+        var categoryQuery = new GetAllParentCategoriesThatHaveAssociatedTasksQuery(query.PageNumber, query.PageSize);
         var result = await categoryQueryBuilder.Handle(categoryQuery, cancellationToken);
 
         if (result.IsFailure)
