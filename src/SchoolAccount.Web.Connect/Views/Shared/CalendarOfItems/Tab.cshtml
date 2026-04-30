@@ -14,7 +14,7 @@
 }
 
 <ul class="govuk-task-list">
-    @if (Model.Pagination.TotalItemCount > 0)
+    @if (Model.Pagination.TotalItemCount > 0 || Model.Items.Count > 0)
     {
         foreach (var group in Model.Items)
         {
@@ -58,8 +58,9 @@
         </li>
     }
 </ul>
-<partial name="_Pagination" model="@Model.Pagination" />
-    
+
+<partial name="_Pagination" model="@Model.Pagination"/>
+
 @if (Model.ShowNavigator)
 {
     <div class="govuk-body">

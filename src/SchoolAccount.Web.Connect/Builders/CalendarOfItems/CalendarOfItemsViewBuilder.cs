@@ -40,7 +40,9 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            _paginationViewBuilder.Build(result, currentUri),
+            !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Standalone) 
+                ? _paginationViewBuilder.Build(result, currentUri) 
+                : new PaginationViewModel(false),
             FiltrationViewModel.Build(options.ViewMode, currentUri, result.Filter)
         )
         {
@@ -114,7 +116,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null
                 ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"
-                : string.Empty,
+                : string.Empty
         };
 
         return Build(options, items, currentUri);

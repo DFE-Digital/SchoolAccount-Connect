@@ -5,6 +5,11 @@ namespace SchoolAccount.Web.Connect.Models.Shared;
 
 public record PaginationViewModel(IReadOnlyList<IPaginationItem> Items) : IPagedList
 {
+    public PaginationViewModel(bool showPagination) : this([])
+    {
+        _showPagination = showPagination;
+    }
+    
     private bool? _showPagination;
 
     public Uri? PreviousUrl { get; init; }
