@@ -13,9 +13,7 @@ public class StartController(IUserContext userContext) : Controller
     [HttpGet(RouteConstants.Start.Index)]
     public IActionResult Index()
     {
-        return !userContext.IsAuthenticated 
-            ? View() 
-            : Redirect(RouteConstants.Root);
+        return !userContext.IsAuthenticated ? View() : Redirect(RouteConstants.Root);
     }
 
     [Authorize]

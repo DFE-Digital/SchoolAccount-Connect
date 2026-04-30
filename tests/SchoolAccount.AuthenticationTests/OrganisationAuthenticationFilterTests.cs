@@ -17,7 +17,11 @@ public class OrganisationAuthenticationFilterTests
         // Arrange
         var context = AuthorizationFilterContextHelper.CreateContext(true);
         var organisation = new AcademyOrganisation("0000000", "Test Academy");
-        var organisationContext = OrganisationContextHelper.CreateContext(true, SchoolType.AcademySpecial, organisation);
+        var organisationContext = OrganisationContextHelper.CreateContext(
+            true,
+            SchoolType.AcademySpecial,
+            organisation
+        );
         var filter = new OrganisationTypeAuthorisationFilter(organisationContext, [typeof(TrustOrganisation)]);
 
         // Act
@@ -50,12 +54,11 @@ public class OrganisationAuthenticationFilterTests
         var context = AuthorizationFilterContextHelper.CreateContext(true);
         var organisation = new AcademyOrganisation("0000000", "Test Academy");
         var organisationContext = OrganisationContextHelper.CreateContext(true, SchoolType.Academy, organisation);
-        
-        // Act 
+
+        // Act
         var filter = () => new OrganisationTypeAuthorisationFilter(organisationContext, [typeof(PreSixteenProvider)]);
 
         // Assert
-        filter.Should().Throw<ArgumentException>()
-            .WithParameterName("allowedOrganisations");
+        filter.Should().Throw<ArgumentException>().WithParameterName("allowedOrganisations");
     }
 }

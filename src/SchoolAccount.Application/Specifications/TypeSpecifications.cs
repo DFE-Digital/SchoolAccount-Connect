@@ -14,7 +14,7 @@ public static class TypeSpecifications
     {
         return x => x.ParentTypeId == null;
     }
-    
+
     public static Expression<Func<TypeEntity, bool>> HasAssociatedTasks()
     {
         return x => x.TypeTaskMappings.Any();

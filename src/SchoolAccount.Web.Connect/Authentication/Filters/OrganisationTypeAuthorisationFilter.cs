@@ -13,7 +13,10 @@ public class OrganisationTypeAuthorisationFilter : IAsyncAuthorizationFilter
     {
         if (!allowedOrganisations.All(x => x.IsAssignableTo(typeof(IOrganisation))))
         {
-            throw new ArgumentException($"All {nameof(allowedOrganisations)} types must implement {nameof(IOrganisation)}", nameof(allowedOrganisations));
+            throw new ArgumentException(
+                $"All {nameof(allowedOrganisations)} types must implement {nameof(IOrganisation)}",
+                nameof(allowedOrganisations)
+            );
         }
 
         _organisationContext = organisationContext;

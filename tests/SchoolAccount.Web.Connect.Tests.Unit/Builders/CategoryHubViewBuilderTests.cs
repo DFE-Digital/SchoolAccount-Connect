@@ -43,7 +43,7 @@ public class CategoryHubViewBuilderTests
         // Arrange
         var schoolName = "Test School";
         var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext(schoolName);
-        
+
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
@@ -70,7 +70,7 @@ public class CategoryHubViewBuilderTests
         // Arrange
         var schoolName = "Test School";
         var organisationContext = OrganisationContextHelper.CreateSimpleOrganisationContext(schoolName);
-        
+
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
         var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);

@@ -12,9 +12,12 @@ public sealed class RestrictOrganisationTypeAttribute : TypeFilterAttribute
     {
         if (!allowedOrganisations.All(x => x.IsAssignableTo(typeof(IOrganisation))))
         {
-            throw new ArgumentException($"All {nameof(allowedOrganisations)} types must implement {nameof(IOrganisation)}", nameof(allowedOrganisations));
+            throw new ArgumentException(
+                $"All {nameof(allowedOrganisations)} types must implement {nameof(IOrganisation)}",
+                nameof(allowedOrganisations)
+            );
         }
-        
+
         Arguments = [allowedOrganisations];
         AllowedOrganisations = allowedOrganisations;
     }

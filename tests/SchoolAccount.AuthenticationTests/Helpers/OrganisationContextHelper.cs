@@ -17,7 +17,7 @@ public static class OrganisationContextHelper
 
         return context;
     }
-    
+
     public static IOrganisationContext CreateContext(bool canAccess, SchoolType schoolType, IOrganisation organisation)
     {
         var provider = Substitute.For<IProvider>();

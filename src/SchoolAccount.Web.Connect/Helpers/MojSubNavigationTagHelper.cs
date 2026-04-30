@@ -8,7 +8,7 @@ public class MojSubNavigationTagHelper : TagHelper
 {
     [HtmlAttributeName("aria-label")]
     public string AriaLabel { get; set; } = "Sub navigation";
-    
+
     [HtmlAttributeName("show-accessibility-label")]
     public bool ShowAccessibleActiveLabel { get; set; } = false;
 

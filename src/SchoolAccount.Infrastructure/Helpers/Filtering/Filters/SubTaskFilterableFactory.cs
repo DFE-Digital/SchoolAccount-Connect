@@ -26,19 +26,17 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
 
         #region Phase of Education
 
-        var byTags = baseQuery is not null
-            ? await baseQuery.Select(x => x.Tags.Select(t => t.Id)).ToListAsync()
-            : null;
+        var byTags = baseQuery is not null ? await baseQuery.Select(x => x.Tags.Select(t => t.Id)).ToListAsync() : null;
 
         items.Add(
             new Filterable(SubTaskFilterableRegistrar.Keys.PhaseOfEducation, "Phase of education")
             {
                 Values = BuildTagTree(
-                    await applicationDbContext.Tags
-                        .Where(x => x.Taxonomy.Name == TaxonomyEntity.IdValues.PhaseOfEducation)
+                    await applicationDbContext
+                        .Tags.Where(x => x.Taxonomy.Name == TaxonomyEntity.IdValues.PhaseOfEducation)
                         .ToListAsync(),
                     byTags
-                )
+                ),
             }
         );
 
@@ -54,12 +52,12 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             new Filterable(SubTaskFilterableRegistrar.Keys.Categories, "Categories")
             {
                 Values = BuildTypeTree(
-                    await applicationDbContext.Types
-                        .Where(TypeSpecifications.OnlyActiveHubTypes())
+                    await applicationDbContext
+                        .Types.Where(TypeSpecifications.OnlyActiveHubTypes())
                         .Where(TypeSpecifications.TopLevelOnly())
                         .ToListAsync(),
                     byTypes: byTypes
-                )
+                ),
             }
         );
 
@@ -67,11 +65,10 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
 
         return items;
     }
-    
+
     private static Collection<FilterableItem> BuildTagTree(List<TagEntity> tags, List<IEnumerable<long>>? byTags = null)
     {
-        return tags
-            .Select(x => new FilterableItem()
+        return tags.Select(x => new FilterableItem()
             {
                 DisplayName = x.DisplayName!,
                 Value = x.Id.ToString(Thread.CurrentThread.CurrentCulture),
@@ -80,8 +77,11 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             .ToCollection();
     }
 
-    private static Collection<FilterableItem> BuildTypeTree(List<TypeEntity> types, int? parentId = null,
-        List<IEnumerable<long>>? byTypes = null)
+    private static Collection<FilterableItem> BuildTypeTree(
+        List<TypeEntity> types,
+        int? parentId = null,
+        List<IEnumerable<long>>? byTypes = null
+    )
     {
         return types
             .Where(c => c.ParentTypeId == parentId)
