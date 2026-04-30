@@ -1,3 +1,4 @@
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Kernel;
@@ -21,6 +22,7 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
             UpdatedBy = task.UpdatedBy,
             UpcomingSubTasks = task.PublishedSubTasks.Select(ToTaskResponseSubTasks),
             PreviousSubTasks = task.ExpiredSubTasks.Select(ToTaskResponseSubTasks),
+            Resources = task.Resources.Select(ToTaskResponseResources),
         };
     }
 
@@ -47,5 +49,10 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
             HasLink = subTask.HasLink,
             IsOptional = subTask.IsOptional,
         };
+    }
+
+    private TaskResponseResource ToTaskResponseResources(ResourceEntity resource)
+    {
+        return new TaskResponseResource { Name = resource.ResourceName, Link = resource.DigitalLink };
     }
 }

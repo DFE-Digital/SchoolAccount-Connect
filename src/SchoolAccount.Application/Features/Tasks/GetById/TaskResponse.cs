@@ -36,6 +36,8 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         public IEnumerable<TaskResponseSubTask> CurrentSubTasks =>
             ViewMode == UpcomingTasks ? UpcomingSubTasks : PreviousSubTasks;
 
+        public IEnumerable<TaskResponseResource> Resources { get; init; } = [];
+
         public string HeadingText => ViewMode == UpcomingTasks ? "Upcoming Tasks" : "Previous 12 months";
 
         public string NoTasksFoundMessage =>
@@ -83,5 +85,12 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         public bool HasLink { get; init; }
 
         public bool IsOptional { get; init; }
+    }
+
+    public class TaskResponseResource
+    {
+        public required string Name { get; init; }
+
+        public string? Link { get; init; }
     }
 }

@@ -1,4 +1,5 @@
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
 
@@ -8,6 +9,7 @@ public sealed class TaskBuilder
 {
     private long _id = 1;
     private readonly List<SubTaskEntity> _subTasks = [];
+    private readonly List<ResourceEntity> _resources = [];
     private string _name = "Test Task";
     private string? _referenceNo;
     private Requirement _requirement = Requirement.Mandatory;
@@ -61,7 +63,20 @@ public sealed class TaskBuilder
     public TaskBuilder WithSubTasks(params SubTaskBuilder[] builders)
     {
         foreach (var b in builders)
+        {
             _subTasks.Add(b.Build());
+        }
+
+        return this;
+    }
+
+    public TaskBuilder WithResources(params ResourceBuilder[] builders)
+    {
+        foreach (var builder in builders)
+        {
+            _resources.Add(builder.Build());
+        }
+
         return this;
     }
 
@@ -78,8 +93,15 @@ public sealed class TaskBuilder
             DateUpdated = _dateUpdated,
         };
 
-        foreach (var st in _subTasks)
-            task.SubTasks.Add(st);
+        foreach (var subtask in _subTasks)
+        {
+            task.SubTasks.Add(subtask);
+        }
+
+        foreach (var resource in _resources)
+        {
+            task.Resources.Add(resource);
+        }
 
         return task;
     }

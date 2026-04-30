@@ -31,8 +31,13 @@
         <ul class="govuk-task-list">
             @foreach (var subTask in Model.CurrentSubTasks)
             {
-                <partial name="_SubTaskView" model="subTask" />
+                <partial name="_Subtasks" model="subTask" />
             }
         </ul>
     }
 </div>
+
+@section RightSide
+{
+    <partial name="_Guidance" model="@Model" />
+}

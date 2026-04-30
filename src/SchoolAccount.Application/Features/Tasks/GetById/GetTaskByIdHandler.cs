@@ -14,6 +14,7 @@ public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContex
         var task = await applicationDbContext
             .Tasks.AsNoTracking()
             .Include(t => t.SubTasks.Where(st => st.WorkflowState == Published || st.WorkflowState == Expired))
+            .Include(t => t.Resources)
             .FirstOrDefaultAsync(t => t.Id == query.Id, cancellationToken);
 
         if (task == null)

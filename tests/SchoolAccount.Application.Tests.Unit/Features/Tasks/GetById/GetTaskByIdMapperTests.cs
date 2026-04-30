@@ -5,6 +5,7 @@ using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 using Xunit;
 using static SchoolAccount.Domain.Common.WorkflowState;
+using static SchoolAccount.Tests.Common.Builders.ResourceBuilder;
 using static SchoolAccount.Tests.Common.Builders.SubTaskBuilder;
 using static SchoolAccount.Tests.Common.Builders.TaskBuilder;
 
@@ -293,5 +294,24 @@ public class GetTaskByIdMapperTests
 
         // Assert
         result.SubTaskLastUpdated.Should().Be(new DateTime(2026, 4, 20, 14, 30, 0));
+    }
+
+    [Fact]
+    public void Resource_links_and_names_are_mapped()
+    {
+        // Arrange
+        var taskEntity = ATask()
+            .WithResources(AResource().Named("Infant Formula").WithLink("https://example.com/infant-formula"))
+            .Build();
+
+        // Act
+        var result = _sut.ToTaskResponse(taskEntity, TaskViewMode.UpcomingTasks);
+
+        // Assert
+        result
+            .Resources.Should()
+            .ContainSingle()
+            .Which.Should()
+            .BeEquivalentTo(new { Name = "Infant Formula", Link = "https://example.com/infant-formula" });
     }
 }

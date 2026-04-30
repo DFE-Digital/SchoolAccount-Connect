@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Types;
 using static SchoolAccount.Domain.Common.WorkflowState;
@@ -49,6 +50,8 @@ public class TaskEntity
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
 
     public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
+
+    public virtual ICollection<ResourceEntity> Resources { get; } = [];
 
     [NotMapped]
     public DateTime? SubTaskLastUpdated =>
