@@ -1,4 +1,5 @@
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
 
@@ -19,6 +20,7 @@ public sealed class SubTaskBuilder
     private bool? _startDateIsExact;
     private DateOnly? _dueDate;
     private bool? _dueDateIsExact;
+    private readonly List<ResourceEntity> _resources = [];
 
     public static SubTaskBuilder ASubTask() => new();
 
@@ -96,8 +98,19 @@ public sealed class SubTaskBuilder
         return this;
     }
 
-    public SubTaskEntity Build() =>
-        new()
+    public SubTaskBuilder WithResources(params ResourceBuilder[] builders)
+    {
+        foreach (var builder in builders)
+        {
+            _resources.Add(builder.Build());
+        }
+
+        return this;
+    }
+
+    public SubTaskEntity Build()
+    {
+        var subtask = new SubTaskEntity
         {
             Id = _id,
             Name = _name,
@@ -121,4 +134,12 @@ public sealed class SubTaskBuilder
                 UpdatedBy = "tester",
             },
         };
+
+        foreach (var resource in _resources)
+        {
+            subtask.Resources.Add(resource);
+        }
+
+        return subtask;
+    }
 }

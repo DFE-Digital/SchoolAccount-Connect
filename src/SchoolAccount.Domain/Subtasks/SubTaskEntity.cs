@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Kernel;
-using static System.Globalization.CultureInfo;
 
 namespace SchoolAccount.Domain.Subtasks;
 
@@ -58,6 +58,8 @@ public class SubTaskEntity
     public virtual required TaskEntity Task { get; set; }
 
     public virtual ICollection<TagsSourceMappingEntity> TagsSourceMappings { get; } = [];
+
+    public virtual ICollection<ResourceEntity> Resources { get; } = [];
 
     [NotMapped]
     public bool HasDescription => !string.IsNullOrWhiteSpace(Description);

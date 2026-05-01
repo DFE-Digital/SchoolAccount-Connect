@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 
@@ -10,6 +11,7 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
 {
     private static class ColumnNames
     {
+        public const string Source = "SourceId";
         public const string Description = "SubTaskDescription";
         public const string Name = "SubTaskName";
         public const string ReferenceNo = "SubTaskReferenceNo";
@@ -54,5 +56,13 @@ public sealed class SubTaskEntityConfiguration : IEntityTypeConfiguration<SubTas
             .WithOne(x => x.SubTask)
             .HasForeignKey(x => x.EntityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder
+            .HasMany(t => t.Resources)
+            .WithMany()
+            .UsingEntity<SubTaskResourceMappingEntity>(
+                j => j.HasOne<ResourceEntity>().WithMany().HasForeignKey(rsm => rsm.ResourceId),
+                j => j.HasOne<SubTaskEntity>().WithMany().HasForeignKey(rsm => rsm.EntityId)
+            );
     }
 }

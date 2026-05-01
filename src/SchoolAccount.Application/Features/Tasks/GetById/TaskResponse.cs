@@ -80,11 +80,21 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
 
         public string UpdatedBy { get; init; } = string.Empty;
 
+        public bool HasDueDateLabel => !string.IsNullOrWhiteSpace(DueDateLabel);
+
+        public bool HasAvailabilityLabel => !string.IsNullOrWhiteSpace(AvailabilityLabel);
+
         public bool HasDescription { get; init; }
 
         public bool HasLink { get; init; }
 
         public bool IsOptional { get; init; }
+
+        public string? ResourceName { get; init; } = string.Empty;
+
+        public string? ResourceLink { get; init; } = string.Empty;
+
+        public bool HasResourceLink => !string.IsNullOrWhiteSpace(ResourceLink);
     }
 
     public class TaskResponseResource
@@ -92,5 +102,7 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         public required string Name { get; init; }
 
         public string? Link { get; init; }
+
+        public bool HasLink => !string.IsNullOrWhiteSpace(Link);
     }
 }

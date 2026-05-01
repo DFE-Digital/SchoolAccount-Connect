@@ -139,13 +139,13 @@ public class GetTaskByIdMapperTests
             .WithStartDate(2026, 5, 1, isExact: true)
             .WithDueDate(2026, 6, 1, isExact: false)
             .WithRequirement(Requirement.Mandatory)
+            .WithResources(AResource().Named("Infant Formula").WithLink("https://example.com/infant-formula"))
             .InState(Published)
             .UpdatedBy("John Doe")
             .UpdatedAt(2026, 4, 20, 15, 30)
             .Build();
 
-        var taskEntity = ATask().WithSubTask(ASubTask()).Build();
-        taskEntity.SubTasks.Clear();
+        var taskEntity = ATask().Build();
         taskEntity.SubTasks.Add(subTask);
 
         // Act
@@ -177,6 +177,8 @@ public class GetTaskByIdMapperTests
                     HasDescription = subTask.HasDescription,
                     HasLink = subTask.HasLink,
                     IsOptional = subTask.IsOptional,
+                    ResourceName = subTask.Resources.FirstOrDefault()?.ResourceName,
+                    ResourceLink = subTask.Resources.FirstOrDefault()?.DigitalLink,
                 }
             );
     }

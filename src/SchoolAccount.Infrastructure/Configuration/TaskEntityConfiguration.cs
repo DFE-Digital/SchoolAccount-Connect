@@ -43,15 +43,9 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         builder
             .HasMany(t => t.Resources)
             .WithMany()
-            .UsingEntity<ResourceSourceMappingEntity>(
+            .UsingEntity<TaskResourceMappingEntity>(
                 j => j.HasOne<ResourceEntity>().WithMany().HasForeignKey(rsm => rsm.ResourceId),
-                j => j.HasOne<TaskEntity>().WithMany().HasForeignKey(rsm => rsm.EntityId),
-                j =>
-                {
-                    j.ToTable(Mapping.Resource, SchemaConstants.Transactional);
-                    j.Property(rsm => rsm.Source).HasConversion<int>().HasColumnName(ColumnNames.Source);
-                    j.HasQueryFilter(rsm => rsm.Source == Source.Task);
-                }
+                j => j.HasOne<TaskEntity>().WithMany().HasForeignKey(rsm => rsm.EntityId)
             );
     }
 }

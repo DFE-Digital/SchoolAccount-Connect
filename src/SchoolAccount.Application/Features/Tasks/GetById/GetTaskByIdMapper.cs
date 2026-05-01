@@ -28,6 +28,10 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
 
     private TaskResponseSubTask ToTaskResponseSubTasks(SubTaskEntity subTask)
     {
+        // The database has a many to many relationship between SubTasks and Resources but manage enforces that
+        // only one resource is allowed per subtask. So we can assume that the first resource is the one we want.
+        var resource = subTask.Resources.FirstOrDefault();
+
         return new TaskResponseSubTask
         {
             Id = subTask.Id,
@@ -48,6 +52,8 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
             HasDescription = subTask.HasDescription,
             HasLink = subTask.HasLink,
             IsOptional = subTask.IsOptional,
+            ResourceName = resource?.ResourceName,
+            ResourceLink = resource?.DigitalLink,
         };
     }
 

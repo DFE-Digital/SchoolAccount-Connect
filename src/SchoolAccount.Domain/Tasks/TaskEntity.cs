@@ -59,15 +59,9 @@ public class TaskEntity
 
     [NotMapped]
     public IEnumerable<SubTaskEntity> ExpiredSubTasks =>
-        SubTasks
-            .Where(subtask => subtask.WorkflowState == Expired)
-            .Where(subtask => subtask.HasStartAndDueDate())
-            .OrderByDescending(st => st.SortingDate);
+        SubTasks.Where(subtask => subtask.WorkflowState == Expired).OrderByDescending(st => st.SortingDate);
 
     [NotMapped]
     public IEnumerable<SubTaskEntity> PublishedSubTasks =>
-        SubTasks
-            .Where(subtask => subtask.WorkflowState == Published)
-            .Where(subtask => subtask.HasStartAndDueDate())
-            .OrderByDescending(subtask => subtask.SortingDate);
+        SubTasks.Where(subtask => subtask.WorkflowState == Published).OrderByDescending(subtask => subtask.SortingDate);
 }

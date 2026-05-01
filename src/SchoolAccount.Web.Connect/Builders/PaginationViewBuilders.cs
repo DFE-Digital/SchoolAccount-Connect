@@ -73,7 +73,7 @@ public class PaginationViewBuilder
             IsFirstPage = model.IsFirstPage,
             IsLastPage = model.IsLastPage,
             HasNextPage = model.HasNextPage,
-            HasPreviousPage = model.HasPreviousPage
+            HasPreviousPage = model.HasPreviousPage,
         };
     }
 

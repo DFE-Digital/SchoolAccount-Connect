@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace SchoolAccount.Domain.Resources;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-public class ResourceSourceMappingEntity
+public abstract class ResourceSourceMappingEntity
 {
     public long EntityId { get; set; }
 

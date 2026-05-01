@@ -6,39 +6,47 @@
 
 <li class="govuk-task-list__item @(Model.HasLink ? "govuk-task-list__item--with-link" : "")">
     <div class="govuk-task-list__name-and-hint">
-        @if (Model.HasLink)
-        {
-            <a class="govuk-link govuk-task-list__link" href="@Model.DigitalLink">
-                @Model.Name
-                @if (Model.IsOptional)
-                {
-                    <text> (optional)</text>
-                }
-            </a>
-        }
-        else
-        {
-            <span>
-                @Model.Name
-                @if (Model.IsOptional)
-                {
-                    <text> (optional)</text>
-                }
-            </span>
-        }
+            @if (Model.HasResourceLink)
+            {
+                <a class="govuk-link govuk-task-list__link" href="@Model.ResourceLink">
+                    @Model.Name
+                    @if (Model.IsOptional)
+                    {
+                        <text> (optional)</text>
+                    }
+                </a>
+            }
+            else
+            {
+                <span>
+                    @Model.Name
+                    @if (Model.IsOptional)
+                    {
+                        <text> (optional)</text>
+                    }
+                </span>
+            }
 
-        @if (Model.HasDescription)
-        {
-            <div class="govuk-task-list__hint">
-                @Model.Description
-            </div>
-        }
+            @if (Model.HasDescription)
+            {
+                <div class="govuk-task-list__hint">
+                    @Model.Description
+                </div>
+            }
 
-        @if (Model.HasLink)
-        {
-            <div class="govuk-task-list__hint">
-                @Model.AvailabilityLabel <strong>@Model.DueDateLabel</strong>
-            </div>
-        }
+            @if (Model.HasAvailabilityLabel || Model.HasDueDateLabel)
+            {
+                <div class="govuk-task-list__hint">
+                    @if (Model.HasAvailabilityLabel)
+                    {
+                        <text>@Model.AvailabilityLabel</text>
+                    }
+                    
+                    @if (Model.HasDueDateLabel)
+                    {
+                        <text><strong>@Model.DueDateLabel</strong></text>
+                    }
+                </div>
+            }
     </div>
 </li>
