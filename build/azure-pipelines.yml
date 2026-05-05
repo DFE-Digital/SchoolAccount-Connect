@@ -9,7 +9,7 @@ trigger:
 variables:
   - group: 'Shared Resources - S268Dev'
   - group: 'Shared Resources - S268Test'
-  - group: 'Shared Resources - UAT'
+  - group: 'Shared Resources - S268UAT'
   - group: 'Shared Resources - PreProd'
   - group: 'Shared Resources - Prod'
 
@@ -51,9 +51,9 @@ stages:
     condition: and(
       succeeded(),
       ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      eq(variables['Build.SourceBranch'], 'refs/heads/main_dfe'))
     variables:
-      - group: 'Shared Resources - UAT'
+      - group: 'Shared Resources - S268UAT'
       - group: 'Alert Thresholds - UAT'
     jobs:
       - template: job-templates/deploy.yml
