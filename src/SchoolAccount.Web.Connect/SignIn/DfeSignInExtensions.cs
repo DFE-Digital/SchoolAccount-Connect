@@ -32,11 +32,11 @@ internal static class DfeSignInExtensions
             throw new ArgumentException("DfeSignInConfig is required.");
         }
 
-        services.AddScoped<IProvider, NullProvider>();
-        services.AddScoped<IProvider, FreeSchoolProvider>();
-        services.AddScoped<IProvider, LamsProvider>();
-        services.AddScoped<IProvider, PreSixteenProvider>();
-        services.AddScoped<IProvider, SpecialsProvider>();
+        services.Scan(scan =>
+            scan.FromAssembliesOf(typeof(DependencyInjection))
+                .AddClasses(classes => classes.AssignableTo<IProvider>())
+                .AsImplementedInterfaces()
+                .WithScopedLifetime());
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();
