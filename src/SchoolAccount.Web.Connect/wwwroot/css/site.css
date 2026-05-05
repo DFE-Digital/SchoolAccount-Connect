@@ -711,7 +711,7 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
 }
 
 header.dfe-connect-header .dfe-connect-header__nav-item .dfe-connect-header__nav-link {
-    padding: var(--govuk-spacing-responsive--3) 0 !important;
+    margin: var(--govuk-spacing-responsive--3) 0 !important;
     display: block;
 }
 
