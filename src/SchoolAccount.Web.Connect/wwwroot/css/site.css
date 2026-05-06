@@ -274,7 +274,7 @@ header.dfe-connect-header a:focus-visible {
 ------------------------------------------------------------- */
 header.dfe-connect-header .dfe-connect-header__top {
     background-color: var(--dfe-blue);
-    color: #ffffff;
+    color: #F4F8FB;
 }
 
 header.dfe-connect-header .dfe-connect-header__top-inner {
@@ -299,7 +299,7 @@ header.dfe-connect-header .dfe-connect-header__brand-link {
     align-items: center;
     min-width: 0;
     text-decoration: none;
-    color: #ffffff;
+    color: #F4F8FB;
 }
 
 header.dfe-connect-header .dfe-connect-header__dept-image {
@@ -327,7 +327,7 @@ header.dfe-connect-header .dfe-connect-header__school {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 420px;
-    color: #ffffff;
+    color: #F4F8FB;
 }
 
 /* ------------------------------------------------------------
@@ -343,7 +343,7 @@ header.dfe-connect-header .dfe-connect-header__search-toggle {
     border: 0;
     cursor: pointer;
     padding: 0;
-    color: #ffffff;
+    color: #F4F8FB;
     border-left: 1px solid rgba(255, 255, 255, 0.4);
     border-right: 1px solid rgba(255, 255, 255, 0.4);
 }
@@ -369,7 +369,7 @@ header.dfe-connect-header .dfe-connect-header__signout {
     height: 32px;
     display: inline-flex;
     align-items: center;
-    color: #ffffff;
+    color: #F4F8FB;
     text-decoration: underline;
     white-space: nowrap;
     padding-left: 12px;
@@ -422,7 +422,7 @@ header.dfe-connect-header .dfe-connect-header__search-submit {
     background-color: var(--dfe-blue);
     border-color: var(--dfe-blue);
     box-shadow: none;
-    color: #ffffff;
+    color: #F4F8FB;
 }
 
 header.dfe-connect-header .dfe-connect-header__search-submit::before,
@@ -444,7 +444,7 @@ header.dfe-connect-header .dfe-connect-header__search-form:focus-within {
 /* Keep input interior white + black inner line when focused */
 header.dfe-connect-header .dfe-connect-header__search-form:focus-within
 .dfe-connect-header__search-input {
-    background: #ffffff;
+    background: #F4F8FB;
     color: var(--dfe-focus-text);
     box-shadow: inset 0 0 0 2px var(--dfe-focus-text);
 }
@@ -469,7 +469,7 @@ header.dfe-connect-header .dfe-connect-header__search-submit:focus-visible {
    Service row + nav (desktop)
 ------------------------------------------------------------- */
 header.dfe-connect-header .dfe-connect-header__service {
-    background-color: #ffffff;
+    background-color: #F4F8FB;
     border-bottom: 1px solid var(--dfe-blue);
 }
 
@@ -532,7 +532,7 @@ header.dfe-connect-header
 ------------------------------------------------------------- */
 header.dfe-connect-header .dfe-connect-header__mobile {
     display: none;
-    background: #ffffff;
+    background: #F4F8FB;
     border-top: 1px solid var(--dfe-border);
     border-bottom: 1px solid var(--dfe-border);
 }
@@ -808,7 +808,7 @@ header.dfe-connect-header .dfe-connect-header__nav-list {
     font-size: 16px;
     line-height: 1;
     padding: 9px 20px;
-    background: #ffffff;
+    background: #F4F8FB;
     color: #0b0c0c;
     border: 2px solid #0b0c0c;
     cursor: pointer;
@@ -826,11 +826,11 @@ header.dfe-connect-header .dfe-connect-header__nav-list {
 
 .dfe-page-feedback__choice--selected {
     background: #0b0c0c;
-    color: #ffffff;
+    color: #F4F8FB;
 }
 
 .dfe-page-feedback__followup {
-    background: #ffffff;
+    background: #F4F8FB;
     padding: 14px 0;
 }
 
