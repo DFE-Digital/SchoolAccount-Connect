@@ -2,9 +2,9 @@ using SchoolAccount.Integration.DfESignIn;
 
 namespace SchoolAccount.Kernel.Organisations;
 
-public class AcademyOrganisation(string ukrpn, string name) : IOrganisation
+public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisation
 {
-    public AcademyOrganisation(OrganisationClaim claim)
+    public EstablishmentOrganisation(OrganisationClaim claim)
         : this(claim.Ukprn!, claim.Name!) { }
 
     public string Ukrpn { get; } = ukrpn;

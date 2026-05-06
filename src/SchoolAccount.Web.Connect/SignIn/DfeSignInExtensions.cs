@@ -33,7 +33,7 @@ internal static class DfeSignInExtensions
         }
 
         services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(DependencyInjection))
+            scan.FromAssembliesOf(typeof(IProvider))
                 .AddClasses(classes => classes.AssignableTo<IProvider>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());

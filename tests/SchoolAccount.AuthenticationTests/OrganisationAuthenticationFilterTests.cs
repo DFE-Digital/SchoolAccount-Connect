@@ -16,7 +16,7 @@ public class OrganisationAuthenticationFilterTests
     {
         // Arrange
         var context = AuthorizationFilterContextHelper.CreateContext(true);
-        var organisation = new AcademyOrganisation("0000000", "Test Academy");
+        var organisation = new EstablishmentOrganisation("0000000", "Test Academy");
         var organisationContext = OrganisationContextHelper.CreateContext(
             true,
             SchoolType.AcademySpecial,
@@ -36,9 +36,9 @@ public class OrganisationAuthenticationFilterTests
     {
         // Arrange
         var context = AuthorizationFilterContextHelper.CreateContext(true);
-        var organisation = new AcademyOrganisation("0000000", "Test Academy");
+        var organisation = new EstablishmentOrganisation("0000000", "Test Academy");
         var organisationContext = OrganisationContextHelper.CreateContext(true, SchoolType.Academy, organisation);
-        var filter = new OrganisationTypeAuthorisationFilter(organisationContext, [typeof(AcademyOrganisation)]);
+        var filter = new OrganisationTypeAuthorisationFilter(organisationContext, [typeof(EstablishmentOrganisation)]);
 
         // Act
         await filter.OnAuthorizationAsync(context);
@@ -52,7 +52,7 @@ public class OrganisationAuthenticationFilterTests
     {
         // Arrange
         var context = AuthorizationFilterContextHelper.CreateContext(true);
-        var organisation = new AcademyOrganisation("0000000", "Test Academy");
+        var organisation = new EstablishmentOrganisation("0000000", "Test Academy");
         var organisationContext = OrganisationContextHelper.CreateContext(true, SchoolType.Academy, organisation);
 
         // Act
