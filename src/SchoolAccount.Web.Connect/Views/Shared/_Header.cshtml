@@ -60,13 +60,13 @@
             <div class="dfe-connect-header__account">
                 @if (isAuthenticated)
                 {
+                    if (!string.IsNullOrWhiteSpace(displayName))
+                    {
+                        <span class="dfe-connect-header__school">@displayName</span>
+                    }
+                    
                     if (isAuthorised)
                     {
-                        if (!string.IsNullOrWhiteSpace(displayName))
-                        {
-                            <span class="dfe-connect-header__school">@displayName</span>
-                        }
-
                         <button class="dfe-connect-header__search-toggle"
                                 id="dfe-connect-search-toggle"
                                 type="button"
