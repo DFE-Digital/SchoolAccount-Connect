@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using Xunit;
 

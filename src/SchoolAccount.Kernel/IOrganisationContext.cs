@@ -1,11 +1,12 @@
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Kernel;
 
 public interface IOrganisationContext : IProviderContext
 {
-    public bool IsValid { get; }
+    public bool IsDsiDetermined { get; }
     public bool IsAuthorised { get; }
     public SchoolType Type { get; }
     public EstablishmentType Establishment { get; }

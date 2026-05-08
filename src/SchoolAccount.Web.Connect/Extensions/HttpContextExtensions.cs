@@ -1,5 +1,6 @@
 using System.Text.Json;
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Web.Connect.Extensions;
 

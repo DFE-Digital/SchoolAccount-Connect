@@ -13,6 +13,7 @@ using SchoolAccount.Integration.DfESignIn.Authentication;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
+using SchoolAccount.Integration.DfESignIn.Resolvers;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Telemetry;
 
@@ -63,12 +64,21 @@ internal static class DfeSignInExtensions
                 options.SkipUnrecognizedRequests = true;
                 options.GetClaimsFromUserInfoEndpoint = configuration.GetClaimsFromUserInfoEndpoint;
                 options.SaveTokens = configuration.SaveTokens;
+                
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-                options.Scope.Clear();
-                foreach (var scope in configuration.Scopes)
-                {
-                    options.Scope.Add(scope);
-                }
+                // uncomment to move organisation selection to DSI
+                // options.Scope.Add("organisation");
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.MapInboundClaims = false;
+
+                // options.Scope.Clear();
+                // foreach (var scope in configuration.Scopes)
+                // {
+                //     options.Scope.Add(scope);
+                // }
 
                 options.Events = new OpenIdConnectEvents
                 {

@@ -1,4 +1,4 @@
-namespace SchoolAccount.Integration.DfESignIn;
+namespace SchoolAccount.Integration.DfESignIn.Models;
 
 /// <summary>
 /// Describes what type of organisation the establishment is.

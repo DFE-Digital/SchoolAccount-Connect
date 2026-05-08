@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAccount.Application.Extensions;
+using SchoolAccount.Integration.AcademiesApi.Services;
+using SchoolAccount.Integration.DfESignIn.Services;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
 using SchoolAccount.Web.Connect.Authentication.Attributes;
@@ -7,7 +12,13 @@ using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-public class StartController(IUserContext userContext) : Controller
+public class StartController(
+    IUserContext userContext, 
+    IDsiApiService dsiApiService,
+    IOrganisationApiService organisationApiService,
+    ITrustApiService trustApiService,
+    IHttpContextAccessor contextAccessor
+) : Controller
 {
     [AllowAnonymous]
     [HttpGet(RouteConstants.Start.Index)]
@@ -29,6 +40,52 @@ public class StartController(IUserContext userContext) : Controller
     public IActionResult MatAcceptanceApprove([FromQuery] string? returnAddress)
     {
         HttpContext.Session.SetString(SessionKeyConstants.MatAccepted, bool.TrueString);
+        return Redirect(returnAddress ?? RouteConstants.Root);
+    }
+
+    [Authorize]
+    [HttpGet(RouteConstants.Start.SelectAOrganisation)]
+    public async Task<IActionResult> SelectAOrganisationAsync([FromQuery] string? returnAddress)
+    {
+        if (string.IsNullOrEmpty(userContext.DsiIdentifier))
+        {
+            return View(new SelectAOrganisationViewModel { Message = "Could not determine your user's identifier" });
+        }
+        
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected);
+        
+        var organisations = (await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier))
+            .Where(o => !string.IsNullOrEmpty(o.Ukprn) && o.Category is not null)
+            .ToCollection();
+        
+        return View(new SelectAOrganisationViewModel
+        {
+            Organisations = organisations
+        });
+    }
+
+    [Authorize]
+    [HttpGet(RouteConstants.Start.PickAOrganisation)]
+    public async Task<IActionResult> PickAsync([FromRoute] string type, [FromRoute] string ukprn,
+        [FromQuery] string? returnAddress)
+    {
+        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType, type);
+        
+        switch (type)
+        {
+            case "academy":
+                var organisation = await organisationApiService.GetEstablishment(ukprn);
+                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(organisation));
+                break;
+            case "trust":
+                var trust = await trustApiService.GetTrust(ukprn);
+                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(trust));
+                break;
+            default:
+                throw new NotImplementedException(type);
+        }
+        
         return Redirect(returnAddress ?? RouteConstants.Root);
     }
 }

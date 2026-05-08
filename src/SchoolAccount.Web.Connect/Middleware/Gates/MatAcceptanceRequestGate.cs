@@ -7,7 +7,7 @@ namespace SchoolAccount.Web.Connect.Middleware.Gates;
 
 public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationContext organisationContext) : IRequestGate
 {
-    public int Priority { get; } = 2;
+    public int Priority { get; } = 10;
 
     public Task<GateResult> EvaluateAsync(HttpContext context)
     {

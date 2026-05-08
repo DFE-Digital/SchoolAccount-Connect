@@ -127,6 +127,7 @@ internal static class DependencyInjection
     {
         services.AddScoped<IRequestGate, MaintenanceRequestGate>();
         services.AddScoped<IRequestGate, MatAcceptanceRequestGate>();
+        services.AddScoped<IRequestGate, SelectAOrganisationRequestGate>();
     }
 
     internal static void ConfigureAreas(this WebApplication app)

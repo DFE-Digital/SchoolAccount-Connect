@@ -1,6 +1,8 @@
 using GovUk.Frontend.AspNetCore;
 using SchoolAccount.Application;
 using SchoolAccount.Infrastructure;
+using SchoolAccount.Integration.AcademiesApi;
+using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Web.Connect;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Logging;
@@ -19,6 +21,9 @@ try
     builder.Services.AddPresentation(builder.Configuration, builder.Environment, bootstrapLogger);
 
     builder.Logging.AddPresentation(builder.Configuration, builder.Environment);
+    
+    builder.Services.AddDsiApi(builder.Configuration);
+    builder.Services.AddAcademiesApi(builder.Configuration);
 
     var app = builder.Build();
 

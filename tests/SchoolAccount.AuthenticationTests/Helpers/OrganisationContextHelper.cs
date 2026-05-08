@@ -42,7 +42,7 @@ public static class OrganisationContextHelper
         organisation.Name.Returns(name);
         context.Organisation.Returns(organisation);
         context.IsAuthorised.Returns(isAuthenticated);
-        context.IsValid.Returns(true);
+        context.IsDsiDetermined.Returns(true);
 
         return context;
     }

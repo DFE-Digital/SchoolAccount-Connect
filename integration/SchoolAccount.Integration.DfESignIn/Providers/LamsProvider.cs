@@ -1,5 +1,6 @@
 using Microsoft.FeatureManagement;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Integration.DfESignIn.Providers;
 

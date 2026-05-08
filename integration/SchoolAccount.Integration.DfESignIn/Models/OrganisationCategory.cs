@@ -1,4 +1,4 @@
-namespace SchoolAccount.Integration.DfESignIn;
+namespace SchoolAccount.Integration.DfESignIn.Models;
 
 /// <summary>
 /// All the supported organisational types from DSI

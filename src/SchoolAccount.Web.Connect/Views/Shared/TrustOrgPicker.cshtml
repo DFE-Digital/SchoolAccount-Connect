@@ -1,0 +1,32 @@
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@inject IOrganisationContext OrganisationContext
+
+@if (!OrganisationContext.IsDsiDetermined && OrganisationContext.Organisation is TrustOrganisation trust)
+{
+    <style>
+        .trust-org-picker {
+            padding: var(--govuk-spacing-responsive--4);
+            margin-bottom: var(--govuk-spacing-responsive--6);
+            background: var(--govuk-colour--light-grey);
+            border: 5px solid var(--govuk-brand-colour);
+        }
+    </style>
+    <div class="trust-org-picker">
+        <h2 class="govuk-heading govuk-!-margin-bottom-1">You are a trust</h2>
+        <p class="govuk-body">With you being a viewing at the trust level you can see all these schools options clustered into one view, you can also click to to impersonate a school.</p>
+            
+        <ul class="govuk-task-list">
+            @foreach (var establishment in trust.TrustData?.Establishments ?? [])
+            {
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@establishment.Ukprn">
+                            <strong>@establishment.EstablishmentName</strong>
+                        </a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}

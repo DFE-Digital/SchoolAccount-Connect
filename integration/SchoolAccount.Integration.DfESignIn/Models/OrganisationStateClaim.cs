@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using SchoolAccount.Integration.DfESignIn.Common;
 
-namespace SchoolAccount.Integration.DfESignIn;
+namespace SchoolAccount.Integration.DfESignIn.Models;
 
 public class OrganisationStateClaim : IdName<int>
 {

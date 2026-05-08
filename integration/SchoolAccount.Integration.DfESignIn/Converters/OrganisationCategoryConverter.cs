@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Integration.DfESignIn.Converters;
 

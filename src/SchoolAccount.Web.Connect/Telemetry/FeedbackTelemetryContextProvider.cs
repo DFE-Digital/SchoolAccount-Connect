@@ -51,7 +51,7 @@ public sealed class FeedbackTelemetryContextProvider(
 
     private static string? GetOrganisationId(IOrganisationContext organisationContext)
     {
-        if (!organisationContext.IsAuthorised || !organisationContext.IsValid)
+        if (!organisationContext.IsAuthorised || !organisationContext.IsDsiDetermined)
         {
             return null;
         }

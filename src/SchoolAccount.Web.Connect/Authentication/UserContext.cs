@@ -14,6 +14,7 @@ internal sealed class UserContext(IHttpContextAccessor contextAccessor) : IUserC
     public string? Name => $"{GivenName} {Surname}".Trim();
     public string? PreferredName { get; } = contextAccessor.HttpContext?.User.FindFirst("preferred_name")?.Value;
     public string? EmailAddress { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value;
+    public string? DsiIdentifier { get; } = contextAccessor.HttpContext?.User.FindFirst("sub")?.Value;
 
     public override string ToString()
     {

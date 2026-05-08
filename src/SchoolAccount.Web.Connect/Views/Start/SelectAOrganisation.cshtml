@@ -1,0 +1,67 @@
+﻿@using SchoolAccount.Integration.DfESignIn.Models
+@model SchoolAccount.Web.Connect.Models.SelectAOrganisationViewModel
+@{
+    ViewData["Title"] = "Choose a Organisation";
+    ViewData["ShowRightHandSide"] = false;
+}
+
+<form method="post">
+    
+    @*<input type="hidden" asp-for="@Model.LocalReturnAddress" />*@
+    
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <h1 class="govuk-heading">
+            @Model.Message
+        </h1>
+    }
+
+    <h2 class="govuk-heading govuk-!-margin-bottom-2">Select your organisation</h2>
+    <p class="govuk-body govuk-!-margin-bottom-6">Here is a list of organisations broken down by their type that you have requested to have access to. If a trust is picked you'll be able to also see all their academies.</p>
+    <ul class="govuk-task-list">
+        @foreach (var type in Model.Organisations.OrderByDescending(x => x.Category!.Id).GroupBy(x => x.Category!.Name))
+        {
+            <li class="govuk-task-list__item dfe-task-list__group">
+                <div class="govuk-task-list__name-and-hint">
+                    <strong>@type.Key</strong>
+                </div>
+            </li>
+            
+            foreach (var org in type)
+            {
+                var link = org.Category!.Id == OrganisationCategory.Establishment ? "academy" : "trust";
+
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" asp-action="Pick" asp-route-type="@link" asp-route-ukprn="@org.Ukprn">
+                            <strong>@org.Name</strong>
+                        </a>
+                        <div class="govuk-task-list__hint">
+                            @if (!string.IsNullOrEmpty(org.Ukprn))
+                            {
+                                <text>UKPRN: @org.Ukprn</text><br />
+                            }
+                            @if (org.Type is not null)
+                            {
+                                <text>Type: @org.Type.Name</text><br />
+                            }
+                            @if (org.PhaseOfEducation is not null)
+                            {
+                                <text>Phase: @org.PhaseOfEducation.Name</text><br />
+                            }
+                            @if (org.LocalAuthority is not null)
+                            {
+                                <text>Authority: @org.LocalAuthority.Name</text><br />
+                            }
+                            @if (org.Region is not null)
+                            {
+                                <text>Region: @org.Region.Name</text><br />
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+        
+</form>

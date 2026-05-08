@@ -21,6 +21,8 @@ public static class RouteConstants
     {
         public const string Index = Root + "start";
         public const string MatAcceptance = Index + "/mat";
+        public const string SelectAOrganisation = Index + "/organisation";
+        public const string PickAOrganisation = Index + "/organisation/{type}/{ukprn}";
     }
 
     internal static class Calendar

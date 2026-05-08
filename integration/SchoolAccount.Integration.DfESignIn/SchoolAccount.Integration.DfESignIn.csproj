@@ -2,5 +2,9 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.FeatureManagement" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolAccount.Integration.AcademiesApi\SchoolAccount.Integration.AcademiesApi.csproj" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using SchoolAccount.Integration.DfESignIn.Common;
 using SchoolAccount.Integration.DfESignIn.Converters;
 
-namespace SchoolAccount.Integration.DfESignIn;
+namespace SchoolAccount.Integration.DfESignIn.Models;
 
 public class OrganisationEstablishmentTypeClaim : IdName<EstablishmentType>
 {

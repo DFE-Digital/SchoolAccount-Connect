@@ -8,4 +8,5 @@ public interface IUserContext
     string? EmailAddress { get; }
     string? Name { get; }
     string? PreferredName { get; }
+    string? DsiIdentifier { get; }
 }

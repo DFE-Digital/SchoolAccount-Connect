@@ -18,6 +18,12 @@ public class ProviderAuthorisationHandler(IProviderContext providerContext) : Au
             return;
         }
 
+        if (context.User.FindFirst("organisation") is null)
+        {
+            context.Succeed(requirement);
+            return;
+        }
+
         var provider = providerContext.Provider;
 
         if (provider == NullProvider.Default)

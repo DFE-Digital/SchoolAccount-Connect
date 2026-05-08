@@ -1,4 +1,5 @@
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Kernel.Organisations;
 

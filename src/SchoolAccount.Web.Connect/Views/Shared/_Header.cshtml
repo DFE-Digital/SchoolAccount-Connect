@@ -63,6 +63,7 @@
                     if (!string.IsNullOrWhiteSpace(displayName))
                     {
                         <span class="dfe-connect-header__school">@displayName</span>
+                        <a asp-controller="Start" asp-action="SelectAOrganisation">Change Organisation</a>
                     }
                     
                     if (isAuthorised)

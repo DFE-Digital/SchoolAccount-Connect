@@ -15,6 +15,7 @@
     <File Path="infrastructure/scripts/Test-ArmTemplate.ps1" />
   </Folder>
   <Folder Name="/integration/">
+    <Project Path="integration/SchoolAccount.Integration.AcademiesApi/SchoolAccount.Integration.AcademiesApi.csproj" />
     <Project Path="integration/SchoolAccount.Integration.DfESignIn/SchoolAccount.Integration.DfESignIn.csproj" />
   </Folder>
   <Folder Name="/requests/">
