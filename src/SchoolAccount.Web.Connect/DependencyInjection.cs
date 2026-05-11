@@ -66,8 +66,7 @@ internal static class DependencyInjection
             .AddControllersWithViews(options =>
             {
                 options.Filters.AddService<AppInsightsFilter>();
-            })
-            .AddMicrosoftIdentityUI();
+            });
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();

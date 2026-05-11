@@ -55,10 +55,10 @@ internal static class DfeSignInExtensions
                 options.ClientId = configuration.ClientId;
                 options.ClientSecret = configuration.ClientSecret;
                 options.Authority = configuration.Scope;
-                options.MetadataAddress = configuration.MetaDataUrl.OriginalString;
-                options.CallbackPath = new PathString(configuration.CallbackUrl.OriginalString);
-                options.SignedOutRedirectUri = new PathString(configuration.SignOutRedirectUrl.OriginalString);
-                options.SignedOutCallbackPath = new PathString(configuration.SignOutCallbackUrl.OriginalString);
+                options.MetadataAddress = configuration.MetaDataUrl.ToString();
+                options.CallbackPath = configuration.CallbackUrl.ToString();
+                options.SignedOutRedirectUri = configuration.SignOutRedirectUrl.ToString();
+                options.SignedOutCallbackPath = configuration.SignOutCallbackUrl.ToString();
                 options.ResponseType = OpenIdConnectResponseType.IdToken;
                 options.SkipUnrecognizedRequests = true;
                 options.GetClaimsFromUserInfoEndpoint = configuration.GetClaimsFromUserInfoEndpoint;
