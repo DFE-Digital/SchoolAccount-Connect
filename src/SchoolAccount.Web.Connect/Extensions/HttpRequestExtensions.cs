@@ -15,4 +15,19 @@ public static class HttpRequestExtensions
 
         return builder.Uri;
     }
+
+    public static bool IsRestrictedPath(this HttpRequest request, params string[] additionalPaths)
+    {
+        var restrictedPaths = new[]
+        {
+            "/MicrosoftIdentity",
+            "/Account",
+        };
+
+        return restrictedPaths
+            .Union(additionalPaths)
+            .Any(path =>
+                request.Path
+                    .StartsWithSegments(path, StringComparison.InvariantCultureIgnoreCase));
+    }
 }

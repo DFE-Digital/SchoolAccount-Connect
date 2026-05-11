@@ -17,25 +17,25 @@ public static class RouteConstants
 
     public const string AccessibilityStatement = "https://accessibility-statements.education.gov.uk/s/21";
 
-    internal static class Start
+    public static class Start
     {
         public const string Index = Root + "start";
         public const string MatAcceptance = Index + "/mat";
     }
 
-    internal static class Calendar
+    public static class Calendar
     {
         public const string Index = Root + "calendar";
     }
 
-    internal static class Category
+    public static class Category
     {
         public const string Index = Root + "categories";
         public const string Hub = Root + "categories/{id}";
         public const string AllTasks = Root + "categories/all-tasks";
     }
 
-    internal static class Task
+    public static class Task
     {
         public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task/{0}");
     }

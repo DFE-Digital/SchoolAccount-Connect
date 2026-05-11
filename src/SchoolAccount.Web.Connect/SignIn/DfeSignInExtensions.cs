@@ -104,6 +104,11 @@ internal static class DfeSignInExtensions
 
                         await handler.Handle(eventCommand, context.HttpContext.RequestAborted);
                     },
+                    OnRedirectToIdentityProviderForSignOut = async context =>
+                    {
+                        context.HttpContext.Session.Clear();
+                        await Task.CompletedTask;
+                    },
                 };
             })
             .AddCookie(options =>
