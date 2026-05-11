@@ -46,7 +46,7 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
 
         using var content = new StringContent(string.Empty);
         await client.PostAsync(RouteConstants.Start.MatAcceptance, content, TestContext.Current.CancellationToken);
-        await client.GetAsync("/MicrosoftIdentity/Account/SignOut", TestContext.Current.CancellationToken);
+        await client.GetAsync("/Account/SignOut", TestContext.Current.CancellationToken);
 
         // After sign out, should redirect to terms again
         var response = await client.GetAsync(RouteConstants.Calendar.Index, TestContext.Current.CancellationToken);
