@@ -7,9 +7,9 @@ namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
 {
-    public TaskResponse ToTaskResponse(TaskEntity task, TaskViewMode viewMode)
+    public GetTaskByIdResponse ToTaskResponse(TaskEntity task, TaskViewMode viewMode)
     {
-        return new TaskResponse
+        return new GetTaskByIdResponse
         {
             Id = task.Id,
             ReferenceNo = task.ReferenceNo,
@@ -26,13 +26,13 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
         };
     }
 
-    private TaskResponseSubTask ToTaskResponseSubTasks(SubTaskEntity subTask)
+    private GetTaskByIdResponseSubTask ToTaskResponseSubTasks(SubTaskEntity subTask)
     {
         // The database has a many to many relationship between SubTasks and Resources but manage enforces that
         // only one resource is allowed per subtask. So we can assume that the first resource is the one we want.
         var resource = subTask.Resources.FirstOrDefault();
 
-        return new TaskResponseSubTask
+        return new GetTaskByIdResponseSubTask
         {
             Id = subTask.Id,
             ReferenceNo = subTask.ReferenceNo,
@@ -57,8 +57,8 @@ public class GetTaskByIdMapper(IDateTimeProvider dateTimeProvider)
         };
     }
 
-    private TaskResponseResource ToTaskResponseResources(ResourceEntity resource)
+    private GetTaskByIdResponseResource ToTaskResponseResources(ResourceEntity resource)
     {
-        return new TaskResponseResource { Name = resource.ResourceName, Link = resource.DigitalLink };
+        return new GetTaskByIdResponseResource { Name = resource.ResourceName, Link = resource.DigitalLink };
     }
 }

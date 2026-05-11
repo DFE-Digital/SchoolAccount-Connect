@@ -9,7 +9,7 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         PreviousTasks,
     }
 
-    public class TaskResponse
+    public class GetTaskByIdResponse
     {
         public long Id { get; init; }
 
@@ -29,14 +29,14 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
 
         public string UpdatedBy { get; init; } = string.Empty;
 
-        public IEnumerable<TaskResponseSubTask> UpcomingSubTasks { get; init; } = [];
+        public IEnumerable<GetTaskByIdResponseSubTask> UpcomingSubTasks { get; init; } = [];
 
-        public IEnumerable<TaskResponseSubTask> PreviousSubTasks { get; init; } = [];
+        public IEnumerable<GetTaskByIdResponseSubTask> PreviousSubTasks { get; init; } = [];
 
-        public IEnumerable<TaskResponseSubTask> CurrentSubTasks =>
+        public IEnumerable<GetTaskByIdResponseSubTask> CurrentSubTasks =>
             ViewMode == UpcomingTasks ? UpcomingSubTasks : PreviousSubTasks;
 
-        public IEnumerable<TaskResponseResource> Resources { get; init; } = [];
+        public IEnumerable<GetTaskByIdResponseResource> Resources { get; init; } = [];
 
         public string HeadingText => ViewMode == UpcomingTasks ? "Upcoming Tasks" : "Previous 12 months";
 
@@ -48,7 +48,7 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         public bool IsPreviousTasksView => ViewMode == PreviousTasks;
     }
 
-    public class TaskResponseSubTask
+    public class GetTaskByIdResponseSubTask
     {
         public long Id { get; init; }
 
@@ -97,7 +97,7 @@ namespace SchoolAccount.Application.Features.Tasks.GetById
         public bool HasResourceLink => !string.IsNullOrWhiteSpace(ResourceLink);
     }
 
-    public class TaskResponseResource
+    public class GetTaskByIdResponseResource
     {
         public required string Name { get; init; }
 

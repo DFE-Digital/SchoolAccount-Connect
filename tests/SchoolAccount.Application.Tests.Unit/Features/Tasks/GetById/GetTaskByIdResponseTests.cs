@@ -4,17 +4,17 @@ using Xunit;
 
 namespace SchoolAccount.Application.Tests.Unit.Features.Tasks.GetById;
 
-public class TaskResponseTests
+public class GetTaskByIdResponseTests
 {
     [Fact]
     public void Current_subtasks_are_upcoming_subtasks_when_view_mode_is_upcoming()
     {
         // Arrange
-        var sut = new TaskResponse
+        var sut = new GetTaskByIdResponse
         {
             ViewMode = TaskViewMode.UpcomingTasks,
-            UpcomingSubTasks = [new TaskResponseSubTask { Id = 1, Name = "SubTask 1" }],
-            PreviousSubTasks = [new TaskResponseSubTask { Id = 2, Name = "SubTask 2" }],
+            UpcomingSubTasks = [new GetTaskByIdResponseSubTask { Id = 1, Name = "SubTask 1" }],
+            PreviousSubTasks = [new GetTaskByIdResponseSubTask { Id = 2, Name = "SubTask 2" }],
         };
 
         // Act & Assert
@@ -25,11 +25,11 @@ public class TaskResponseTests
     public void Current_subtasks_are_previous_subtasks_when_view_mode_is_previous()
     {
         // Arrange
-        var sut = new TaskResponse
+        var sut = new GetTaskByIdResponse
         {
             ViewMode = TaskViewMode.PreviousTasks,
-            UpcomingSubTasks = [new TaskResponseSubTask { Id = 1, Name = "SubTask 1" }],
-            PreviousSubTasks = [new TaskResponseSubTask { Id = 2, Name = "SubTask 2" }],
+            UpcomingSubTasks = [new GetTaskByIdResponseSubTask { Id = 1, Name = "SubTask 1" }],
+            PreviousSubTasks = [new GetTaskByIdResponseSubTask { Id = 2, Name = "SubTask 2" }],
         };
 
         // Act & Assert
@@ -40,7 +40,7 @@ public class TaskResponseTests
     public void Heading_text_is_upcoming_tasks_when_view_mode_is_upcoming()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.UpcomingTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
 
         // Act & Assert
         sut.HeadingText.Should().Be("Upcoming Tasks");
@@ -50,7 +50,7 @@ public class TaskResponseTests
     public void Heading_text_is_previous_12_months_when_view_mode_is_previous()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.PreviousTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
 
         // Act & Assert
         sut.HeadingText.Should().Be("Previous 12 months");
@@ -59,7 +59,7 @@ public class TaskResponseTests
     [Fact]
     public void No_tasks_found_message_is_upcoming_when_view_mode_is_upcoming()
     {
-        var sut = new TaskResponse { ViewMode = TaskViewMode.UpcomingTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
 
         sut.NoTasksFoundMessage.Should().Be("There are no upcoming tasks");
     }
@@ -67,7 +67,7 @@ public class TaskResponseTests
     [Fact]
     public void No_tasks_found_message_is_previous_when_view_mode_is_previous()
     {
-        var sut = new TaskResponse { ViewMode = TaskViewMode.PreviousTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
 
         sut.NoTasksFoundMessage.Should().Be("There are no previous tasks");
     }
@@ -76,7 +76,7 @@ public class TaskResponseTests
     public void Is_upcoming_tasks_view_is_true_when_view_mode_is_upcoming()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.UpcomingTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
 
         // Act & Assert
         sut.IsUpcomingTasksView.Should().BeTrue();
@@ -86,7 +86,7 @@ public class TaskResponseTests
     public void Is_upcoming_tasks_view_is_false_when_view_mode_is_previous()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.PreviousTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
 
         // Act & Assert
         sut.IsUpcomingTasksView.Should().BeFalse();
@@ -96,7 +96,7 @@ public class TaskResponseTests
     public void Is_previous_tasks_view_is_true_when_view_mode_is_previous()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.PreviousTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
 
         // Act & Assert
         sut.IsPreviousTasksView.Should().BeTrue();
@@ -106,7 +106,7 @@ public class TaskResponseTests
     public void Is_previous_tasks_view_is_false_when_view_mode_is_upcoming()
     {
         // Arrange
-        var sut = new TaskResponse { ViewMode = TaskViewMode.UpcomingTasks };
+        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
 
         // Act & Assert
         sut.IsPreviousTasksView.Should().BeFalse();

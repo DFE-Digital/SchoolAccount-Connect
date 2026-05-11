@@ -4,10 +4,10 @@ using SchoolAccount.Application.Features.Tasks.GetById;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-public sealed class TaskController(IQueryHandler<GetTaskByIdQuery, TaskResponse> taskHandler) : Controller
+public sealed class TaskController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse> taskHandler) : Controller
 {
     [HttpGet("Task/{id}")]
-    public async Task<ActionResult<TaskResponse>> Index(
+    public async Task<ActionResult<GetTaskByIdResponse>> Index(
         GetTaskByIdQuery taskDetailQuery,
         CancellationToken cancellationToken
     )

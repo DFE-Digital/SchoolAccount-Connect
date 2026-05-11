@@ -51,7 +51,7 @@ public class GetTaskByIdMapperTests
         result
             .Should()
             .BeEquivalentTo(
-                new TaskResponse
+                new GetTaskByIdResponse
                 {
                     Id = taskEntity.Id,
                     ReferenceNo = taskEntity.ReferenceNo,
@@ -157,7 +157,7 @@ public class GetTaskByIdMapperTests
             .ContainSingle()
             .Which.Should()
             .BeEquivalentTo(
-                new TaskResponseSubTask
+                new GetTaskByIdResponseSubTask
                 {
                     Id = subTask.Id,
                     ReferenceNo = subTask.ReferenceNo,

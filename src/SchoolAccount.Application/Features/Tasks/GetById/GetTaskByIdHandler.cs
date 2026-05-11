@@ -7,9 +7,9 @@ using static SchoolAccount.Domain.Common.WorkflowState;
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContext, IDateTimeProvider dateTimeProvider)
-    : IQueryHandler<GetTaskByIdQuery, TaskResponse>
+    : IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse>
 {
-    public async Task<Result<TaskResponse>> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Result<GetTaskByIdResponse>> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
     {
         var task = await applicationDbContext
             .Tasks.AsNoTracking()
@@ -20,7 +20,7 @@ public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContex
 
         if (task == null)
         {
-            return new TaskResponse();
+            return new GetTaskByIdResponse();
         }
 
         var mapper = new GetTaskByIdMapper(dateTimeProvider);
