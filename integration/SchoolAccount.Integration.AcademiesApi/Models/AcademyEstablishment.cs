@@ -313,18 +313,3 @@ public class AcademyEstablishment
     [JsonPropertyName("concerns")]
     public object? Concerns { get; set; }
 }
-
-public class ViewAcademyConversionData
-{
-    [JsonPropertyName("viabilityIssue")]
-    public string? ViabilityIssue { get; set; }
-
-    [JsonPropertyName("pfi")]
-    public string? Pfi { get; set; }
-
-    [JsonPropertyName("pan")]
-    public string? Pan { get; set; }
-
-    [JsonPropertyName("deficit")]
-    public string? Deficit { get; set; }
-}

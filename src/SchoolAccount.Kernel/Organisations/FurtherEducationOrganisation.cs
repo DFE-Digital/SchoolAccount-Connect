@@ -6,7 +6,12 @@ namespace SchoolAccount.Kernel.Organisations;
 public class FurtherEducationOrganisation(string ukrpn, string name) : IOrganisation
 {
     public FurtherEducationOrganisation(OrganisationClaim claim)
-        : this(claim.Ukprn!, claim.Name!) { }
+        : this(claim.UkPrn!, claim.Name!) 
+    { }
+    
+    public FurtherEducationOrganisation(Organisation organisation)
+        : this(organisation.UkPrn, organisation.Name) 
+    { }
 
     public string Ukrpn { get; } = ukrpn;
     public string Name { get; } = name;

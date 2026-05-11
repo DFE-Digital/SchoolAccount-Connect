@@ -7,6 +7,7 @@ using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
+using SchoolAccount.Kernel.Organisations;
 using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Authentication;
@@ -24,9 +25,7 @@ public class OrganisationContext(
     public bool IsUserDeclared => contextAccessor.HttpContext?.Session.Keys.Contains(SessionKeyConstants.OrgType) == true;
 
 
-    private OrganisationClaim? Claim => contextAccessor.GetOrganisation();
-
-    private AcademyOrganisation? Academy
+    private Organisation? Data
     {
         get
         {
@@ -37,17 +36,11 @@ public class OrganisationContext(
 
                 if (!string.IsNullOrEmpty(obj))
                 {
-                    return JsonSerializer.Deserialize<AcademyOrganisation>(obj);
+                    var acd = JsonSerializer.Deserialize<AcademyOrganisation>(obj);
+                    return acd is not null ? new Organisation(acd) : null;
                 }
             }
-
-            return null;
-        }
-    }
-    private AcademyTrust? Trust
-    {
-        get
-        {
+            
             if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
                 SessionKeyConstants.OrgTypeTrust)
             {
@@ -55,11 +48,13 @@ public class OrganisationContext(
 
                 if (!string.IsNullOrEmpty(obj))
                 {
-                    return JsonSerializer.Deserialize<AcademyTrust>(obj);
+                    var tru = JsonSerializer.Deserialize<AcademyTrust>(obj);
+                    return tru is not null ? new Organisation(tru) : null;
                 }
             }
-
-            return null;
+            
+            var claim = contextAccessor.GetOrganisation();
+            return claim is not null ? new Organisation(claim) : null;
         }
     }
 
@@ -67,21 +62,43 @@ public class OrganisationContext(
 
     public SchoolType Type => _schoolType ??= DetermineSchoolType();
 
-    public EstablishmentType Establishment => Claim?.Type?.Id ?? EstablishmentType.Undeclared;
+    public EstablishmentType Establishment => Data?.Establishment ?? EstablishmentType.Undeclared;
 
-    public OrganisationCategory Category => Claim?.Category?.Id ?? OrganisationCategory.Undeclared;
+    public OrganisationCategory Category => Data?.Category ?? OrganisationCategory.Undeclared;
 
-    public IProvider Provider => providerResolver.Resolve(Claim, Academy, Trust);
+    public IProvider Provider
+    {
+        get
+        {
+            return contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) switch
+            {
+                SessionKeyConstants.OrgTypeAcademy => new PreSixteenProvider(),
+                SessionKeyConstants.OrgTypeTrust => new TrustProvider(),
+                _ => providerResolver.Resolve(contextAccessor.GetOrganisation())
+            };
+        }
+    }
 
-    public IOrganisation Organisation => organisationResolver.Resolve(Claim, Academy, Trust);
+    public IOrganisation Organisation
+    {
+        get
+        {
+            return contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) switch
+            {
+                SessionKeyConstants.OrgTypeAcademy => new EstablishmentOrganisation(Data!),
+                SessionKeyConstants.OrgTypeTrust => new TrustOrganisation(Data!),
+                _ => organisationResolver.Resolve(contextAccessor.GetOrganisation())
+            };
+        }
+    }
 
     private SchoolType DetermineSchoolType()
     {
-        return Claim?.Category?.Id switch
+        return Data?.Category switch
         {
             OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
             OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
-            _ => Claim?.Type?.Id switch
+            _ => Data?.Establishment switch
             {
                 EstablishmentType.AcademyConverter
                     or EstablishmentType.AcademySponsorLed

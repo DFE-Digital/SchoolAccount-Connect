@@ -14,7 +14,7 @@ public class OrganisationClaim : IdName<Guid>
     public string? Urn { get; init; }
     public string? Uid { get; init; }
     public string? Upin { get; init; }
-    public string? Ukprn { get; init; }
+    public string? UkPrn { get; init; }
     public string? EstablishmentNumber { get; set; }
 
     public OrganisationStateClaim? Status { get; init; }

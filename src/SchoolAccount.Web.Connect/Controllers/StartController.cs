@@ -56,7 +56,7 @@ public class StartController(
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected);
         
         var organisations = (await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier))
-            .Where(o => !string.IsNullOrEmpty(o.Ukprn) && o.Category is not null)
+            .Where(o => !string.IsNullOrEmpty(o.UkPrn) && o.Category is not null)
             .ToCollection();
         
         return View(new SelectAOrganisationViewModel
@@ -71,6 +71,7 @@ public class StartController(
         [FromQuery] string? returnAddress)
     {
         contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType, type);
+        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.UkPrn, ukprn);
         
         switch (type)
         {

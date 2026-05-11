@@ -7,5 +7,5 @@ namespace SchoolAccount.Application.Resolvers.Interfaces;
 
 public interface IOrganisationResolver
 {
-    IOrganisation Resolve(OrganisationClaim? claim, AcademyOrganisation? academy, AcademyTrust? trust);
+    IOrganisation Resolve(OrganisationClaim? claim);
 }

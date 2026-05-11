@@ -17,12 +17,12 @@
         <p class="govuk-body">With you being a viewing at the trust level you can see all these schools options clustered into one view, you can also click to to impersonate a school.</p>
             
         <ul class="govuk-task-list">
-            @foreach (var establishment in trust.TrustData?.Establishments ?? [])
+            @foreach (var establishment in trust.Establishments ?? [])
             {
                 <li class="govuk-task-list__item govuk-task-list__item--with-link">
                     <div class="govuk-task-list__name-and-hint">
-                        <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@establishment.Ukprn">
-                            <strong>@establishment.EstablishmentName</strong>
+                        <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@establishment.Ukrpn">
+                            <strong>@establishment.Name</strong>
                         </a>
                     </div>
                 </li>

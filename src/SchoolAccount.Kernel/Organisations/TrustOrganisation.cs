@@ -7,15 +7,23 @@ namespace SchoolAccount.Kernel.Organisations;
 public class TrustOrganisation(string ukrpn, string name) : IOrganisation
 {
     public TrustOrganisation(OrganisationClaim claim)
-        : this(claim.Ukprn!, claim.Name!) { }
+        : this(claim.UkPrn!, claim.Name!) { }
 
     public TrustOrganisation(AcademyTrust trust)
         : this(trust.GiasData!.Ukprn!, trust.GiasData!.GroupName!)
     {
-        TrustData = trust;
+        Establishments = trust.Establishments
+            .Select(x => new EstablishmentOrganisation(x.Ukprn, x.EstablishmentName))
+            .ToList();
+    }
+
+    public TrustOrganisation(Organisation organisation)
+    : this(organisation.UkPrn, organisation.Name)
+    {
+        Establishments = organisation.Children?.Select(x => new EstablishmentOrganisation(x)).ToList() ?? [];
     }
 
     public string Ukrpn { get; } = ukrpn;
     public string Name { get; } = name;
-    public AcademyTrust? TrustData { get; }
+    public IReadOnlyCollection<EstablishmentOrganisation> Establishments { get; } = [];
 }

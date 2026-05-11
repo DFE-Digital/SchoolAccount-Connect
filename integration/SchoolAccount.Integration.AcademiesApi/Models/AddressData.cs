@@ -21,4 +21,6 @@ public class AddressData
 
     [JsonPropertyName("postcode")]
     public string Postcode { get; set; } = string.Empty;
+    
+    override public string ToString() => $"{Street}, {Locality}, {AdditionalLine}, {County}, {Postcode}";
 }
