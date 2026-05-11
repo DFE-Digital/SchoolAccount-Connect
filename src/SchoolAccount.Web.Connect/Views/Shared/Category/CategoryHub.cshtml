@@ -5,7 +5,7 @@
     <input type="hidden" asp-for="@Model.ViewModes"/>
         
     <ul class="govuk-task-list">
-        @if (Model.Pagination.TotalItemCount > 0)
+        @if (Model.Pagination.TotalItemCount > 0 || Model.Items.Count > 0)
         {
             foreach (var group in Model.Items)
             {

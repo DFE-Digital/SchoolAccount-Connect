@@ -2,10 +2,12 @@ using System.Collections.ObjectModel;
 using AwesomeAssertions;
 using NSubstitute;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.AuthenticationTests.Helpers;
+using SchoolAccount.InfrastructureTests.Extensions;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
@@ -17,7 +19,7 @@ namespace SchoolAccount.Web.Connect.Tests.Unit.Builders;
 public class CategoryHubViewBuilderTests
 {
     [Fact]
-    public void Successfully_handles_an_empty_list_of_items()
+    public void Returns_an_empty_items_collection_when_there_are_no_calendar_items()
     {
         // Arrange
         var organisationContext = Substitute.For<IOrganisationContext>();
@@ -38,7 +40,7 @@ public class CategoryHubViewBuilderTests
     }
 
     [Fact]
-    public void Successfully_sets_the_correct_text_for_AllTasks_view_when_category_is_null()
+    public void Displays_all_tasks_headings_and_text_when_no_category_is_provided()
     {
         // Arrange
         var schoolName = "Test School";
@@ -57,6 +59,7 @@ public class CategoryHubViewBuilderTests
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);
 
         // Assert
+        viewModel.ViewModes.Should().Be(CalendarOfItemsViewModes.Custom);
         viewModel.Caption.Should().Be("Test School");
         viewModel.Heading.Should().Be("All tasks");
         viewModel.SubHeading.Should().Be("See all your tasks, returns and policies from DfE.");
@@ -65,7 +68,7 @@ public class CategoryHubViewBuilderTests
     }
 
     [Fact]
-    public void Successfully_sets_the_correct_text_for_Category_when_category_is_set()
+    public void Displays_category_specific_headings_and_text_when_category_is_provided()
     {
         // Arrange
         var schoolName = "Test School";
@@ -93,10 +96,69 @@ public class CategoryHubViewBuilderTests
         var viewModel = categoryHubViewBuilder.Build(items, currentUri, category);
 
         // Assert
+        viewModel.ViewModes.Should().Be(CalendarOfItemsViewModes.Custom);
         viewModel.Caption.Should().Be("Test School");
         viewModel.Heading.Should().Be(category.DisplayName);
         viewModel.SubHeading.Should().Be(category.HubViewDescription);
         viewModel.Description.Should().Be("Explore all tasks and support");
         viewModel.NoResultsMessage.Should().Be("No results found");
+    }
+
+    [Fact]
+    public void Pagination_shows_zero_items_when_the_list_is_empty()
+    {
+        // Arrange
+        var organisationContext = Substitute.For<IOrganisationContext>();
+        var filters = new Collection<Filterable>();
+        var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
+        var currentUri = new Uri("https://localhost:7033/categories/1");
+
+        var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
+
+        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+
+        // Act
+        var viewModel = categoryHubViewBuilder.Build(items, currentUri);
+
+        // Assert
+        viewModel.ViewModes.Should().Be(CalendarOfItemsViewModes.Custom);
+        viewModel.ViewModes.Should().NotHaveFlag(CalendarOfItemsViewModes.Standalone);
+        viewModel.Pagination.Should().NotBeNull();
+        viewModel.Pagination.TotalItemCount.Should().Be(0);
+    }
+
+    [Fact]
+    public void Pagination_shows_the_correct_total_count_when_there_are_multiple_items()
+    {
+        // Arrange
+        var organisationContext = Substitute.For<IOrganisationContext>();
+        var filters = new Collection<Filterable>();
+        var calendarViewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
+        var currentUri = new Uri("https://localhost:7033/categories/1");
+
+        var tasks = new StaticPagedList<CalendarOfItemsRow>(
+            new List<CalendarOfItemsRow>()
+            {
+                CalendarOfItemsRowExtensions.Create(1, "Task 1", null, CalendarOfItemsRowType.Task),
+                CalendarOfItemsRowExtensions.Create(2, "Task 2", null, CalendarOfItemsRowType.Task),
+                CalendarOfItemsRowExtensions.Create(3, "Task 3", null, CalendarOfItemsRowType.Task),
+            },
+            1,
+            10,
+            3
+        );
+
+        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), tasks, filters);
+
+        // Act
+        var viewModel = categoryHubViewBuilder.Build(items, currentUri);
+
+        // Assert
+        viewModel.ViewModes.Should().Be(CalendarOfItemsViewModes.Custom);
+        viewModel.ViewModes.Should().NotHaveFlag(CalendarOfItemsViewModes.Standalone);
+        viewModel.Pagination.Should().NotBeNull();
+        viewModel.Pagination.TotalItemCount.Should().Be(3);
     }
 }
