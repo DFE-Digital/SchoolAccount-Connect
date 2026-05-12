@@ -24,6 +24,16 @@
                         <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@establishment.Ukrpn">
                             <strong>@establishment.Name</strong>
                         </a>
+                        <div class="govuk-task-list__hint">
+                            @if (!string.IsNullOrEmpty(establishment.Ukrpn))
+                            {
+                                <text>UKPRN: @establishment.Ukrpn</text><br />
+                            }
+                            @if (establishment.PhaseOfEducation is not null)
+                            {
+                                <text>Phase: (@establishment.PhaseOfEducation.Id) @establishment.PhaseOfEducation.Name</text><br />
+                            }
+                        </div>
                     </div>
                 </li>
             }

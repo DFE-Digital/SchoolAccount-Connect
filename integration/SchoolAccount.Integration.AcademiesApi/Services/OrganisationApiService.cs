@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Caching.Distributed;
 using SchoolAccount.Integration.AcademiesApi.Models;
+using SchoolAccount.Integration.DistributedCache.Extensions;
 
 namespace SchoolAccount.Integration.AcademiesApi.Services;
 
@@ -11,23 +13,28 @@ public interface IOrganisationApiService
 }
 
 [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-public class OrganisationApiService(HttpClient httpClient) : IOrganisationApiService
+public class OrganisationApiService(HttpClient httpClient, IDistributedCache cache) : IOrganisationApiService
 {
     public async Task<AcademyOrganisation?> GetEstablishment(string ukPrn)
     {
+        return await cache.GetOrCreateAsync(
+            $"aca:establishment:{ukPrn}",
+            async () =>
+            {
+                var response = await httpClient.GetAsync($"establishment/{ukPrn}");
 
-        var response = await httpClient.GetAsync($"establishment/{ukPrn}");
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            return null;
-        }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApplicationException($"{response.StatusCode}: Could not read organisations");
+                }
 
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new ApplicationException($"{response.StatusCode}: Could not read organisations");
-        }
-
-        return await response.Content.ReadFromJsonAsync<AcademyOrganisation>() ?? null;
+                return await response.Content.ReadFromJsonAsync<AcademyOrganisation>() ?? null;
+            }
+        );
     }   
 }

@@ -1,9 +1,12 @@
 using System.ComponentModel.Design;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using SchoolAccount.Integration.AcademiesApi.Configuration;
 using SchoolAccount.Integration.AcademiesApi.Services;
+using SchoolAccount.Integration.DistributedCache.Extensions;
 
 namespace SchoolAccount.Integration.AcademiesApi;
 
@@ -34,6 +37,8 @@ public static class DependencyInjection
         
         services.AddHttpClient<IOrganisationApiService, OrganisationApiService>(setUpHttpClient);
         services.AddHttpClient<ITrustApiService, TrustApiService>(setUpHttpClient);
+
+        services.AddDistributedCacheIfAbsent();
         
         return services;
     }

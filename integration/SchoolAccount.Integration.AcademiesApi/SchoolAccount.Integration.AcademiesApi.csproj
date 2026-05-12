@@ -3,4 +3,7 @@
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SchoolAccount.Integration.DistributedCache\SchoolAccount.Integration.DistributedCache.csproj" />
+    </ItemGroup>
 </Project>

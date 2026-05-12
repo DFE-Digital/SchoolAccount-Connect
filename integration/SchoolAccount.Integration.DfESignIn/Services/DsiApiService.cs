@@ -4,10 +4,12 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SchoolAccount.Integration.DfESignIn.Configuration;
 using SchoolAccount.Integration.DfESignIn.Models;
+using SchoolAccount.Integration.DistributedCache.Extensions;
 
 namespace SchoolAccount.Integration.DfESignIn.Services
 {
@@ -17,7 +19,7 @@ namespace SchoolAccount.Integration.DfESignIn.Services
     }
 
     [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-    public class DsiApiService(HttpClient httpClient, IOptions<DsiApiConfig> options) : IDsiApiService
+    public class DsiApiService(HttpClient httpClient, IOptions<DsiApiConfig> options, IDistributedCache cache) : IDsiApiService
     {
         private readonly DsiApiConfig _apiConfig = options.Value;
 
@@ -38,23 +40,28 @@ namespace SchoolAccount.Integration.DfESignIn.Services
 
         public async Task<List<OrganisationClaim>> GetUserOrganisations(string userId)
         {
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", CreateBearerToken());
-
+            return await cache.GetOrCreateAsync(
+                $"dsi:user:{userId}",
+                async () =>
+                {
+                    httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", CreateBearerToken());
             
-            var response = await httpClient.GetAsync($"users/{userId}/v2/organisations");
+                    var response = await httpClient.GetAsync($"users/{userId}/v2/organisations");
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return new List<OrganisationClaim>();
-            }
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return new List<OrganisationClaim>();
+                    }
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException($"{response.StatusCode}: Could not read organisations");
-            }
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new ApplicationException($"{response.StatusCode}: Could not read organisations");
+                    }
 
-            return await response.Content.ReadFromJsonAsync<List<OrganisationClaim>>() ?? [];
+                    return await response.Content.ReadFromJsonAsync<List<OrganisationClaim>>() ?? [];
+                }
+            );
         }
     }
 }

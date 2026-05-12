@@ -6,5 +6,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SchoolAccount.Integration.AcademiesApi\SchoolAccount.Integration.AcademiesApi.csproj" />
+    <ProjectReference Include="..\SchoolAccount.Integration.DistributedCache\SchoolAccount.Integration.DistributedCache.csproj" />
   </ItemGroup>
 </Project>
