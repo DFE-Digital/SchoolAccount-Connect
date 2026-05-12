@@ -1,108 +1,94 @@
 using SchoolAccount.Domain.Common;
-using static SchoolAccount.Application.Features.Tasks.GetById.TaskViewMode;
 
-namespace SchoolAccount.Application.Features.Tasks.GetById
+namespace SchoolAccount.Application.Features.Tasks.GetById;
+
+public sealed record GetTaskByIdResponse
 {
-    public enum TaskViewMode
+    public long Id { get; init; }
+
+    public string? ReferenceNo { get; init; }
+
+    public string Name { get; init; } = string.Empty;
+
+    public Requirement? Requirement { get; init; }
+
+    public DateTime DateUpdated { get; init; }
+
+    public string UpdatedBy { get; init; } = string.Empty;
+
+    public DateTime? SubTaskLastUpdated => GetSubTaskLastUpdated();
+
+    public IReadOnlyCollection<GetTaskByIdResponseSubtask> SubTasks { get; init; } = [];
+
+    public IReadOnlyCollection<GetTaskByIdResponseResource> Resources { get; init; } = [];
+
+    public IReadOnlyCollection<GetTaskByIdResponseRelatedTask> RelatedTasks { get; init; } = [];
+
+    private DateTime? GetSubTaskLastUpdated()
     {
-        UpcomingTasks,
-        PreviousTasks,
+        return SubTasks.OrderByDescending(st => st.DateUpdated).FirstOrDefault()?.DateUpdated;
     }
+}
 
-    public class GetTaskByIdResponse
-    {
-        public long Id { get; init; }
+public sealed record GetTaskByIdResponseSubtask
+{
+    public long Id { get; init; }
 
-        public string? ReferenceNo { get; init; }
+    public string? ReferenceNo { get; init; }
 
-        public string Name { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 
-        public DateTime? SubTaskLastUpdated { get; init; }
+    public string? Description { get; init; }
 
-        public TaskViewMode ViewMode { get; init; }
+    public DateOnly? StartDate { get; init; }
 
-        public int TotalSubTasks { get; init; }
+    public bool? StartDateIsExact { get; init; }
 
-        public Requirement? Requirement { get; init; }
+    public DateOnly? DueDate { get; init; }
 
-        public DateTime DateUpdated { get; init; }
+    public bool? DueDateIsExact { get; init; }
 
-        public string UpdatedBy { get; init; } = string.Empty;
+    public string AvailabilityLabel { get; init; } = string.Empty;
 
-        public IEnumerable<GetTaskByIdResponseSubTask> UpcomingSubTasks { get; init; } = [];
+    public string DueDateLabel { get; init; } = string.Empty;
 
-        public IEnumerable<GetTaskByIdResponseSubTask> PreviousSubTasks { get; init; } = [];
+    public Requirement Requirement { get; init; }
 
-        public IEnumerable<GetTaskByIdResponseSubTask> CurrentSubTasks =>
-            ViewMode == UpcomingTasks ? UpcomingSubTasks : PreviousSubTasks;
+    public WorkflowState WorkflowState { get; init; }
 
-        public IEnumerable<GetTaskByIdResponseResource> Resources { get; init; } = [];
+    public DateTime DateUpdated { get; init; }
 
-        public string HeadingText => ViewMode == UpcomingTasks ? "Upcoming Tasks" : "Previous 12 months";
+    public string UpdatedBy { get; init; } = string.Empty;
 
-        public string NoTasksFoundMessage =>
-            ViewMode == UpcomingTasks ? "There are no upcoming tasks" : "There are no previous tasks";
+    public bool HasDueDateLabel => !string.IsNullOrWhiteSpace(DueDateLabel);
 
-        public bool IsUpcomingTasksView => ViewMode == UpcomingTasks;
+    public bool HasAvailabilityLabel => !string.IsNullOrWhiteSpace(AvailabilityLabel);
 
-        public bool IsPreviousTasksView => ViewMode == PreviousTasks;
-    }
+    public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
 
-    public class GetTaskByIdResponseSubTask
-    {
-        public long Id { get; init; }
+    public bool IsOptional => Requirement == Requirement.Optional;
 
-        public string? ReferenceNo { get; init; }
+    public DateOnly? SortingDate => DueDate ?? StartDate;
 
-        public string Name { get; init; } = string.Empty;
+    public string? ResourceName { get; init; } = string.Empty;
 
-        public string? Description { get; init; }
+    public string? ResourceLink { get; init; } = string.Empty;
 
-        public string? DigitalLink { get; init; }
+    public bool HasResourceLink => !string.IsNullOrWhiteSpace(ResourceLink);
+}
 
-        public DateOnly? StartDate { get; init; }
+public sealed record GetTaskByIdResponseResource
+{
+    public required string Name { get; init; }
 
-        public bool? StartDateIsExact { get; init; }
+    public string? Link { get; init; }
 
-        public DateOnly? DueDate { get; init; }
+    public bool HasLink => !string.IsNullOrWhiteSpace(Link);
+}
 
-        public bool? DueDateIsExact { get; init; }
+public sealed record GetTaskByIdResponseRelatedTask
+{
+    public long Id { get; init; }
 
-        public string AvailabilityLabel { get; init; } = string.Empty;
-
-        public string DueDateLabel { get; init; } = string.Empty;
-
-        public Requirement Requirement { get; init; }
-
-        public WorkflowState WorkflowState { get; init; }
-
-        public DateTime DateUpdated { get; init; }
-
-        public string UpdatedBy { get; init; } = string.Empty;
-
-        public bool HasDueDateLabel => !string.IsNullOrWhiteSpace(DueDateLabel);
-
-        public bool HasAvailabilityLabel => !string.IsNullOrWhiteSpace(AvailabilityLabel);
-
-        public bool HasDescription { get; init; }
-
-        public bool HasLink { get; init; }
-
-        public bool IsOptional { get; init; }
-
-        public string? ResourceName { get; init; } = string.Empty;
-
-        public string? ResourceLink { get; init; } = string.Empty;
-
-        public bool HasResourceLink => !string.IsNullOrWhiteSpace(ResourceLink);
-    }
-
-    public class GetTaskByIdResponseResource
-    {
-        public required string Name { get; init; }
-
-        public string? Link { get; init; }
-
-        public bool HasLink => !string.IsNullOrWhiteSpace(Link);
-    }
+    public string Name { get; init; } = string.Empty;
 }

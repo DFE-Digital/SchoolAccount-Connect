@@ -1,114 +1,49 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.Tasks.GetById;
 using Xunit;
+using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseBuilder;
+using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseSubtaskBuilder;
 
 namespace SchoolAccount.Application.UnitTests.Features.Tasks.GetById;
 
-public class GetTaskByIdResponseTests
+public static class GetTaskByIdResponseTests
 {
-    [Fact]
-    public void Current_subtasks_are_upcoming_subtasks_when_view_mode_is_upcoming()
+    public class SubtaskLastUpdated
     {
-        // Arrange
-        var sut = new GetTaskByIdResponse
+        [Fact]
+        public void Task_with_no_subtasks_has_no_last_updated_date()
         {
-            ViewMode = TaskViewMode.UpcomingTasks,
-            UpcomingSubTasks = [new GetTaskByIdResponseSubTask { Id = 1, Name = "SubTask 1" }],
-            PreviousSubTasks = [new GetTaskByIdResponseSubTask { Id = 2, Name = "SubTask 2" }],
-        };
+            // Arrange
+            var sut = AResponse().Build();
 
-        // Act & Assert
-        sut.CurrentSubTasks.Should().BeEquivalentTo(sut.UpcomingSubTasks);
-    }
+            // Act & Assert
+            sut.SubTaskLastUpdated.Should().BeNull();
+        }
 
-    [Fact]
-    public void Current_subtasks_are_previous_subtasks_when_view_mode_is_previous()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse
+        [Fact]
+        public void Task_with_one_subtask_returns_that_subtasks_updated_date()
         {
-            ViewMode = TaskViewMode.PreviousTasks,
-            UpcomingSubTasks = [new GetTaskByIdResponseSubTask { Id = 1, Name = "SubTask 1" }],
-            PreviousSubTasks = [new GetTaskByIdResponseSubTask { Id = 2, Name = "SubTask 2" }],
-        };
+            // Arrange
+            var updated = new DateTime(2024, 6, 1, 12, 0, 0, DateTimeKind.Utc);
 
-        // Act & Assert
-        sut.CurrentSubTasks.Should().BeEquivalentTo(sut.PreviousSubTasks);
-    }
+            var sut = AResponse().WithSubtasks(ASubtask().WithDateUpdated(updated).Build()).Build();
 
-    [Fact]
-    public void Heading_text_is_upcoming_tasks_when_view_mode_is_upcoming()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
+            // Act & Assert
+            sut.SubTaskLastUpdated.Should().Be(updated);
+        }
 
-        // Act & Assert
-        sut.HeadingText.Should().Be("Upcoming Tasks");
-    }
+        [Fact]
+        public void Task_with_multiple_subtasks_returns_the_most_recently_updated_date()
+        {
+            // Arrange
+            var oldest = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+            var newest = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
-    [Fact]
-    public void Heading_text_is_previous_12_months_when_view_mode_is_previous()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
+            var sut = AResponse()
+                .WithSubtasks(ASubtask().WithDateUpdated(oldest).Build(), ASubtask().WithDateUpdated(newest).Build())
+                .Build();
 
-        // Act & Assert
-        sut.HeadingText.Should().Be("Previous 12 months");
-    }
-
-    [Fact]
-    public void No_tasks_found_message_is_upcoming_when_view_mode_is_upcoming()
-    {
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
-
-        sut.NoTasksFoundMessage.Should().Be("There are no upcoming tasks");
-    }
-
-    [Fact]
-    public void No_tasks_found_message_is_previous_when_view_mode_is_previous()
-    {
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
-
-        sut.NoTasksFoundMessage.Should().Be("There are no previous tasks");
-    }
-
-    [Fact]
-    public void Is_upcoming_tasks_view_is_true_when_view_mode_is_upcoming()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
-
-        // Act & Assert
-        sut.IsUpcomingTasksView.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Is_upcoming_tasks_view_is_false_when_view_mode_is_previous()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
-
-        // Act & Assert
-        sut.IsUpcomingTasksView.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Is_previous_tasks_view_is_true_when_view_mode_is_previous()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.PreviousTasks };
-
-        // Act & Assert
-        sut.IsPreviousTasksView.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Is_previous_tasks_view_is_false_when_view_mode_is_upcoming()
-    {
-        // Arrange
-        var sut = new GetTaskByIdResponse { ViewMode = TaskViewMode.UpcomingTasks };
-
-        // Act & Assert
-        sut.IsPreviousTasksView.Should().BeFalse();
+            // Act & Assert
+            sut.SubTaskLastUpdated.Should().Be(newest);
+        }
     }
 }

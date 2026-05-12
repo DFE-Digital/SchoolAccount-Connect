@@ -1,5 +1,6 @@
-﻿@using SchoolAccount.Application.Features.Tasks.GetById
-@model SchoolAccount.Application.Features.Tasks.GetById.GetTaskByIdResponse
+﻿@using SchoolAccount.Application.Extensions
+@using SchoolAccount.Web.Connect.Models.Tasks
+@model SchoolAccount.Web.Connect.Models.Tasks.TaskViewModel
 
 <moj-sub-navigation>
     <moj-sub-navigation-item
@@ -17,9 +18,9 @@
 <div class="govuk-grid-row govuk-!-padding-top-2">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">@Model.HeadingText</h2>
-        @if (Model.SubTaskLastUpdated.HasValue)
+        @if (Model.Task.SubTaskLastUpdated.HasValue)
         {
-            <h3 class="govuk-caption-m">Last updated: @Model.SubTaskLastUpdated</h3>
+            <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
         }
     </div>
 </div>

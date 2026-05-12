@@ -84,6 +84,14 @@ stages:
               testRunTitle: 'Integration Tests'
               
           - task: DotNetCoreCLI@2
+            displayName: 'Run Application Integration Tests'
+            inputs:
+              command: 'test'
+              projects: 'tests/SchoolAccount.Application.IntegrationTests/SchoolAccount.Application.IntegrationTests.csproj'
+              arguments: '--configuration Release --no-restore --no-build'
+              testRunTitle: 'Application Integration Tests'
+              
+          - task: DotNetCoreCLI@2
             displayName: 'Publish Connect Web App'
             inputs:
               command: publish

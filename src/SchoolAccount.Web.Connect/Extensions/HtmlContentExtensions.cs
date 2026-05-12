@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace SchoolAccount.Web.Connect.Extensions;
+﻿namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class HtmlContentExtensions
 {

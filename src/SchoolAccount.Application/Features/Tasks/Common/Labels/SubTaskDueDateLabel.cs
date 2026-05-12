@@ -1,6 +1,6 @@
 using static System.Globalization.CultureInfo;
 
-namespace SchoolAccount.Domain.Subtasks;
+namespace SchoolAccount.Application.Features.Tasks.Common.Labels;
 
 public static class SubTaskDueDateLabel
 {

@@ -1,13 +1,13 @@
 using System.Globalization;
 using AwesomeAssertions;
 using NSubstitute;
+using SchoolAccount.Application.Features.Tasks.Common.Labels;
 using SchoolAccount.Domain.Common;
-using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 using Xunit;
 using static SchoolAccount.Domain.Common.WorkflowState;
 
-namespace SchoolAccount.Domain.UnitTests.Subtasks;
+namespace SchoolAccount.Application.UnitTests.Features.Tasks.Common.Labels;
 
 public class SubTaskAvailabilityLabelTests
 {

@@ -2,7 +2,7 @@ using SchoolAccount.Domain.Common;
 using Xunit;
 using static SchoolAccount.Domain.Common.WorkflowState;
 
-namespace SchoolAccount.Domain.UnitTests.Subtasks;
+namespace SchoolAccount.Application.UnitTests.Features.Tasks.Common.Labels;
 
 public class AvailabilityScenarioData : TheoryData<WorkflowState, int?, bool?, int?, string, string>
 {

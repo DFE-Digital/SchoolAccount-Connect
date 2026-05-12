@@ -60,6 +60,12 @@ public sealed class TaskBuilder
         return this;
     }
 
+    public TaskBuilder WithSubTask(SubTaskEntity entity)
+    {
+        _subTasks.Add(entity);
+        return this;
+    }
+
     public TaskBuilder WithSubTasks(params SubTaskBuilder[] builders)
     {
         foreach (var b in builders)

@@ -2,7 +2,7 @@ using System.Globalization;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Domain.Subtasks;
+namespace SchoolAccount.Application.Features.Tasks.Common.Labels;
 
 public class SubTaskAvailabilityLabel
 {

@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace SchoolAccount.Domain.UnitTests.Subtasks;
+namespace SchoolAccount.Application.UnitTests.Features.Tasks.Common.Labels;
 
 public class AvailabilityBoundaryData : TheoryData<string, string, bool, string, string>
 {

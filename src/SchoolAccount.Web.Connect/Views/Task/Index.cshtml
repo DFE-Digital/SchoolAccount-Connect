@@ -1,4 +1,4 @@
-﻿@model SchoolAccount.Application.Features.Tasks.GetById.GetTaskByIdResponse
+@model SchoolAccount.Web.Connect.Models.Tasks.TaskViewModel
 
 @{
     ViewData["Title"] = "Task details";
@@ -10,10 +10,10 @@
         Task
     </p>
     <h1 class="govuk-heading-l govuk-!-padding-top-0">
-        @Model.Name
+        @Model.Task.Name
     </h1>
     <p class="govuk-body">
-        Track the jobs you need to do to manage your @Model.Name.ToLower() and view information and resources
+        Track the jobs you need to do to manage your @Model.Task.Name.ToLower() and view information and resources
         that can help you. All links open in a new tab.
     </p>
 }
@@ -21,7 +21,7 @@
 <div class="govuk-tabs">
     <partial name="_Tabs" model="@Model" />
             
-    @if (!Model.CurrentSubTasks.Any())
+    @if (!Model.SubTasks.Any())
     {   
         <hr class="govuk-section-break govuk-section-break--visible">
         <p>@Model.NoTasksFoundMessage</p>
@@ -29,7 +29,7 @@
     else
     {
         <ul class="govuk-task-list">
-            @foreach (var subTask in Model.CurrentSubTasks)
+            @foreach (var subTask in Model.SubTasks)
             {
                 <partial name="_Subtasks" model="subTask" />
             }
@@ -39,5 +39,13 @@
 
 @section RightSide
 {
-    <partial name="_Guidance" model="@Model" />
+    @if (Model.HasResources)
+    {
+        <partial name="_Guidance" model="Model.ResourcesWithALink" />
+    }
+
+    @if (Model.HasRelatedTasks)
+    {
+        <partial name="_RelatedTasks" model="Model.Task.RelatedTasks" />
+    }
 }

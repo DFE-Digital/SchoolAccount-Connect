@@ -1,9 +1,9 @@
 using System.Globalization;
 using AwesomeAssertions;
-using SchoolAccount.Domain.Subtasks;
+using SchoolAccount.Application.Features.Tasks.Common.Labels;
 using Xunit;
 
-namespace SchoolAccount.Domain.UnitTests.Subtasks;
+namespace SchoolAccount.Application.UnitTests.Features.Tasks.Common.Labels;
 
 public class SubTaskDueDateLabelTests
 {
