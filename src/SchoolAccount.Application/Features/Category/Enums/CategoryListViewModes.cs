@@ -8,4 +8,5 @@ public enum CategoryListViewModes
     Backward = 1 << 1,
     Custom = 1 << 2,
     Standalone = 1 << 3,
+    Dashboard = 1 << 4,
 }

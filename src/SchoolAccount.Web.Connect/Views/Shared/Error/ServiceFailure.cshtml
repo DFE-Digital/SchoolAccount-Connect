@@ -1,0 +1,67 @@
+@using SchoolAccount.Web.Connect
+@model SchoolAccount.Web.Connect.Models.Shared.ErrorViewModel
+@{
+    ViewData["Title"] = "Problem with the Service";
+    ViewData["ShowRightHandSide"] = false;
+}
+
+<div class="govuk-width-container">
+    
+    @if (Model.ShowException && Model.Exception is not null && !Model.HandledException)
+    {
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                <h2 class="govuk-error-summary__title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Type
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @Model.Exception.GetType().Name
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Message
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @Html.Raw(Model.Exception.Message.Replace("\n", "<br />"))
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Stack Trace
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @Model.Exception.StackTrace
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                Sorry, there is a problem with the service
+            </h1>
+            <p>Try again later.</p>
+            <p>You can try go <a class="govuk-link" href="@RouteConstants.Root">back to your dashboard</a>.</p>
+            <p><a class="govuk-link" href="#">Contact the DfE Helpline</a> if you need to speak to someone for any further assistance.</p>
+
+            @if (Model.ShowRequestId && !Model.HandledException)
+            {
+                <p class="govuk-body">
+                    <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                </p>
+            }
+        </div>
+    </div>
+
+</div>

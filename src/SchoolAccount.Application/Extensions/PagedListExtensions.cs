@@ -26,12 +26,8 @@ public static class PagedListExtensions
         var paginated = await query.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync(cancellationToken);
         return paginated.ToStaticPagedList(pageNumber, pageSize, count);
     }
-    
-    public static IPagedList<T> PaginateForExtraItem<T>(
-        this IEnumerable<T> source,
-        int pageSize,
-        int pageNumber
-    )
+
+    public static IPagedList<T> PaginateForExtraItem<T>(this IEnumerable<T> source, int pageSize, int pageNumber)
     {
         var list = source.ToList();
         var paginated = list.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToList();

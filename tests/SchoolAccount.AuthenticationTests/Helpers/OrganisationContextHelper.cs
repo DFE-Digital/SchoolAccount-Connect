@@ -17,15 +17,31 @@ public static class OrganisationContextHelper
 
         return context;
     }
+
+    public static IOrganisationContext CreateContext(bool canAccess, SchoolType schoolType, IOrganisation organisation)
+    {
+        var provider = Substitute.For<IProvider>();
+        provider.CanAccess().Returns(canAccess);
+
+        var context = Substitute.For<IOrganisationContext>();
+        context.Type.Returns(schoolType);
+        context.Provider.Returns(provider);
+        context.Organisation.Returns(organisation);
+
+        return context;
+    }
+
     public static IOrganisationContext CreateSimpleOrganisationContext(
-        string name = "Test School")
+        string name = "Test School",
+        bool isAuthenticated = true
+    )
     {
         var context = Substitute.For<IOrganisationContext>();
         var organisation = Substitute.For<IOrganisation>();
 
         organisation.Name.Returns(name);
         context.Organisation.Returns(organisation);
-        context.IsAuthenticated.Returns(true);
+        context.IsAuthorised.Returns(isAuthenticated);
         context.IsValid.Returns(true);
 
         return context;

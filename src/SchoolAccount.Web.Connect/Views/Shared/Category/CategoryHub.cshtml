@@ -1,10 +1,11 @@
+@using SchoolAccount.Web.Connect.Models.Shared
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
 <form method="get">
     <input type="hidden" asp-for="@Model.ViewModes"/>
         
     <ul class="govuk-task-list">
-        @if (Model.Pagination.TotalItemCount > 0)
+        @if (Model.Pagination.TotalItemCount > 0 || Model.Items.Count > 0)
         {
             foreach (var group in Model.Items)
             {
@@ -19,25 +20,13 @@
 
                 foreach (var row in group)
                 {
-                    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                        <div class="govuk-task-list__name-and-hint">
-                            <a class="govuk-link govuk-task-list__link" href="@row.Url">
-                                @row.Name
-                            </a>
-                            <div class="govuk-task-list__hint">
-                                @row.Description
-                            </div>
-                            <div class="govuk-task-list__hint">
-                                <strong>@row.DateText</strong>
-                            </div>
-                        </div>
-                        @if (row.ShowTag)
-                        {
-                            <div class="govuk-task-list__status">
-                                <govuk-tag class="@row.TagTheme">@row.TagValue</govuk-tag>
-                            </div>
-                        }
-                    </li>
+                    <partial name="_ListItem" model='new ListItemViewModel
+                             (
+                                 name: @row.Name,
+                                 url: @row.Url,
+                                 description: @row.Description
+                             )'
+                    />
                 }
             }
         }

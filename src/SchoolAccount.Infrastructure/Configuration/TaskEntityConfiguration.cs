@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Infrastructure.Configuration.Constants;
+using static SchoolAccount.Infrastructure.Configuration.Constants.TableConstants;
 
 namespace SchoolAccount.Infrastructure.Configuration;
 
@@ -14,12 +16,13 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         public const string Name = "TaskName";
         public const string ReferenceNo = "TaskReferenceNo";
         public const string Requirement = "RequirementId";
+        public const string Source = "SourceId";
         public const string WorkflowState = "WorkflowStateId";
     }
 
     public void Configure(EntityTypeBuilder<TaskEntity> builder)
     {
-        builder.ToTable(TableConstants.Transactional.Task, SchemaConstants.Transactional).HasKey(x => x.Id);
+        builder.ToTable(Transactional.Task, SchemaConstants.Transactional).HasKey(x => x.Id);
 
         builder.Property(x => x.ReferenceNo).HasColumnName(ColumnNames.ReferenceNo).HasMaxLength(50);
         builder.Property(x => x.Name).HasColumnName(ColumnNames.Name).HasMaxLength(200);
@@ -36,5 +39,13 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
         builder.HasIndex(x => x.ReferenceNo);
         builder.HasIndex(x => x.Name);
         builder.HasIndex(x => new { x.IsDeleted, x.IsLatestVersion });
+
+        builder
+            .HasMany(t => t.Resources)
+            .WithMany()
+            .UsingEntity<TaskResourceMappingEntity>(
+                j => j.HasOne<ResourceEntity>().WithMany().HasForeignKey(rsm => rsm.ResourceId),
+                j => j.HasOne<TaskEntity>().WithMany().HasForeignKey(rsm => rsm.EntityId)
+            );
     }
 }

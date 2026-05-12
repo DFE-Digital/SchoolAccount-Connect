@@ -1,6 +1,6 @@
 namespace SchoolAccount.Integration.DfESignIn.Exceptions;
 
-public class NoProviderException : AuthorisationException
+public class NoProviderException : ProviderAuthorisationException
 {
     public NoProviderException() { }
 

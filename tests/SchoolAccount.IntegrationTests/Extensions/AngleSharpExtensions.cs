@@ -43,7 +43,7 @@ public static class AngleSharpExtensions
         var container = assertions.Subject as IElement;
         container.Should().NotBeNull();
 
-        var selectedTab = container.QuerySelector(".moj-sub-navigation__link[aria-current=page]");
+        var selectedTab = container.QuerySelector(".moj-sub-navigation__link[aria-current=true]");
 
         selectedTab.Should().NotBeNull("a tab was expected to be selected");
         selectedTab.TextContent.Trim().Should().Be(expectedLabel);

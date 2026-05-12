@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
@@ -40,6 +41,8 @@ public record CalendarOfItemsViewModel(
 
     public bool HasTabs => Tabs.Count > 0;
     public CalendarOfItemsTabViewModel? SelectedTab => Tabs.FirstOrDefault(x => x.IsSelected);
+    public bool HasSelectedTab => SelectedTab is not null;
+    public string CurrentlyActiveTabAccessibilityLabel => $"Currently active tab is {SelectedTab?.Label}";
 
     public string? CallToActionMessage
     {

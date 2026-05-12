@@ -1,3 +1,3 @@
 .idea/
-tests/SchoolAccount.Domain.Tests.Unit/Subtasks/SubTaskAvailabilityLabelBoundaryData.cs
-tests/SchoolAccount.Domain.Tests.Unit/Subtasks/SubTaskAvailabilityLabelScenarioData.cs
+tests/SchoolAccount.Domain.UnitTests/Subtasks/SubTaskAvailabilityLabelBoundaryData.cs
+tests/SchoolAccount.Domain.UnitTests/Subtasks/SubTaskAvailabilityLabelScenarioData.cs

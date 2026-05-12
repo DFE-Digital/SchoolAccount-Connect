@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
+using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Models.Categories;
 
@@ -14,8 +15,6 @@ public record CategoryHubViewModel(
     FiltrationViewModel Filters
 ) : CalendarOfItemsViewModel(Title, Description, ViewModes, Tabs, Items, Pagination, Filters)
 {
-    public string HeadingStyles => "-l";
-
     public static CategoryHubViewModel FromCalendarOfItemsViewModel(CalendarOfItemsViewModel model)
     {
         return new CategoryHubViewModel(
@@ -32,7 +31,7 @@ public record CategoryHubViewModel(
             NoResultsMessage = model.NoResultsMessage,
             LastUpdatedMessage = model.LastUpdatedMessage,
             CanRenderFilter = model.CanRenderFilter,
-            Caption = "Category",
+            Caption = model.Caption,
             Heading = model.Heading,
             SubHeading = model.SubHeading,
             GeneratedAt = model.GeneratedAt,

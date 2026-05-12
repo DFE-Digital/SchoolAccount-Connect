@@ -5,8 +5,8 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
+using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 
@@ -40,7 +40,9 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             options.ViewMode,
             options.Tabs ?? [],
             rows,
-            _paginationViewBuilder.Build(result, currentUri),
+            !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Standalone)
+                ? _paginationViewBuilder.Build(result, currentUri)
+                : new PaginationViewModel(false),
             FiltrationViewModel.Build(options.ViewMode, currentUri, result.Filter)
         )
         {
@@ -109,7 +111,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             ViewMode = CalendarOfItemsViewModes.Custom | CalendarOfItemsViewModes.Standalone,
             Tabs = [],
             Title = "Upcoming tasks",
-            Description = "These are all the required tasks that you must complete for your school each month.",
+            Description = "These are the next required tasks that you must complete for your school.",
             GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null

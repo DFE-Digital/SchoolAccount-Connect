@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Category.Enums;
+using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Models.Categories;
 
@@ -18,7 +19,7 @@ public record CategoryListViewModel(
 )
 {
     private readonly string _callToActionMessage = "See the full list of categories";
-    
+
     public string? Title { get; init; }
     public bool HasTitle => !string.IsNullOrEmpty(Title);
     public string? Description { get; init; }
@@ -33,10 +34,8 @@ public record CategoryListViewModel(
     public bool DisplayCaption => !string.IsNullOrEmpty(Caption) && ViewModes.HasFlag(CategoryListViewModes.Standalone);
     public bool ShowPageHeading => DisplayCaption || HasHeading || HasSubHeading;
     public bool IsStandalone => ViewModes.HasFlag(CategoryListViewModes.Standalone);
-    public string HeadingStyles => "-l";
-    public string SubHeadingStyles => IsStandalone ? "-l" : string.Empty;
-    public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.None) && Pagination.PageCount > 1;
-    
+    public bool ShowNavigator => ViewModes.HasFlag(CategoryListViewModes.Dashboard) && Pagination.PageCount > 1;
+
     public string? CallToActionMessage
     {
         get => _callToActionMessage;

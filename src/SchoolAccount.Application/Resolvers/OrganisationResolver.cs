@@ -11,16 +11,15 @@ public class OrganisationResolver : IOrganisationResolver
     {
         return claim?.Category?.Id switch
         {
-            OrganisationCategory.SingleAcademyTrust or OrganisationCategory.MultiAcademyTrust => new TrustOrganisation(
-                claim
-            ),
-
-            OrganisationCategory.Establishment => new AcademyOrganisation(claim),
-
-            OrganisationCategory.LocalAuthority or OrganisationCategory.FurtherEducation => new OtherOrganisation(
-                claim
-            ),
-
+            OrganisationCategory.SingleAcademyTrust  
+                or OrganisationCategory.MultiAcademyTrust 
+                => new TrustOrganisation(claim),
+            OrganisationCategory.LocalAuthority 
+                => new LocalAuthorityOrganisation(claim),
+            OrganisationCategory.FurtherEducation 
+                => new FurtherEducationOrganisation(claim),
+            OrganisationCategory.Establishment 
+                => new EstablishmentOrganisation(claim),
             _ => NullOrganisation.Default,
         };
     }

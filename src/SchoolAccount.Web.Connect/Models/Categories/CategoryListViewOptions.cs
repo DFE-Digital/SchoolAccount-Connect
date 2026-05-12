@@ -16,5 +16,4 @@ public class CategoryListViewOptions
     public string? Heading { get; init; }
     public string? SubHeading { get; init; }
     public string? CallToActionMessage { get; init; }
-    
 }

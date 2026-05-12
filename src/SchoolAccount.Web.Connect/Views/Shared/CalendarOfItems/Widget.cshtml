@@ -8,7 +8,13 @@
     {
         <div class="dfe-tabs">
 
-            <moj-sub-navigation>
+            <moj-sub-navigation aria-label="Calendar of items view navigation" show-accessibility-label="true">
+                @if (Model.HasSelectedTab)
+                {
+                    <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
+                        @Model.CurrentlyActiveTabAccessibilityLabel
+                    </span>
+                }
                 @foreach (var tab in Model.Tabs)
                 {
                     <moj-sub-navigation-item href="@tab.Href"

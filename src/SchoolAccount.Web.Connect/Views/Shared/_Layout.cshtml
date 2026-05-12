@@ -20,7 +20,6 @@
 
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
     var showRightHandSide = ViewData["ShowRightHandSide"] as bool? ?? true;
-    var cookieRedirect = (string?)ViewData["CookieRedirect"] ?? "https://dfeconnect.education.gov.uk/Home/Cookies";
 }
 
 @section Head {
@@ -56,7 +55,7 @@
                         id="dfe-cta-declineCookies"/>
                     <govuk-cookie-banner-message-action-link
                         text="View cookies"
-                        href="@cookieRedirect"/>
+                        href="@RouteConstants.Cookies"/>
                 </govuk-cookie-banner-message-actions>
             </govuk-cookie-banner-message>
         </govuk-cookie-banner>
@@ -129,20 +128,22 @@
     }
 </div>
 
-@Html.GovUkFrontendScriptImports()
-@Html.MojFrontendScriptImports()
+@section BodyEnd {
+    @Html.GovUkFrontendScriptImports()
 
-<script>
-    window.cookieConsentConfig = {
-        cookieName: "@CookieConsentConstants.CookieName",
-        acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
-        rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
-    };
-</script>
+    <script>
+        window.cookieConsentConfig = {
+            cookieName: "@CookieConsentConstants.CookieName",
+            acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
+            rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
+        };
+    </script>
 
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script src="~/js/feedback.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/feedback.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+}
 
 @section Footer {
     @if (isAuthenticated)
@@ -153,7 +154,7 @@
     <govuk-footer>
         <govuk-footer-meta>
             <govuk-footer-meta-items>
-                <govuk-footer-meta-item href="@cookieRedirect">Cookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.Cookies">Cookies</govuk-footer-meta-item>
                 <govuk-footer-meta-item href="@RouteConstants.PrivacyPolicy"
                                         link-target="_blank"
                                         link-rel="noopener noreferrer">
@@ -161,16 +162,27 @@
                 </govuk-footer-meta-item>
                 <govuk-footer-meta-item href="@RouteConstants.AccessibilityStatement"
                                         link-target="_blank"
-                                        link-rel="noopener noreferrer"
-                >Accessibility statement
+                                        link-rel="noopener noreferrer">
+                    Accessibility statement (opens in a new tab)
                 </govuk-footer-meta-item>
-                <govuk-footer-meta-item
-                    href="@RouteConstants.ContactUs"
-                    link-target="_blank"
-                    link-rel="noopener noreferrer">
+                <govuk-footer-meta-item href="@RouteConstants.ContactUs"
+                                        link-target="_blank"
+                                        link-rel="noopener noreferrer">
                     Contact us (opens in a new tab)
                 </govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
+
+        <govuk-footer-content-licence>
+            All content is available under the
+            <a class="govuk-footer__link"
+               href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+               rel="license">
+                Open Government Licence v3.0
+            </a>,
+            except where otherwise stated
+        </govuk-footer-content-licence>
+
+        <govuk-footer-copyright />
     </govuk-footer>
 }

@@ -1,0 +1,31 @@
+using Microsoft.EntityFrameworkCore;
+using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Kernel;
+using static SchoolAccount.Domain.Common.WorkflowState;
+
+namespace SchoolAccount.Application.Features.Tasks.GetById;
+
+public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContext, IDateTimeProvider dateTimeProvider)
+    : IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse>
+{
+    public async Task<Result<GetTaskByIdResponse>> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
+    {
+        var task = await applicationDbContext
+            .Tasks.AsNoTracking()
+            .Include(t => t.SubTasks.Where(st => st.WorkflowState == Published || st.WorkflowState == Expired))
+                .ThenInclude(st => st.Resources)
+            .Include(t => t.Resources)
+            .FirstOrDefaultAsync(t => t.Id == query.Id, cancellationToken);
+
+        if (task == null)
+        {
+            return new GetTaskByIdResponse();
+        }
+
+        var mapper = new GetTaskByIdMapper(dateTimeProvider);
+        var taskResponse = mapper.ToTaskResponse(task, query.ViewMode);
+
+        return Result.Success(taskResponse);
+    }
+}

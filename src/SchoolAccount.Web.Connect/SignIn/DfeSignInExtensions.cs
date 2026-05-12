@@ -32,11 +32,11 @@ internal static class DfeSignInExtensions
             throw new ArgumentException("DfeSignInConfig is required.");
         }
 
-        services.AddScoped<IProvider, NullProvider>();
-        services.AddScoped<IProvider, FreeSchoolProvider>();
-        services.AddScoped<IProvider, LamsProvider>();
-        services.AddScoped<IProvider, PreSixteenProvider>();
-        services.AddScoped<IProvider, SpecialsProvider>();
+        services.Scan(scan =>
+            scan.FromAssembliesOf(typeof(IProvider))
+                .AddClasses(classes => classes.AssignableTo<IProvider>())
+                .AsImplementedInterfaces()
+                .WithScopedLifetime());
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();
@@ -55,10 +55,10 @@ internal static class DfeSignInExtensions
                 options.ClientId = configuration.ClientId;
                 options.ClientSecret = configuration.ClientSecret;
                 options.Authority = configuration.Scope;
-                options.MetadataAddress = configuration.MetaDataUrl.OriginalString;
-                options.CallbackPath = new PathString(configuration.CallbackUrl.OriginalString);
-                options.SignedOutRedirectUri = new PathString(configuration.SignOutRedirectUrl.OriginalString);
-                options.SignedOutCallbackPath = new PathString(configuration.SignOutCallbackUrl.OriginalString);
+                options.MetadataAddress = configuration.MetaDataUrl.ToString();
+                options.CallbackPath = configuration.CallbackUrl.ToString();
+                options.SignedOutRedirectUri = configuration.SignOutRedirectUrl.ToString();
+                options.SignedOutCallbackPath = configuration.SignOutCallbackUrl.ToString();
                 options.ResponseType = OpenIdConnectResponseType.IdToken;
                 options.SkipUnrecognizedRequests = true;
                 options.GetClaimsFromUserInfoEndpoint = configuration.GetClaimsFromUserInfoEndpoint;
@@ -103,6 +103,11 @@ internal static class DfeSignInExtensions
                         );
 
                         await handler.Handle(eventCommand, context.HttpContext.RequestAborted);
+                    },
+                    OnRedirectToIdentityProviderForSignOut = async context =>
+                    {
+                        context.HttpContext.Session.Clear();
+                        await Task.CompletedTask;
                     },
                 };
             })

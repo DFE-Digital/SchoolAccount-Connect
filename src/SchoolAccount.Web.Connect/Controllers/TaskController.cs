@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.TaskDetails;
-using SchoolAccount.Domain.ViewModels;
+using SchoolAccount.Application.Features.Tasks.GetById;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-public sealed class TaskController(IQueryHandler<TaskDetailQuery, TaskDetailsViewModel> taskHandler) : Controller
+public sealed class TaskController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse> taskHandler) : Controller
 {
-    [HttpGet("Task")]
-    public async Task<ActionResult<TaskDetailsViewModel>> TaskDetailsPage(
-        [FromQuery] TaskDetailQuery taskDetailQuery,
+    [HttpGet("Task/{id}")]
+    public async Task<ActionResult<GetTaskByIdResponse>> Index(
+        GetTaskByIdQuery taskDetailQuery,
         CancellationToken cancellationToken
     )
     {
@@ -20,8 +19,6 @@ public sealed class TaskController(IQueryHandler<TaskDetailQuery, TaskDetailsVie
             return Problem(detail: result.Error.Description);
         }
 
-        result.Value.AddRequestDetails(Request);
-
-        return View("TaskDetailsPage", result.Value);
+        return View(result.Value);
     }
 }

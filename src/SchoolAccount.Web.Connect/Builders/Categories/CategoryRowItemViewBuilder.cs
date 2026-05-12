@@ -7,9 +7,7 @@ public class CategoryRowItemViewBuilder
 {
     private static string DetermineUri(long? id)
     {
-        return id.HasValue 
-            ? $"{RouteConstants.Root}categories/{id}" 
-            : RouteConstants.Category.AllTasks;
+        return id.HasValue ? $"{RouteConstants.Root}categories/{id}" : RouteConstants.Category.AllTasks;
     }
 
     public CategoryListRowItemViewModel Build(CategoryRow row)

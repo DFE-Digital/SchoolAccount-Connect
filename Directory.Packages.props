@@ -56,6 +56,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <!--Vulnerability overrides-->
-    <PackageVersion Include="Microsoft.AspNetCore.DataProtection" Version="10.0.7" /><!-- https://github.com/advisories/GHSA-9mv3-2cwr-p262 -->
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection" Version="10.0.7" />
+    <!-- https://github.com/advisories/GHSA-9mv3-2cwr-p262 -->
   </ItemGroup>
 </Project>
