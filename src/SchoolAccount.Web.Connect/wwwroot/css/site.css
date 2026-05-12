@@ -711,12 +711,14 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
 }
 
 header.dfe-connect-header .dfe-connect-header__nav-item .dfe-connect-header__nav-link {
-    margin: var(--govuk-spacing-responsive--3) 0 !important;
+    margin: var(--govuk-spacing-responsive--3) 0 var(--govuk-spacing-responsive--2) 0 !important;
+    padding-bottom: 5px;
     display: block;
 }
 
 header.dfe-connect-header .dfe-connect-header__nav-item--active .dfe-connect-header__nav-link {
     padding-bottom: var(--govuk-spacing-responsive--2) !important;
+    margin-bottom: 0 !important;
     border-bottom-width: var(--govuk-spacing-responsive--1);
 }
 
