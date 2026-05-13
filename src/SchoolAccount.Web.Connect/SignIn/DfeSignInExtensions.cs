@@ -11,7 +11,6 @@ using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Authentication;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
-using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Telemetry;
@@ -36,7 +35,8 @@ internal static class DfeSignInExtensions
             scan.FromAssembliesOf(typeof(IProvider))
                 .AddClasses(classes => classes.AssignableTo<IProvider>())
                 .AsImplementedInterfaces()
-                .WithScopedLifetime());
+                .WithScopedLifetime()
+        );
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();

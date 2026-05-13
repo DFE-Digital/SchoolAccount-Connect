@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.Tasks.GetById;
-using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;

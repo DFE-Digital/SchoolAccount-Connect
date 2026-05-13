@@ -1,4 +1,3 @@
-using AngleSharp;
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 

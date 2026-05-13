@@ -6,7 +6,6 @@ using FluentValidation.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
-using Microsoft.Identity.Web.UI;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
@@ -62,11 +61,10 @@ internal static class DependencyInjection
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IRequestContext, RequestContext>();
 
-        services
-            .AddControllersWithViews(options =>
-            {
-                options.Filters.AddService<AppInsightsFilter>();
-            });
+        services.AddControllersWithViews(options =>
+        {
+            options.Filters.AddService<AppInsightsFilter>();
+        });
 
         services.AddDfeSignInAuthentication(configurationManager);
         services.AddSession();
