@@ -7,4 +7,5 @@ public enum Source
     Task,
     Subtask,
     Resource,
+    Type
 }

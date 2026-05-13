@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.Shared;
 
@@ -15,7 +16,14 @@ public record CategoryHubViewModel(
     FiltrationViewModel Filters
 ) : CalendarOfItemsViewModel(Title, Description, ViewModes, Tabs, Items, Pagination, Filters)
 {
-    public static CategoryHubViewModel FromCalendarOfItemsViewModel(CalendarOfItemsViewModel model)
+    public IReadOnlyCollection<CategoryResource> Resources { get; init; } = [];
+    
+    public bool HasResources => Resources.Count != 0;
+    
+    public static CategoryHubViewModel FromCalendarOfItemsViewModel(
+        CalendarOfItemsViewModel model,
+        IReadOnlyCollection<CategoryResource>? resources = null
+        )
     {
         return new CategoryHubViewModel(
             model.Title,
@@ -35,6 +43,7 @@ public record CategoryHubViewModel(
             Heading = model.Heading,
             SubHeading = model.SubHeading,
             GeneratedAt = model.GeneratedAt,
+            Resources = resources ?? [],
         };
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Resources;
 
 namespace SchoolAccount.Domain.Types;
 
@@ -28,4 +29,6 @@ public class TypeEntity
     public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
 
     public virtual ICollection<TypeEntity> Children { get; } = [];
+    
+    public virtual ICollection<ResourceEntity> Resources { get; } = [];
 }

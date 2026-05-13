@@ -22,6 +22,7 @@ public sealed class ResourceSourceMappingEntityConfiguration : IEntityTypeConfig
 
         builder
             .HasDiscriminator(rsm => rsm.Source)
+            .HasValue<TypeResourceMappingEntity>(Source.Type)
             .HasValue<TaskResourceMappingEntity>(Source.Task)
             .HasValue<SubTaskResourceMappingEntity>(Source.Subtask);
     }

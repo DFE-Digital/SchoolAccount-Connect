@@ -23,3 +23,16 @@
 }
 
 <partial name="@ViewAddressConstraints.Categories.Hub" model="@Model"/>
+
+@section RightSide
+{
+    @if (Model.HasResources)
+    {
+        @foreach (var resource in Model.Resources)
+        {
+            <li>
+                <a class="govuk-link govuk-link--no-visited-state" href="@resource.Link" target="_blank">@resource.Name</a>
+            </li>
+        }
+    }
+}

@@ -50,6 +50,13 @@ public sealed class GetCategoryByIdQueryHandler(IApplicationDbContext applicatio
                     IsMultiSelect = category.TypeGrouping.IsMultiSelect,
                 },
             Children = category.Children.Select(x => x.Id).ToList(),
+            Resources = category.Resources.Count > 0
+                ? category.Resources.Select(x => new CategoryResource
+                {
+                    Name = x.ResourceName,
+                    Link = x.DigitalLink
+                }).ToList()
+                : []
         };
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolAccount.Domain.Resources;
+using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Domain.Types;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 
@@ -28,5 +30,13 @@ public class TypeEntityConfiguration : IEntityTypeConfiguration<TypeEntity>
         builder.HasOne(d => d.TypeGrouping).WithMany(p => p.Types).HasForeignKey(d => d.TypeGroupingId);
 
         builder.HasMany(x => x.Children).WithOne(x => x.Parent).HasForeignKey(x => x.ParentTypeId);
+        
+        builder
+            .HasMany(t => t.Resources)
+            .WithMany()
+            .UsingEntity<TypeResourceMappingEntity>(
+                j => j.HasOne<ResourceEntity>().WithMany().HasForeignKey(rsm => rsm.ResourceId),
+                j => j.HasOne<TypeEntity>().WithMany().HasForeignKey(rsm => (int)rsm.EntityId)
+            );
     }
 }

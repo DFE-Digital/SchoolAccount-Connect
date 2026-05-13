@@ -21,4 +21,15 @@ public sealed class CategoryType
     public CategoryTypeGrouping? TypeGrouping { get; set; }
 
     public Collection<int> AllCategoryIds => [Id, .. Children];
+
+    public IReadOnlyCollection<CategoryResource> Resources { get; init; } = [];
+}
+
+public sealed record CategoryResource
+{
+    public required string Name { get; init; }
+
+    public string? Link { get; init; }
+
+    public bool HasLink => !string.IsNullOrWhiteSpace(Link);
 }
