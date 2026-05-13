@@ -51,7 +51,7 @@ stages:
     condition: and(
       succeeded(),
       ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main_dfe'))
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Shared Resources - S268UAT'
       - group: 'Alert Thresholds - UAT'
