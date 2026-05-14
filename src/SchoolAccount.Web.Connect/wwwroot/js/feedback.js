@@ -103,9 +103,10 @@
 
     function initialiseBanner(root) {
         if (isBannerDismissed()) {
-            root.classList.add("govuk-!-display-none");
             return;
         }
+
+        root.classList.remove("govuk-!-display-none");
 
         var dismissButton = root.querySelector("[data-feedback-dismiss]");
         var feedbackLink = root.querySelector("[data-feedback-exit-link]");

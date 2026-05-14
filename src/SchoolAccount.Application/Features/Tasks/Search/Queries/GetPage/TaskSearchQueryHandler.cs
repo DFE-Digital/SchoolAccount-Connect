@@ -9,9 +9,9 @@ namespace SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 public sealed class TaskSearchQueryHandler(
     IApplicationDbContext applicationDbContext,
     IDateTimeProvider dateTimeProvider
-) : IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto>
+) : IQueryHandler<TaskSearchQuery, TaskSearchResponse>
 {
-    public async Task<Result<TaskWithSubTasksDto>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
+    public async Task<Result<TaskSearchResponse>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
     {
         var term = query.Term.Trim();
         var isInitialLoad = string.IsNullOrWhiteSpace(term);
@@ -40,13 +40,13 @@ public sealed class TaskSearchQueryHandler(
         {
             var like = $"%{term}%";
             tasksQuery = tasksQuery.Where(t =>
-                EF.Functions.Like(t.Name, like) || EF.Functions.Like(t.ReferenceNo!, like)
+                EF.Functions.Like(t.Name, like) || EF.Functions.Like(t.Description!, like)
             );
         }
 
         var tasks = await tasksQuery
             .OrderByDescending(t => t.DateUpdated)
-            .Select(t => new TaskListItemDto(
+            .Select(t => new TaskListItem(
                 t.Id,
                 t.Name,
                 t.Description ?? string.Empty,
@@ -55,6 +55,6 @@ public sealed class TaskSearchQueryHandler(
             .ToListAsync(cancellationToken);
         
 
-        return Result.Success(new TaskWithSubTasksDto(tasks));
+        return Result.Success(new TaskSearchResponse(tasks));
     }
 }

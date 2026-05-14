@@ -9,7 +9,7 @@ namespace SchoolAccount.Web.Connect.Builders;
 
 public class TaskSearchCategoryHubViewBuilder
 {
-    public CategoryHubViewModel Build(TaskWithSubTasksDto searchResults, string? term, Uri currentUri)
+    public CategoryHubViewModel Build(TaskSearchResponse searchResults, string? term, Uri currentUri)
     {
         var items = new Collection<CalendarOfItemsRowGroupViewModel>
         {
