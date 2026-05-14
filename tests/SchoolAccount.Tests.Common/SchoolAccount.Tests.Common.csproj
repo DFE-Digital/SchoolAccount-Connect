@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SchoolAccount.Application\SchoolAccount.Application.csproj" />
     <ProjectReference Include="..\..\src\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Bogus" />
   </ItemGroup>
 </Project>

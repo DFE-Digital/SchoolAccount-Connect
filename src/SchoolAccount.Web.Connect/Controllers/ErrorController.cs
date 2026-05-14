@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Integration.DfESignIn.Exceptions;
-using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -29,19 +28,24 @@ public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEn
         {
             case ProviderAuthorisationException:
                 LogWarning(model.OriginalPath);
+                Response.StatusCode = StatusCodes.Status401Unauthorized;
                 return View("Error/InaccessibleProvider", model);
             case not null:
                 LogCriticalError(model.OriginalPath, model.Exception!.Message, model.Exception);
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 return View("Error/ServiceFailure", model);
         }
 
         LogWarning(model.OriginalPath);
-        return View(
-            code is >= StatusCodes.Status400BadRequest and < StatusCodes.Status500InternalServerError
-                ? "Error/NotFound"
-                : "Error/ServiceFailure",
-            model
-        );
+
+        if (code is >= StatusCodes.Status400BadRequest and < StatusCodes.Status500InternalServerError)
+        {
+            Response.StatusCode = StatusCodes.Status404NotFound;
+            return View("Error/NotFound", model);
+        }
+
+        Response.StatusCode = StatusCodes.Status500InternalServerError;
+        return View("Error/ServiceFailure", model);
     }
 
     [LoggerMessage(EventId = 1001, Level = LogLevel.Critical, Message = "{route} : An exception occured. {message}")]

@@ -11,7 +11,6 @@ public sealed class SubTaskBuilder
     private string _name = "Sub Task";
     private string? _referenceNo;
     private string? _description;
-    private string? _digitalTaskLink;
     private Requirement _requirement = Requirement.Mandatory;
     private WorkflowState _state = WorkflowState.Draft;
     private DateTime _dateUpdated = DateTime.UtcNow;
@@ -45,12 +44,6 @@ public sealed class SubTaskBuilder
     public SubTaskBuilder WithDescription(string? description)
     {
         _description = description;
-        return this;
-    }
-
-    public SubTaskBuilder WithDigitalLink(string? digitalTaskLink)
-    {
-        _digitalTaskLink = digitalTaskLink;
         return this;
     }
 
@@ -116,7 +109,6 @@ public sealed class SubTaskBuilder
             Name = _name,
             ReferenceNo = _referenceNo,
             Description = _description,
-            DigitalTaskLink = _digitalTaskLink,
             Requirement = _requirement,
             CreatedBy = "tester",
             UpdatedBy = _updatedBy,
@@ -126,7 +118,6 @@ public sealed class SubTaskBuilder
             StartDateIsExact = _startDateIsExact,
             DueDate = _dueDate,
             DueDateIsExact = _dueDateIsExact,
-            // Stub navigation property to avoid EF circular reference issues
             Task = new TaskEntity
             {
                 Name = "Stub",

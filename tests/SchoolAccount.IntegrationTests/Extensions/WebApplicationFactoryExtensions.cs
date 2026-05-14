@@ -1,4 +1,3 @@
-using AngleSharp;
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -25,8 +24,6 @@ internal static class WebApplicationFactoryExtensions
             );
         }
 
-        var html = await response.Content.ReadAsStringAsync();
-        var context = BrowsingContext.New(Configuration.Default);
-        return await context.OpenAsync(req => req.Content(html));
+        return (await response.GetPage())!;
     }
 }

@@ -1,5 +1,6 @@
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
+using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
 using SchoolAccount.Web.Connect.Middleware.Models;
 
@@ -15,10 +16,7 @@ public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationCon
             !userContext.IsAuthenticated
             || !organisationContext.IsAuthorised
             || organisationContext.Organisation is not TrustOrganisation
-            || context.Request.Path.StartsWithSegments(
-                RouteConstants.Start.MatAcceptance,
-                StringComparison.InvariantCultureIgnoreCase
-            )
+            || context.Request.IsRestrictedPath(RouteConstants.Start.MatAcceptance)
         )
         {
             return Task.FromResult(GateResult.Continue());

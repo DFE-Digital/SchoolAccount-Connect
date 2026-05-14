@@ -516,7 +516,7 @@
                             },
                             {
                                 "name": "DfeSignIn__CallbackUrl",
-                                "value": "/home"
+                                "value": "/"
                             },
                             {
                                 "name": "DfeSignIn__SignoutCallbackUrl",
@@ -528,7 +528,7 @@
                             },
                             {
                                 "name": "DfeSignIn__LoginPath",
-                                "value": "/login/login"
+                                "value": "/start"
                             },
                             {
                                 "name": "DfeSignIn__CookieName",

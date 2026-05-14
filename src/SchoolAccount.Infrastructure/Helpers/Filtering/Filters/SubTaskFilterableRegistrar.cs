@@ -25,10 +25,10 @@ public class SubTaskFilterableRegistrar : IFilterableRegistrar<CalendarOfItemsFi
         {
             [Keys.Name] = (Expression<Func<SubTaskEntity, string>>)(x => x.Name),
             [Keys.Categories] =
-                (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(x => x.TypeId)),
+                (Expression<Func<SubTaskEntity, IEnumerable<int>>>)(x => x.Task.TypeTaskMappings.Select(t => t.TypeId)),
             [Keys.State] = (Expression<Func<SubTaskEntity, WorkflowState>>)(x => x.WorkflowState),
             [Keys.PhaseOfEducation] =
-                (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(x => x.TagId)),
+                (Expression<Func<SubTaskEntity, IEnumerable<long>>>)(x => x.TagsSourceMappings.Select(t => t.TagId)),
         };
 
     public void ConsolidateFilters(CalendarOfItemsFilter filter)

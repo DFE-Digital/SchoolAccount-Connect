@@ -13,7 +13,7 @@ public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsVi
     {
         var options = new CalendarOfItemViewOptions
         {
-            ViewMode = CalendarOfItemsViewModes.Custom | CalendarOfItemsViewModes.Standalone,
+            ViewMode = CalendarOfItemsViewModes.Custom,
             Tabs = [],
             Description = $"Explore all tasks and support",
             Heading = category is not null ? category.DisplayName : "All tasks",

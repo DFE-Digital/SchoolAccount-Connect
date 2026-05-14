@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchoolAccount.Integration.DfESignIn.Extensions;
 using SchoolAccount.Integration.DfESignIn.Models;
 
 namespace SchoolAccount.Integration.DfESignIn.Converters;
@@ -12,9 +14,9 @@ public class OrganisationCategoryConverter : JsonConverter<OrganisationCategory>
         JsonSerializerOptions options
     )
     {
-        var value = reader.GetString();
+        var value = reader.GetValueByTypeToString();
 
-        if (int.TryParse(value, out int numericValue))
+        if (int.TryParse(value, out var numericValue))
         {
             return (OrganisationCategory)numericValue;
         }
@@ -24,6 +26,6 @@ public class OrganisationCategoryConverter : JsonConverter<OrganisationCategory>
 
     public override void Write(Utf8JsonWriter writer, OrganisationCategory value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(((int)value).ToString("D3", System.Globalization.CultureInfo.InvariantCulture));
+        writer.WriteStringValue(((int)value).ToString("D3", CultureInfo.InvariantCulture));
     }
 }

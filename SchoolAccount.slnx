@@ -40,13 +40,13 @@
     <Project Path="src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/SchoolAccount.Application.Tests.Unit/SchoolAccount.Application.Tests.Unit.csproj" />
+    <Project Path="tests/SchoolAccount.Application.IntegrationTests/SchoolAccount.Application.IntegrationTests.csproj" />
     <Project Path="tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj" />
     <Project Path="tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj" />
-    <Project Path="tests/SchoolAccount.Domain.Tests.Unit/SchoolAccount.Domain.Tests.Unit.csproj" />
     <Project Path="tests/SchoolAccount.InfrastructureTests/SchoolAccount.InfrastructureTests.csproj" />
     <Project Path="tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj" />
     <Project Path="tests/SchoolAccount.Tests.Common/SchoolAccount.Tests.Common.csproj" />
-    <Project Path="tests/SchoolAccount.Web.Connect.Tests.Unit/SchoolAccount.Web.Connect.Tests.Unit.csproj" />
+    <Project Path="tests/SchoolAccount.Application.UnitTests/SchoolAccount.Application.UnitTests.csproj" />
+    <Project Path="tests/SchoolAccount.Web.Connect.UnitTests/SchoolAccount.Web.Connect.UnitTests.csproj" />
   </Folder>
 </Solution>

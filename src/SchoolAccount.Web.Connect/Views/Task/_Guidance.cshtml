@@ -1,10 +1,10 @@
-@model SchoolAccount.Application.Features.Tasks.GetById.TaskResponse
+@model IReadOnlyCollection<SchoolAccount.Application.Features.Tasks.GetById.GetTaskByIdResponseResource>
 
 <h2 class="govuk-heading-s govuk-!-padding-top-1 govuk-!-margin-bottom-3">
     Guidance and support
 </h2>
 <ul class="govuk-list">
-@foreach (var resource in Model.Resources)
+@foreach (var resource in Model)
 {
     <li>
         <a class="govuk-link govuk-link--no-visited-state" href="@resource.Link" target="_blank">@resource.Name</a>

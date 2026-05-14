@@ -2,30 +2,27 @@ using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Kernel;
-using static SchoolAccount.Domain.Common.WorkflowState;
 
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContext, IDateTimeProvider dateTimeProvider)
-    : IQueryHandler<GetTaskByIdQuery, TaskResponse>
+    : IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse>
 {
-    public async Task<Result<TaskResponse>> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Result<GetTaskByIdResponse>> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
     {
         var task = await applicationDbContext
             .Tasks.AsNoTracking()
-            .Include(t => t.SubTasks.Where(st => st.WorkflowState == Published || st.WorkflowState == Expired))
-                .ThenInclude(st => st.Resources)
-            .Include(t => t.Resources)
-            .FirstOrDefaultAsync(t => t.Id == query.Id, cancellationToken);
+            .Where(task => task.Id == query.Id)
+            .Select(GetTaskByIdProjection.ToTaskResponse())
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (task == null)
+        if (task is null)
         {
-            return new TaskResponse();
+            return Result.Failure<GetTaskByIdResponse>(GetTaskByIdErrors.NotFound(query.Id));
         }
 
-        var mapper = new GetTaskByIdMapper(dateTimeProvider);
-        var taskResponse = mapper.ToTaskResponse(task, query.ViewMode);
+        var enricher = new GetTaskByIdResponseEnricher(dateTimeProvider);
 
-        return Result.Success(taskResponse);
+        return Result.Success(enricher.Enrich(task));
     }
 }

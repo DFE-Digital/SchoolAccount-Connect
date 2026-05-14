@@ -27,5 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
+    <ProjectReference Include="..\SchoolAccount.Tests.Common\SchoolAccount.Tests.Common.csproj" />
   </ItemGroup>
 </Project>
