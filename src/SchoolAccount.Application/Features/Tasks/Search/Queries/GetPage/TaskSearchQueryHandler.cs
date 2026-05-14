@@ -13,7 +13,7 @@ public sealed class TaskSearchQueryHandler(
 {
     public async Task<Result<TaskWithSubTasksDto>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
     {
-        var term = query.Term?.Trim();
+        var term = query.Term.Trim();
         var isInitialLoad = string.IsNullOrWhiteSpace(term);
 
         var from = dateTimeProvider.UtcNow.Date.ToDateOnly();
@@ -40,7 +40,7 @@ public sealed class TaskSearchQueryHandler(
         {
             var like = $"%{term}%";
             tasksQuery = tasksQuery.Where(t =>
-                EF.Functions.Like(t.Name!, like) || EF.Functions.Like(t.ReferenceNo!, like)
+                EF.Functions.Like(t.Name, like) || EF.Functions.Like(t.ReferenceNo!, like)
             );
         }
 
@@ -48,32 +48,13 @@ public sealed class TaskSearchQueryHandler(
             .OrderByDescending(t => t.DateUpdated)
             .Select(t => new TaskListItemDto(
                 t.Id,
-                t.ReferenceNo ?? string.Empty,
-                t.Name ?? string.Empty,
-                t.UpdatedBy,
+                t.Name,
+                t.Description ?? string.Empty,
                 t.DateUpdated
             ))
             .ToListAsync(cancellationToken);
+        
 
-        var taskIds = tasks.Select(t => t.Id).ToArray();
-
-        var subTasksQuery = applicationDbContext
-            .SubTasks.AsNoTracking()
-            .Where(st => st.IsDeleted != true)
-            .Where(st => taskIds.Contains(st.TaskId));
-
-        if (isInitialLoad)
-        {
-            subTasksQuery = subTasksQuery
-                .Where(st => st.DueDate != null)
-                .Where(st => st.DueDate >= from && st.DueDate < to);
-        }
-
-        var subTasks = await subTasksQuery
-            .OrderByDescending(st => st.DateUpdated)
-            .Select(st => SubTaskListItemHelper.ToListItem(st))
-            .ToListAsync(cancellationToken);
-
-        return Result.Success(new TaskWithSubTasksDto(tasks, (IReadOnlyCollection<SubTaskListItemDto>)subTasks));
+        return Result.Success(new TaskWithSubTasksDto(tasks));
     }
 }

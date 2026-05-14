@@ -22,6 +22,7 @@ public sealed class HomeController(
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
+    TaskSearchCategoryHubViewBuilder taskSearchCategoryHubViewBuilder,
     BasicPageViewBuilder basicPageViewBuilder
 ) : Controller
 {
@@ -55,8 +56,8 @@ public sealed class HomeController(
         return View(viewModel);
     }
 
-    [HttpGet("home/task-search")]
-    public async Task<ActionResult<TaskWithSubTasksDto>> TaskSearch(
+    [HttpGet("search")]
+    public async Task<IActionResult> TaskSearch(
         [FromQuery] string term,
         CancellationToken cancellationToken
     )
@@ -68,7 +69,10 @@ public sealed class HomeController(
             return Problem(detail: result.Error.Description);
         }
 
-        return Ok(result.Value);
+        var currentUri = Request.GetFullRequestUri();
+        var viewModel = taskSearchCategoryHubViewBuilder.Build(result.Value, term, currentUri);
+
+        return View("~/Views/Category/AllTasks.cshtml", viewModel);
     }
 
     [HttpGet(RouteConstants.Support)]

@@ -220,5 +220,6 @@ internal static class DependencyInjection
         services.AddScoped<CategoryHubViewBuilder>();
         services.AddScoped<CategoryListViewBuilder>();
         services.AddScoped<BasicPageViewBuilder>();
+        services.AddScoped<TaskSearchCategoryHubViewBuilder>();
     }
 }
