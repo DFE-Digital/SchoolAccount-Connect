@@ -58,4 +58,6 @@ public class SubTaskEntity
     public virtual ICollection<TagsSourceMappingEntity> TagsSourceMappings { get; } = [];
 
     public virtual ICollection<ResourceEntity> Resources { get; } = [];
+    
+    public virtual ICollection<SubTaskConditionEntity> Conditions { get; } = [];
 }

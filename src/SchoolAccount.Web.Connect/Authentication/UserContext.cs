@@ -9,8 +9,13 @@ internal sealed class UserContext(IHttpContextAccessor contextAccessor) : IUserC
     public string? AuthenticationType { get; } = contextAccessor.HttpContext?.User.Identity?.AuthenticationType;
     public bool IsAuthenticated { get; } = contextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
     public string? Id { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    public string? GivenName { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.GivenName)?.Value;
-    public string? Surname { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Surname)?.Value;
+
+    public string? GivenName { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.GivenName)?.Value
+                                        ?? contextAccessor.HttpContext?.User.FindFirst("given_name")?.Value;
+
+    public string? Surname { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Surname)?.Value
+                                      ?? contextAccessor.HttpContext?.User.FindFirst("family_name")?.Value;
+
     public string? Name => $"{GivenName} {Surname}".Trim();
     public string? PreferredName { get; } = contextAccessor.HttpContext?.User.FindFirst("preferred_name")?.Value;
     public string? EmailAddress { get; } = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value;

@@ -1,5 +1,7 @@
 @using SchoolAccount.Application
 @using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@using SchoolAccount.Web.Connect
 @inject IUserContext CurrentUser
 @inject IOrganisationContext OrganisationContext
 
@@ -62,8 +64,15 @@
                 {
                     if (!string.IsNullOrWhiteSpace(displayName))
                     {
-                        <span class="dfe-connect-header__school">@displayName</span>
-                        <a asp-controller="Start" asp-action="SelectAOrganisation">Change Organisation</a>
+                        <a asp-controller="Account" asp-action="School">
+                            <span class="dfe-connect-header__school">@displayName</span>
+                        </a>
+                        <a asp-controller="Start" asp-action="SelectAOrganisation">Chg Org</a>
+                        
+                        if (OrganisationContext?.Organisation is not TrustOrganisation && !string.IsNullOrEmpty(Context.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn)))
+                        {
+                            <a asp-controller="Start" asp-action="ReturnToTrust">Bck 2 Trust</a>
+                        }
                     }
                     
                     if (isAuthorised)

@@ -23,6 +23,7 @@ public static class RouteConstants
         public const string MatAcceptance = Index + "/mat";
         public const string SelectAOrganisation = Index + "/organisation";
         public const string PickAOrganisation = Index + "/organisation/{type}/{ukprn}";
+        public const string ReturnToTrust = Index + "/organisation/return-to-trust";
     }
 
     public static class Calendar

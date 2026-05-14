@@ -1,4 +1,10 @@
+@using System.Globalization
+@using SchoolAccount.Application.Features.Tasks.GetById
+@using SchoolAccount.Domain.Subtasks
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
 @model SchoolAccount.Application.Features.Tasks.GetById.GetTaskByIdResponseSubtask
+@inject IOrganisationContext OrganisationContext
 
 @{
     ViewData["Title"] = "Task";
@@ -6,47 +12,107 @@
 
 <li class="govuk-task-list__item @(Model.HasResourceLink ? "govuk-task-list__item--with-link" : "")">
     <div class="govuk-task-list__name-and-hint">
-            @if (Model.HasResourceLink)
-            {
-                <a class="govuk-link govuk-task-list__link" href="@Model.ResourceLink">
-                    @Model.Name
-                    @if (Model.IsOptional)
-                    {
-                        <text> (optional)</text>
-                    }
-                </a>
-            }
-            else
-            {
-                <span>
-                    @Model.Name
-                    @if (Model.IsOptional)
-                    {
-                        <text> (optional)</text>
-                    }
-                </span>
-            }
+        @if (Model.HasResourceLink)
+        {
+            <a class="govuk-link govuk-task-list__link" href="@Model.ResourceLink">
+                @Model.Name
+                @if (Model.IsOptional)
+                {
+                    <text> (optional)</text>
+                }
+            </a>
+        }
+        else
+        {
+            <span>
+                @Model.Name
+                @if (Model.IsOptional)
+                {
+                    <text> (optional)</text>
+                }
+            </span>
+        }
 
-            @if (Model.HasDescription)
-            {
-                <div class="govuk-task-list__hint">
-                    @Model.Description
-                </div>
-            }
+        @if (Model.HasDescription)
+        {
+            <div class="govuk-task-list__hint">
+                @Model.Description
+            </div>
+        }
+            
+        @if (Model.HasConditions)
+        {
+            <style>
+                .conditions {
+                    padding: var(--govuk-spacing-responsive--4);
+                    margin: var(--govuk-spacing-responsive--2) 0;
+                    background: var(--govuk-colour--light-grey);
+                }
+            </style>
+            
+            <div class="conditions">
+                <h4 class="govuk-heading-s">Conditions</h4>
 
-            @if (Model.HasAvailabilityLabel || Model.HasDueDateLabel)
-            {
-                <div class="govuk-task-list__hint">
-                    @if (Model.HasAvailabilityLabel)
-                    {
-                        <text>@Model.AvailabilityLabel</text>
-                    }
+                @if (OrganisationContext.Organisation is EstablishmentOrganisation establishment)
+                {
+                    <div class="govuk-task-list__hint">
+                        @foreach (var condition in Model.Conditions)
+                        {
+                            <govuk-tag class="@condition.DetermineColour(establishment)">@condition.Identifier @condition.Comparitor() @condition.Value</govuk-tag>
+                        }
+                    </div>
+                }
+                
+                @if (OrganisationContext.Organisation is TrustOrganisation trst)
+                {
+                    <h4 class="govuk-heading-s">By School</h4>
+                    <div class="govuk-task-list__hint">
+                        @foreach (var sch in trst.Establishments)
+                        {
+                            <govuk-tag class="@GetTaskByIdResponseCondition.DetermineColour(Model.Conditions, sch)">@sch.Name</govuk-tag>
+                        }
+                    </div>
+                }
+
+                @if (OrganisationContext.Organisation is TrustOrganisation trust)
+                {
+                    <h4 class="govuk-heading-s">By Condition</h4>
+                    <div class="govuk-task-list__hint">
+                        <dl class="govuk-summary-list">
+                            @foreach (var school in trust.Establishments)
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        @school.Name
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @foreach (var condition in Model.Conditions)
+                                        {
+                                        <govuk-tag class="@condition.DetermineColour(school)">@condition.Identifier @condition.Comparitor() @condition.Value</govuk-tag>
+                                        }
+                                    </dd>
+                                </div>
+                            }
+                        </dl>
+                    </div>
+                }
+
+            </div>
+        }
+
+        @if (Model.HasAvailabilityLabel || Model.HasDueDateLabel)
+        {
+            <div class="govuk-task-list__hint">
+                @if (Model.HasAvailabilityLabel)
+                {
+                    <text>@Model.AvailabilityLabel</text>
+                }
                     
-                    @if (Model.HasDueDateLabel)
-                    {
-                        <text><strong>@Model.DueDateLabel</strong></text>
-                    }
-                </div>
-            }
+                @if (Model.HasDueDateLabel)
+                {
+                    <text><strong>@Model.DueDateLabel</strong></text>
+                }
+            </div>
+        }
     </div>
 </li>

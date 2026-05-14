@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAccount.Application.Features.Account;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -31,5 +32,11 @@ public class AccountController : Controller
         }
         
         return RedirectToAction("Index", "Start");
+    }
+
+    [HttpGet("/account/school")]
+    public IActionResult School()
+    {
+        return View(new AccountSchoolViewModel());
     }
 }

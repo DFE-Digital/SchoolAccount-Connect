@@ -3,6 +3,7 @@ using System.Text.Json;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.AcademiesApi.Models;
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Exceptions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
@@ -81,6 +82,7 @@ public class OrganisationContext(
 
     public IOrganisation Organisation
     {
+        [SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations")]
         get
         {
             return contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) switch

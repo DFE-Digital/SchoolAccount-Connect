@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Domain.Tasks;
 using static SchoolAccount.Domain.Common.WorkflowState;
 
@@ -36,6 +37,14 @@ public static class GetTaskByIdProjection
                     // only one resource is allowed per subtask. So we can assume that the first resource is the one we want.
                     ResourceName = st.Resources.Select(r => r.ResourceName).FirstOrDefault(),
                     ResourceLink = st.Resources.Select(r => r.DigitalLink).FirstOrDefault(),
+                    Conditions = st.Conditions.
+                        Select(c => new GetTaskByIdResponseCondition
+                        {
+                            Identifier = c.Identifier,
+                            ComparitorType = c.Comparitor,
+                            Value = c.Value
+                        })
+                        .ToCollection()
                 })
                 .ToArray(),
             Resources = x

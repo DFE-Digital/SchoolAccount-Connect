@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Common;
 using SchoolAccount.Integration.DfESignIn.Models;
@@ -14,6 +15,13 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
         : this(organisation.UkPrn, organisation.Name)
     {
         PhaseOfEducation = organisation.PhaseOfEducation;
+
+        Conditions = new Collection<EstablishmentCondition>(
+            organisation.Conditions?
+                .Where(x => x.Value is not null)
+                .Select(x => new EstablishmentCondition(x.Identifier, x.Value!))
+                .ToList()
+            ?? []);
     }
 
     public string Ukrpn { get; } = ukrpn;
@@ -21,4 +29,8 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
     
     
     public IdName<int>? PhaseOfEducation { get; set; }
+
+    public Collection<EstablishmentCondition> Conditions { get; init; } = [];
 }
+
+public record EstablishmentCondition(string Identifier, object Value); 

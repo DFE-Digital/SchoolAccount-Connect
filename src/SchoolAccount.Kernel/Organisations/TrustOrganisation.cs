@@ -13,7 +13,7 @@ public class TrustOrganisation(string ukrpn, string name) : IOrganisation
         : this(trust.GiasData!.Ukprn!, trust.GiasData!.GroupName!)
     {
         Establishments = trust.Establishments
-            .Select(x => new EstablishmentOrganisation(x.Ukprn, x.EstablishmentName))
+            .Select(x => new EstablishmentOrganisation(new Organisation(x)))
             .ToList();
     }
 

@@ -1,0 +1,126 @@
+@using Microsoft.Identity.Web
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@model SchoolAccount.Application.Features.Account.AccountSchoolViewModel
+@inject IOrganisationContext OrganisationContext
+@inject IUserContext UserContext
+
+@{
+    ViewData["Title"] = "Organisation";
+}
+
+<h1 class="govuk-heading govuk-!-margin-bottom-1">@OrganisationContext.Organisation.Name</h1>
+<p class="govuk-body govuk-!-margin-bottom-6">Inspecting content as <strong>@UserContext.ToString()</strong> <strong>@User.GetDisplayName()</strong></p>
+
+<h3 class="govuk-heading govuk-!-margin-bottom-1">Organisation Details</h3>
+<p class="govuk-body-s govuk-!-margin-bottom-3">This is information that identifies the organisation and it's scope</p>
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @OrganisationContext.Organisation.Name
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Category
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @OrganisationContext.Category.ToString()
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Type
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @OrganisationContext.Establishment.ToString()
+        </dd>
+    </div>
+</dl>
+
+@if (OrganisationContext.Organisation is EstablishmentOrganisation establishment)
+{
+    <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishment Details</h3>
+    <p class="govuk-body-s govuk-!-margin-bottom-3">Information on which forms the schools core requirements</p>
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Phase of Education
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @establishment.PhaseOfEducation?.Name
+            </dd>
+        </div>
+        @*<div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Number of Pupils
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.NumberOfPupils
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Percentage Eligible for Free School Meals (6 years)
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.PercentageEligibleForFsm
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Percentage Free School Meals
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.PercentageFsm %
+            </dd>
+        </div>*@
+    </dl>
+    
+    <h3 class="govuk-heading govuk-!-margin-bottom-1">Conditions</h3>
+    <p class="govuk-body-s govuk-!-margin-bottom-3">These are properties that can be used to see if schools meet task conditions</p>
+    <dl class="govuk-summary-list">
+        @foreach (var condition in establishment.Conditions)
+        {
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @condition.Identifier
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @condition.Value
+                </dd>
+            </div>
+        }
+    </dl>
+}
+
+@if (OrganisationContext.Organisation is TrustOrganisation trust)
+{
+    <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishments</h3>
+    <p class="govuk-body-s govuk-!-margin-bottom-3">A list of all the establishments that this organisation has maintains</p>
+    <ul class="govuk-task-list">
+        @foreach (var school in trust.Establishments ?? [])
+        {
+            <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                <div class="govuk-task-list__name-and-hint">
+                    <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@school.Ukrpn">
+                        <strong>@school.Name</strong>
+                    </a>
+                    <div class="govuk-task-list__hint">
+                        @if (!string.IsNullOrEmpty(school.Ukrpn))
+                        {
+                            <text>UKPRN: @school.Ukrpn</text><br />
+                        }
+                        @if (school.PhaseOfEducation is not null)
+                        {
+                            <text>Phase: (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name</text><br />
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+}

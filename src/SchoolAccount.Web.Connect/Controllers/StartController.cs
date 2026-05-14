@@ -78,15 +78,27 @@ public class StartController(
             case "academy":
                 var organisation = await organisationApiService.GetEstablishment(ukprn);
                 contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(organisation));
+                //contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.SelectedTrustUkRpn);
                 break;
             case "trust":
                 var trust = await trustApiService.GetTrust(ukprn);
                 contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(trust));
+                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.SelectedTrustUkRpn, ukprn);
                 break;
             default:
                 throw new NotImplementedException(type);
         }
         
         return Redirect(returnAddress ?? RouteConstants.Root);
+    }
+
+    [Authorize]
+    [HttpGet(RouteConstants.Start.ReturnToTrust)]
+    public async Task<IActionResult> ReturnToTrustAsync()
+    {
+        var trustUkRpn = contextAccessor.HttpContext!.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn);
+        return string.IsNullOrEmpty(trustUkRpn)
+            ? throw new ArgumentException(trustUkRpn)
+            : RedirectToAction("Pick", new { type = "trust", ukprn = trustUkRpn });
     }
 }

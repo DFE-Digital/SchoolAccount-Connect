@@ -6,6 +6,8 @@ using SchoolAccount.Kernel.Extensions;
 
 namespace SchoolAccount.Kernel;
 
+public record OrganisationCondition(string Identifier, object? Value); 
+
 public class Organisation
 {
     public Organisation(OrganisationClaim claim)
@@ -64,6 +66,17 @@ public class Organisation
             Code = establishment.LocalAuthorityCode,
             Name = establishment.LocalAuthorityName
         };
+
+        Conditions =
+        [
+            new("Census.NumberOfBoys", establishment.Census?.NumberOfBoys),
+            new("Census.NumberOfGirls", establishment.Census?.NumberOfGirls),
+            new("Census.NumberOfPupils", establishment.Census?.NumberOfPupils),
+            new("SmartData.RiskRatingNum", establishment.SmartData?.RiskRatingNum),
+            new("SmartData.ProbabilityOfDeclining", establishment.SmartData?.ProbabilityOfDeclining),
+            new("SmartData.ProbabilityOfImproving", establishment.SmartData?.ProbabilityOfImproving),
+            new("SmartData.ProbabilityOfStayingTheSame", establishment.SmartData?.ProbabilityOfStayingTheSame),
+        ];
     }
 
     public Organisation(AcademyTrust trust)
@@ -129,6 +142,17 @@ public class Organisation
             Code = establishment.LocalAuthorityCode,
             Name = establishment.LocalAuthorityName
         };
+
+        Conditions =
+        [
+            new("Census.NumberOfBoys", establishment.Census?.NumberOfBoys),
+            new("Census.NumberOfGirls", establishment.Census?.NumberOfGirls),
+            new("Census.NumberOfPupils", establishment.Census?.NumberOfPupils),
+            new("SmartData.RiskRatingNum", establishment.SmartData?.RiskRatingNum),
+            new("SmartData.ProbabilityOfDeclining", establishment.SmartData?.ProbabilityOfDeclining),
+            new("SmartData.ProbabilityOfImproving", establishment.SmartData?.ProbabilityOfImproving),
+            new("SmartData.ProbabilityOfStayingTheSame", establishment.SmartData?.ProbabilityOfStayingTheSame),
+        ];
     }
     
     public string UkPrn { get; init; }
@@ -147,4 +171,6 @@ public class Organisation
     public IdCodeName<Guid, string>? LocalAuthority { get; init; }
 
     public Collection<Organisation>? Children { get; init; }
+    
+    public Collection<OrganisationCondition>? Conditions { get; init; }
 }
