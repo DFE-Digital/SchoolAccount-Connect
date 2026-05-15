@@ -12,6 +12,12 @@ public class SubTaskConditionEntityConfiguration: IEntityTypeConfiguration<SubTa
         builder.ToTable("SubTaskCondition", SchemaConstants.Transactional).HasKey(x => x.Id);
         
         builder
+            .HasOne(d => d.Condition)
+            .WithMany(p => p.SubTaskConditions)
+            .HasForeignKey(d => d.ConditionId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        builder
             .HasOne(d => d.SubTask)
             .WithMany(p => p.Conditions)
             .HasForeignKey(d => d.SubTaskId)

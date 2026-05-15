@@ -15,7 +15,7 @@ public class OrganisationResolver : IOrganisationResolver
         {
             OrganisationCategory.SingleAcademyTrust  
                 or OrganisationCategory.MultiAcademyTrust 
-                => new TrustOrganisation(claim),
+                => TrustOrganisation.CreateFromClaim(claim),
             OrganisationCategory.LocalAuthority 
                 => new LocalAuthorityOrganisation(claim),
             OrganisationCategory.FurtherEducation 

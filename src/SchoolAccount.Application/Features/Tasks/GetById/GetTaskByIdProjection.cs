@@ -40,7 +40,7 @@ public static class GetTaskByIdProjection
                     Conditions = st.Conditions.
                         Select(c => new GetTaskByIdResponseCondition
                         {
-                            Identifier = c.Identifier,
+                            Identifier = c.Condition.Identifier,
                             ComparitorType = c.Comparitor,
                             Value = c.Value
                         })

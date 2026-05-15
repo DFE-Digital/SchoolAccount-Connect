@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\integration\SchoolAccount.Integration.DfESignIn\SchoolAccount.Integration.DfESignIn.csproj" />
   </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Scrutor" />
+    </ItemGroup>
 </Project>

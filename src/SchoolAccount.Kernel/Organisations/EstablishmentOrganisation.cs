@@ -14,6 +14,8 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
     public EstablishmentOrganisation(Organisation organisation)
         : this(organisation.UkPrn, organisation.Name)
     {
+        Data = organisation;
+        
         PhaseOfEducation = organisation.PhaseOfEducation;
 
         Conditions = new Collection<EstablishmentCondition>(
@@ -27,6 +29,7 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
     public string Ukrpn { get; } = ukrpn;
     public string Name { get; } = name;
     
+    public object? Data { get; }
     
     public IdName<int>? PhaseOfEducation { get; set; }
 

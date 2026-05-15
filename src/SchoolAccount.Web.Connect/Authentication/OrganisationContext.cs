@@ -8,6 +8,7 @@ using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
+using SchoolAccount.Kernel.Conditions.Interface;
 using SchoolAccount.Kernel.Organisations;
 using SchoolAccount.Web.Connect.Extensions;
 
@@ -17,7 +18,8 @@ namespace SchoolAccount.Web.Connect.Authentication;
 public class OrganisationContext(
     IHttpContextAccessor contextAccessor,
     IProviderResolver providerResolver,
-    IOrganisationResolver organisationResolver
+    IOrganisationResolver organisationResolver,
+    IConditionMapperResolver conditionMapperResolver
 ) : IOrganisationContext
 {
     private SchoolType? _schoolType;
@@ -25,37 +27,67 @@ public class OrganisationContext(
     public bool IsDsiDetermined => contextAccessor.HttpContext?.User.FindFirst("organisation") is not null;
     public bool IsUserDeclared => contextAccessor.HttpContext?.Session.Keys.Contains(SessionKeyConstants.OrgType) == true;
 
+    private async Task<Organisation?> Populate()
+    {
+        Organisation? organisation = null;
 
+        if (contextAccessor.HttpContext?.Session.GetString("computed-org") is { } storedOrg 
+            && !string.IsNullOrEmpty(storedOrg))
+        {
+            return JsonSerializer.Deserialize<Organisation>(storedOrg);
+        }
+        
+        if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
+            SessionKeyConstants.OrgTypeAcademy)
+        {
+            var obj = contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
+
+            if (!string.IsNullOrEmpty(obj))
+            {
+                var acd = JsonSerializer.Deserialize<AcademyOrganisation>(obj);
+                organisation = acd is not null 
+                    ? await Kernel.Organisation.CreateFromAcademyOrganisation(acd, conditionMapperResolver) 
+                    : null;
+            }
+        }
+            
+        if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
+            SessionKeyConstants.OrgTypeTrust)
+        {
+            var obj = contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
+
+            if (!string.IsNullOrEmpty(obj))
+            {
+                var tru = JsonSerializer.Deserialize<AcademyTrust>(obj);
+                organisation = tru is not null 
+                    ? await Kernel.Organisation.CreateFromAcademyTrust(tru, conditionMapperResolver) 
+                    : null;
+            }
+        }
+
+        if (organisation is null)
+        {
+            var claim = contextAccessor.GetOrganisation();
+            organisation = claim is not null 
+                ? Kernel.Organisation.CreateFromClaim(claim) 
+                : null;
+        }
+
+        if (organisation is not null)
+        {
+            contextAccessor.HttpContext?.Session.SetString(
+                "computed-org",
+                JsonSerializer.Serialize(organisation));
+        }
+        
+        return organisation;
+    }
+    
     private Organisation? Data
     {
         get
         {
-            if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
-                SessionKeyConstants.OrgTypeAcademy)
-            {
-                var obj = contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
-
-                if (!string.IsNullOrEmpty(obj))
-                {
-                    var acd = JsonSerializer.Deserialize<AcademyOrganisation>(obj);
-                    return acd is not null ? new Organisation(acd) : null;
-                }
-            }
-            
-            if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
-                SessionKeyConstants.OrgTypeTrust)
-            {
-                var obj = contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
-
-                if (!string.IsNullOrEmpty(obj))
-                {
-                    var tru = JsonSerializer.Deserialize<AcademyTrust>(obj);
-                    return tru is not null ? new Organisation(tru) : null;
-                }
-            }
-            
-            var claim = contextAccessor.GetOrganisation();
-            return claim is not null ? new Organisation(claim) : null;
+            return field ??= Populate().GetAwaiter().GetResult();
         }
     }
 
@@ -88,7 +120,7 @@ public class OrganisationContext(
             return contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) switch
             {
                 SessionKeyConstants.OrgTypeAcademy => new EstablishmentOrganisation(Data!),
-                SessionKeyConstants.OrgTypeTrust => new TrustOrganisation(Data!),
+                SessionKeyConstants.OrgTypeTrust => TrustOrganisation.CreateFromOrganisation(Data!),
                 _ => organisationResolver.Resolve(contextAccessor.GetOrganisation())
             };
         }
