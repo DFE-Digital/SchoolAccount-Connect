@@ -15,12 +15,8 @@
     </moj-sub-navigation-item>
 </moj-sub-navigation>
 
-<div class="govuk-grid-row govuk-!-padding-top-2">
-    <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m">@Model.HeadingText</h2>
-        @if (Model.Task.SubTaskLastUpdated.HasValue)
-        {
-            <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
-        }
-    </div>
-</div>
+<h2 class="govuk-heading-m">@Model.HeadingText</h2>
+@if (Model.Task.SubTaskLastUpdated.HasValue)
+{
+    <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
+}
