@@ -64,6 +64,7 @@ internal static class DependencyInjection
         services.AddControllersWithViews(options =>
         {
             options.Filters.AddService<AppInsightsFilter>();
+            options.Filters.Add<BreadcrumbActionFilter>();
         });
 
         services.AddDfeSignInAuthentication(configurationManager);

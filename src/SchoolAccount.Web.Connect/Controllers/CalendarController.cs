@@ -5,9 +5,11 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
+using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
+using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -17,7 +19,7 @@ public class CalendarController(
     IOrganisationContext organisationContext
 ) : Controller
 {
-    [HttpGet(RouteConstants.Calendar.Index)]
+    [HttpGet(Calendar.Index)]
     public async Task<IActionResult> Index(
         [FromQuery] CalendarQuery query,
         CancellationToken cancellationToken = default

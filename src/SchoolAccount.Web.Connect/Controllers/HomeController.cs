@@ -10,6 +10,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
+using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;
@@ -75,6 +76,8 @@ public sealed class HomeController(
         return View("~/Views/Category/AllTasks.cshtml", viewModel);
     }
 
+    [Breadcrumb("Home", "/")]
+    [Breadcrumb("Support", RouteConstants.Support)]
     [HttpGet(RouteConstants.Support)]
     public async Task<IActionResult> Support()
     {
@@ -82,6 +85,8 @@ public sealed class HomeController(
         return View("Support", model);
     }
 
+    [Breadcrumb("Home", "/")]
+    [Breadcrumb("Cookies", RouteConstants.Cookies)]
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
     public async Task<IActionResult> Cookies()
