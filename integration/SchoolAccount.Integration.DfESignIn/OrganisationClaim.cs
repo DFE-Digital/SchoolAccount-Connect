@@ -4,7 +4,7 @@ using SchoolAccount.Integration.DfESignIn.Common;
 namespace SchoolAccount.Integration.DfESignIn;
 
 [SuppressMessage("Design", "CA1056:URI-like properties should not be strings")]
-public class OrganisationClaim : IdName<Guid>
+public record OrganisationClaim : IdName<Guid>
 {
     public string LegalName { get; init; } = null!;
 

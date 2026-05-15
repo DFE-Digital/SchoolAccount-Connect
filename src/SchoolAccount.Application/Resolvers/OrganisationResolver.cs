@@ -1,5 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Providers;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
 

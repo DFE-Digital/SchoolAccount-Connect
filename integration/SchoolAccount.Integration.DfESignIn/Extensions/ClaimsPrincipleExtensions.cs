@@ -1,8 +1,7 @@
 using System.Security.Claims;
 using System.Text.Json;
-using SchoolAccount.Integration.DfESignIn;
 
-namespace SchoolAccount.Web.Connect.Extensions;
+namespace SchoolAccount.Integration.DfESignIn.Extensions;
 
 public static class ClaimsPrincipleExtensions
 {

@@ -1,36 +1,45 @@
+using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Providers;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
+using SchoolAccount.Integration.DfESignIn.Extensions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Authentication;
 
-public class OrganisationContext(
-    IHttpContextAccessor contextAccessor,
-    IProviderResolver providerResolver,
-    IOrganisationResolver organisationResolver
-) : IOrganisationContext
+public class OrganisationContext : IOrganisationContext
 {
+    private readonly IOrganisationResolver _organisationResolver;
     private SchoolType? _schoolType;
-    private IProvider? _provider;
-    private IOrganisation? _organisation;
 
-    private OrganisationClaim? Claim { get; } = contextAccessor.GetOrganisation();
+    public OrganisationContext(
+        IHttpContextAccessor contextAccessor,
+        IProviderResolver providerResolver,
+        IOrganisationResolver organisationResolver,
+        IEnumerable<IProviderContextResolver>  providerContextResolvers
+    )
+    {
+        _organisationResolver = organisationResolver;
+        var rawClaim = contextAccessor.GetOrganisation();
+
+        Provider = providerResolver.Resolve(rawClaim);
+        Claim = providerContextResolvers
+            .FirstOrDefault(x => x.ProviderType == Provider.GetType())?
+            .Resolve(rawClaim) ?? rawClaim;
+    }
+
+    private OrganisationClaim? Claim { get; }
 
     public bool IsValid => Claim is not null;
     public bool IsAuthorised => IsValid && Provider is not NullProvider;
 
     public SchoolType Type => _schoolType ??= DetermineSchoolType();
 
-    public EstablishmentType Establishment => Claim?.Type?.Id ?? EstablishmentType.Undeclared;
+    public IProvider Provider { get; }
 
-    public OrganisationCategory Category => Claim?.Category?.Id ?? OrganisationCategory.Undeclared;
-
-    public IProvider Provider => _provider ??= providerResolver.Resolve(Claim);
-
-    public IOrganisation Organisation => _organisation ??= organisationResolver.Resolve(Claim);
+    public IOrganisation Organisation => field ??= _organisationResolver.Resolve(Claim);
 
     private SchoolType DetermineSchoolType()
     {

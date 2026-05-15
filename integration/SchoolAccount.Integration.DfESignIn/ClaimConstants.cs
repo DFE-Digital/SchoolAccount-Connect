@@ -1,4 +1,4 @@
-namespace SchoolAccount.Web.Connect;
+namespace SchoolAccount.Integration.DfESignIn;
 
 public static class ClaimConstants
 {

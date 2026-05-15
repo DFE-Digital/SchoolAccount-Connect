@@ -24,4 +24,25 @@ public static class ServiceCollectionExtensions
         services.AddTransient(factory);
         return services;
     }
+
+    public static IServiceCollection ReplaceWithSingleton<TService>(
+        this IServiceCollection services,
+        Func<IServiceProvider, TService> factory
+    )
+        where TService : class
+    {
+        services.RemoveAll<TService>();
+        services.AddSingleton(factory);
+        return services;
+    }
+    
+    
+    public static IServiceCollection ReplaceWithSingleton<TService, TImplementation>(this IServiceCollection services)
+        where TImplementation : class, TService
+        where TService : class
+    {
+        services.RemoveAll<TService>();
+        services.AddSingleton<TService, TImplementation>();
+        return services;
+    }
 }

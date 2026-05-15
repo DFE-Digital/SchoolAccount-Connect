@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -11,6 +12,7 @@ using SchoolAccount.Infrastructure;
 using SchoolAccount.IntegrationTests.Extensions;
 using SchoolAccount.IntegrationTests.Fakes;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
+using SchoolAccount.IntegrationTests.Features.Database.Resolvers;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
@@ -18,6 +20,7 @@ public class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactor
     where TStartup : class
 {
     public TestCalendarOfItemsDirectionalQueryHandler TestCalendarOfItemsDirectionalQueryHandler { get; } = new();
+    public StubFallbackProviderResolver FallbackProviderResolver { get; } = new();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -25,6 +28,8 @@ public class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactor
 
         builder.ConfigureTestServices(services =>
         {
+            services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
+            
             services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
             services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
 
