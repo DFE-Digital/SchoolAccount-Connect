@@ -21,26 +21,23 @@ public sealed class TaskSearchQueryHandler(
             return Result.Success(new TaskSearchResponse([]));
         }
 
-        var from = dateTimeProvider.UtcNow.Date.ToDateOnly();
-        var to = from.AddMonths(12);
+        var to = dateTimeProvider.UtcNow.Date.ToDateOnly();
+        var from = to.AddMonths(-12);
         var like = $"%{term}%";
 
         var tasks = await applicationDbContext
             .Tasks.AsNoTracking()
-            .Where(t => t.IsDeleted != true)
-            .Where(t => t.IsLatestVersion)
             .Where(t =>
                 EF.Functions.Like(t.Name, like)
                 || EF.Functions.Like(t.Description ?? string.Empty, like)
             )
             .Where(t =>
                 applicationDbContext.SubTasks.Any(st =>
-                    st.IsDeleted != true
-                    && st.TaskId == t.Id
+                    st.TaskId == t.Id
                     && st.WorkflowState == WorkflowState.Published
                     && st.DueDate != null
                     && st.DueDate >= from
-                    && st.DueDate < to
+                    && st.DueDate <= to
                 )
             )
             .OrderByDescending(t => t.DateUpdated)
