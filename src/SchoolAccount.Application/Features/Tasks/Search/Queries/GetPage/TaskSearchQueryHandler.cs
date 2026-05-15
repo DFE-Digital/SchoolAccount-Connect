@@ -21,7 +21,7 @@ public sealed class TaskSearchQueryHandler(
             return Result.Success(new TaskSearchResponse([]));
         }
 
-        var to = dateTimeProvider.UtcNow.Date.ToDateOnly();
+        var to = dateTimeProvider.UtcNow.Date.AddMonths(12).ToDateOnly();
         var from = to.AddMonths(-12);
         var like = $"%{term}%";
 
@@ -35,9 +35,6 @@ public sealed class TaskSearchQueryHandler(
                 applicationDbContext.SubTasks.Any(st =>
                     st.TaskId == t.Id
                     && st.WorkflowState == WorkflowState.Published
-                    && st.DueDate != null
-                    && st.DueDate >= from
-                    && st.DueDate <= to
                 )
             )
             .OrderByDescending(t => t.DateUpdated)
