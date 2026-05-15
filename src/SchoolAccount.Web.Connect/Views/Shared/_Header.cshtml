@@ -12,7 +12,7 @@
     ];
 
     var isAuthenticated = CurrentUser?.IsAuthenticated == true;
-    var isAuthorised = isAuthenticated && OrganisationContext?.IsAuthorised == true;
+    var isAuthorised = isAuthenticated && OrganisationContext is not null && await OrganisationContext.IsAuthorised();
     var displayName = OrganisationContext?.Organisation.Name;
     var path = Context.Request.Path.Value ?? string.Empty;
 

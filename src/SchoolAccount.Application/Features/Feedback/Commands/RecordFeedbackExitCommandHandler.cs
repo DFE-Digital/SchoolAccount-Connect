@@ -23,7 +23,7 @@ public sealed class RecordFeedbackExitCommandHandler(
             return Result.Failure(Error.Problem("Feedback.CtaTypeRequired", "CTA type is required."));
         }
 
-        var context = feedbackTelemetryContextProvider.GetContext();
+        var context = await feedbackTelemetryContextProvider.GetContext();
 
         var eventResult = await telemetryCommandHandler.Handle(
             new TrackAnalyticsTelemetryCommand(

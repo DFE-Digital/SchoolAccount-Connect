@@ -43,7 +43,7 @@ public sealed class RecordPageFeedbackCommandHandler(
             return Result.Failure(Error.Problem("Feedback.InvalidAnswer", "Selected answer must be yes or no."));
         }
 
-        var context = feedbackTelemetryContextProvider.GetContext();
+        var context = await feedbackTelemetryContextProvider.GetContext();
 
         var tags = BuildTags(command.PageId, command.CtaType, command.SelectedAnswer, context);
 

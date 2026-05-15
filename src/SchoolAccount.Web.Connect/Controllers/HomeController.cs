@@ -76,29 +76,26 @@ public sealed class HomeController(
     }
 
     [HttpGet(RouteConstants.Support)]
-    public IActionResult Support()
+    public async Task<IActionResult> Support()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Support", model);
     }
 
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
-    public IActionResult Cookies()
+    public async Task<IActionResult> Cookies()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Cookies", model);
     }
 
     [HttpGet(RouteConstants.Maintenance)]
     [FeatureGate(FeatureFlagConstants.MaintenanceMode)]
     [AllowAnonymous]
-    public IActionResult Maintenance()
+    public async Task<IActionResult> Maintenance()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Maintenance", model);
     }
 }

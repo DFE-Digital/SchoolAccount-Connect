@@ -32,15 +32,22 @@ public class OrganisationContext : IOrganisationContext
 
     private OrganisationClaim? Claim { get; }
 
-    public bool IsValid => Claim is not null;
-    public bool IsAuthorised => IsValid && Provider is not NullProvider;
-
     public SchoolType Type => _schoolType ??= DetermineSchoolType();
 
     public IProvider Provider { get; }
 
     public IOrganisation Organisation => field ??= _organisationResolver.Resolve(Claim);
+    
+    public Task<bool> IsValid()
+    {
+        return Task.FromResult(Claim is not null);
+    }
 
+    public async Task<bool> IsAuthorised()
+    {
+        return await IsValid() && Provider is not NullProvider && await Provider.CanAccess(Claim);
+    }
+    
     private SchoolType DetermineSchoolType()
     {
         return Claim?.Category?.Id switch

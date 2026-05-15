@@ -45,7 +45,7 @@ public sealed class AppInsightsFilter(
         var journey = BuildJourney(descriptor);
 
         var hashedUserId = TryGetHashedUserId(user);
-        var organisationId = GetOrganisationId(organisationContext);
+        var organisationId = await GetOrganisationId(organisationContext);
         var sessionId = GetSessionId(user);
 
         var metricCommand = new TrackAnalyticsTelemetryCommand(
@@ -119,9 +119,9 @@ public sealed class AppInsightsFilter(
         }
     }
 
-    private static string? GetOrganisationId(IOrganisationContext organisationContext)
+    private static async Task<string?> GetOrganisationId(IOrganisationContext organisationContext)
     {
-        if (!organisationContext.IsAuthorised || !organisationContext.IsValid)
+        if (!await organisationContext.IsAuthorised() || !await organisationContext.IsValid())
         {
             return null;
         }
