@@ -13,38 +13,25 @@ public sealed class TaskSearchQueryHandler(
 {
     public async Task<Result<TaskSearchResponse>> Handle(TaskSearchQuery query, CancellationToken cancellationToken)
     {
-        var term = query.Term.Trim();
-        var isInitialLoad = string.IsNullOrWhiteSpace(term);
+        var term = query.Term?.Trim();
 
-        var from = dateTimeProvider.UtcNow.Date.ToDateOnly();
-        var to = from.AddMonths(12);
+        if (string.IsNullOrWhiteSpace(term))
+        {
+            return Result.Success(new TaskSearchResponse([]));
+        }
 
-        var tasksQuery = applicationDbContext
+        var from = dateTimeProvider.UtcNow.Date.AddMonths(-12);
+        var like = $"%{term}%";
+
+        var tasks = await applicationDbContext
             .Tasks.AsNoTracking()
             .Where(t => t.IsDeleted != true)
-            .Where(t => t.IsLatestVersion);
-
-        if (isInitialLoad)
-        {
-            tasksQuery = tasksQuery.Where(t =>
-                applicationDbContext.SubTasks.Any(st =>
-                    st.IsDeleted != true
-                    && st.TaskId == t.Id
-                    && st.DueDate != null
-                    && st.DueDate >= from
-                    && st.DueDate < to
-                )
-            );
-        }
-        else
-        {
-            var like = $"%{term}%";
-            tasksQuery = tasksQuery.Where(t =>
-                EF.Functions.Like(t.Name, like) || EF.Functions.Like(t.Description!, like)
-            );
-        }
-
-        var tasks = await tasksQuery
+            .Where(t => t.IsLatestVersion)
+            .Where(t => t.DateUpdated >= from)
+            .Where(t =>
+                EF.Functions.Like(t.Name, like)
+                || EF.Functions.Like(t.Description ?? string.Empty, like)
+            )
             .OrderByDescending(t => t.DateUpdated)
             .Select(t => new TaskListItem(
                 t.Id,
@@ -53,7 +40,6 @@ public sealed class TaskSearchQueryHandler(
                 t.DateUpdated
             ))
             .ToListAsync(cancellationToken);
-        
 
         return Result.Success(new TaskSearchResponse(tasks));
     }

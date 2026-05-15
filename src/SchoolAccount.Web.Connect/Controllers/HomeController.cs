@@ -58,7 +58,7 @@ public sealed class HomeController(
 
     [HttpGet("search")]
     public async Task<IActionResult> TaskSearch(
-        [FromQuery] string term,
+        [FromQuery] string? term,
         CancellationToken cancellationToken
     )
     {
