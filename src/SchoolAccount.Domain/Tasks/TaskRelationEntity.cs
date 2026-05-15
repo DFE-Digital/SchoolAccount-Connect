@@ -12,8 +12,4 @@ public class TaskRelationEntity
     public long RelatedTaskId { get; set; }
 
     public int RelatedOrder { get; set; }
-
-    public virtual TaskEntity Task { get; set; } = null!;
-
-    public virtual TaskEntity RelatedTask { get; set; } = null!;
 }

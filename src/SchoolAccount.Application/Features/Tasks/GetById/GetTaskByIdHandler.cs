@@ -13,6 +13,7 @@ public sealed class GetTaskByIdHandler(IApplicationDbContext applicationDbContex
         var task = await applicationDbContext
             .Tasks.AsNoTracking()
             .Where(task => task.Id == query.Id)
+            .AsSingleQuery()
             .Select(GetTaskByIdProjection.ToTaskResponse())
             .FirstOrDefaultAsync(cancellationToken);
 
