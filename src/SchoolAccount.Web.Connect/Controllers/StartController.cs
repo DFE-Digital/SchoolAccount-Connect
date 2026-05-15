@@ -70,6 +70,7 @@ public class StartController(
     public async Task<IActionResult> PickAsync([FromRoute] string type, [FromRoute] string ukprn,
         [FromQuery] string? returnAddress)
     {
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg);
         contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType, type);
         contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.UkPrn, ukprn);
         
@@ -94,11 +95,12 @@ public class StartController(
 
     [Authorize]
     [HttpGet(RouteConstants.Start.ReturnToTrust)]
-    public async Task<IActionResult> ReturnToTrustAsync()
+    public async Task<IActionResult> ReturnToTrustAsync([FromQuery] string? returnAddress)
     {
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg);
         var trustUkRpn = contextAccessor.HttpContext!.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn);
         return string.IsNullOrEmpty(trustUkRpn)
             ? throw new ArgumentException(trustUkRpn)
-            : RedirectToAction("Pick", new { type = "trust", ukprn = trustUkRpn });
+            : RedirectToAction("Pick", new { type = "trust", ukprn = trustUkRpn, returnAddress });
     }
 }

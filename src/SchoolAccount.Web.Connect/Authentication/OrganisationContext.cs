@@ -31,7 +31,7 @@ public class OrganisationContext(
     {
         Organisation? organisation = null;
 
-        if (contextAccessor.HttpContext?.Session.GetString("computed-org") is { } storedOrg 
+        if (contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.ComputedOrg) is { } storedOrg 
             && !string.IsNullOrEmpty(storedOrg))
         {
             return JsonSerializer.Deserialize<Organisation>(storedOrg);
@@ -76,7 +76,7 @@ public class OrganisationContext(
         if (organisation is not null)
         {
             contextAccessor.HttpContext?.Session.SetString(
-                "computed-org",
+                SessionKeyConstants.ComputedOrg,
                 JsonSerializer.Serialize(organisation));
         }
         

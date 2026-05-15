@@ -2,6 +2,7 @@
 @using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Organisations
 @using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Extensions
 @inject IUserContext CurrentUser
 @inject IOrganisationContext OrganisationContext
 
@@ -67,11 +68,11 @@
                         <a asp-controller="Account" asp-action="School">
                             <span class="dfe-connect-header__school">@displayName</span>
                         </a>
-                        <a asp-controller="Start" asp-action="SelectAOrganisation">Chg Org</a>
+                        <a asp-controller="Start" asp-action="SelectAOrganisation" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">Chg Org</a>
                         
                         if (OrganisationContext?.Organisation is not TrustOrganisation && !string.IsNullOrEmpty(Context.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn)))
                         {
-                            <a asp-controller="Start" asp-action="ReturnToTrust">Bck 2 Trust</a>
+                            <a asp-controller="Start" asp-action="ReturnToTrust" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">Bck 2 Trust</a>
                         }
                     }
                     

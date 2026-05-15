@@ -9,4 +9,5 @@ public static class SessionKeyConstants
     public const string OrgType = "org_type";
     public const string OrgTypeTrust = "trust";
     public const string OrgTypeAcademy = "academy";
+    public const string ComputedOrg = "computed-org";
 }
