@@ -35,7 +35,6 @@ public sealed class TaskSearchQueryHandler(
                 applicationDbContext.SubTasks.Any(st =>
                     st.TaskId == t.Id
                     && st.WorkflowState == WorkflowState.Published
-                    && st.DueDate != null
                     && st.DueDate >= from
                     && st.DueDate <= to
                 )
