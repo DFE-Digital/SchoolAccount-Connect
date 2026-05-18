@@ -52,7 +52,8 @@ public class GetSubTasksForCardsHandler(
                     {
                         Identifier = t.Type.Id,
                         Name = t.Type.Name,
-                        DisplayValue = t.Type.Name,
+                        DisplayValue = t.Type.DisplayName,
+                        Group = t.Type.TypeGrouping!.DisplayName
                     })
                     .ToCollection(),
                 Condition = x.Conditions

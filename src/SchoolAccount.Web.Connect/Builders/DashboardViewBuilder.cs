@@ -57,8 +57,7 @@ public class DashboardViewBuilder(
                     Description = x.Description,
                     Status = new NodeComponent
                     {
-                        Value = x.Status?.DisplayValue ?? "UNDEFINED",
-                        Colour = x.Status?.Colour
+                        Value = string.Join(" ", x.Types.Select(t => t.DisplayValue)),
                     },
                     Metadata = x.Tags
                         .Select(t => new NodeComponent
