@@ -10,7 +10,7 @@ public class TypeTaskMappingEntity
 
     public long TaskId { get; set; }
 
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     public virtual required TaskEntity Task { get; set; }
 

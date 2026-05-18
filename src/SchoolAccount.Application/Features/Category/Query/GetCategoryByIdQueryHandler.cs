@@ -32,12 +32,12 @@ public sealed class GetCategoryByIdQueryHandler(IApplicationDbContext applicatio
     {
         return new CategoryType
         {
-            Id = category.Id,
+            Id = (int)category.Id,
             Name = category.Name,
             DisplayName = category.DisplayName,
             Description = category.Description,
             HubViewDescription = category.HubViewDescription,
-            ParentTypeId = category.ParentTypeId,
+            ParentTypeId = category.ParentTypeId is null ? null : (int?)category.ParentTypeId,
             TypeGrouping = category.TypeGrouping is null
                 ? null
                 : new CategoryTypeGrouping
@@ -49,7 +49,7 @@ public sealed class GetCategoryByIdQueryHandler(IApplicationDbContext applicatio
                     IsMandatory = category.TypeGrouping.IsMandatory,
                     IsMultiSelect = category.TypeGrouping.IsMultiSelect,
                 },
-            Children = category.Children.Select(x => x.Id).ToList(),
+            Children = category.Children.Select(x => (int)x.Id).ToList(),
             Resources = category.Resources.Count > 0
                 ? category.Resources.Select(x => new CategoryResource
                 {

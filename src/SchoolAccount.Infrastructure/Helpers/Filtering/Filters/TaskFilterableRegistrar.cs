@@ -20,7 +20,7 @@ public class TaskFilterableRegistrar : IFilterableRegistrar
         new()
         {
             [Keys.Categories] =
-                (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.TypeTaskMappings.Select(ttm => ttm.TypeId)),
+                (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.TypeTaskMappings.Select(ttm => (int)ttm.TypeId)),
             [Keys.State] = (Expression<Func<TaskEntity, WorkflowState>>)(x => x.WorkflowState),
         };
 }

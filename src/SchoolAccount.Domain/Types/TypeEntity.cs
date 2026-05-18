@@ -6,7 +6,7 @@ namespace SchoolAccount.Domain.Types;
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class TypeEntity
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     public required string TagName { get; set; }
 
@@ -18,7 +18,7 @@ public class TypeEntity
 
     public string? HubViewDescription { get; set; }
 
-    public int? ParentTypeId { get; set; }
+    public long? ParentTypeId { get; set; }
 
     public int? TypeGroupingId { get; set; }
 

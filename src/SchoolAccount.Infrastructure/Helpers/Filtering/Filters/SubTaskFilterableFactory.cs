@@ -89,7 +89,7 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             {
                 DisplayName = c.DisplayName ?? c.Name,
                 Value = c.Id.ToString(Thread.CurrentThread.CurrentCulture),
-                Children = BuildTypeTree(types, c.Id).ToCollection(),
+                Children = BuildTypeTree(types, (int)c.Id).ToCollection(),
                 Count = byTypes?.Count(t => t.Any(x => x == c.Id)) ?? null,
             })
             .ToCollection();

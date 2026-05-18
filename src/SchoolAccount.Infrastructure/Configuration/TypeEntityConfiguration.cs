@@ -36,7 +36,7 @@ public class TypeEntityConfiguration : IEntityTypeConfiguration<TypeEntity>
             .WithMany()
             .UsingEntity<TypeResourceMappingEntity>(
                 j => j.HasOne<ResourceEntity>().WithMany().HasForeignKey(rsm => rsm.ResourceId),
-                j => j.HasOne<TypeEntity>().WithMany().HasForeignKey(rsm => (int)rsm.EntityId)
+                j => j.HasOne<TypeEntity>().WithMany().HasForeignKey(rsm => rsm.EntityId)
             );
     }
 }
