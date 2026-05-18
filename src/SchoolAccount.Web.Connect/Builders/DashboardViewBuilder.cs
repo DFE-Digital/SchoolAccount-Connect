@@ -5,10 +5,9 @@ using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Shared;
 using SchoolAccount.Application.Features.SubTask;
+using SchoolAccount.Domain.Conditions;
 using SchoolAccount.Kernel;
-using SchoolAccount.Kernel.Conditions.Interface;
 using SchoolAccount.Kernel.Organisations;
-using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
 using SchoolAccount.Web.Connect.Models;
@@ -70,13 +69,11 @@ public class DashboardViewBuilder(
                     Conditions = organisationContext.Organisation switch
                     {
                         TrustOrganisation trust => trust.Establishments
-                            .SelectMany(t => x.Condition
-                            .Select(c => new NodeComponent
+                            .Select(t => new NodeComponent
                             {
-                                Group = t.Name,
-                                Value = $"{c.Identifier} {c.ComparitorType.Comparitor()} {c.Value}",
-                                Colour = c.DetermineColour(t)
-                            }))
+                                Value = t.Name,
+                                Colour = x.Condition.OfType<IConditionObject>().ToCollection().DetermineColour(t)
+                            })
                             .ToCollection(),
                         EstablishmentOrganisation establishment => x.Condition
                             .Select(c => new NodeComponent

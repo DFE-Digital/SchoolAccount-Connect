@@ -124,30 +124,25 @@ public class OrganisationContext(
 
     public static SchoolType ComputeSchoolType(IOrganisation? organisation)
     {
-        return organisation?.Ukrpn switch
+        return organisation?.Category switch
         {
-            "10034529" => SchoolType.IndustrySpecial,
-            "10047905" => SchoolType.LocalAuthorityManagedSpecial,
-            _ => organisation?.Category switch
-                {
-                    OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
-                    OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
-                    _ => organisation?.Establishment switch
-                    {
-                        EstablishmentType.AcademyConverter
-                            or EstablishmentType.AcademySponsorLed
-                            or EstablishmentType.AcademyAlternativeProvisionConverter
-                            or EstablishmentType.AcademyAlternativeProvisionSponsorLed
-                            or EstablishmentType.FreeSchools
-                            or EstablishmentType.FreeSchoolsAlternativeProvision => SchoolType.Academy,
+            OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
+            OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
+            _ => organisation?.Establishment switch
+            {
+                EstablishmentType.AcademyConverter
+                    or EstablishmentType.AcademySponsorLed
+                    or EstablishmentType.AcademyAlternativeProvisionConverter
+                    or EstablishmentType.AcademyAlternativeProvisionSponsorLed
+                    or EstablishmentType.FreeSchools
+                    or EstablishmentType.FreeSchoolsAlternativeProvision => SchoolType.Academy,
 
-                        EstablishmentType.AcademySpecialConverter
-                            or EstablishmentType.AcademySpecialSponsorLed
-                            or EstablishmentType.FreeSchoolsSpecial => SchoolType.AcademySpecial,
+                EstablishmentType.AcademySpecialConverter
+                    or EstablishmentType.AcademySpecialSponsorLed
+                    or EstablishmentType.FreeSchoolsSpecial => SchoolType.AcademySpecial,
 
-                        _ => SchoolType.Unknown,
-                    }
-                }
+                _ => SchoolType.Unknown,
+            }
         };
     }
     

@@ -1,5 +1,8 @@
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
 @using SchoolAccount.Web.Connect.Extensions
 @model SchoolAccount.Application.Features.Shared.SliderCollection
+@inject IOrganisationContext Organisation
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -146,16 +149,19 @@ strong.govuk-tag.meta-condition p {
         @if (slide.Conditions.Any())
         {
           <div class="card-meta card-conitions">
-            <h1 class="govuk-heading-s conditions-title">Conditions</h1>
-            @foreach (var group in slide.Conditions.GroupBy(x => x.Group))
+            @if (Organisation.Organisation is TrustOrganisation)
             {
-              <h2 class="govuk-heading-s conditions-group">@group.Key</h2>
-              foreach (var condition in group)
-              {
-                <govuk-tag class="meta-condition @condition.Colour">
-                  @condition.Value.FromMarkdown().ToHtml()
-                </govuk-tag>
-              }
+              <h1 class="govuk-heading-s conditions-title">Establishments meeting eligibility conditions</h1>
+            }
+            else
+            {
+              <h1 class="govuk-heading-s conditions-title">Conditions</h1>
+            }
+            @foreach (var condition in slide.Conditions)
+            {
+              <govuk-tag class="meta-condition @condition.Colour">
+                @condition.Value.FromMarkdown().ToHtml()
+              </govuk-tag>
             }
           </div>
         }
