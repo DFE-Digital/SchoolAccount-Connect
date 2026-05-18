@@ -73,7 +73,8 @@ public class DashboardViewBuilder(
                             .SelectMany(t => x.Condition
                             .Select(c => new NodeComponent
                             {
-                                Value = $"**{t.Name}** {c.Identifier} {c.ComparitorType} {c.Value}",
+                                Group = t.Name,
+                                Value = $"{c.Identifier} {c.ComparitorType.Comparitor()} {c.Value}",
                                 Colour = c.DetermineColour(t)
                             }))
                             .ToCollection(),

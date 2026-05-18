@@ -93,6 +93,14 @@
   width:7px;pointer-events:none;
 }
 .dot-btn.active .dot{background:var(--gov-blue);width:20px}
+
+h2.govuk-heading-s.conditions-group {
+  font-size: .75em;
+  color: var(--govuk-colour--dark-grey);
+  width: 100%;
+  margin: 0;
+}
+
 .conditions-title {
   text-transform: uppercase;
   display: block;
@@ -139,9 +147,15 @@ strong.govuk-tag.meta-condition p {
         {
           <div class="card-meta card-conitions">
             <h1 class="govuk-heading-s conditions-title">Conditions</h1>
-            @foreach (var condition in slide.Conditions)
+            @foreach (var group in slide.Conditions.GroupBy(x => x.Group))
             {
-              <govuk-tag class="meta-condition @condition.Colour">@condition.Value.FromMarkdown().ToHtml()</govuk-tag>
+              <h2 class="govuk-heading-s conditions-group">@group.Key</h2>
+              foreach (var condition in group)
+              {
+                <govuk-tag class="meta-condition @condition.Colour">
+                  @condition.Value.FromMarkdown().ToHtml()
+                </govuk-tag>
+              }
             }
           </div>
         }

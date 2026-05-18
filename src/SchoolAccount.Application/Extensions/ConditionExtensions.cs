@@ -50,7 +50,12 @@ public static class ConditionExtensions
     
     public static string Comparitor(this IConditionObject condition)
     {
-        return condition.ComparitorType switch
+        return condition.ComparitorType.Comparitor();
+    }
+    
+    public static string Comparitor(this ConditionComparitorType comparitor)
+    {
+        return comparitor switch
         {
             ConditionComparitorType.Equal => "=",
             ConditionComparitorType.NotEqual => "!=",
@@ -58,7 +63,7 @@ public static class ConditionExtensions
             ConditionComparitorType.GreaterThanOrEqual => ">=",
             ConditionComparitorType.LessThan => "<",
             ConditionComparitorType.LessThanOrEqual => "<=",
-            _ => "NOTDEFINED"
+            _ => string.Empty
         };
     }
 
