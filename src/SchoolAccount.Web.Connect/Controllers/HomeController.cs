@@ -60,10 +60,11 @@ public sealed class HomeController(
     [HttpGet("search")]
     public async Task<IActionResult> TaskSearch(
         [FromQuery] string? term,
+        [FromQuery] int? pageNumber,
         CancellationToken cancellationToken
     )
     {
-        var result = await handler.Handle(new TaskSearchQuery(term), cancellationToken);
+        var result = await handler.Handle(new TaskSearchQuery(term, pageNumber ?? 1), cancellationToken);
 
         if (result.IsFailure)
         {

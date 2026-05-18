@@ -9,6 +9,8 @@ namespace SchoolAccount.Web.Connect.Builders;
 
 public class TaskSearchCategoryHubViewBuilder
 {
+    private readonly PaginationViewBuilder _paginationViewBuilder = new();
+
     public CategoryHubViewModel Build(TaskSearchResponse searchResults, string? term, Uri currentUri)
     {
         var items = new Collection<CalendarOfItemsRowGroupViewModel>
@@ -34,14 +36,14 @@ public class TaskSearchCategoryHubViewBuilder
             ViewModes: CalendarOfItemsViewModes.Custom,
             Tabs: [],
             Items: items,
-            Pagination: new PaginationViewModel(false),
+            Pagination: _paginationViewBuilder.Build(searchResults, currentUri),
             Filters: FiltrationViewModel.Build(CalendarOfItemsViewModes.Custom, currentUri, [])
         )
         {
             Heading = "Search results",
-            SubHeading = searchResults.Tasks.Count == 0
+            SubHeading = searchResults.TotalItemCount == 0
                 ? "No matching tasks found."
-                : $"{searchResults.Tasks.Count} task{(searchResults.Tasks.Count == 1 ? string.Empty : "s")} found.",
+                : $"{searchResults.TotalItemCount} task{(searchResults.TotalItemCount == 1 ? string.Empty : "s")} found.",
             NoResultsMessage = "No matching tasks found.",
             CanRenderFilter = false,
             LastUpdatedMessage = "Last updated: today",
