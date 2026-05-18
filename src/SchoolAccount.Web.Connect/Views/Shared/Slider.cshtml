@@ -1,0 +1,246 @@
+@using SchoolAccount.Web.Connect.Extensions
+@model SchoolAccount.Application.Features.Shared.SliderCollection
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gov-blue:#1d70b8;
+  --gov-focus:#ffdd00;
+  --gov-focus-text:#0b0c0c;
+  --txt:#0b0c0c;
+  --txt-2:#505a5f;
+  --txt-3:#6e7477;
+  --surface:rgba(0,0,0,0.04);
+  --card-bg:#ffffff;
+  --border:rgba(0,0,0,0.08);
+  --tag-blue-bg:#e8f1fb;
+  --tag-blue-txt:#0c447c;
+  --tag-green-bg:#e0f0e8;
+  --tag-green-txt:#00482a;
+  --tag-amber-bg:#fdf3da;
+  --tag-amber-txt:#594d00;
+  --card-w:82%;
+  --gap:14px;
+  --radius:16px;
+  --radius-pill:100px;
+}
+
+.wrap{padding:1.5rem 0 1rem;overflow:hidden}
+
+.hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.1rem;gap:1rem}
+.hdr-title{font-size:17px;font-weight:600;letter-spacing:-.2px;color:var(--txt)}
+.hdr-count{font-size:13px;color:var(--txt-3);font-variant-numeric:tabular-nums}
+
+.slider-track-outer{overflow:hidden;position:relative;margin: 0;}
+.slider-track{
+  display:flex;
+  overflow-x:scroll;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  gap:var(--gap);
+  padding-bottom:4px;
+}
+.slider-track::-webkit-scrollbar{display:none}
+.slider-track:focus-visible{outline:3px solid var(--gov-focus);outline-offset:2px;border-radius:4px}
+
+.slide-card{
+  padding:1.4rem 1.4rem 1.2rem;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  flex-shrink:0;
+  scroll-snap-align:start;    
+  max-width: 80dvw;
+}
+
+.tag{
+  display:inline-flex;align-items:center;
+  font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;
+  padding:4px 10px;border-radius:var(--radius-pill);
+  margin-bottom:1rem;
+}
+
+.card-title{font-size:17px;font-weight:600;letter-spacing:-.3px;line-height:1.3;color:var(--txt);margin-bottom:.6rem}
+.card-body{font-size:14px;line-height:1.6;color:var(--txt-2);margin-bottom:1.2rem}
+
+.card-meta{display:flex;gap:1.25rem;flex-wrap:wrap;padding-top:.9rem;border-top:1px solid var(--border);margin-bottom:1rem}
+.meta-item{font-size:12px;color:var(--txt-3);line-height:1.5}
+.meta-label{font-size:11px;font-weight:600;letter-spacing:.2px;color:var(--txt-2);display:block;margin-bottom:1px}
+
+.card-link{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:14px;font-weight:500;
+  color:var(--gov-blue);text-decoration:none;letter-spacing:-.1px;
+}
+.card-link:hover{text-decoration:underline;text-decoration-thickness:1.5px}
+.card-link:focus{outline:3px solid var(--gov-focus);outline-offset:2px;border-radius:3px;background:var(--gov-focus);color:var(--gov-focus-text);padding:0 2px}
+
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:.9rem;gap:1rem}
+.nav-btns{display:flex;gap:6px}
+
+.dots{display:flex;gap:4px;align-items:center}
+.dot-btn{
+  width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;padding:0;border-radius:50%;
+}
+.dot-btn:focus{outline:3px solid var(--gov-focus);border-radius:50%;background:var(--gov-focus)}
+.dot{
+  height:7px;border-radius:4px;
+  background:var(--border);
+  transition:background .2s,width .25s cubic-bezier(.4,0,.2,1);
+  width:7px;pointer-events:none;
+}
+.dot-btn.active .dot{background:var(--gov-blue);width:20px}
+.conditions-title {
+  text-transform: uppercase;
+  display: block;
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+  color: var(--govuk-colour--dark-grey);
+}
+
+strong.govuk-tag.meta-condition {
+  font-size: 14px;
+  padding: var(--govuk-spacing-responsive--2);
+  border-radius: var(--govuk-spacing-responsive--1);
+  max-width: 300px;
+}
+
+strong.govuk-tag.meta-condition p {
+  font-size: inherit;
+  margin: 0;
+}
+
+.card-conitions {
+  gap: .75em;
+}
+</style>
+
+<div class="slider-wrap">
+
+<div class="govuk-grid-row slider-track-outer">
+  <div class="govuk-grid-column-full slider-track" id="track">
+    
+    @for (var i = 0; i < Model.Count; i++)
+    {
+      var slide = Model.ElementAt(i);
+      
+      <article class="slide-card govuk-grid-column-two-thirds" role="group" aria-roledescription="slide" aria-label="Slide @i of @Model.Count">
+        
+        <govuk-tag class="tag @slide.Status.Colour">@slide.Status.Value</govuk-tag>
+        
+        <h3 class="govuk-heading card-title">@slide.Title</h3>
+        <p class="govuk-body card-body">@slide.Description</p>
+        
+        @if (slide.Conditions.Any())
+        {
+          <div class="card-meta card-conitions">
+            <h1 class="govuk-heading-s conditions-title">Conditions</h1>
+            @foreach (var condition in slide.Conditions)
+            {
+              <govuk-tag class="meta-condition @condition.Colour">@condition.Value.FromMarkdown().ToHtml()</govuk-tag>
+            }
+          </div>
+        }
+        
+        @if (slide.Metadata.Any())
+        {
+          <div class="card-meta">
+            @foreach (var meta in slide.Metadata.GroupBy(x => x.Group))
+            {
+              <div class="meta-item">
+                <span class="meta-label">@meta.Key</span>
+                <text>@(string.Join(", ", meta.Select(x => x.Value)))</text>
+              </div>
+            }
+          </div>
+        }
+
+        @if (slide.Action is not null)
+        {
+          <a class="govuk-link card-link" href="@slide.Action.Url">
+            @slide.Action.Value
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2.5 6.5h8M6.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        }
+      
+      </article>
+    }
+    
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <div class="nav-btns">
+    <button class="govuk-button govuk-button--secondary govuk-gr govuk-!-margin-bottom-0" id="prev" aria-label="Previous card" disabled>
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M8 2.5L4 6.5l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Previous
+    </button>
+    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" id="next" aria-label="Next card">
+      Next
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="dots" role="tablist" aria-label="Card navigation">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+      <button class="dot-btn @(i == 0 ? "active" : string.Empty)" role="tab" aria-selected="true" aria-label="Card @i"><span class="dot"></span></button>
+    }
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const nav   = document.getElementById('nav');
+  const prev  = document.getElementById('prev');
+  const next  = document.getElementById('next');
+  const countEl = document.getElementById('count');
+  const dotBtns = Array.from(document.querySelectorAll('.dot-btn'));
+  const total = dotBtns.length;
+  let cur = 0, st = null;
+
+  function cardStride(){
+    const c = track.querySelector('.slide-card');
+    return c ? c.offsetWidth + 14 : track.clientWidth;
+  }
+
+  function sync(i){
+    cur = Math.max(0, Math.min(total-1, i));
+    //countEl.textContent = (cur+1) + ' of ' + total;
+    prev.disabled = cur === 0;
+    next.disabled = cur === total-1;
+    dotBtns.forEach((d,j)=>{
+      d.classList.toggle('active', j===cur);
+      d.setAttribute('aria-selected', String(j===cur));
+    });
+  }
+
+  function go(i, smooth){
+    if(i<0||i>=total) return;
+    track.scrollTo({left: i * cardStride(), behavior: smooth?'smooth':'instant'});
+    sync(i);
+  }
+
+  track.addEventListener('scroll',()=>{
+    clearTimeout(st);
+    st = setTimeout(()=> sync(Math.round(track.scrollLeft / cardStride())), 80);
+  },{passive:true});
+
+  prev.addEventListener('click',()=>go(cur-1,true));
+  next.addEventListener('click',()=>go(cur+1,true));
+  dotBtns.forEach((d,i)=>d.addEventListener('click',()=>go(i,true)));
+
+  track.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1,true);}
+    if(e.key==='ArrowRight'){e.preventDefault();go(cur+1,true);}
+    if(e.key==='Home'){e.preventDefault();go(0,true);}
+    if(e.key==='End'){e.preventDefault();go(total-1,true);}
+  });
+})();
+</script>

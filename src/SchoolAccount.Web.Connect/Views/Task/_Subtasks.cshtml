@@ -1,5 +1,8 @@
+@using System.Collections.ObjectModel
 @using System.Globalization
+@using SchoolAccount.Application.Extensions
 @using SchoolAccount.Application.Features.Tasks.GetById
+@using SchoolAccount.Domain.Conditions
 @using SchoolAccount.Domain.Subtasks
 @using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Organisations
@@ -69,7 +72,7 @@
                     <div class="govuk-task-list__hint">
                         @foreach (var sch in trst.Establishments)
                         {
-                            <govuk-tag class="@GetTaskByIdResponseCondition.DetermineColour(Model.Conditions, sch)">@sch.Name</govuk-tag>
+                            <govuk-tag class="@(Model.Conditions.OfType<IConditionObject>().ToCollection().DetermineColour(sch))">@sch.Name</govuk-tag>
                         }
                     </div>
                 }

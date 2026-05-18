@@ -4,13 +4,13 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Specifications;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Infrastructure.Extensions;
 using SchoolAccount.Infrastructure.Helpers.Filtering;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using SchoolAccount.Infrastructure.Resolvers;
-using SchoolAccount.Infrastructure.Specifications;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Aggregators;

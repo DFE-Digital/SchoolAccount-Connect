@@ -7,16 +7,28 @@
 @section PageHeading
 {
     <partial name="TrustOrgPicker" />
-
+    
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Welcome to DfE Connect</h1>
     <p class="govuk-body-l govuk-!-margin-bottom-6">Manage your tasks, access services and find related guidance
         to
         help you run your school and work with us.</p>
 }
 
-@foreach (var view in Model.Value)
+@section PreContent 
 {
-    if (Model.ShowDividerLine(view))
+    @if (Model.Slides.Count > 0)
+    {
+        <h2 class="govuk-heading-s">Latest and upcoming items which you might be eligible for</h2>
+        <partial name="~/Views/Shared/Slider.cshtml" model="Model.Slides" />
+    }
+}
+
+
+@for (var i = 0; i < Model.Value.Count; i++)
+{
+    var view = Model.Value.ElementAt(i);
+    
+    if (Model.ShowDividerLine(view) || i == 0 && Model.Slides.Count > 0)
     {
         <partial name="SVG/DividerLine"></partial>
     }

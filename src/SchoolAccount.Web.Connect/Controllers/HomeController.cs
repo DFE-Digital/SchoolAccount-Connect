@@ -9,6 +9,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
+using SchoolAccount.Application.Features.SubTask;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.Shared;
@@ -19,6 +20,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 [Authorize]
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
+    IQueryHandler<GetSubTasksForCardsQuery, GetSubTasksForCardsResponse> sliderCardsQueryBuilder,
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
@@ -28,6 +30,14 @@ public sealed class HomeController(
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] int? pageNumber, CancellationToken cancellationToken)
     {
+        var cardsQuery = new GetSubTasksForCardsQuery(DateOnlyExtensions.Today);
+        var cardsResult = await sliderCardsQueryBuilder.Handle(cardsQuery, cancellationToken);
+
+        if (cardsResult.IsFailure)
+        {
+            return Problem(detail: cardsResult.Error.Description);
+        }
+        
         var calendarOfItemsQuery = new GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnlyExtensions.Today);
         var calendarOfItemsResult = await calendarOfItemQueryBuilder.Handle(calendarOfItemsQuery, cancellationToken);
 
@@ -50,7 +60,11 @@ public sealed class HomeController(
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewModel = dashboardViewBuilder.Build(calendarOfItemsResult.Value, categoryResult.Value, currentUri);
+        var viewModel = dashboardViewBuilder.Build(
+            cardsResult.Value, 
+            calendarOfItemsResult.Value, 
+            categoryResult.Value, 
+            currentUri);
 
         return View(viewModel);
     }

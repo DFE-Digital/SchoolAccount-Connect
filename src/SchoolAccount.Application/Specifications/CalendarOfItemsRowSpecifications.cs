@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Infrastructure.Specifications;
+namespace SchoolAccount.Application.Specifications;
 
 public static class CalendarOfItemsRowSpecifications
 {

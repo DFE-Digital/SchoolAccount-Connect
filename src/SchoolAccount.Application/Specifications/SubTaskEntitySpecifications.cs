@@ -4,7 +4,7 @@ using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Infrastructure.Specifications;
+namespace SchoolAccount.Application.Specifications;
 
 public static class SubTaskEntitySpecifications
 {
