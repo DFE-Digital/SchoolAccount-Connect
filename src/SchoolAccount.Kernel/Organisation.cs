@@ -126,7 +126,7 @@ public class Organisation
             Telephone = establishment.TelephoneNumber,
 
             Establishment = (EstablishmentType)establishmentType,
-            Category = OrganisationCategory.MultiAcademyTrust,
+            Category = OrganisationCategory.Establishment,
 
             StatutoryAges = new IntRange(
                 establishment.StatutoryHighAge.ToIntOrDefault(int.MaxValue),

@@ -9,7 +9,14 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
 {
     public EstablishmentOrganisation(OrganisationClaim claim)
         : this(claim.UkPrn!, claim.Name!) 
-    { }
+    { 
+        Establishment = claim.Type is not null 
+            ? claim.Type!.Id 
+            : EstablishmentType.Undeclared;
+        Category = claim.Category is not null
+            ? claim.Category!.Id
+            : OrganisationCategory.Undeclared;
+    }
 
     public EstablishmentOrganisation(Organisation organisation)
         : this(organisation.UkPrn, organisation.Name)
@@ -17,6 +24,8 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
         Data = organisation;
         
         PhaseOfEducation = organisation.PhaseOfEducation;
+        Category = organisation.Category;
+        Establishment = organisation.Establishment;
 
         Conditions = new Collection<EstablishmentCondition>(
             organisation.Conditions?
@@ -28,6 +37,9 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
 
     public string Ukrpn { get; } = ukrpn;
     public string Name { get; } = name;
+    
+    public EstablishmentType Establishment { get; init; }
+    public OrganisationCategory Category { get; init; }
     
     public object? Data { get; }
     

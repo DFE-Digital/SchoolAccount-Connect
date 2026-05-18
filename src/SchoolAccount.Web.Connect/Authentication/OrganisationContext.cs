@@ -2,8 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.AcademiesApi.Models;
-using SchoolAccount.Integration.DfESignIn;
-using SchoolAccount.Integration.DfESignIn.Exceptions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
@@ -22,8 +20,6 @@ public class OrganisationContext(
     IConditionMapperResolver conditionMapperResolver
 ) : IOrganisationContext
 {
-    private SchoolType? _schoolType;
-
     public bool IsDsiDetermined => contextAccessor.HttpContext?.User.FindFirst("organisation") is not null;
     public bool IsUserDeclared => contextAccessor.HttpContext?.Session.Keys.Contains(SessionKeyConstants.OrgType) == true;
 
@@ -93,7 +89,7 @@ public class OrganisationContext(
 
     public bool IsAuthorised => (IsDsiDetermined || IsUserDeclared) && Provider is not NullProvider;
 
-    public SchoolType Type => _schoolType ??= DetermineSchoolType();
+    public Dictionary<string, SchoolType> Type => field ??= DetermineSchoolType();
 
     public EstablishmentType Establishment => Data?.Establishment ?? EstablishmentType.Undeclared;
 
@@ -126,13 +122,13 @@ public class OrganisationContext(
         }
     }
 
-    private SchoolType DetermineSchoolType()
+    public static SchoolType ComputeSchoolType(IOrganisation? organisation)
     {
-        return Data?.Category switch
+        return organisation?.Category switch
         {
             OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
             OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
-            _ => Data?.Establishment switch
+            _ => organisation?.Establishment switch
             {
                 EstablishmentType.AcademyConverter
                     or EstablishmentType.AcademySponsorLed
@@ -148,5 +144,23 @@ public class OrganisationContext(
                 _ => SchoolType.Unknown,
             }
         };
+    }
+    
+    private Dictionary<string, SchoolType> DetermineSchoolType()
+    {
+        var response = new Dictionary<string, SchoolType>
+        {
+            { Organisation.Ukrpn, ComputeSchoolType(Organisation) }
+        };
+
+        if (Organisation is TrustOrganisation trust)
+        {
+            foreach (var establishment in trust.Establishments)
+            {
+                response.Add(establishment.Ukrpn, ComputeSchoolType(establishment));
+            }    
+        }
+        
+        return response;
     }
 }

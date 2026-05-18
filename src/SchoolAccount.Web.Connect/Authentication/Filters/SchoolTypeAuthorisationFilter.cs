@@ -18,7 +18,7 @@ public class SchoolTypeAuthorisationFilter(IOrganisationContext organisationCont
             return Task.CompletedTask;
         }
 
-        if (!allowedTypes.Contains(organisationContext.Type))
+        if (!allowedTypes.Any(a => organisationContext.Type.ContainsValue(a)))
         {
             context.Result = new ForbidResult();
         }

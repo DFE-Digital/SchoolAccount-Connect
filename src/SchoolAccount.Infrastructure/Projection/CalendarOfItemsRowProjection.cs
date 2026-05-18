@@ -1,15 +1,21 @@
 using System.Linq.Expressions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Projection;
 
 public static class CalendarOfItemsRowProjection
 {
-    public static Expression<Func<SubTaskEntity, CalendarOfItemsRow>> FromSubTask()
+    public static Expression<Func<SubTaskEntity, CalendarOfItemsRow>> FromSubTask(
+        IQueryable<SchoolTypeTagMappingEntity> schoolTypeMappings,
+        IEnumerable<SchoolType> types
+    )
     {
+        var typeIds = types.Select(t => (int)t).ToList();
         return x => new CalendarOfItemsRow
         {
             Id = x.Task.Id,
@@ -42,6 +48,14 @@ public static class CalendarOfItemsRowProjection
                 DisplayValue = t.Type.Name,
                 Type = CalendarOfItemsExtensionNodeType.Type,
             }),
+            Organisations = x.TagsSourceMappings
+                .SelectMany(t => schoolTypeMappings
+                    .Where(st => typeIds.Contains(st.SchoolTypeId) && st.TagId == t.TagId)
+                    .Select(st => new CalendarOfItemsExtensionNode
+                    {
+                        DisplayValue = st.SchoolType.Name,
+                        Id = st.SchoolTypeId
+                    }))
         };
     }
 

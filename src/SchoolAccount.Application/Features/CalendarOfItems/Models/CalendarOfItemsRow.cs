@@ -29,4 +29,6 @@ public class CalendarOfItemsRow
     public IEnumerable<CalendarOfItemsExtensionNode> Types { get; init; } = [];
 
     public IEnumerable<CalendarOfItemsExtensionNode> Tags { get; init; } = [];
+    
+    public IEnumerable<CalendarOfItemsExtensionNode> Organisations { get; init; } = [];
 }

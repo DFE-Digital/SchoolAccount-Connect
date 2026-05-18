@@ -22,7 +22,7 @@ public class GetSubTasksForCardsHandler(
             .Include(x => x.Task)
             .Include(x => x.TagsSourceMappings)
             .Include(x => x.Conditions)
-            .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
+            .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type.Values))
             .Where(x => (x.DueDate ?? x.StartDate) >= queryFrom)
             .Where(x => x.Conditions.Any())
             .Select(x => new GetSubTasksForCardsResponseSubTask

@@ -28,7 +28,7 @@ public class TaskCalendarOfItemQueryFactory(
             .Include(x => x.SubTasks)
                 .ThenInclude(x => x.TagsSourceMappings)
             .Include(x => x.TypeTaskMappings)
-            .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
+            .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type.Values))
             .Where(TaskEntitySpecifications.IsVisible())
             .Apply(filter, mappings)
             .Select(CalendarOfItemsRowProjection.FromTask());

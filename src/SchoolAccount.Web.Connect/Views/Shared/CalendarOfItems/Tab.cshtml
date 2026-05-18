@@ -1,4 +1,7 @@
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+@inject IOrganisationContext OrganisationContext
 
 @if (Model.HasTitle)
 {
@@ -11,6 +14,24 @@
 @if (Model.HasLastUpdatedMessage)
 {
     <p class="govuk-caption-m">@Model.LastUpdatedMessage</p>
+}
+
+@if (OrganisationContext.Organisation is TrustOrganisation)
+{
+    <style>
+        .access-org strong.govuk-tag {
+            font-size: .75em;
+            max-width: 250px;
+            border-radius: var(--govuk-spacing-responsive--1);
+            padding: var(--govuk-spacing-responsive--1) var(--govuk-spacing-responsive--2);
+        }
+
+        .govuk-task-list__hint.access-org {
+            display: flex;
+            gap: .5em;
+            margin-top: var(--govuk-spacing-responsive--2);
+        }
+    </style>
 }
 
 <ul class="govuk-task-list">
@@ -40,6 +61,15 @@
                         <div class="govuk-task-list__hint">
                             <strong>@row.DateText</strong>
                         </div>
+                        @if (row.HasOrganisation && OrganisationContext.Organisation is TrustOrganisation trust)
+                        {
+                            <div class="govuk-task-list__hint access-org">
+                                @foreach (var establishment in trust.Establishments)
+                                {
+                                    <govuk-tag class="govuk-tag--@(row.Organisations.Any(x => x.Id == (int)SchoolAccount.Web.Connect.Authentication.OrganisationContext.ComputeSchoolType(establishment)) ? "green" : "red")">@establishment.Name</govuk-tag>
+                                }
+                            </div>
+                        }
                     </div>
                     @if (row.ShowTag)
                     {

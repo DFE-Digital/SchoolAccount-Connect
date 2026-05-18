@@ -27,8 +27,8 @@ public class SubTaskCalendarOfItemQueryFactory(
             .SubTasks.AsNoTracking()
             .Include(x => x.Task)
             .Include(x => x.TagsSourceMappings)
-            .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
+            .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type.Values))
             .Apply(filter, mappings)
-            .Select(CalendarOfItemsRowProjection.FromSubTask());
+            .Select(CalendarOfItemsRowProjection.FromSubTask(accessibleTags, organisationContext.Type.Values));
     }
 }

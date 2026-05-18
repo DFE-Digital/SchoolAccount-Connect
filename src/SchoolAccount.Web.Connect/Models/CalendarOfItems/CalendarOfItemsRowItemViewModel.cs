@@ -1,4 +1,7 @@
-﻿namespace SchoolAccount.Web.Connect.Models.CalendarOfItems;
+﻿using System.Collections.ObjectModel;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
+
+namespace SchoolAccount.Web.Connect.Models.CalendarOfItems;
 
 public record CalendarOfItemsRowItemViewModel(string Name, string Url)
 {
@@ -8,4 +11,7 @@ public record CalendarOfItemsRowItemViewModel(string Name, string Url)
     public string? TagTheme { get; init; }
     public string? TagValue { get; init; }
     public bool HasTag => !string.IsNullOrEmpty(TagValue);
+    
+    public Collection<CalendarOfItemsExtensionNode> Organisations { get; init; } = [];
+    public bool HasOrganisation => Organisations.Count > 0;
 }

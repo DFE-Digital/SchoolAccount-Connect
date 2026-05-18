@@ -20,6 +20,7 @@ public class CalendarOfItemsRowViewBuilder
         return new CalendarOfItemsRowItemViewModel(row.Name, url)
         {
             Description = row.Description,
+            Organisations =  row.Organisations.ToCollection(),
             DateText = !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)
                 ? GenerateAvailableOrDueMessage(row)
                 : null,

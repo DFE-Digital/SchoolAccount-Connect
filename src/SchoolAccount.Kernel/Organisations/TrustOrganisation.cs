@@ -15,6 +15,12 @@ public class TrustOrganisation : IOrganisation
         {
             Ukrpn = claim.UkPrn ?? throw new ArgumentException(nameof(claim.UkPrn)),
             Name = claim.Name ?? throw new ArgumentException(nameof(claim.Name)),
+            Establishment = claim.Type is not null
+                ? claim.Type!.Id
+                : EstablishmentType.Undeclared,
+            Category = claim.Category is not null
+                ? claim.Category!.Id
+                : OrganisationCategory.Undeclared
         };
     }
 
@@ -33,6 +39,8 @@ public class TrustOrganisation : IOrganisation
         {
             Ukrpn = trust.GiasData?.Ukprn ?? throw new ArgumentException(nameof(trust.GiasData.Ukprn)),
             Name = trust.GiasData?.GroupName ?? throw new ArgumentException(nameof(trust.GiasData.GroupName)),
+            Category = OrganisationCategory.MultiAcademyTrust,
+            Establishment = EstablishmentType.Undeclared,
             Establishments = establishments
         };
     }
@@ -43,11 +51,17 @@ public class TrustOrganisation : IOrganisation
         {
             Ukrpn = organisation.UkPrn ?? throw new ArgumentException(nameof(organisation.UkPrn)),
             Name = organisation.Name ?? throw new ArgumentException(nameof(organisation.Name)),
+            Category =  organisation.Category,
+            Establishment = organisation.Establishment,
             Establishments = organisation.Children?.Select(x => new EstablishmentOrganisation(x)).ToList() ?? []
         };
     }
 
     public string Ukrpn { get; init; } = null!;
     public string Name { get; init; } = null!;
+    
+    public EstablishmentType Establishment { get; init; }
+    public OrganisationCategory Category { get; init; }
+    
     public IReadOnlyCollection<EstablishmentOrganisation> Establishments { get; init; } = [];
 }

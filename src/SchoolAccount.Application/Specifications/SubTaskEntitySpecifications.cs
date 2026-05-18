@@ -10,12 +10,14 @@ public static class SubTaskEntitySpecifications
 {
     public static Expression<Func<SubTaskEntity, bool>> IsAccessibleForSchoolType(
         IQueryable<SchoolTypeTagMappingEntity> schoolTypeMappings,
-        SchoolType type
+        IEnumerable<SchoolType> types
     )
     {
+        var typeIds = types.Select(t => (int)t).ToList();
+
         return s =>
             s.TagsSourceMappings.Any(t =>
-                schoolTypeMappings.Any(st => st.SchoolTypeId == (int)type && st.TagId == t.TagId)
+                schoolTypeMappings.Any(st => typeIds.Contains(st.SchoolTypeId) && st.TagId == t.TagId)
             );
     }
 
