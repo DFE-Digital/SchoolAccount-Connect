@@ -37,7 +37,8 @@ public class TaskSearchCategoryHubViewBuilder
             Tabs: [],
             Items: items,
             Pagination: _paginationViewBuilder.Build(searchResults, currentUri),
-            Filters: FiltrationViewModel.Build(CalendarOfItemsViewModes.Custom, currentUri, [])
+            Filters: FiltrationViewModel.Build(CalendarOfItemsViewModes.Custom, currentUri, []),
+            null
         )
         {
             Heading = searchResults.TotalItemCount == 0 ? "No matching tasks found." : "Search results for " + term,

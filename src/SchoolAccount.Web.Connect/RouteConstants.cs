@@ -22,6 +22,7 @@ public static class RouteConstants
 
     public const string AccessibilityStatement =
         "https://accessibility-statements.education.gov.uk/s/21";
+    public const string AcademyTrustHandbook = "https://www.gov.uk/government/publications/academy-trust-handbook";
 
     public static class Start
     {
