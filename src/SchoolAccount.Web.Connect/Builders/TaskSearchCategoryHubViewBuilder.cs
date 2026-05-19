@@ -40,7 +40,7 @@ public class TaskSearchCategoryHubViewBuilder
             Filters: FiltrationViewModel.Build(CalendarOfItemsViewModes.Custom, currentUri, [])
         )
         {
-            Heading = "Search results",
+            Heading = searchResults.TotalItemCount == 0 ? "No matching tasks found." : "Search results for " + term,
             SubHeading = searchResults.TotalItemCount == 0
                 ? "No matching tasks found."
                 : $"{searchResults.TotalItemCount} task{(searchResults.TotalItemCount == 1 ? string.Empty : "s")} found.",
