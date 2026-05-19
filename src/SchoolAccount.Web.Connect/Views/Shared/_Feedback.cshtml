@@ -5,14 +5,7 @@
     const string feedbackSubmittedCookieName = "page_feedback_submitted";
 
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
-        .Trim('/')
-        .Replace("/", "-")
         .ToLowerInvariant();
-
-    if (string.IsNullOrWhiteSpace(pageId))
-    {
-        pageId = "home";
-    }
 
     var feedbackSubmitted =
         string.Equals(

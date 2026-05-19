@@ -3,14 +3,7 @@
 
 @{
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
-        .Trim('/')
-        .Replace("/", "-")
         .ToLowerInvariant();
-
-    if (string.IsNullOrWhiteSpace(pageId))
-    {
-        pageId = "home";
-    }
 
     var redirectUrl =
         $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
