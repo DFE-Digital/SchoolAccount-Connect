@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Features.Feedback.Commands;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -10,56 +11,101 @@ public sealed class FeedbackController(
     ICommandHandler<RecordFeedbackExitCommand> recordFeedbackExitHandler
 ) : ControllerBase
 {
-    [HttpPost(RouteConstants.FeedBack)]
-    public async Task<IActionResult> RecordPageFeedback(
-        [FromBody] RecordPageFeedbackCommand command,
+    private const string FeedbackSubmittedCookieName = "page_feedback_submitted";
+    private const string BannerHiddenCookieName = "connect_banner_hidden";
+
+    [HttpPost(RouteConstants.FeedBackRespond)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Respond(
+        [FromForm] string pageId,
+        [FromForm] string ctaType,
+        [FromForm] string selectedAnswer,
         CancellationToken cancellationToken
     )
     {
-        var result = await recordPageFeedbackHandler.Handle(command, cancellationToken);
+        var result = await recordPageFeedbackHandler.Handle(
+            new RecordPageFeedbackCommand(
+                AnalyticsEvents.CtaYesNoInteraction,
+                pageId,
+                ctaType,
+                selectedAnswer),
+            cancellationToken);
 
         if (result.IsFailure)
         {
             return Problem(detail: result.Error.Description);
         }
 
-        return NoContent();
+        Response.Cookies.Append(
+            FeedbackSubmittedCookieName,
+            "true",
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Lax,
+                Path = "/"
+            });
+
+        return Redirect($"{pageId}#page-feedback");
+    }
+
+    [HttpGet(RouteConstants.FeedBackCancel)]
+    public IActionResult Cancel(
+        [FromQuery] string pageId,
+        [FromQuery] string? ctaType)
+    {
+        Response.Cookies.Delete(FeedbackSubmittedCookieName);
+
+        if (string.Equals(ctaType, AnalyticsCtaTypes.Banner, StringComparison.OrdinalIgnoreCase))
+        {
+            Response.Cookies.Append(
+                BannerHiddenCookieName,
+                "true",
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = Request.IsHttps,
+                    SameSite = SameSiteMode.Lax,
+                    Path = "/"
+                });
+        }
+
+        return Redirect($"{pageId}#page-feedback");
     }
 
     [HttpGet(RouteConstants.FeedBackExit)]
     public async Task<IActionResult> RecordFeedbackExit(
         [FromQuery] string pageId,
         [FromQuery] string ctaType,
-        [FromQuery] string returnUrl,
         CancellationToken cancellationToken
     )
     {
-        if (!IsAllowedFeedbackUrl(returnUrl))
-        {
-            return BadRequest("Invalid returnUrl.");
-        }
-
         var result = await recordFeedbackExitHandler.Handle(
             new RecordFeedbackExitCommand(pageId, ctaType),
-            cancellationToken
-        );
+            cancellationToken);
 
         if (result.IsFailure)
         {
             return Problem(detail: result.Error.Description);
         }
 
-        return Redirect(returnUrl);
-    }
+        Response.Cookies.Delete(FeedbackSubmittedCookieName);
 
-    private static bool IsAllowedFeedbackUrl(string returnUrl)
-    {
-        if (!Uri.TryCreate(returnUrl, UriKind.Absolute, out var uri))
+        if (string.Equals(ctaType, AnalyticsCtaTypes.Banner, StringComparison.OrdinalIgnoreCase))
         {
-            return false;
+            Response.Cookies.Append(
+                BannerHiddenCookieName,
+                "true",
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = Request.IsHttps,
+                    SameSite = SameSiteMode.Lax,
+                    Path = "/"
+                });
         }
 
-        return uri.Scheme == Uri.UriSchemeHttps
-            && string.Equals(uri.Host, "digital-forms.education.gov.uk", StringComparison.OrdinalIgnoreCase);
+        return Redirect("https://digital-forms.education.gov.uk/smxqhd6u2i");
     }
 }
