@@ -27,10 +27,10 @@ public sealed record TaskViewModel(GetTaskByIdResponse TaskResponse, TaskViewMod
 
     public bool IsPreviousTasksView => ViewMode == PreviousTasks;
 
-    public string HeadingText => IsUpcomingTasksView ? "Upcoming Tasks" : "Previous 12 months";
+    public string HeadingText => IsUpcomingTasksView ? "Upcoming tasks" : "Previous 12 months";
 
     public string NoTasksFoundMessage =>
-        IsUpcomingTasksView ? "There are no upcoming tasks" : "There are no previous tasks";
+        IsUpcomingTasksView ? "There are no upcoming tasks." : "There are no previous tasks.";
 
     private GetTaskByIdResponseSubtask[] GetSubTasksForViewMode()
     {

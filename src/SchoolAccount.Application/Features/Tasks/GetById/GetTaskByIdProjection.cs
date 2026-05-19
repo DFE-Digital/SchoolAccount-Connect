@@ -46,7 +46,7 @@ public static class GetTaskByIdProjection
                 .ToArray(),
             TaskTypes = x
                 .TypeTaskMappings.Where(t => t.Type.ParentTypeId == null && t.Type.TypeGroupingId == 1)
-                .Select(t => new GetTaskByIdResponseTaskType { Id = t.Type.Id, Name = t.Type.Name })
+                .Select(t => new GetTaskByIdResponseTaskType { Id = t.Type.Id, Name = t.Type.DisplayName })
                 .ToArray(),
         };
     }
