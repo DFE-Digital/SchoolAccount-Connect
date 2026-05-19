@@ -1,5 +1,5 @@
-using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
+using static Microsoft.AspNetCore.Http.HttpResults.RedirectHttpResult;
 
 namespace SchoolAccount.Web.Connect.Middleware;
 
@@ -21,7 +21,7 @@ public class RequestGateMiddleware(RequestDelegate next)
                 throw new NullReferenceException(nameof(result.RedirectAddress));
             }
 
-            if (result.RedirectAddress.IsLocalUrl())
+            if (IsLocalUrl(result.RedirectAddress))
             {
                 context.Response.Redirect(result.RedirectAddress);
             }
