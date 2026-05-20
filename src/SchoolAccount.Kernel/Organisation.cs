@@ -36,7 +36,6 @@ public class Organisation
     public static async Task<Organisation> CreateFromAcademyOrganisation(AcademyOrganisation establishment,
         IConditionMapperResolver conditionMapperResolver)
     {
-
         if (!int.TryParse(establishment.EstablishmentType?.Code, out int establishmentType))
         {
             throw new ArgumentException(nameof(EstablishmentType));
@@ -52,7 +51,7 @@ public class Organisation
             Telephone = establishment.TelephoneNumber,
 
             Establishment = (EstablishmentType)establishmentType,
-            Category = OrganisationCategory.MultiAcademyTrust,
+            Category = OrganisationCategory.Establishment,
             StatutoryAges = new IntRange(
                 establishment.StatutoryHighAge.ToIntOrDefault(int.MaxValue),
                 establishment.StatutoryLowAge.ToIntOrDefault(0)),
