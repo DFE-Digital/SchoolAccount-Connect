@@ -48,6 +48,22 @@
     <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
+                Category
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @establishment.Category.ToString()
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Type
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @establishment.Establishment.ToString()
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
                 Phase of Education
             </dt>
             <dd class="govuk-summary-list__value">
@@ -112,11 +128,16 @@
                     <div class="govuk-task-list__hint">
                         @if (!string.IsNullOrEmpty(school.Ukrpn))
                         {
-                            <text>UKPRN: @school.Ukrpn</text><br />
+                            <text><strong>UKPRN</strong> @school.Ukrpn</text><br />
+                        }
+                        
+                        @if (school.Establishment > 0)
+                        {
+                            <text><strong>Type</strong> @school.Establishment</text><br />
                         }
                         @if (school.PhaseOfEducation is not null)
                         {
-                            <text>Phase: (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name</text><br />
+                            <text><strong>Phase</strong> (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name</text><br />
                         }
                     </div>
                 </div>

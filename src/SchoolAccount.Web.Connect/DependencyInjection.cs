@@ -123,7 +123,7 @@ internal static class DependencyInjection
     private static void AddRequestGates(this IServiceCollection services)
     {
         services.AddScoped<IRequestGate, MaintenanceRequestGate>();
-        services.AddScoped<IRequestGate, MatAcceptanceRequestGate>();
+        //services.AddScoped<IRequestGate, MatAcceptanceRequestGate>();
         services.AddScoped<IRequestGate, SelectAOrganisationRequestGate>();
     }
 

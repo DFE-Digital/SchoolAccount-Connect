@@ -78,7 +78,7 @@ public class DashboardViewBuilder(
                         EstablishmentOrganisation establishment => x.Condition
                             .Select(c => new NodeComponent
                             {
-                                Value = $"{c.Identifier} {c.ComparitorType} {c.Value}",
+                                Value = $"{c.Identifier} {c.ComparitorType.Comparitor()} {c.Value}",
                                 Colour = c.DetermineColour(establishment)
                             })
                             .ToCollection(),
