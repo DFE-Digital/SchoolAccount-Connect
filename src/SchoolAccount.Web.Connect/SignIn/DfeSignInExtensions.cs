@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -80,6 +81,7 @@ internal static class DfeSignInExtensions
 
                         var hashedUserId = TelemetryUserIdFactory.CreateHashedUserId(context.Principal!);
                         var sessionId = AnalyticsSessionIdProvider.EnsureSessionIdClaim(context.Principal!);
+                        var academyName = TelemetryUserIdFactory.GetAcademyName(context.Principal!);
 
                         var metricCommand = new TrackAnalyticsTelemetryCommand(
                             AnalyticsMetrics.UserLogin,
@@ -87,7 +89,8 @@ internal static class DfeSignInExtensions
                             (AnalyticsTagNames.Outcome, "success"),
                             (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
                             (AnalyticsTagNames.Journey, "sign-in"),
-                            (AnalyticsTagNames.Client, "web")
+                            (AnalyticsTagNames.Client, "web"),
+                            (AnalyticsTagNames.OrganisationName, academyName)
                         );
 
                         await handler.Handle(metricCommand, context.HttpContext.RequestAborted);
