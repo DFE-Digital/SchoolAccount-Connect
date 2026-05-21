@@ -51,10 +51,24 @@ public sealed class FeedbackController(
     }
 
     [HttpGet(RouteConstants.FeedBackCancel)]
-    public IActionResult Cancel(
+    public async Task<IActionResult> Cancel(
         [FromQuery] string pageId,
-        [FromQuery] string? ctaType)
+        [FromQuery] string? ctaType,
+        CancellationToken cancellationToken)
     {
+        var result = await recordPageFeedbackHandler.Handle(
+            new RecordPageFeedbackCommand(
+                AnalyticsEvents.CtaCancelled,
+                pageId,
+                ctaType ?? AnalyticsCtaTypes.YesNo,
+                null),
+            cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return Problem(detail: result.Error.Description);
+        }
+
         Response.Cookies.Delete(FeedbackSubmittedCookieName);
 
         if (string.Equals(ctaType, AnalyticsCtaTypes.Banner, StringComparison.OrdinalIgnoreCase))
