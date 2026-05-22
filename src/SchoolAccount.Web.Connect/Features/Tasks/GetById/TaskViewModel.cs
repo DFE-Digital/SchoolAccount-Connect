@@ -1,8 +1,8 @@
 using SchoolAccount.Application.Features.Tasks.GetById;
 using static SchoolAccount.Domain.Common.WorkflowState;
-using static SchoolAccount.Web.Connect.Models.Tasks.TaskViewMode;
+using static SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewMode;
 
-namespace SchoolAccount.Web.Connect.Models.Tasks;
+namespace SchoolAccount.Web.Connect.Features.Tasks.GetById;
 
 public enum TaskViewMode
 {

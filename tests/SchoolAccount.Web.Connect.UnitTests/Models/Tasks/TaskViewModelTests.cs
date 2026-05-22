@@ -1,10 +1,11 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Tasks.GetById;
-using SchoolAccount.Web.Connect.Models.Tasks;
+using SchoolAccount.Web.Connect.Features.Tasks;
+using SchoolAccount.Web.Connect.Features.Tasks.GetById;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseBuilder;
 using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseSubtaskBuilder;
-using static SchoolAccount.Web.Connect.Models.Tasks.TaskViewMode;
+using static SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewMode;
 
 // ReSharper disable RedundantArgumentDefaultValue
 

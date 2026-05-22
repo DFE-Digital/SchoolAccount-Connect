@@ -6,7 +6,7 @@
 <ul class="govuk-list">
     @foreach (var relatedTask in Model)
     {
-        var relatedTaskUrl = Url.Action("Index", "Task", new { id = relatedTask.Id });
+        var relatedTaskUrl = Url.Action("GetById", "Tasks", new { id = relatedTask.Id });
 
         <li>
             <a class="govuk-link govuk-link--no-visited-state" href="@relatedTaskUrl">

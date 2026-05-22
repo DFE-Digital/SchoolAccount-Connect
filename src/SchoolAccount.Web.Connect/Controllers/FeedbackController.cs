@@ -24,12 +24,9 @@ public sealed class FeedbackController(
     )
     {
         var result = await recordPageFeedbackHandler.Handle(
-            new RecordPageFeedbackCommand(
-                AnalyticsEvents.CtaYesNoInteraction,
-                pageId,
-                ctaType,
-                selectedAnswer),
-            cancellationToken);
+            new RecordPageFeedbackCommand(AnalyticsEvents.CtaYesNoInteraction, pageId, ctaType, selectedAnswer),
+            cancellationToken
+        );
 
         if (result.IsFailure)
         {
@@ -44,8 +41,9 @@ public sealed class FeedbackController(
                 HttpOnly = true,
                 Secure = Request.IsHttps,
                 SameSite = SameSiteMode.Lax,
-                Path = "/"
-            });
+                Path = "/",
+            }
+        );
 
         return Redirect($"{pageId}#page-feedback");
     }
@@ -54,15 +52,18 @@ public sealed class FeedbackController(
     public async Task<IActionResult> Cancel(
         [FromQuery] string pageId,
         [FromQuery] string? ctaType,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var result = await recordPageFeedbackHandler.Handle(
             new RecordPageFeedbackCommand(
                 AnalyticsEvents.CtaCancelled,
                 pageId,
                 ctaType ?? AnalyticsCtaTypes.YesNo,
-                null),
-            cancellationToken);
+                null
+            ),
+            cancellationToken
+        );
 
         if (result.IsFailure)
         {
@@ -81,8 +82,9 @@ public sealed class FeedbackController(
                     HttpOnly = true,
                     Secure = Request.IsHttps,
                     SameSite = SameSiteMode.Lax,
-                    Path = "/"
-                });
+                    Path = "/",
+                }
+            );
         }
 
         return Redirect($"{pageId}#page-feedback");
@@ -97,7 +99,8 @@ public sealed class FeedbackController(
     {
         var result = await recordFeedbackExitHandler.Handle(
             new RecordFeedbackExitCommand(pageId, ctaType),
-            cancellationToken);
+            cancellationToken
+        );
 
         if (result.IsFailure)
         {
@@ -116,8 +119,9 @@ public sealed class FeedbackController(
                     HttpOnly = true,
                     Secure = Request.IsHttps,
                     SameSite = SameSiteMode.Lax,
-                    Path = "/"
-                });
+                    Path = "/",
+                }
+            );
         }
 
         return Redirect("https://digital-forms.education.gov.uk/smxqhd6u2i");

@@ -55,7 +55,7 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
         response.RequestMessage.RequestUri.Should().NotBeNull();
         response.RequestMessage.RequestUri.AbsolutePath.Should().Be(RouteConstants.Start.MatAcceptance);
     }
-    
+
     [Fact]
     public async Task Ensure_if_not_trust_that_they_bypass_the_trust_acceptance_screen()
     {

@@ -1,19 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.Tasks.GetById;
 using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models.Tasks;
+using SchoolAccount.Web.Connect.Features.Tasks.GetById;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Controllers;
+// ReSharper disable CheckNamespace
 
-public sealed class TaskController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse> taskHandler) : Controller
+namespace SchoolAccount.Web.Connect.Features.Tasks;
+
+public sealed partial class TasksController
 {
     [Breadcrumb("Home", Root)]
     [Breadcrumb("Tasks", Category.AllTasks)]
-    [HttpGet("Task/{id}")]
-    public async Task<ActionResult<GetTaskByIdResponse>> Index(
+    [HttpGet("Task/{id:long}")]
+    public async Task<ActionResult<GetTaskByIdResponse>> GetById(
         [FromRoute] long id,
         [FromQuery] TaskViewMode viewMode,
         CancellationToken cancellationToken
@@ -31,7 +32,7 @@ public sealed class TaskController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdRe
 
         var taskViewModel = new TaskViewModel(taskResult.Value, viewMode);
 
-        return View(taskViewModel);
+        return View(ViewAddressConstants.Tasks.GetById, taskViewModel);
     }
 
     private void AddTopLevelCategoryAsBreadcrumb(GetTaskByIdResponse task)

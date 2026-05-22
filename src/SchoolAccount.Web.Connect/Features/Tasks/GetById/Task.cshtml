@@ -1,4 +1,5 @@
-@model SchoolAccount.Web.Connect.Models.Tasks.TaskViewModel
+@using static SchoolAccount.Web.Connect.Features.Tasks.ViewAddressConstants.Tasks
+@model SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewModel
 
 @{
     ViewData["Title"] = "Task details";
@@ -19,8 +20,8 @@
 }
 
 <div class="govuk-tabs">
-    <partial name="_Tabs" model="@Model" />
-            
+    <partial name="@Partials.Tabs" model="@Model" />
+        
     @if (!Model.SubTasks.Any())
     {   
         <hr class="govuk-section-break govuk-section-break--visible">
@@ -31,7 +32,7 @@
         <ul class="govuk-task-list">
             @foreach (var subTask in Model.SubTasks)
             {
-                <partial name="_Subtasks" model="subTask" />
+                <partial name="@Partials.Subtasks" model="subTask" />
             }
         </ul>
     }
@@ -41,11 +42,11 @@
 {
     @if (Model.HasResources)
     {
-        <partial name="_Guidance" model="Model.ResourcesWithALink" />
+        <partial name="@Partials.Guidance" model="Model.ResourcesWithALink" />
     }
 
     @if (Model.HasRelatedTasks)
     {
-        <partial name="_RelatedTasks" model="Model.Task.RelatedTasks" />
+        <partial name="@Partials.RelatedTasks" model="Model.Task.RelatedTasks" />
     }
 }
