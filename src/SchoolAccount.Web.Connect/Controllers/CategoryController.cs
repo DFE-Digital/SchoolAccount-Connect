@@ -8,9 +8,11 @@ using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Category.Query;
+using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Builders.Categories;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models;
+using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
@@ -23,7 +25,7 @@ public class CategoryController(
     CategoryListViewBuilder categoryListViewBuilder
 ) : Controller
 {
-    [HttpGet(RouteConstants.Category.Index)]
+    [HttpGet(Category.Index)]
     public async Task<IActionResult> Index(
         [FromQuery] CategoryQuery query,
         CancellationToken cancellationToken = default
@@ -52,7 +54,9 @@ public class CategoryController(
         return View(viewModel);
     }
 
-    [HttpGet(RouteConstants.Category.Hub)]
+    [Breadcrumb("Home", Root)]
+    [Breadcrumb("Tasks", Category.AllTasks)]
+    [HttpGet(Category.Hub)]
     public async Task<IActionResult> Hub(
         [FromRoute] int id,
         [FromQuery] CalendarQuery query,
@@ -83,10 +87,14 @@ public class CategoryController(
         var currentUri = Request.GetFullRequestUri();
         var viewModel = categoryHubViewBuilder.Build(results.Value, currentUri, category.Value);
 
+        this.AddBreadcrumb(category.Value.DisplayName);
+
         return View(viewModel);
     }
 
-    [HttpGet(RouteConstants.Category.AllTasks)]
+    [Breadcrumb("Home", Root)]
+    [Breadcrumb("Tasks")]
+    [HttpGet(Category.AllTasks)]
     public async Task<IActionResult> AllTasks(
         [FromQuery] CalendarQuery query,
         CancellationToken cancellationToken = default

@@ -1,6 +1,6 @@
 namespace SchoolAccount.Integration.DfESignIn.Common;
 
-public class IdName<TId>
+public record IdName<TId>
 {
     public TId? Id { get; init; }
     public string? Name { get; init; }

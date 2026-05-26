@@ -1,39 +1,44 @@
 @using SchoolAccount.Application.Constants
-@{
-    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
-                      ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+@using SchoolAccount.Web.Connect
 
+@{
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
         .ToLowerInvariant();
 
     var redirectUrl =
-        $"/feedback/exit?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}&returnUrl={Uri.EscapeDataString(feedbackUrl)}";
+        $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
+
+    var cancelUrl =
+        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
+
+    var bannerDismissed =
+        string.Equals(
+            Context.Request.Cookies["connect_banner_hidden"],
+            "true",
+            StringComparison.OrdinalIgnoreCase);
 }
 
-<div class="dfe-connect-banner govuk-!-margin-top-4 govuk-!-margin-bottom-6"
-     data-feedback-component="banner"
-     data-feedback-post-url="/feedback/page-useful"
-     data-page-id="@pageId"
-     data-cta-type="@AnalyticsCtaTypes.Banner">
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">
-        Help us improve DfE Connect
-    </h2>
+@if (!bannerDismissed)
+{
+    <div class="dfe-connect-banner govuk-!-margin-top-4 govuk-!-margin-bottom-6">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-3">
+            Help us improve DfE Connect
+        </h2>
 
-    <p class="govuk-body govuk-!-margin-bottom-3">
-        To help us improve DfE Connect, we’d like to know more about your visit today.
-        <a href="@redirectUrl"
-           class="govuk-link"
-           target="_blank"
-           rel="noopener noreferrer"
-           data-feedback-exit-link>
-            Give your feedback (opens in a new tab)
-        </a>.
-    </p>
+        <p class="govuk-body govuk-!-margin-bottom-3">
+            To help us improve DfE Connect, we’d like to know more about your visit today.
+            <a href="@redirectUrl"
+               class="govuk-link"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="hideConnectBannerState()">
+                Give your feedback (opens in a new tab)
+            </a>.
+        </p>
 
-    <button type="button"
-            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-            data-module="govuk-button"
-            data-feedback-dismiss>
-        Cancel
-    </button>
-</div>
+        <a href="@cancelUrl"
+           class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0">
+            Cancel
+        </a>
+    </div>
+}

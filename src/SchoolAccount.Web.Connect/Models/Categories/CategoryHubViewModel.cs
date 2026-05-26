@@ -12,10 +12,15 @@ public record CategoryHubViewModel(
     Collection<CalendarOfItemsTabViewModel> Tabs,
     Collection<CalendarOfItemsRowGroupViewModel> Items,
     PaginationViewModel Pagination,
-    FiltrationViewModel Filters
+    FiltrationViewModel Filters,
+    int? _categoryId
 ) : CalendarOfItemsViewModel(Title, Description, ViewModes, Tabs, Items, Pagination, Filters)
 {
-    public static CategoryHubViewModel FromCalendarOfItemsViewModel(CalendarOfItemsViewModel model)
+    private readonly int? _categoryId = _categoryId;
+
+    public bool IsAcademyTrustHandbook => _categoryId is not null && _categoryId == 1;
+    
+    public static CategoryHubViewModel FromCalendarOfItemsViewModel(CalendarOfItemsViewModel model, int? categoryId = null)
     {
         return new CategoryHubViewModel(
             model.Title,
@@ -24,7 +29,8 @@ public record CategoryHubViewModel(
             model.Tabs,
             model.Items,
             model.Pagination,
-            model.Filters
+            model.Filters,
+            categoryId
         )
         {
             CallToActionMessage = model.CallToActionMessage,

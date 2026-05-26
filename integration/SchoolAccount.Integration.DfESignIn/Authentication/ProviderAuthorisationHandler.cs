@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using SchoolAccount.Integration.DfESignIn.Exceptions;
+using SchoolAccount.Integration.DfESignIn.Extensions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
@@ -30,7 +31,7 @@ public class ProviderAuthorisationHandler(IProviderContext providerContext) : Au
             return;
         }
 
-        if (!await provider.CanAccess())
+        if (!await provider.CanAccess(context.User.GetOrganisation()))
         {
             throw new ProviderAuthorisationException();
         }

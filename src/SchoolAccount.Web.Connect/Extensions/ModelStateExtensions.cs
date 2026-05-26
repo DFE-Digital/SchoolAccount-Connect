@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Extensions;

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 
@@ -5,10 +6,9 @@ namespace SchoolAccount.Kernel;
 
 public interface IOrganisationContext : IProviderContext
 {
-    public bool IsValid { get; }
-    public bool IsAuthorised { get; }
     public SchoolType Type { get; }
-    public EstablishmentType Establishment { get; }
-    public OrganisationCategory Category { get; }
     public IOrganisation Organisation { get; }
+    
+    public Task<bool> IsValid();
+    public Task<bool> IsAuthorised();
 }

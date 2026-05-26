@@ -5,6 +5,7 @@
 @using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Models.Breadcrumb
 @inject IFeatureManager FeatureManager
 @inject ICookieConsentContext CookieConsent
 
@@ -77,6 +78,13 @@
             give your feedback (opens in a new tab)
         </a>
     </govuk-phase-banner>
+    
+    @{
+        if (ViewData["Breadcrumbs"] is List<Breadcrumb> breadcrumbs && breadcrumbs.Any())
+        {
+            <partial name="_Breadcrumbs" model="breadcrumbs" />
+        }
+    }
 
     @await RenderSectionAsync("BeforeContent", false)
 

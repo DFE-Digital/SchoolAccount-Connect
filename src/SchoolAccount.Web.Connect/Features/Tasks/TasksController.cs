@@ -1,0 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Features.Tasks.GetById;
+
+namespace SchoolAccount.Web.Connect.Features.Tasks;
+
+public partial class TasksController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse> taskHandler) : Controller;

@@ -10,14 +10,14 @@ namespace SchoolAccount.Web.Connect.UnitTests.Builders;
 public class BasicPageViewBuilderTests
 {
     [Fact]
-    public void Successfully_handles_an_empty_OrganisationContext()
+    public async Task Successfully_handles_an_empty_OrganisationContext()
     {
         // Arrange
         var organisationContext = Substitute.For<IOrganisationContext>();
         var viewBuilder = new BasicPageViewBuilder(organisationContext);
 
         // Act
-        var viewModel = viewBuilder.Build();
+        var viewModel = await viewBuilder.Build();
 
         // Assert
         viewModel.OrganisationName.Should().BeNull();
@@ -25,7 +25,7 @@ public class BasicPageViewBuilderTests
     }
 
     [Fact]
-    public void Build_does_not_add_the_OrganisationName_when_authentication_is_false()
+    public async Task Build_does_not_add_the_OrganisationName_when_authentication_is_false()
     {
         // Arrange
         var schoolName = "Test School";
@@ -33,7 +33,7 @@ public class BasicPageViewBuilderTests
         var viewBuilder = new BasicPageViewBuilder(organisationContext);
 
         // Act
-        var viewModel = viewBuilder.Build();
+        var viewModel = await viewBuilder.Build();
 
         // Assert
         viewModel.OrganisationName.Should().BeNull();
@@ -41,7 +41,7 @@ public class BasicPageViewBuilderTests
     }
 
     [Fact]
-    public void Build_successfully_adds_the_OrganisationName_when_authentication_is_true()
+    public async Task Build_successfully_adds_the_OrganisationName_when_authentication_is_true()
     {
         // Arrange
         var schoolName = "Test School";
@@ -49,7 +49,7 @@ public class BasicPageViewBuilderTests
         var viewBuilder = new BasicPageViewBuilder(organisationContext);
 
         // Act
-        var viewModel = viewBuilder.Build();
+        var viewModel = await viewBuilder.Build();
 
         // Assert
         viewModel.OrganisationName.Should().Be(schoolName);

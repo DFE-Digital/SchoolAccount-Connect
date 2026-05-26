@@ -1,0 +1,22 @@
+﻿@using SchoolAccount.Application.Extensions
+@using SchoolAccount.Web.Connect.Features.Tasks.GetById
+@model SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewModel
+
+<moj-sub-navigation>
+    <moj-sub-navigation-item
+        href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.UpcomingTasks })"
+        current="@Model.IsUpcomingTasksView">
+        Upcoming tasks
+    </moj-sub-navigation-item>
+    <moj-sub-navigation-item
+        href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.PreviousTasks })"
+        current="@Model.IsPreviousTasksView">
+        Previous 12 months
+    </moj-sub-navigation-item>
+</moj-sub-navigation>
+
+<h2 class="govuk-heading-m">@Model.HeadingText</h2>
+@if (Model.Task.SubTaskLastUpdated.HasValue)
+{
+    <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
+}

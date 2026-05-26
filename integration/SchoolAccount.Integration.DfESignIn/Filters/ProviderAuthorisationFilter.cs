@@ -25,7 +25,7 @@ public class ProviderAuthorisationFilter(IProviderContext organisationContext, T
             return;
         }
 
-        if (!await provider.CanAccess())
+        if (!await provider.CanAccess(context.HttpContext.GetOrganisation()))
         {
             context.Result = new ForbidResult();
         }

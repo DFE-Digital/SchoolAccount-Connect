@@ -3,19 +3,18 @@
     // ------------------------------------------------------
     // Cookie consent
     // ------------------------------------------------------
-    function setConsent(value) {
-        var parts = [
-            cookieConsentConfig.cookieName + "=" + value,
-            "Path=/",
-            "Max-Age=" + (60 * 60 * 24 * 365),
-            "SameSite=Lax"
-        ];
+    async function setConsent(value) {
+        const response = await fetch("/cookies/consent", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ value: value })
+        });
 
-        if (location.protocol === "https:") {
-            parts.push("Secure");
+        if (!response.ok) {
+            throw new Error("Failed to save cookie consent");
         }
-
-        document.cookie = parts.join("; ");
     }
     
     // ------------------------------------------------------
@@ -29,16 +28,24 @@
         var declineBtn = document.getElementById("dfe-cta-declineCookies");
 
         if (acceptBtn) {
-            acceptBtn.addEventListener("click", function () {
-                setConsent(cookieConsentConfig.acceptedValue);
-                banner.style.display = "none";
+            acceptBtn.addEventListener("click", async function () {
+                try {
+                    await setConsent(cookieConsentConfig.acceptedValue);
+                    banner.style.display = "none";
+                } catch {
+                    // Keep the banner visible if consent could not be saved.
+                }
             });
         }
 
         if (declineBtn) {
-            declineBtn.addEventListener("click", function () {
-                setConsent(cookieConsentConfig.rejectedValue);
-                banner.style.display = "none";
+            declineBtn.addEventListener("click", async function () {
+                try {
+                    await setConsent(cookieConsentConfig.rejectedValue);
+                    banner.style.display = "none";
+                } catch {
+                    // Keep the banner visible if consent could not be saved.
+                }
             });
         }
     }
@@ -50,7 +57,7 @@
     var cookiesNotification = document.getElementById("cookiesNotification");
 
     if (cookiesForm && cookieConsentConfig) {
-        cookiesForm.addEventListener("submit", function (e) {
+        cookiesForm.addEventListener("submit", async function (e) {
             e.preventDefault();
 
             var selected = cookiesForm.querySelector("input[name=\"analytics-cookies\"]:checked");
@@ -60,11 +67,15 @@
                 ? cookieConsentConfig.acceptedValue
                 : cookieConsentConfig.rejectedValue;
 
-            setConsent(value);
+            try {
+                await setConsent(value);
 
-            if (cookiesNotification) {
-                cookiesNotification.style.display = "";
-                cookiesNotification.focus();
+                if (cookiesNotification) {
+                    cookiesNotification.style.display = "";
+                    cookiesNotification.focus();
+                }
+            } catch {
+                // Do not show the confirmation message if consent could not be saved.
             }
         });
     }

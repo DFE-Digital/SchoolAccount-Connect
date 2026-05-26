@@ -1,0 +1,15 @@
+@model List<SchoolAccount.Web.Connect.Models.Breadcrumb.Breadcrumb>
+
+<govuk-breadcrumbs>
+    @foreach (var crumb in Model)
+    {
+        if (string.IsNullOrEmpty(crumb.Url))
+        {
+            <govuk-breadcrumbs-item>@crumb.Title</govuk-breadcrumbs-item>
+        }
+        else
+        {
+            <govuk-breadcrumbs-item href="@crumb.Url">@crumb.Title</govuk-breadcrumbs-item>
+        }
+    }
+</govuk-breadcrumbs>

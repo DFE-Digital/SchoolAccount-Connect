@@ -26,7 +26,8 @@ public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsVi
         };
 
         return CategoryHubViewModel.FromCalendarOfItemsViewModel(
-            calendarOfItemsViewBuilder.Build(options, items, currentUri)
+            calendarOfItemsViewBuilder.Build(options, items, currentUri),
+            category?.Id
         );
     }
 }

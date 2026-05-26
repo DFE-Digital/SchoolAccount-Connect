@@ -5,9 +5,9 @@ namespace SchoolAccount.Web.Connect.Builders.Shared;
 
 public class BasicPageViewBuilder(IOrganisationContext organisationContext)
 {
-    public BasicPageViewModel Build()
+    public async Task<BasicPageViewModel> Build()
     {
-        if (!organisationContext.IsAuthorised)
+        if (!await organisationContext.IsAuthorised())
         {
             return new BasicPageViewModel();
         }

@@ -4,6 +4,8 @@ namespace SchoolAccount.Integration.DfESignIn.Providers;
 
 public class PreSixteenProvider : IProvider
 {
+    public int Priority { get; } = 1;
+
     public bool IsProvider(OrganisationClaim organisation)
     {
         return organisation.Type?.Id
@@ -15,7 +17,7 @@ public class PreSixteenProvider : IProvider
                 or EstablishmentType.AcademyAlternativeProvisionSponsorLed;
     }
 
-    public Task<bool> CanAccess()
+    public Task<bool> CanAccess(OrganisationClaim? organisation)
     {
         return Task.FromResult(true);
     }

@@ -9,7 +9,7 @@ namespace SchoolAccount.Tests.Common.Builders;
 public sealed class OrganisationClaimBuilder
 {
     private readonly Faker _faker = new Faker { Random = new Randomizer(1234) };
-    
+
     private Guid? _id;
     private string? _name;
     private string? _legalName;
@@ -30,7 +30,7 @@ public sealed class OrganisationClaimBuilder
     private int? _statutoryHighAge;
     private string? _districtAdministrativeName;
     private string? _districtAdministrativeCode;
-    
+
     public static OrganisationClaimBuilder AOrganisationClaim()
     {
         return new();
@@ -61,6 +61,12 @@ public sealed class OrganisationClaimBuilder
         return this;
     }
 
+    public OrganisationClaimBuilder WithRandomCategory()
+    {
+        _category = _faker.PickRandom<OrganisationCategory>();
+        return this;
+    }
+
     public OrganisationClaimBuilder WithType(EstablishmentType type)
     {
         _type = type;
@@ -69,7 +75,7 @@ public sealed class OrganisationClaimBuilder
 
     public OrganisationClaimBuilder WithAddress(string address)
     {
-        _address  = address;
+        _address = address;
         return this;
     }
 
@@ -128,9 +134,9 @@ public sealed class OrganisationClaimBuilder
             Id = _faker.Random.Uuid(),
             Code = _faker.Random.Int(0).ToString(CultureInfo.InvariantCulture)
         };
-        
-        return setDistrict 
-            ? WithDistrictAdministrative(name) 
+
+        return setDistrict
+            ? WithDistrictAdministrative(name)
             : this;
     }
 
@@ -160,7 +166,7 @@ public sealed class OrganisationClaimBuilder
             Id = _faker.Random.Uuid().ToString(),
             Name = region
         };
-        
+
         return this;
     }
 
@@ -208,7 +214,7 @@ public sealed class OrganisationClaimBuilder
             LegalName = _legalName
                         ?? school.ToUpper(CultureInfo.InvariantCulture),
             Category = category,
-            Type = BuildType(category.Id),
+            Type = BuildType(category?.Id),
             Urn = _urn,
             Upin = _upin,
             Ukprn = _ukprn
@@ -245,7 +251,7 @@ public sealed class OrganisationClaimBuilder
             .AsOpen();
 
     public static OrganisationClaimBuilder Trust =>
-     AOrganisationClaim()
+        AOrganisationClaim()
             .WithName("Abbey Academies Trust")
             .WithAddress("Bourne Abbey C Of E Primary Academy, Abbey Road, Bourne, Not recorded, PE10 9EP")
             .WithCategory(OrganisationCategory.MultiAcademyTrust)
@@ -253,24 +259,24 @@ public sealed class OrganisationClaimBuilder
 
     public static OrganisationClaimBuilder Default => Academy;
 
-    private OrganisationCategoryClaim BuildCategory()
+    private OrganisationCategoryClaim? BuildCategory()
     {
-        _category ??= _faker.PickRandom<OrganisationCategory>();
-
-        return new OrganisationCategoryClaim
-        {
-            Id = _category.Value,
-            Name = _category.Value.ToString()
-        };
+        return _category.HasValue
+            ? new OrganisationCategoryClaim
+            {
+                Id = _category.Value,
+                Name = _category.Value.ToString()
+            }
+            : null;
     }
 
-    private OrganisationEstablishmentTypeClaim? BuildType(OrganisationCategory category)
+    private OrganisationEstablishmentTypeClaim? BuildType(OrganisationCategory? category)
     {
-        if (category != OrganisationCategory.Establishment)
+        if (!category.HasValue || category != OrganisationCategory.Establishment)
         {
             return null;
         }
-        
+
         _type ??= _faker.PickRandom<EstablishmentType>();
 
         return new OrganisationEstablishmentTypeClaim

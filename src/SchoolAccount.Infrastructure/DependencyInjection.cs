@@ -29,6 +29,14 @@ public static class DependencyInjection
         services.AddFilterableServices();
         services.AddCalendarOfItemsEngine();
 
+        services.AddSingleton<IFallbackProviderResolver>(sp =>
+        {
+            using var scope = sp.CreateScope();
+            var database = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+            var overrides = database.ProviderOverrides.AsNoTracking().ToList();
+            return new FallbackProviderResolver(overrides);
+        });
+
         return services;
     }
 

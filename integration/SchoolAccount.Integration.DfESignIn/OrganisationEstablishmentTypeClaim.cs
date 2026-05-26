@@ -4,7 +4,7 @@ using SchoolAccount.Integration.DfESignIn.Converters;
 
 namespace SchoolAccount.Integration.DfESignIn;
 
-public class OrganisationEstablishmentTypeClaim : IdName<EstablishmentType>
+public record OrganisationEstablishmentTypeClaim : IdName<EstablishmentType>
 {
     [JsonConverter(typeof(EstablishmentTypeConverter))]
     public new EstablishmentType Id { get; init; }

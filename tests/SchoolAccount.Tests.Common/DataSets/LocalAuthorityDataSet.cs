@@ -1,5 +1,4 @@
 using Bogus;
-using SchoolAccount.Integration.DfESignIn.Common;
 
 namespace SchoolAccount.Tests.Common.DataSets;
 
@@ -11,7 +10,7 @@ public static class LocalAuthorityDataSet
         "County Council",
         "Metropolitan Borough Council",
         "Metropolitan District Council",
-        "Council"
+        "Council",
     ];
 
     public static string GetAuthorityName(this Faker faker, out string city)
@@ -23,8 +22,11 @@ public static class LocalAuthorityDataSet
     public static string ToShortAuthorityName(this string name)
     {
         return AuthoritiesTypes
-            .Aggregate(name, (current, authority) =>
-                current.Replace(authority, string.Empty, StringComparison.InvariantCultureIgnoreCase))
+            .Aggregate(
+                name,
+                (current, authority) =>
+                    current.Replace(authority, string.Empty, StringComparison.InvariantCultureIgnoreCase)
+            )
             .Trim();
     }
 
@@ -38,9 +40,9 @@ public static class LocalAuthorityDataSet
         {
             return string.Empty;
         }
-        
+
         var typeCode = "07";
-        
+
         if (name.Contains("Metropolitan", StringComparison.InvariantCultureIgnoreCase))
         {
             typeCode = "08";

@@ -91,7 +91,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             Title = selectedTab?.Label ?? string.Empty,
             Description = selectedTab?.Description ?? string.Empty,
             Heading = "Calendar of tasks",
-            SubHeading = "These are all of the required tasks that you must complete for your school each month.",
+            SubHeading = "These are all of the required tasks that you must complete for your school.",
             GroupingFunction = x => x.SortDate.ToGdsMonthString(),
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null

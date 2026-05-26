@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -11,7 +12,6 @@ using SchoolAccount.Application.Resolvers.Interfaces;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Authentication;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
-using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Integration.DfESignIn.Requirements;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Telemetry;
@@ -36,7 +36,8 @@ internal static class DfeSignInExtensions
             scan.FromAssembliesOf(typeof(IProvider))
                 .AddClasses(classes => classes.AssignableTo<IProvider>())
                 .AsImplementedInterfaces()
-                .WithScopedLifetime());
+                .WithScopedLifetime()
+        );
         services.AddScoped<IProviderResolver, ProviderResolver>();
         services.AddScoped<IProviderContext>(sp => sp.GetRequiredService<IOrganisationContext>());
         services.AddScoped<IOrganisationResolver, OrganisationResolver>();
@@ -80,6 +81,7 @@ internal static class DfeSignInExtensions
 
                         var hashedUserId = TelemetryUserIdFactory.CreateHashedUserId(context.Principal!);
                         var sessionId = AnalyticsSessionIdProvider.EnsureSessionIdClaim(context.Principal!);
+                        var academyName = TelemetryUserIdFactory.GetAcademyName(context.Principal!);
 
                         var metricCommand = new TrackAnalyticsTelemetryCommand(
                             AnalyticsMetrics.UserLogin,
@@ -87,7 +89,8 @@ internal static class DfeSignInExtensions
                             (AnalyticsTagNames.Outcome, "success"),
                             (AnalyticsTagNames.AuthMethod, "dfe-sign-in"),
                             (AnalyticsTagNames.Journey, "sign-in"),
-                            (AnalyticsTagNames.Client, "web")
+                            (AnalyticsTagNames.Client, "web"),
+                            (AnalyticsTagNames.OrganisationName, academyName)
                         );
 
                         await handler.Handle(metricCommand, context.HttpContext.RequestAborted);
