@@ -13,7 +13,7 @@ using TaxonomyEntity = SchoolAccount.Domain.Taxonomies.TaxonomyEntity;
 
 namespace SchoolAccount.Infrastructure;
 
-internal sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options),
         IApplicationDbContext
 {

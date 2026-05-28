@@ -7,8 +7,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SchoolAccount.Application\SchoolAccount.Application.csproj" />
     <ProjectReference Include="..\..\src\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Bogus" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
 </Project>

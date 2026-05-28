@@ -1,7 +1,9 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Tasks.GetById;
 using SchoolAccount.Domain.Common;
+using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Kernel;
 using Xunit;
 using static SchoolAccount.Domain.Common.WorkflowState;
 using static SchoolAccount.Tests.Common.Builders.ResourceBuilder;
@@ -12,7 +14,10 @@ namespace SchoolAccount.Application.UnitTests.Features.Tasks.GetById;
 
 public class GetTaskByIdProjectionTests
 {
-    private readonly Func<TaskEntity, GetTaskByIdResponse> _project = GetTaskByIdProjection.ToTaskResponse().Compile();
+    private static Func<TaskEntity, GetTaskByIdResponse> _project(IEnumerable<SchoolTypeTagMappingEntity> mapping)
+    {
+        return GetTaskByIdProjection.ToTaskResponse(mapping.AsQueryable(), SchoolType.Unknown).Compile();
+    }
 
     [Fact]
     public void Projection_of_task_entity_preserves_all_task_properties()
@@ -30,7 +35,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.Id.Should().Be(taskEntity.Id);
@@ -59,7 +64,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result
@@ -93,7 +98,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result
@@ -123,7 +128,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.Should().ContainSingle();
@@ -142,7 +147,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.Should().ContainSingle();
@@ -168,7 +173,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(ATask().WithSubTask(subTask).Build());
+        var result = _project([])(ATask().WithSubTask(subTask).Build());
 
         // Assert
         result
@@ -206,7 +211,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.First().ResourceName.Should().BeNull();
@@ -232,7 +237,7 @@ public class GetTaskByIdProjectionTests
         taskEntity.SubTasks.Add(subTask);
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.First().ResourceName.Should().Be("First Resource");
@@ -252,7 +257,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.Should().HaveCount(3);
@@ -266,7 +271,7 @@ public class GetTaskByIdProjectionTests
         var taskEntity = ATask().Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.Should().BeEmpty();
@@ -284,7 +289,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.SubTasks.Should().BeEmpty();
@@ -302,7 +307,7 @@ public class GetTaskByIdProjectionTests
             .Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.Resources.Should().HaveCount(2);
@@ -321,7 +326,7 @@ public class GetTaskByIdProjectionTests
         var taskEntity = ATask().Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.Resources.Should().BeEmpty();
@@ -336,7 +341,7 @@ public class GetTaskByIdProjectionTests
         taskEntity.RelatedTasks.Add(ATask().WithId(20).Named("Related Task 2").Build());
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.RelatedTasks.Should().HaveCount(2);
@@ -351,7 +356,7 @@ public class GetTaskByIdProjectionTests
         var taskEntity = ATask().Build();
 
         // Act
-        var result = _project(taskEntity);
+        var result = _project([])(taskEntity);
 
         // Assert
         result.RelatedTasks.Should().BeEmpty();

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Http;
 
-namespace SchoolAccount.IntegrationTests.Fakes;
+namespace SchoolAccount.Tests.Common.Fakes;
 
 public class FakePolicyEvaluator : IPolicyEvaluator
 {

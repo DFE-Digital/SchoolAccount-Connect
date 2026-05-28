@@ -6,9 +6,9 @@ using SchoolAccount.Tests.Common.DataSets;
 
 namespace SchoolAccount.Tests.Common.Builders;
 
-public sealed class OrganisationClaimBuilder
+public sealed class OrganisationClaimBuilder(Faker? faker = null)
 {
-    private readonly Faker _faker = new Faker { Random = new Randomizer(1234) };
+    private readonly Faker _faker = faker ?? new Faker { Random = new Randomizer(1234) };
 
     private Guid? _id;
     private string? _name;
@@ -31,9 +31,9 @@ public sealed class OrganisationClaimBuilder
     private string? _districtAdministrativeName;
     private string? _districtAdministrativeCode;
 
-    public static OrganisationClaimBuilder AOrganisationClaim()
+    public static OrganisationClaimBuilder AOrganisationClaim(Faker? faker = null)
     {
-        return new();
+        return new(faker);
     }
 
     public OrganisationClaimBuilder WithId(Guid id)

@@ -10,9 +10,9 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.IntegrationTests.Extensions;
-using SchoolAccount.IntegrationTests.Fakes;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 using SchoolAccount.IntegrationTests.Features.Database.Resolvers;
+using SchoolAccount.Tests.Common.Fakes;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 

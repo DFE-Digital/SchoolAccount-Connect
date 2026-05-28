@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure;
-using SchoolAccount.IntegrationTests.Fakes;
 using SchoolAccount.IntegrationTests.Features.Database.Resolvers;
+using SchoolAccount.Tests.Common.Fakes;
 
 namespace SchoolAccount.IntegrationTests.Features.Database;
 

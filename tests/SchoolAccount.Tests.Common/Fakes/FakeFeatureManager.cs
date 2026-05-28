@@ -2,7 +2,7 @@ using System.Reflection;
 using Microsoft.FeatureManagement;
 using SchoolAccount.Application.Constants;
 
-namespace SchoolAccount.IntegrationTests.Fakes;
+namespace SchoolAccount.Tests.Common.Fakes;
 
 public class FakeFeatureManager : IFeatureManager
 {

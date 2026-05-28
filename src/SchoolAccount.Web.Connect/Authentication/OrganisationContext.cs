@@ -32,7 +32,7 @@ public class OrganisationContext : IOrganisationContext
 
     private OrganisationClaim? Claim { get; }
 
-    public SchoolType Type => _schoolType ??= DetermineSchoolType();
+    public SchoolType Type => _schoolType ??= DetermineSchoolType(Claim);
 
     public IProvider Provider { get; }
 
@@ -48,13 +48,13 @@ public class OrganisationContext : IOrganisationContext
         return await IsValid() && Provider is not NullProvider && await Provider.CanAccess(Claim);
     }
     
-    private SchoolType DetermineSchoolType()
+    public static SchoolType DetermineSchoolType(OrganisationClaim? claim)
     {
-        return Claim?.Category?.Id switch
+        return claim?.Category?.Id switch
         {
             OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
             OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
-            _ => Claim?.Type?.Id switch
+            _ => claim?.Type?.Id switch
             {
                 EstablishmentType.AcademyConverter
                     or EstablishmentType.AcademySponsorLed
