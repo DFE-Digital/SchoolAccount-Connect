@@ -6,22 +6,24 @@
     <input type="hidden" asp-for="ViewModes"/>
     @if (Model.HasTabs)
     {
-        <div class="dfe-tabs">
-
-            <moj-sub-navigation aria-label="Calendar of items view navigation" show-accessibility-label="true">
-                @if (Model.HasSelectedTab)
-                {
-                    <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
-                        @Model.CurrentlyActiveTabAccessibilityLabel
-                    </span>
-                }
+        <div class="dfe-tabs" aria-label="Calendar of items view navigation">
+            @if (Model.HasSelectedTab)
+            {
+                <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
+                    @Model.CurrentlyActiveTabAccessibilityLabel
+                </span>
+            }
+            <ul class="govuk-tabs__list">
                 @foreach (var tab in Model.Tabs)
                 {
-                    <moj-sub-navigation-item href="@tab.Href"
-                                             current="@tab.IsSelected">@tab.Label</moj-sub-navigation-item>
+                    <li class="govuk-tabs__list-item @(tab.IsSelected ? "govuk-tabs__list-item--selected" : string.Empty)">
+                        <a class="govuk-tabs__tab" href="@tab.Href">
+                            @tab.Label
+                        </a>
+                    </li>
                 }
-            </moj-sub-navigation>
-
+            </ul>
+            
             <div class="dfe-tabs__panel">
                 <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
             </div>

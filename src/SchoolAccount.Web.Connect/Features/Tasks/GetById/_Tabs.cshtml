@@ -2,21 +2,29 @@
 @using SchoolAccount.Web.Connect.Features.Tasks.GetById
 @model SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewModel
 
-<moj-sub-navigation>
-    <moj-sub-navigation-item
-        href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.UpcomingTasks })"
-        current="@Model.IsUpcomingTasksView">
-        Upcoming tasks
-    </moj-sub-navigation-item>
-    <moj-sub-navigation-item
-        href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.PreviousTasks })"
-        current="@Model.IsPreviousTasksView">
-        Previous 12 months
-    </moj-sub-navigation-item>
-</moj-sub-navigation>
+<div class="dfe-tabs" aria-label="Task tab view navigation">
+        <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
+            @Model.CurrentlyActiveTabAccessibilityLabel
+        </span>
+    <ul class="govuk-tabs__list">
+        <li class="govuk-tabs__list-item @(Model.IsUpcomingTasksView ? "govuk-tabs__list-item--selected" : string.Empty)">
+            <a class="govuk-tabs__tab"
+               href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.UpcomingTasks })">
+                Upcoming tasks
+            </a>
+        </li>
+        <li class="govuk-tabs__list-item @(Model.IsPreviousTasksView ? "govuk-tabs__list-item--selected" : string.Empty)">
+            <a class="govuk-tabs__tab"
+               href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.PreviousTasks })">
+                Previous 12 months
+            </a>
+        </li>
+    </ul>
 
-<h2 class="govuk-heading-m">@Model.HeadingText</h2>
-@if (Model.Task.SubTaskLastUpdated.HasValue)
-{
-    <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
-}
+    <h2 class="govuk-heading-m">@Model.HeadingText</h2>
+    @if (Model.Task.SubTaskLastUpdated.HasValue)
+    {
+        <h3 class="govuk-caption-m">Last updated: @Model.Task.SubTaskLastUpdated.ToGdsDateString()</h3>
+    }
+</div>
+

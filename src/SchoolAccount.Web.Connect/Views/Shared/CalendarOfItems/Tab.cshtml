@@ -2,15 +2,15 @@
 
 @if (Model.HasTitle)
 {
-    <h2 class="govuk-heading govuk-heading-l @(Model.HasDescription || Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Title</h2>
+    <h2 class="govuk-heading-m @(Model.HasDescription || Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Title</h2>
 }
 @if (Model.HasDescription)
 {
-    <p class="govuk-body govuk-body-l @(Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Description</p>
+    <p class="govuk-body-m @(Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Description</p>
 }
 @if (Model.HasLastUpdatedMessage)
 {
-    <p class="govuk-caption-m">@Model.LastUpdatedMessage</p>
+    <h3 class="govuk-caption-m">@Model.LastUpdatedMessage</h3>
 }
 
 <ul class="govuk-task-list">

@@ -29,6 +29,8 @@ public sealed record TaskViewModel(GetTaskByIdResponse TaskResponse, TaskViewMod
 
     public string HeadingText => IsUpcomingTasksView ? "Upcoming tasks" : "Previous 12 months";
 
+    public string CurrentlyActiveTabAccessibilityLabel => $"Currently active tab is {HeadingText}";
+
     public string NoTasksFoundMessage =>
         IsUpcomingTasksView ? "There are no upcoming tasks." : "There are no previous tasks.";
 
