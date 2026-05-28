@@ -2,7 +2,7 @@ using AngleSharp.Dom;
 using AwesomeAssertions;
 using AwesomeAssertions.Primitives;
 
-namespace SchoolAccount.IntegrationTests.Extensions;
+namespace SchoolAccount.Tests.Common.Extensions;
 
 public static class AngleSharpExtensions
 {
@@ -47,5 +47,12 @@ public static class AngleSharpExtensions
 
         selectedTab.Should().NotBeNull("a tab was expected to be selected");
         selectedTab.TextContent.Trim().Should().Be(expectedLabel);
+    }
+
+    public static IElement? FindByText(this IParentNode document, string selector, string text)
+    {
+        return document
+            .QuerySelectorAll(selector)
+            .FirstOrDefault(el => el.TextContent.Trim().Equals(text, StringComparison.OrdinalIgnoreCase));
     }
 }

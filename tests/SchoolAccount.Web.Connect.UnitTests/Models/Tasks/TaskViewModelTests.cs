@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Tasks.GetById;
-using SchoolAccount.Web.Connect.Features.Tasks;
 using SchoolAccount.Web.Connect.Features.Tasks.GetById;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseBuilder;

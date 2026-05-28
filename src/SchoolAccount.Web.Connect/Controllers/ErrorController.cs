@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Integration.DfESignIn.Exceptions;
@@ -6,6 +7,7 @@ using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
+[AllowAnonymous]
 public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEnvironment environment) : Controller
 {
     [Route(RouteConstants.Error)]

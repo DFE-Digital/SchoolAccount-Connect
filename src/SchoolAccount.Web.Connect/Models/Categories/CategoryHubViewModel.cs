@@ -19,8 +19,11 @@ public record CategoryHubViewModel(
     private readonly int? _categoryId = _categoryId;
 
     public bool IsAcademyTrustHandbook => _categoryId is not null && _categoryId == 1;
-    
-    public static CategoryHubViewModel FromCalendarOfItemsViewModel(CalendarOfItemsViewModel model, int? categoryId = null)
+
+    public static CategoryHubViewModel FromCalendarOfItemsViewModel(
+        CalendarOfItemsViewModel model,
+        int? categoryId = null
+    )
     {
         return new CategoryHubViewModel(
             model.Title,

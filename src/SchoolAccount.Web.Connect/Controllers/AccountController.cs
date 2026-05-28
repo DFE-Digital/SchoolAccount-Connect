@@ -1,18 +1,31 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
+[AllowAnonymous]
 public class AccountController : Controller
 {
+    [HttpGet(RouteConstants.Account.Login)]
+    public IActionResult Login(string? redirect)
+    {
+        return Challenge(
+            new AuthenticationProperties { RedirectUri = redirect ?? "/" },
+            OpenIdConnectDefaults.AuthenticationScheme
+        );
+    }
+
+    [HttpGet(RouteConstants.Account.SignOut)]
     public new IActionResult SignOut()
     {
         if (!(User?.Identity?.IsAuthenticated ?? false))
         {
             return RedirectToAction("Index", "Start");
         }
-        
+
         HttpContext.Session.Clear();
 
         return base.SignOut(
@@ -20,7 +33,8 @@ public class AccountController : Controller
             OpenIdConnectDefaults.AuthenticationScheme
         );
     }
-    
+
+    [HttpGet(RouteConstants.Account.SignedOut)]
     public IActionResult SignedOut()
     {
         HttpContext.Session.Clear();
@@ -29,7 +43,7 @@ public class AccountController : Controller
         {
             return RedirectToAction("Index", "Home");
         }
-        
+
         return RedirectToAction("Index", "Start");
     }
 }

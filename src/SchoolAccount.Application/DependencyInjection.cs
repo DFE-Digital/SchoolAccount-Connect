@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Providers;
-using SchoolAccount.Integration.DfESignIn.Extensions;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Application;

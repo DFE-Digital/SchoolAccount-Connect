@@ -7,11 +7,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SchoolAccount.Application\SchoolAccount.Application.csproj" />
     <ProjectReference Include="..\..\src\SchoolAccount.Domain\SchoolAccount.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SchoolAccount.Infrastructure\SchoolAccount.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="Bogus" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" />
   </ItemGroup>
 </Project>

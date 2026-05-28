@@ -1,4 +1,4 @@
-﻿namespace SchoolAccount.Web.Connect.SignIn;
+﻿namespace SchoolAccount.Web.Connect.Authentication.SignIn;
 
 internal sealed class DfeSignInConfiguration
 {

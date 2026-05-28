@@ -17,7 +17,6 @@ using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-[Authorize]
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskSearchResponse> handler,
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -12,7 +11,6 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-[Authorize]
 public class CalendarController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
     IOrganisationContext organisationContext

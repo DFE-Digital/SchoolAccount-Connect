@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Domain.Providers;
-using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Application.Abstractions.Data;
 

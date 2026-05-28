@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -16,7 +15,7 @@ using SchoolAccount.Integration.DfESignIn.Requirements;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Telemetry;
 
-namespace SchoolAccount.Web.Connect.SignIn;
+namespace SchoolAccount.Web.Connect.Authentication.SignIn;
 
 internal static class DfeSignInExtensions
 {
@@ -127,13 +126,18 @@ internal static class DfeSignInExtensions
 
         services.AddScoped<IAuthorizationHandler, ProviderAuthorisationHandler>();
 
-        services
-            .AddAuthorizationBuilder()
-            .SetDefaultPolicy(
-                new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .AddRequirements(new ProviderRequirement())
-                    .Build()
-            );
+        services.AddAuthorizationBuilder().SetDefaultPolicy(BuildPolicy()).SetFallbackPolicy(BuildPolicy());
+    }
+
+    private static AuthorizationPolicy BuildPolicy(bool includeProviderRequirement = true)
+    {
+        var builder = new AuthorizationPolicyBuilder().RequireAuthenticatedUser();
+
+        if (includeProviderRequirement)
+        {
+            builder = builder.AddRequirements(new ProviderRequirement());
+        }
+
+        return builder.Build();
     }
 }

@@ -13,8 +13,11 @@ public class CookieConsentController(IDataProtectionProvider dataProtectionProvi
     [HttpPost("consent")]
     public IActionResult SetConsent([FromBody] CookieConsentRequest request)
     {
-        if (request.Value is not CookieConsentConstants.IdValues.Accepted
-            and not CookieConsentConstants.IdValues.Rejected)
+        if (
+            request.Value
+            is not CookieConsentConstants.IdValues.Accepted
+                and not CookieConsentConstants.IdValues.Rejected
+        )
         {
             return BadRequest();
         }
@@ -31,8 +34,9 @@ public class CookieConsentController(IDataProtectionProvider dataProtectionProvi
                 HttpOnly = true,
                 Secure = Request.IsHttps,
                 SameSite = SameSiteMode.Lax,
-                IsEssential = true
-            });
+                IsEssential = true,
+            }
+        );
 
         return NoContent();
     }

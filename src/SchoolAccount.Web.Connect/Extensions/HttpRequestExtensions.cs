@@ -18,16 +18,10 @@ public static class HttpRequestExtensions
 
     public static bool IsRestrictedPath(this HttpRequest request, params string[] additionalPaths)
     {
-        var restrictedPaths = new[]
-        {
-            "/MicrosoftIdentity",
-            "/Account",
-        };
+        var restrictedPaths = new[] { "/MicrosoftIdentity", "/Account" };
 
         return restrictedPaths
             .Union(additionalPaths)
-            .Any(path =>
-                request.Path
-                    .StartsWithSegments(path, StringComparison.InvariantCultureIgnoreCase));
+            .Any(path => request.Path.StartsWithSegments(path, StringComparison.InvariantCultureIgnoreCase));
     }
 }

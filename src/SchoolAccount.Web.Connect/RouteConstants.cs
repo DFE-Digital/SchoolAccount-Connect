@@ -29,6 +29,14 @@ public static class RouteConstants
         public const string MatAcceptance = Index + "/mat";
     }
 
+    public static class Account
+    {
+        private const string Index = Root + "account";
+        public const string Login = Index + "/login";
+        public const string SignOut = Index + "/signout";
+        public const string SignedOut = Index + "/signedout";
+    }
+
     public static class Calendar
     {
         public const string Index = Root + "calendar";

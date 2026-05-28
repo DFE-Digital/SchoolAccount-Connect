@@ -2,11 +2,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using AwesomeAssertions;
 using SchoolAccount.Domain.Providers;
-using SchoolAccount.IntegrationTests.Extensions;
 using SchoolAccount.IntegrationTests.Features.Authentication.Collections;
 using SchoolAccount.IntegrationTests.Features.Authentication.Fixtures;
 using SchoolAccount.Kernel;
-using SchoolAccount.Tests.Common.Builders;
+using SchoolAccount.Tests.Common.Extensions;
 using SchoolAccount.Web.Connect;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.OrganisationClaimBuilder;
@@ -25,17 +24,19 @@ public class FallbackProviderTests : IClassFixture<SessionFixture>
         _fixture = fixture;
 
         _fixture.FallbackProviderResolver.ClearProviders();
-        _fixture.FallbackProviderResolver.AddProvider(EmptyUkPrn,
+        _fixture.FallbackProviderResolver.AddProvider(
+            EmptyUkPrn,
             new ProviderOverrideEntity
             {
                 HasAccess = true,
                 Id = 1,
                 SchoolName = "Test",
                 SchoolType = SchoolType.Academy,
-                UkPrn = EmptyUkPrn
-            });
+                UkPrn = EmptyUkPrn,
+            }
+        );
     }
-    
+
     [Fact]
     public async Task Ensure_that_passing_a_fallback_organisation_resolver_authenticates()
     {
@@ -44,13 +45,13 @@ public class FallbackProviderTests : IClassFixture<SessionFixture>
         var response = await client.GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken);
 
         response.IsSuccessStatusCode.Should().BeTrue();
-        
-        var page = await response.GetPage();
-        
+
+        var page = await response.GetPage(TestContext.Current.CancellationToken);
+
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Support");
     }
-    
+
     [Fact]
     public async Task Ensure_that_if_no_fallback_organisation_is_found_it_will_fail_authentication()
     {
@@ -59,9 +60,9 @@ public class FallbackProviderTests : IClassFixture<SessionFixture>
         var response = await client.GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        
-        var page = await response.GetPage();
-        
+
+        var page = await response.GetPage(TestContext.Current.CancellationToken);
+
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Service Inaccessible");
     }

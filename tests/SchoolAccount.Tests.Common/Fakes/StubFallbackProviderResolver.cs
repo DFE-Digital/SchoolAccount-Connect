@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Domain.Providers;
 
-namespace SchoolAccount.IntegrationTests.Features.Database.Resolvers;
+namespace SchoolAccount.Tests.Common.Fakes;
 
 public class StubFallbackProviderResolver : IFallbackProviderResolver
 {
@@ -12,7 +12,7 @@ public class StubFallbackProviderResolver : IFallbackProviderResolver
     {
         _overrides = [];
     }
-    
+
     public StubFallbackProviderResolver(Dictionary<string, ProviderOverrideEntity> overrides)
     {
         _overrides = overrides;
@@ -22,16 +22,16 @@ public class StubFallbackProviderResolver : IFallbackProviderResolver
     {
         _overrides = overrides.ToDictionary(o => o.UkPrn);
     }
-    
+
     public bool TryGetProvider(string? ukPrn, [MaybeNullWhen(false)] out ProviderOverrideEntity provider)
     {
         provider = null;
-        
+
         if (string.IsNullOrEmpty(ukPrn))
         {
             return false;
         }
-        
+
         return !string.IsNullOrEmpty(ukPrn) && _overrides.TryGetValue(ukPrn, out provider);
     }
 

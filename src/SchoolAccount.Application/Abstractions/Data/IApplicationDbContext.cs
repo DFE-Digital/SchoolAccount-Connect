@@ -25,7 +25,7 @@ public interface IApplicationDbContext
     DbSet<TypeEntity> Types { get; set; }
     DbSet<TypeGroupingEntity> TypeGroupings { get; set; }
     DbSet<TypeTaskMappingEntity> TypeTaskMappings { get; set; }
-    DbSet<ProviderOverrideEntity>  ProviderOverrides { get; set; }
+    DbSet<ProviderOverrideEntity> ProviderOverrides { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

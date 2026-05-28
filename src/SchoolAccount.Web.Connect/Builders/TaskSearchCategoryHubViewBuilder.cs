@@ -30,9 +30,7 @@ public class TaskSearchCategoryHubViewBuilder
 
         return new CategoryHubViewModel(
             Title: "Search results",
-            Description: string.IsNullOrWhiteSpace(term)
-                ? "Showing matching tasks."
-                : $"Showing results for “{term}”.",
+            Description: string.IsNullOrWhiteSpace(term) ? "Showing matching tasks." : $"Showing results for “{term}”.",
             ViewModes: CalendarOfItemsViewModes.Custom,
             Tabs: [],
             Items: items,
@@ -42,9 +40,10 @@ public class TaskSearchCategoryHubViewBuilder
         )
         {
             Heading = searchResults.TotalItemCount == 0 ? "No matching tasks found." : "Search results for " + term,
-            SubHeading = searchResults.TotalItemCount == 0
-                ? "No matching tasks found."
-                : $"{searchResults.TotalItemCount} task{(searchResults.TotalItemCount == 1 ? string.Empty : "s")} found.",
+            SubHeading =
+                searchResults.TotalItemCount == 0
+                    ? "No matching tasks found."
+                    : $"{searchResults.TotalItemCount} task{(searchResults.TotalItemCount == 1 ? string.Empty : "s")} found.",
             NoResultsMessage = "No matching tasks found.",
             CanRenderFilter = false,
             LastUpdatedMessage = "Last updated: today",

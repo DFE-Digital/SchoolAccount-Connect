@@ -99,10 +99,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
 
     public OrganisationClaimBuilder WithPhaseOfEducation(string phase)
     {
-        _phaseOfEducation = new IdName<int>
-        {
-            Name = phase
-        };
+        _phaseOfEducation = new IdName<int> { Name = phase };
 
         return this;
     }
@@ -110,11 +107,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
     public OrganisationClaimBuilder WithDefaultPhaseOfEducation(bool assignStatutoryAge = true)
     {
         var type = _faker.PickRandom(SchoolDataSet.SchoolTypes);
-        _phaseOfEducation = new IdName<int>
-        {
-            Id = SchoolDataSet.SchoolTypes.IndexOf(type),
-            Name = type
-        };
+        _phaseOfEducation = new IdName<int> { Id = SchoolDataSet.SchoolTypes.IndexOf(type), Name = type };
 
         if (assignStatutoryAge)
         {
@@ -132,12 +125,10 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
         {
             Name = name,
             Id = _faker.Random.Uuid(),
-            Code = _faker.Random.Int(0).ToString(CultureInfo.InvariantCulture)
+            Code = _faker.Random.Int(0).ToString(CultureInfo.InvariantCulture),
         };
 
-        return setDistrict
-            ? WithDistrictAdministrative(name)
-            : this;
+        return setDistrict ? WithDistrictAdministrative(name) : this;
     }
 
     public OrganisationClaimBuilder WithDistrictAdministrative(string name, string? code = null)
@@ -161,33 +152,21 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
 
     public OrganisationClaimBuilder WithRegion(string region)
     {
-        _region = new IdName<string>()
-        {
-            Id = _faker.Random.Uuid().ToString(),
-            Name = region
-        };
+        _region = new IdName<string>() { Id = _faker.Random.Uuid().ToString(), Name = region };
 
         return this;
     }
 
     public OrganisationClaimBuilder AsOpen(DateTime? openedOn = null)
     {
-        _status = new OrganisationStateClaim()
-        {
-            Id = 1,
-            Name = "Open",
-        };
+        _status = new OrganisationStateClaim() { Id = 1, Name = "Open" };
         _openedOn = openedOn;
         return this;
     }
 
     public OrganisationClaimBuilder AsClosed(DateTime closedOn)
     {
-        _status = new OrganisationStateClaim()
-        {
-            Id = 2,
-            Name = "Closed",
-        };
+        _status = new OrganisationStateClaim() { Id = 2, Name = "Closed" };
         _closedOn = closedOn;
         return this;
     }
@@ -207,37 +186,27 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
 
         return new OrganisationClaim
         {
-            Id = _id
-                 ?? _faker.Random.Uuid(),
-            Name = _name
-                   ?? school,
-            LegalName = _legalName
-                        ?? school.ToUpper(CultureInfo.InvariantCulture),
+            Id = _id ?? _faker.Random.Uuid(),
+            Name = _name ?? school,
+            LegalName = _legalName ?? school.ToUpper(CultureInfo.InvariantCulture),
             Category = category,
             Type = BuildType(category?.Id),
             Urn = _urn,
             Upin = _upin,
-            Ukprn = _ukprn
-                    ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
+            Ukprn = _ukprn ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
             PhaseOfEducation = _phaseOfEducation,
-            Address = _address
-                      ?? _faker.Address.FullAddress(),
-            Region = _region
-                     ?? new IdName<string>()
-                     {
-                         Id = _faker.Random.Uuid().ToString(),
-                         Name = _faker.Address.State()
-                     },
+            Address = _address ?? _faker.Address.FullAddress(),
+            Region =
+                _region ?? new IdName<string>() { Id = _faker.Random.Uuid().ToString(), Name = _faker.Address.State() },
             LocalAuthority = authority,
             StatutoryLowAge = _statutoryLowAge ?? lowAge,
             StatutoryHighAge = _statutoryHighAge ?? highAge,
-            DistrictAdministrativeCode = _districtAdministrativeCode
-                                         ?? LocalAuthorityDataSet.GenerateGssCode(distinctAuthorityName),
-            DistrictAdministrativeName = _districtAdministrativeName
-                                         ?? distinctAuthorityName,
+            DistrictAdministrativeCode =
+                _districtAdministrativeCode ?? LocalAuthorityDataSet.GenerateGssCode(distinctAuthorityName),
+            DistrictAdministrativeName = _districtAdministrativeName ?? distinctAuthorityName,
             Status = _status,
             ClosedOn = _closedOn,
-            Telephone = _telephone
+            Telephone = _telephone,
         };
     }
 
@@ -262,11 +231,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
     private OrganisationCategoryClaim? BuildCategory()
     {
         return _category.HasValue
-            ? new OrganisationCategoryClaim
-            {
-                Id = _category.Value,
-                Name = _category.Value.ToString()
-            }
+            ? new OrganisationCategoryClaim { Id = _category.Value, Name = _category.Value.ToString() }
             : null;
     }
 
@@ -279,11 +244,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
 
         _type ??= _faker.PickRandom<EstablishmentType>();
 
-        return new OrganisationEstablishmentTypeClaim
-        {
-            Id = _type.Value,
-            Name = _type.Value.ToString()
-        };
+        return new OrganisationEstablishmentTypeClaim { Id = _type.Value, Name = _type.Value.ToString() };
     }
 
     private IdCodeName<Guid, string> BuildLocalAuthority(out string authorityName)
@@ -293,7 +254,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
         {
             Name = authority,
             Id = _faker.Random.Uuid(),
-            Code = _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture)
+            Code = _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
         };
     }
 }

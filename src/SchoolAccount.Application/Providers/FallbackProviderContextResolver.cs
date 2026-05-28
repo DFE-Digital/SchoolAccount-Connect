@@ -5,7 +5,8 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Providers;
 
-public class FallbackProviderContextResolver(IFallbackProviderResolver fallbackProviderResolver) : IProviderContextResolver
+public class FallbackProviderContextResolver(IFallbackProviderResolver fallbackProviderResolver)
+    : IProviderContextResolver
 {
     public Type ProviderType { get; } = typeof(FallbackProvider);
 
@@ -48,18 +49,14 @@ public class FallbackProviderContextResolver(IFallbackProviderResolver fallbackP
 
         return organisationClaim with
         {
-            Category = new OrganisationCategoryClaim()
-            {
-                Id = categoryId,
-                Name = categoryId.ToString()
-            },
+            Category = new OrganisationCategoryClaim() { Id = categoryId, Name = categoryId.ToString() },
             Type = establishmentType.HasValue
                 ? new OrganisationEstablishmentTypeClaim()
                 {
                     Id = establishmentType.Value,
-                    Name = establishmentType.Value.ToString()
+                    Name = establishmentType.Value.ToString(),
                 }
-                : null
+                : null,
         };
     }
 }

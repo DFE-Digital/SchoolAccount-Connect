@@ -9,15 +9,16 @@ public class CookieConsentContext : ICookieConsentContext
     private readonly string? _cookie;
     private readonly IDataProtector _protector;
 
-    public CookieConsentContext(
-        IHttpContextAccessor contextAccessor,
-        IDataProtectionProvider dataProtectionProvider)
+    public CookieConsentContext(IHttpContextAccessor contextAccessor, IDataProtectionProvider dataProtectionProvider)
     {
         _protector = dataProtectionProvider.CreateProtector("cookie-consent");
 
-        if (contextAccessor.HttpContext?.Request.Cookies.TryGetValue(
+        if (
+            contextAccessor.HttpContext?.Request.Cookies.TryGetValue(
                 CookieConsentConstants.CookieName,
-                out var cookieValue) == true)
+                out var cookieValue
+            ) == true
+        )
         {
             _cookie = Unprotect(cookieValue);
         }
@@ -41,7 +42,7 @@ public class CookieConsentContext : ICookieConsentContext
             CookieConsentConstants.IdValues.Accepted => CookieConsentState.Accepted,
             CookieConsentConstants.IdValues.Rejected => CookieConsentState.Rejected,
             null => CookieConsentState.Undeclared,
-            _ => CookieConsentState.Invalid
+            _ => CookieConsentState.Invalid,
         };
 
     public bool IsSet => State is CookieConsentState.Accepted or CookieConsentState.Rejected;

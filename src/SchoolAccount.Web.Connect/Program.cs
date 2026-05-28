@@ -44,6 +44,7 @@ try
     app.UseAuthorization();
 
     app.ConfigureAreas();
+    app.MapControllers();
     app.StripHeaders();
 
     await app.RunAsync();

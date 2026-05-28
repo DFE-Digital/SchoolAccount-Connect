@@ -1,5 +1,4 @@
 using SchoolAccount.Integration.DfESignIn;
-using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Resolvers.Interfaces;

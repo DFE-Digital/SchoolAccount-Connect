@@ -1,11 +1,7 @@
-using System.Text.Json;
-using SchoolAccount.Integration.DfESignIn;
-
 namespace SchoolAccount.Web.Connect.Extensions;
 
 public static class HttpContextExtensions
 {
-
     public static string GetCurrentEndpoint(this HttpContext context)
     {
         var endpoint = context.GetEndpoint();

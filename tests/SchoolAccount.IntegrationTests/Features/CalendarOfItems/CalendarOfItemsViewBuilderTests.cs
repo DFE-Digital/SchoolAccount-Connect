@@ -2,9 +2,9 @@ using AngleSharp.Dom;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.IntegrationTests.Extensions;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
+using SchoolAccount.Tests.Common.Extensions;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;

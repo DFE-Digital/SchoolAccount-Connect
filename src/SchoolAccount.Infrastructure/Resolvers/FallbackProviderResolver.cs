@@ -10,19 +10,18 @@ public class FallbackProviderResolver : IFallbackProviderResolver
 
     public FallbackProviderResolver(IEnumerable<ProviderOverrideEntity> overrides)
     {
-        _overrides = overrides
-            .ToDictionary(x => x.UkPrn);
+        _overrides = overrides.ToDictionary(x => x.UkPrn);
     }
-    
+
     public bool TryGetProvider(string? ukPrn, [MaybeNullWhen(false)] out ProviderOverrideEntity provider)
     {
         provider = null;
-        
+
         if (string.IsNullOrEmpty(ukPrn))
         {
             return false;
         }
-        
+
         return !string.IsNullOrEmpty(ukPrn) && _overrides.TryGetValue(ukPrn, out provider);
     }
 }

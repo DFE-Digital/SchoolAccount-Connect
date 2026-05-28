@@ -42,7 +42,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<TypeGroupingEntity> TypeGroupings { get; set; }
 
     public DbSet<TypeTaskMappingEntity> TypeTaskMappings { get; set; }
-    
+
     public DbSet<ProviderOverrideEntity> ProviderOverrides { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,9 +1,9 @@
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace SchoolAccount.IntegrationTests.Extensions;
+namespace SchoolAccount.Tests.Common.Extensions;
 
-internal static class WebApplicationFactoryExtensions
+public static class WebApplicationFactoryExtensions
 {
     public static async Task<IDocument> RequestPageAsync<T>(
         this WebApplicationFactory<T> factory,
