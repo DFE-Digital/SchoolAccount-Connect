@@ -19,15 +19,16 @@ public class AccountController : Controller
     }
 
     [HttpGet(RouteConstants.Account.SignOut)]
-    public new IActionResult SignOut()
+    public new async Task<IActionResult> SignOut()
     {
         if (!(User?.Identity?.IsAuthenticated ?? false))
         {
             return RedirectToAction("Index", "Start");
         }
-
+        
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         HttpContext.Session.Clear();
-
+        
         return base.SignOut(
             CookieAuthenticationDefaults.AuthenticationScheme,
             OpenIdConnectDefaults.AuthenticationScheme
