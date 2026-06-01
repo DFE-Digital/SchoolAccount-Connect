@@ -1,4 +1,5 @@
 using System.Collections;
+using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
@@ -23,13 +24,14 @@ public class CalendarOfItemsAggregator(
 {
     private readonly CalendarOfItemsAggregatorValidator _validator = new(queryFactoryResolver);
 
-    private void ConsolidateFilters(CalendarOfItemsCriteria criteria)
+    private void ConsolidateFilters<TFilter>(CalendarOfItemsCriteria criteria)
+        where TFilter : IFilter
     {
         var types = MapTypeToEntity((FilterableEntities)criteria.ToQuery);
         foreach (
             var registrar in filterRegistry
                 .Registrars.Where(x => types.Contains(x.TypeBeingRegistered))
-                .OfType<IFilterableRegistrar<CalendarOfItemsFilter>>()
+                .OfType<IFilterableRegistrar<TFilter>>()
         )
         {
             registrar.ConsolidateFilters(criteria.Filter);
@@ -89,10 +91,11 @@ public class CalendarOfItemsAggregator(
         return filters;
     }
 
-    public async Task<Result<CalendarOfItemsPagedResult>> Query(
+    public async Task<Result<CalendarOfItemsPagedResult>> Query<TFilter>(
         CalendarOfItemsCriteria criteria,
         CancellationToken cancellationToken = default
     )
+        where TFilter : IFilter
     {
         var validation = await _validator.ValidateAsync(criteria, cancellationToken);
 
@@ -101,7 +104,7 @@ public class CalendarOfItemsAggregator(
             return validation.ToResult<CalendarOfItemsPagedResult>();
         }
 
-        ConsolidateFilters(criteria);
+        ConsolidateFilters<TFilter>(criteria);
 
         var factories = queryFactoryResolver.GetFactoriesByType(criteria.ToQuery);
 
@@ -114,7 +117,7 @@ public class CalendarOfItemsAggregator(
             .WithSorting(criteria.ViewModes, criteria.SortMode, criteria.CustomOrderByFunction)
             .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
-        var filters = criteria.IncludeFilterOptions
+        var filters = criteria.PopulateFilterOptions
             ? (await ProduceAndCorrelateFilter(criteria, query)).ToCollection()
             : [];
 

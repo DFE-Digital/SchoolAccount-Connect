@@ -42,7 +42,7 @@ public partial class CalendarOfItemsAggregatorTests
                 ViewModes = viewModes,
                 SortMode = sortMode,
                 Filter = filter ?? new CalendarOfItemsFilter([]),
-                IncludeFilterOptions = includeFilterOptions,
+                PopulateFilterOptions = includeFilterOptions,
                 CustomOrderByFunction = customOrderByFunction,
             };
         }

@@ -1,14 +1,11 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
 
-public class CalendarOfItemsRowStatus
+public class CalendarOfItemsRowStatus : ExtensionNode<int>
 {
-    public string DisplayValue { get; init; } = null!;
-
     public string? Theme { get; init; }
-
-    public CalendarOfItemsRowType? Type { get; init; }
 
     public long? EntityId { get; init; }
 }

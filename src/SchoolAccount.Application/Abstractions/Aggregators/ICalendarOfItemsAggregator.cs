@@ -5,8 +5,8 @@ namespace SchoolAccount.Application.Abstractions.Aggregators;
 
 public interface ICalendarOfItemsAggregator
 {
-    Task<Result<CalendarOfItemsPagedResult>> Query(
+    Task<Result<CalendarOfItemsPagedResult>> Query<TFilter>(
         CalendarOfItemsCriteria criteria,
         CancellationToken cancellationToken = default
-    );
+    ) where TFilter : IFilter;
 }

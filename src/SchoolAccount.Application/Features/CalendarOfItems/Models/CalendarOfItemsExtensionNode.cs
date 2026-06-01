@@ -1,12 +1,8 @@
+using SchoolAccount.Kernel;
+
 namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
 
-public class CalendarOfItemsExtensionNode
-{
-    public long Id { get; init; }
-    public string? Name { get; init; }
-    public string? DisplayValue { get; init; }
-    public CalendarOfItemsExtensionNodeType Type { get; init; } = CalendarOfItemsExtensionNodeType.NotSpecified;
-}
+public class CalendarOfItemsExtensionNode : ExtensionNode<long>;
 
 public enum CalendarOfItemsExtensionNodeType
 {
