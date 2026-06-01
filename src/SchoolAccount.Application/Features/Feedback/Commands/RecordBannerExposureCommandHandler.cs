@@ -18,7 +18,7 @@ public sealed class RecordBannerExposureCommandHandler(
             return Result.Failure(Error.Problem("Feedback.PageIdRequired", "Page id is required."));
         }
 
-        var context = feedbackTelemetryContextProvider.GetContext();
+        var context = await feedbackTelemetryContextProvider.GetContext();
 
         if (!context.BannerShown)
         {

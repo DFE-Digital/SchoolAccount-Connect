@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Kernel.Conditions.Extensions;
+using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Application;
 
@@ -17,6 +18,12 @@ public static class DependencyInjection
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
                 .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)), publicOnly: false)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo<IProvider>(), publicOnly: false)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo<IProviderContextResolver>(), publicOnly: false)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );

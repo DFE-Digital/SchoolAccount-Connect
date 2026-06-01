@@ -5,12 +5,14 @@ namespace SchoolAccount.Integration.DfESignIn.Providers;
 
 public class NullProvider : IProvider
 {
+    public int Priority { get; } = 1;
+
     public bool IsProvider(OrganisationClaim organisation)
     {
         return false;
     }
 
-    public Task<bool> CanAccess()
+    public Task<bool> CanAccess(OrganisationClaim? organisation)
     {
         return Task.FromResult(false);
     }

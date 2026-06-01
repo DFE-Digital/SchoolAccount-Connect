@@ -13,7 +13,7 @@ public class ProviderResolver(IEnumerable<IProvider> providers) : IProviderResol
 
         if (organisation is not null)
         {
-            provider = providers.FirstOrDefault(p => p.IsProvider(organisation));
+            provider = providers.OrderBy(x => x.Priority).FirstOrDefault(p => p.IsProvider(organisation));
         }
 
         return provider ?? NullProvider.Default;

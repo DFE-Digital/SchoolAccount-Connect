@@ -12,7 +12,7 @@ public sealed class FeedbackTelemetryContextProvider(
     IFeatureManager featureManager
 ) : IFeedbackTelemetryContextProvider
 {
-    public FeedbackTelemetryContext GetContext()
+    public async Task<FeedbackTelemetryContext> GetContext()
     {
         var httpContext = httpContextAccessor.HttpContext;
         var user = httpContext?.User;
@@ -27,7 +27,7 @@ public sealed class FeedbackTelemetryContextProvider(
             treatmentGroup,
             bannerShown,
             TryGetHashedUserId(user),
-            GetOrganisationId(organisationContext),
+            await GetOrganisationId(organisationContext),
             GetSessionId(user)
         );
     }
@@ -49,9 +49,9 @@ public sealed class FeedbackTelemetryContextProvider(
         }
     }
 
-    private static string? GetOrganisationId(IOrganisationContext organisationContext)
+    private static async Task<string?> GetOrganisationId(IOrganisationContext organisationContext)
     {
-        if (!organisationContext.IsAuthorised || !organisationContext.IsDsiDetermined)
+        if (!organisationContext.IsDsiDetermined || !await organisationContext.IsAuthorised() || !await organisationContext.IsValid())
         {
             return null;
         }

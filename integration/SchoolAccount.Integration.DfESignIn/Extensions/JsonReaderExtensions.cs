@@ -11,7 +11,7 @@ public static class JsonReaderExtensions
         {
             JsonTokenType.Number => reader.GetInt32().ToString(CultureInfo.InvariantCulture),
             JsonTokenType.String => reader.GetString(),
-            _ => throw new JsonException($"Unexpected token type: {reader.TokenType}")
+            _ => throw new JsonException($"Unexpected token type: {reader.TokenType}"),
         };
     }
 }

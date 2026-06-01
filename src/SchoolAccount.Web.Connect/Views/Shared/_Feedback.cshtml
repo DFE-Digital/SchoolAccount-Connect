@@ -1,67 +1,97 @@
 @using SchoolAccount.Application.Constants
+@using SchoolAccount.Web.Connect
+
 @{
-    var feedbackUrl = (string?)ViewData["FeedbackUrl"]
-        ?? "https://digital-forms.education.gov.uk/smxqhd6u2i";
+    const string feedbackSubmittedCookieName = "page_feedback_submitted";
 
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
         .ToLowerInvariant();
 
+    var feedbackSubmitted =
+        string.Equals(
+            Context.Request.Cookies[feedbackSubmittedCookieName],
+            "true",
+            StringComparison.OrdinalIgnoreCase);
+
     var redirectUrl =
-        $"/feedback/exit?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}&returnUrl={Uri.EscapeDataString(feedbackUrl)}";
+        $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
+
+    var cancelUrl =
+        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
 }
 
-<section class="dfe-page-feedback"
-         aria-label="Page feedback"
-         data-feedback-component="page-useful"
-         data-feedback-post-url="/feedback/page-useful"
-         data-page-id="@pageId"
-         data-cta-type="@AnalyticsCtaTypes.YesNo">
+<section id="page-feedback"
+         class="dfe-page-feedback"
+         aria-label="Page feedback">
     <div class="govuk-width-container">
-        <div class="dfe-page-feedback__initial" data-feedback-initial>
-            <div class="dfe-page-feedback__row">
-                <div class="dfe-page-feedback__left">
-                    <span class="dfe-page-feedback__question">Is this page useful?</span>
 
-                    <div class="dfe-page-feedback__choices" role="group" aria-label="Is this page useful?">
-                        <button type="button"
-                                class="dfe-page-feedback__choice"
-                                data-feedback-answer="@AnalyticsAnswers.Yes">
-                            Yes
-                        </button>
+        @if (!feedbackSubmitted)
+        {
+            <div class="dfe-page-feedback__initial">
+                <div class="dfe-page-feedback__row">
+                    <div class="dfe-page-feedback__left">
 
-                        <button type="button"
-                                class="dfe-page-feedback__choice"
-                                data-feedback-answer="@AnalyticsAnswers.No">
-                            No
-                        </button>
+                        <span class="dfe-page-feedback__question">
+                            Is this page useful?
+                        </span>
+
+                        <form method="post"
+                              action="@RouteConstants.FeedBackRespond"
+                              class="dfe-page-feedback__choices">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="pageId" value="@pageId" />
+                            <input type="hidden" name="ctaType" value="@AnalyticsCtaTypes.YesNo" />
+
+                            <button type="submit"
+                                    name="selectedAnswer"
+                                    value="@AnalyticsAnswers.Yes"
+                                    class="dfe-page-feedback__choice">
+                                Yes
+                            </button>
+
+                            <button type="submit"
+                                    name="selectedAnswer"
+                                    value="@AnalyticsAnswers.No"
+                                    class="dfe-page-feedback__choice">
+                                No
+                            </button>
+                        </form>
+
                     </div>
                 </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="dfe-page-feedback__followup">
+                <div class="dfe-page-feedback__followup-panel">
 
-        <div class="dfe-page-feedback__followup govuk-!-display-none"
-             data-feedback-followup
-             aria-live="polite">
-            <div class="dfe-page-feedback__followup-panel">
-                <h2 class="dfe-page-feedback__followup-heading">Help us improve DfE Connect</h2>
+                    <h2 class="dfe-page-feedback__followup-heading">
+                        Help us improve DfE Connect
+                    </h2>
 
-                <p class="dfe-page-feedback__followup-body">
-                    To help us improve DfE Connect, we'd like to know more about your visit today.
-                    <a class="govuk-link"
-                       data-feedback-exit-link
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       href="@redirectUrl">
-                        Give your feedback (opens in a new tab)
-                    </a>.
-                </p>
+                    <p class="dfe-page-feedback__followup-body">
+                        To help us improve DfE Connect, we'd like to know more about your visit today.
 
-                <button type="button"
-                        class="govuk-button govuk-button--secondary dfe-page-feedback__cancel"
-                        data-feedback-cancel>
-                    Cancel
-                </button>
+                        <a class="govuk-link"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           href="@redirectUrl"
+                           onclick="resetPageFeedbackState()">
+                            Give your feedback (opens in a new tab)
+                        </a>.
+                    </p>
+
+                    <a href="@cancelUrl"
+                       class="govuk-button govuk-button--secondary">
+                        Cancel
+                    </a>
+
+                </div>
             </div>
-        </div>
+        }
+
     </div>
 </section>

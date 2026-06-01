@@ -11,19 +11,20 @@ using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
 using SchoolAccount.Application.Features.SubTask;
 using SchoolAccount.Application.Features.Tasks.Search.Queries.GetPage;
+using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
-[Authorize]
 public sealed class HomeController(
-    IQueryHandler<TaskSearchQuery, TaskWithSubTasksDto> handler,
+    IQueryHandler<TaskSearchQuery, TaskSearchResponse> handler,
     IQueryHandler<GetSubTasksForCardsQuery, GetSubTasksForCardsResponse> sliderCardsQueryBuilder,
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
+    TaskSearchCategoryHubViewBuilder taskSearchCategoryHubViewBuilder,
     BasicPageViewBuilder basicPageViewBuilder
 ) : Controller
 {
@@ -69,46 +70,51 @@ public sealed class HomeController(
         return View(viewModel);
     }
 
-    [HttpGet("home/task-search")]
-    public async Task<ActionResult<TaskWithSubTasksDto>> TaskSearch(
-        [FromQuery] string term,
+    [HttpGet("search")]
+    public async Task<IActionResult> TaskSearch(
+        [FromQuery] string? term,
+        [FromQuery] int? pageNumber,
         CancellationToken cancellationToken
     )
     {
-        var result = await handler.Handle(new TaskSearchQuery(term), cancellationToken);
+        var result = await handler.Handle(new TaskSearchQuery(term, pageNumber ?? 1), cancellationToken);
 
         if (result.IsFailure)
         {
             return Problem(detail: result.Error.Description);
         }
 
-        return Ok(result.Value);
+        var currentUri = Request.GetFullRequestUri();
+        var viewModel = taskSearchCategoryHubViewBuilder.Build(result.Value, term, currentUri);
+
+        return View("~/Views/Category/AllTasks.cshtml", viewModel);
     }
 
+    [Breadcrumb("Home", "/")]
+    [Breadcrumb("Support", RouteConstants.Support)]
     [HttpGet(RouteConstants.Support)]
-    public IActionResult Support()
+    public async Task<IActionResult> Support()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Support", model);
     }
 
+    [Breadcrumb("Home", "/")]
+    [Breadcrumb("Cookies", RouteConstants.Cookies)]
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
-    public IActionResult Cookies()
+    public async Task<IActionResult> Cookies()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Cookies", model);
     }
 
     [HttpGet(RouteConstants.Maintenance)]
     [FeatureGate(FeatureFlagConstants.MaintenanceMode)]
     [AllowAnonymous]
-    public IActionResult Maintenance()
+    public async Task<IActionResult> Maintenance()
     {
-        var model = basicPageViewBuilder.Build();
-
+        var model = await basicPageViewBuilder.Build();
         return View("Maintenance", model);
     }
 }

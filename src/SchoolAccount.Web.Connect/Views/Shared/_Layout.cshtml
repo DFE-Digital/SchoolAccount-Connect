@@ -5,6 +5,7 @@
 @using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Models.Breadcrumb
 @inject IFeatureManager FeatureManager
 @inject ICookieConsentContext CookieConsent
 
@@ -77,6 +78,13 @@
             give your feedback (opens in a new tab)
         </a>
     </govuk-phase-banner>
+    
+    @{
+        if (ViewData["Breadcrumbs"] is List<Breadcrumb> breadcrumbs && breadcrumbs.Any())
+        {
+            <partial name="_Breadcrumbs" model="breadcrumbs" />
+        }
+    }
 
     @await RenderSectionAsync("BeforeContent", false)
 
@@ -159,21 +167,17 @@
     <govuk-footer>
         <govuk-footer-meta>
             <govuk-footer-meta-items>
-                <govuk-footer-meta-item href="@RouteConstants.Cookies">Cookies</govuk-footer-meta-item>
-                <govuk-footer-meta-item href="@RouteConstants.PrivacyPolicy"
-                                        link-target="_blank"
-                                        link-rel="noopener noreferrer">
-                    Privacy notice (opens in a new tab)
+                <govuk-footer-meta-item href="@RouteConstants.Cookies">
+                    Cookies
                 </govuk-footer-meta-item>
-                <govuk-footer-meta-item href="@RouteConstants.AccessibilityStatement"
-                                        link-target="_blank"
-                                        link-rel="noopener noreferrer">
-                    Accessibility statement (opens in a new tab)
+                <govuk-footer-meta-item href="@RouteConstants.PrivacyPolicy">
+                    Privacy notice
                 </govuk-footer-meta-item>
-                <govuk-footer-meta-item href="@RouteConstants.ContactUs"
-                                        link-target="_blank"
-                                        link-rel="noopener noreferrer">
-                    Contact us (opens in a new tab)
+                <govuk-footer-meta-item href="@RouteConstants.AccessibilityStatement">
+                    Accessibility statement
+                </govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.ContactUs">
+                    Contact us
                 </govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>

@@ -15,6 +15,7 @@ using SchoolAccount.Application.Features.Feedback;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
+using SchoolAccount.Web.Connect.Authentication.SignIn;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
@@ -26,7 +27,6 @@ using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
 using SchoolAccount.Web.Connect.Models;
-using SchoolAccount.Web.Connect.SignIn;
 using SchoolAccount.Web.Connect.Telemetry;
 
 namespace SchoolAccount.Web.Connect;
@@ -64,6 +64,7 @@ internal static class DependencyInjection
         services.AddControllersWithViews(options =>
         {
             options.Filters.AddService<AppInsightsFilter>();
+            options.Filters.Add<BreadcrumbActionFilter>();
         });
 
         services.AddDfeSignInAuthentication(configurationManager);
@@ -221,5 +222,6 @@ internal static class DependencyInjection
         services.AddScoped<CategoryHubViewBuilder>();
         services.AddScoped<CategoryListViewBuilder>();
         services.AddScoped<BasicPageViewBuilder>();
+        services.AddScoped<TaskSearchCategoryHubViewBuilder>();
     }
 }

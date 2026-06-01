@@ -5,6 +5,8 @@ namespace SchoolAccount.Integration.DfESignIn.Providers;
 
 public class FreeSchoolProvider : IProvider
 {
+    public int Priority { get; } = 1;
+
     public bool IsProvider(OrganisationClaim organisation)
     {
         return organisation.Type?.Id
@@ -13,7 +15,7 @@ public class FreeSchoolProvider : IProvider
                 or EstablishmentType.FreeSchoolsSpecial;
     }
 
-    public Task<bool> CanAccess()
+    public Task<bool> CanAccess(OrganisationClaim? organisation)
     {
         return Task.FromResult(true);
     }

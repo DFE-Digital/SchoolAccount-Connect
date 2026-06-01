@@ -30,6 +30,8 @@ public sealed record GetTaskByIdResponse
 
     public IReadOnlyCollection<GetTaskByIdResponseRelatedTask> RelatedTasks { get; init; } = [];
 
+    public IReadOnlyCollection<GetTaskByIdResponseTaskType> TaskTypes { get; init; } = [];
+
     private DateTime? GetSubTaskLastUpdated()
     {
         return SubTasks.OrderByDescending(st => st.DateUpdated).FirstOrDefault()?.DateUpdated;
@@ -104,6 +106,13 @@ public sealed record GetTaskByIdResponseResource
 }
 
 public sealed record GetTaskByIdResponseRelatedTask
+{
+    public long Id { get; init; }
+
+    public string Name { get; init; } = string.Empty;
+}
+
+public sealed record GetTaskByIdResponseTaskType
 {
     public long Id { get; init; }
 

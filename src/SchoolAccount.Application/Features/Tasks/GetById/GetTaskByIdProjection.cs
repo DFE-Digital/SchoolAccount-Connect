@@ -1,14 +1,22 @@
 using System.Linq.Expressions;
-using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Specifications;
+using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Kernel;
+using SchoolAccount.Application.Extensions;
 using static SchoolAccount.Domain.Common.WorkflowState;
 
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public static class GetTaskByIdProjection
 {
-    public static Expression<Func<TaskEntity, GetTaskByIdResponse>> ToTaskResponse()
+    public static Expression<Func<TaskEntity, GetTaskByIdResponse>> ToTaskResponse(
+        IQueryable<SchoolTypeTagMappingEntity> schoolTypeMappings,
+        SchoolType type
+    )
     {
+        var isVisible = SubTaskEntitySpecifications.IsVisible();
+        var isAccessible = SubTaskEntitySpecifications.IsAccessibleForSchoolType(schoolTypeMappings, type);
         return x => new GetTaskByIdResponse
         {
             Id = x.Id,
@@ -18,7 +26,10 @@ public static class GetTaskByIdProjection
             DateUpdated = x.DateUpdated,
             UpdatedBy = x.UpdatedBy,
             SubTasks = x
-                .SubTasks.Where(subtask => subtask.WorkflowState == Published || subtask.WorkflowState == Expired)
+                .SubTasks
+                .AsQueryable()
+                .Where(isVisible)
+                .Where(isAccessible)
                 .Select(st => new GetTaskByIdResponseSubtask
                 {
                     Id = st.Id,
@@ -52,6 +63,10 @@ public static class GetTaskByIdProjection
                 .ToArray(),
             RelatedTasks = x
                 .RelatedTasks.Select(rt => new GetTaskByIdResponseRelatedTask { Id = rt.Id, Name = rt.Name })
+                .ToArray(),
+            TaskTypes = x
+                .TypeTaskMappings.Where(t => t.Type.ParentTypeId == null && t.Type.TypeGroupingId == 1)
+                .Select(t => new GetTaskByIdResponseTaskType { Id = t.Type.Id, Name = t.Type.DisplayName })
                 .ToArray(),
         };
     }

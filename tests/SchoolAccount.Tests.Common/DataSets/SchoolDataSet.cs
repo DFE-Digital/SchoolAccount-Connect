@@ -7,7 +7,7 @@ public static class SchoolDataSet
     public static readonly string[] SchoolTypes =
     [
         "Primary School",
-        "High School", 
+        "High School",
         "Academy",
         "Junior School",
         "Community School",
@@ -15,7 +15,7 @@ public static class SchoolDataSet
         "Catholic Primary School",
         "Grammar School",
         "Free School",
-        "Foundation School"
+        "Foundation School",
     ];
 
     public static readonly Dictionary<string, (int Low, int High)> SchoolAgeRanges = new()
@@ -36,15 +36,10 @@ public static class SchoolDataSet
     {
         return faker.GetSchoolName(out _, out _);
     }
-    
+
     public static string GetSchoolName(this Faker faker, out int lowAge, out int highAge)
     {
-        var schoolPrefixes = new[]
-        {
-            faker.Address.City(),
-            faker.Address.StreetName(),
-            faker.Name.LastName(),
-        };
+        var schoolPrefixes = new[] { faker.Address.City(), faker.Address.StreetName(), faker.Name.LastName() };
 
         var schoolType = faker.PickRandom(SchoolTypes);
         lowAge = SchoolAgeRanges[schoolType].Low;

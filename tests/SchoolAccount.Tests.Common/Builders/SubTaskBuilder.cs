@@ -1,7 +1,12 @@
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Resources;
+using SchoolAccount.Domain.SchoolTypes;
+using SchoolAccount.Domain.Sources;
 using SchoolAccount.Domain.Subtasks;
+using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Domain.Taxonomies;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Tests.Common.Builders;
 
@@ -20,6 +25,7 @@ public sealed class SubTaskBuilder
     private DateOnly? _dueDate;
     private bool? _dueDateIsExact;
     private readonly List<ResourceEntity> _resources = [];
+    private readonly List<SchoolTypeTagMappingEntity> _schoolTypeTagMappings = [];
 
     public static SubTaskBuilder ASubTask() => new();
 
@@ -101,6 +107,37 @@ public sealed class SubTaskBuilder
         return this;
     }
 
+    public SubTaskBuilder AccessibleTo(SchoolType type)
+    {
+        return AccessibleTo(type, out _);
+    }
+
+    public SubTaskBuilder AccessibleTo(SchoolType type, out SchoolTypeTagMappingEntity mapping)
+    {
+        _schoolTypeTagMappings.Add(mapping = new SchoolTypeTagMappingEntity
+        {
+            SchoolType = new SchoolTypeEntity
+            {
+                Id = (int)type,
+                Name = type.ToString()
+            },
+            Tag = new TagEntity
+            {
+                Id = (int)type,
+                Name = type.ToString(),
+                TagName = $"#{type}",
+                Taxonomy = new TaxonomyEntity
+                {
+                    Id=1,  
+                    Name = type.ToString(),
+                    TaxonomyName = type.ToString()
+                }
+            }
+        });
+
+        return this;
+    }
+
     public SubTaskEntity Build()
     {
         var subtask = new SubTaskEntity
@@ -129,6 +166,24 @@ public sealed class SubTaskBuilder
         foreach (var resource in _resources)
         {
             subtask.Resources.Add(resource);
+        }
+
+        foreach (var schoolType in _schoolTypeTagMappings)
+        {
+            if (schoolType.Tag.SchoolTypeTagMappings.All(x => x.SchoolTypeId != schoolType.SchoolTypeId))
+            {
+                schoolType.Tag.SchoolTypeTagMappings.Add(schoolType);
+            }
+
+            subtask.TagsSourceMappings.Add(
+                new TagsSourceMappingEntity
+                {
+                    Id = _schoolTypeTagMappings.Count + 1,
+                    EntityId = subtask.Id,
+                    Tag = schoolType.Tag,
+                    Source = new SourceEntity { Id = (int)Source.Subtask, Name = nameof(Source.Subtask) },
+                    SubTask = subtask
+                });
         }
 
         return subtask;

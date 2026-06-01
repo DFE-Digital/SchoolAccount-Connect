@@ -23,8 +23,8 @@ public record GetSubTasksNextTenItemsCalendarOfItemsQuery : CalendarOfItemsCusto
                 {
                     Field = "state",
                     Operator = ComparisonType.Equals,
-                    Value = WorkflowState.Published
-                }
+                    Value = WorkflowState.Published,
+                },
             ])
         ) { }
 }

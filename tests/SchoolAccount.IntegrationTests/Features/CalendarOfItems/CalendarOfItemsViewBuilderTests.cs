@@ -2,9 +2,9 @@ using AngleSharp.Dom;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.IntegrationTests.Extensions;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
+using SchoolAccount.Tests.Common.Extensions;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
@@ -54,7 +54,9 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert
-        request.QuerySelector(".dfe-tabs").Should().HaveTabs("Upcoming tasks", "Previous tasks");
+        request.QuerySelectorAll(".govuk-tabs__tab").Should().HaveCount(2);
+        request.QuerySelectorAll(".govuk-tabs__tab")[0].Should().HaveTextContent("Upcoming tasks");
+        request.QuerySelectorAll(".govuk-tabs__tab")[1].Should().HaveTextContent("Previous tasks");
     }
 
     [Theory]
@@ -66,7 +68,10 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
-        request.QuerySelector(".dfe-tabs").Should().HaveSelectedTab(expectedTitle);
+        request
+            .QuerySelector(".govuk-tabs__list-item--selected .govuk-tabs__tab")
+            .Should()
+            .HaveTextContent(expectedTitle);
     }
 
     [Theory]
@@ -78,7 +83,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
-        request.QuerySelector(".dfe-tabs__panel .govuk-heading").Should().HaveTextContent(expectedTitle);
+        request.QuerySelector(".dfe-tabs__panel .govuk-heading-m").Should().HaveTextContent(expectedTitle);
     }
 
     [Fact]

@@ -14,6 +14,7 @@ public static class AnalyticsTagNames
     public const string OrganisationId = "OrganisationId";
     public const string SessionId = "SessionId";
     public const string Scheme = "Scheme";
+    public const string OrganisationName = "OrganisationName";
 
     public const string ExperimentName = "ExperimentName";
     public const string TreatmentGroup = "TreatmentGroup";

@@ -6,6 +6,8 @@ namespace SchoolAccount.Integration.DfESignIn.Providers;
 
 public class LamsProvider(IFeatureManager featureManager) : IProvider
 {
+    public int Priority { get; } = 1;
+
     public bool IsProvider(OrganisationClaim organisation)
     {
         return organisation.Type?.Id
@@ -17,7 +19,7 @@ public class LamsProvider(IFeatureManager featureManager) : IProvider
                 or EstablishmentType.VoluntaryControlledSchool;
     }
 
-    public async Task<bool> CanAccess()
+    public async Task<bool> CanAccess(OrganisationClaim? organisation)
     {
         return await featureManager.IsEnabledAsync("AllowedSchools.Lams");
     }

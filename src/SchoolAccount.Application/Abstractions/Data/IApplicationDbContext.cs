@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolAccount.Domain.Providers;
 using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Sources;
 using SchoolAccount.Domain.Subtasks;
@@ -24,6 +25,7 @@ public interface IApplicationDbContext
     DbSet<TypeEntity> Types { get; set; }
     DbSet<TypeGroupingEntity> TypeGroupings { get; set; }
     DbSet<TypeTaskMappingEntity> TypeTaskMappings { get; set; }
+    DbSet<ProviderOverrideEntity> ProviderOverrides { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

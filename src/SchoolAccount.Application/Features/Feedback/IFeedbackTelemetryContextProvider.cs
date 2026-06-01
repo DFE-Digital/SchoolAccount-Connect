@@ -2,5 +2,5 @@ namespace SchoolAccount.Application.Features.Feedback;
 
 public interface IFeedbackTelemetryContextProvider
 {
-    FeedbackTelemetryContext GetContext();
+    Task<FeedbackTelemetryContext> GetContext();
 }

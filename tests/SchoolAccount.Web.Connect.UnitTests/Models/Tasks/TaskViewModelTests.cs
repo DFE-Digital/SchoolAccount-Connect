@@ -1,10 +1,10 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Tasks.GetById;
-using SchoolAccount.Web.Connect.Models.Tasks;
+using SchoolAccount.Web.Connect.Features.Tasks.GetById;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseBuilder;
 using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseSubtaskBuilder;
-using static SchoolAccount.Web.Connect.Models.Tasks.TaskViewMode;
+using static SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewMode;
 
 // ReSharper disable RedundantArgumentDefaultValue
 
@@ -22,7 +22,7 @@ public static class TaskViewModelTests
             var sut = new TaskViewModel(taskResponse, UpcomingTasks);
 
             // Act & Assert
-            sut.HeadingText.Should().Be("Upcoming Tasks");
+            sut.HeadingText.Should().Be("Upcoming tasks");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ public static class TaskViewModelTests
             var sut = new TaskViewModel(taskResponse);
 
             // Act & Assert
-            sut.HeadingText.Should().Be("Upcoming Tasks");
+            sut.HeadingText.Should().Be("Upcoming tasks");
         }
     }
 
@@ -58,7 +58,7 @@ public static class TaskViewModelTests
             var sut = new TaskViewModel(taskResponse);
 
             // Act & Assert
-            sut.NoTasksFoundMessage.Should().Be("There are no upcoming tasks");
+            sut.NoTasksFoundMessage.Should().Be("There are no upcoming tasks.");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ public static class TaskViewModelTests
             var sut = new TaskViewModel(taskResponse, PreviousTasks);
 
             // Act & Assert
-            sut.NoTasksFoundMessage.Should().Be("There are no previous tasks");
+            sut.NoTasksFoundMessage.Should().Be("There are no previous tasks.");
         }
     }
 

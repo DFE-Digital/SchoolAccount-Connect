@@ -22,8 +22,7 @@ public class DisabledAntiforgery : IAntiforgery
         return Task.FromResult(true);
     }
 
-    public void SetCookieTokenAndHeader(HttpContext context) 
-    { }
+    public void SetCookieTokenAndHeader(HttpContext context) { }
 
     public Task ValidateRequestAsync(HttpContext context)
     {

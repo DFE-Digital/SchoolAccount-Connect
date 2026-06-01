@@ -6,6 +6,7 @@ public static class TableConstants
     {
         public const string AuditLog = "AuditLog";
         public const string ProcessLog = "ProcessLog";
+        public const string ProviderOverride = "MockProviders";
     }
 
     internal static class Transactional

@@ -4,7 +4,7 @@ using SchoolAccount.Integration.DfESignIn.Converters;
 
 namespace SchoolAccount.Integration.DfESignIn.Models;
 
-public class OrganisationCategoryClaim : IdName<OrganisationCategory>
+public record OrganisationCategoryClaim : IdName<OrganisationCategory>
 {
     [JsonConverter(typeof(OrganisationCategoryConverter))]
     public new OrganisationCategory Id { get; init; }

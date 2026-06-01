@@ -6,10 +6,10 @@ using SchoolAccount.Tests.Common.DataSets;
 
 namespace SchoolAccount.Tests.Common.Builders;
 
-public sealed class OrganisationClaimBuilder
+public sealed class OrganisationClaimBuilder(Faker? faker = null)
 {
-    private readonly Faker _faker = new Faker { Random = new Randomizer(1234) };
-    
+    private readonly Faker _faker = faker ?? new Faker { Random = new Randomizer(1234) };
+
     private Guid? _id;
     private string? _name;
     private string? _legalName;
@@ -30,10 +30,10 @@ public sealed class OrganisationClaimBuilder
     private int? _statutoryHighAge;
     private string? _districtAdministrativeName;
     private string? _districtAdministrativeCode;
-    
-    public static OrganisationClaimBuilder AOrganisationClaim()
+
+    public static OrganisationClaimBuilder AOrganisationClaim(Faker? faker = null)
     {
-        return new();
+        return new(faker);
     }
 
     public OrganisationClaimBuilder WithId(Guid id)
@@ -61,6 +61,12 @@ public sealed class OrganisationClaimBuilder
         return this;
     }
 
+    public OrganisationClaimBuilder WithRandomCategory()
+    {
+        _category = _faker.PickRandom<OrganisationCategory>();
+        return this;
+    }
+
     public OrganisationClaimBuilder WithType(EstablishmentType type)
     {
         _type = type;
@@ -69,7 +75,7 @@ public sealed class OrganisationClaimBuilder
 
     public OrganisationClaimBuilder WithAddress(string address)
     {
-        _address  = address;
+        _address = address;
         return this;
     }
 
@@ -93,10 +99,7 @@ public sealed class OrganisationClaimBuilder
 
     public OrganisationClaimBuilder WithPhaseOfEducation(string phase)
     {
-        _phaseOfEducation = new IdName<int>
-        {
-            Name = phase
-        };
+        _phaseOfEducation = new IdName<int> { Name = phase };
 
         return this;
     }
@@ -104,11 +107,7 @@ public sealed class OrganisationClaimBuilder
     public OrganisationClaimBuilder WithDefaultPhaseOfEducation(bool assignStatutoryAge = true)
     {
         var type = _faker.PickRandom(SchoolDataSet.SchoolTypes);
-        _phaseOfEducation = new IdName<int>
-        {
-            Id = SchoolDataSet.SchoolTypes.IndexOf(type),
-            Name = type
-        };
+        _phaseOfEducation = new IdName<int> { Id = SchoolDataSet.SchoolTypes.IndexOf(type), Name = type };
 
         if (assignStatutoryAge)
         {
@@ -126,12 +125,10 @@ public sealed class OrganisationClaimBuilder
         {
             Name = name,
             Id = _faker.Random.Uuid(),
-            Code = _faker.Random.Int(0).ToString(CultureInfo.InvariantCulture)
+            Code = _faker.Random.Int(0).ToString(CultureInfo.InvariantCulture),
         };
-        
-        return setDistrict 
-            ? WithDistrictAdministrative(name) 
-            : this;
+
+        return setDistrict ? WithDistrictAdministrative(name) : this;
     }
 
     public OrganisationClaimBuilder WithDistrictAdministrative(string name, string? code = null)
@@ -155,33 +152,21 @@ public sealed class OrganisationClaimBuilder
 
     public OrganisationClaimBuilder WithRegion(string region)
     {
-        _region = new IdName<string>()
-        {
-            Id = _faker.Random.Uuid().ToString(),
-            Name = region
-        };
-        
+        _region = new IdName<string>() { Id = _faker.Random.Uuid().ToString(), Name = region };
+
         return this;
     }
 
     public OrganisationClaimBuilder AsOpen(DateTime? openedOn = null)
     {
-        _status = new OrganisationStateClaim()
-        {
-            Id = 1,
-            Name = "Open",
-        };
+        _status = new OrganisationStateClaim() { Id = 1, Name = "Open" };
         _openedOn = openedOn;
         return this;
     }
 
     public OrganisationClaimBuilder AsClosed(DateTime closedOn)
     {
-        _status = new OrganisationStateClaim()
-        {
-            Id = 2,
-            Name = "Closed",
-        };
+        _status = new OrganisationStateClaim() { Id = 2, Name = "Closed" };
         _closedOn = closedOn;
         return this;
     }
@@ -201,37 +186,27 @@ public sealed class OrganisationClaimBuilder
 
         return new OrganisationClaim
         {
-            Id = _id
-                 ?? _faker.Random.Uuid(),
-            Name = _name
-                   ?? school,
-            LegalName = _legalName
-                        ?? school.ToUpper(CultureInfo.InvariantCulture),
+            Id = _id ?? _faker.Random.Uuid(),
+            Name = _name ?? school,
+            LegalName = _legalName ?? school.ToUpper(CultureInfo.InvariantCulture),
             Category = category,
-            Type = BuildType(category.Id),
+            Type = BuildType(category?.Id),
             Urn = _urn,
             Upin = _upin,
-            Ukprn = _ukprn
-                    ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
+            Ukprn = _ukprn ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
             PhaseOfEducation = _phaseOfEducation,
-            Address = _address
-                      ?? _faker.Address.FullAddress(),
-            Region = _region
-                     ?? new IdName<string>()
-                     {
-                         Id = _faker.Random.Uuid().ToString(),
-                         Name = _faker.Address.State()
-                     },
+            Address = _address ?? _faker.Address.FullAddress(),
+            Region =
+                _region ?? new IdName<string>() { Id = _faker.Random.Uuid().ToString(), Name = _faker.Address.State() },
             LocalAuthority = authority,
             StatutoryLowAge = _statutoryLowAge ?? lowAge,
             StatutoryHighAge = _statutoryHighAge ?? highAge,
-            DistrictAdministrativeCode = _districtAdministrativeCode
-                                         ?? LocalAuthorityDataSet.GenerateGssCode(distinctAuthorityName),
-            DistrictAdministrativeName = _districtAdministrativeName
-                                         ?? distinctAuthorityName,
+            DistrictAdministrativeCode =
+                _districtAdministrativeCode ?? LocalAuthorityDataSet.GenerateGssCode(distinctAuthorityName),
+            DistrictAdministrativeName = _districtAdministrativeName ?? distinctAuthorityName,
             Status = _status,
             ClosedOn = _closedOn,
-            Telephone = _telephone
+            Telephone = _telephone,
         };
     }
 
@@ -245,7 +220,7 @@ public sealed class OrganisationClaimBuilder
             .AsOpen();
 
     public static OrganisationClaimBuilder Trust =>
-     AOrganisationClaim()
+        AOrganisationClaim()
             .WithName("Abbey Academies Trust")
             .WithAddress("Bourne Abbey C Of E Primary Academy, Abbey Road, Bourne, Not recorded, PE10 9EP")
             .WithCategory(OrganisationCategory.MultiAcademyTrust)
@@ -253,31 +228,23 @@ public sealed class OrganisationClaimBuilder
 
     public static OrganisationClaimBuilder Default => Academy;
 
-    private OrganisationCategoryClaim BuildCategory()
+    private OrganisationCategoryClaim? BuildCategory()
     {
-        _category ??= _faker.PickRandom<OrganisationCategory>();
-
-        return new OrganisationCategoryClaim
-        {
-            Id = _category.Value,
-            Name = _category.Value.ToString()
-        };
+        return _category.HasValue
+            ? new OrganisationCategoryClaim { Id = _category.Value, Name = _category.Value.ToString() }
+            : null;
     }
 
-    private OrganisationEstablishmentTypeClaim? BuildType(OrganisationCategory category)
+    private OrganisationEstablishmentTypeClaim? BuildType(OrganisationCategory? category)
     {
-        if (category != OrganisationCategory.Establishment)
+        if (!category.HasValue || category != OrganisationCategory.Establishment)
         {
             return null;
         }
-        
+
         _type ??= _faker.PickRandom<EstablishmentType>();
 
-        return new OrganisationEstablishmentTypeClaim
-        {
-            Id = _type.Value,
-            Name = _type.Value.ToString()
-        };
+        return new OrganisationEstablishmentTypeClaim { Id = _type.Value, Name = _type.Value.ToString() };
     }
 
     private IdCodeName<Guid, string> BuildLocalAuthority(out string authorityName)
@@ -287,7 +254,7 @@ public sealed class OrganisationClaimBuilder
         {
             Name = authority,
             Id = _faker.Random.Uuid(),
-            Code = _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture)
+            Code = _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
         };
     }
 }

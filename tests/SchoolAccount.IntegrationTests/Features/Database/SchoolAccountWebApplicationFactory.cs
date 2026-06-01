@@ -1,28 +1,20 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure;
-using SchoolAccount.IntegrationTests.Fakes;
+using SchoolAccount.Tests.Common;
+using SchoolAccount.Tests.Common.Fakes;
 
 namespace SchoolAccount.IntegrationTests.Features.Database;
 
-public class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
+public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWebApplicationFactory<TStartup>
     where TStartup : class
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override void ConfigureTestServices(IServiceCollection services)
     {
-        builder.UseEnvironment("IntegrationTest");
-
-        builder.ConfigureTestServices(services =>
-        {
-            services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
-            services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<DbContextOptions<ApplicationDbContext>>();
-        });
+        services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
+        base.ConfigureTestServices(services);
     }
 
     internal async Task ResetDatabaseAsync()
@@ -34,9 +26,7 @@ public class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactor
 
     internal ApplicationDbContext GetDbContext()
     {
-#pragma warning disable CA2000
         var scope = Services.CreateScope();
-#pragma warning restore CA2000
         return scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     }
 }

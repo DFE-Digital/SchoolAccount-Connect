@@ -6,6 +6,8 @@ namespace SchoolAccount.Integration.DfESignIn.Providers;
 
 public class SpecialsProvider(IFeatureManager featureManager) : IProvider
 {
+    public int Priority { get; } = 1;
+
     public bool IsProvider(OrganisationClaim organisation)
     {
         return organisation.Type?.Id
@@ -15,7 +17,7 @@ public class SpecialsProvider(IFeatureManager featureManager) : IProvider
                 or EstablishmentType.NonMaintainedSpecialSchool;
     }
 
-    public async Task<bool> CanAccess()
+    public async Task<bool> CanAccess(OrganisationClaim? organisation)
     {
         return await featureManager.IsEnabledAsync("AllowedSchools.Specials");
     }

@@ -1,36 +1,31 @@
 using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Infrastructure;
-using SchoolAccount.IntegrationTests.Extensions;
-using SchoolAccount.IntegrationTests.Fakes;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
+using SchoolAccount.Tests.Common;
+using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Fakes;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class SchoolAccountWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWebApplicationFactory<TStartup>
     where TStartup : class
 {
     public TestCalendarOfItemsDirectionalQueryHandler TestCalendarOfItemsDirectionalQueryHandler { get; } = new();
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override void ConfigureTestServices(IServiceCollection services)
     {
-        builder.UseEnvironment("IntegrationTest");
+        services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
 
-        builder.ConfigureTestServices(services =>
-        {
-            services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
-            services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
+        services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
+        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
 
-            services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>>(
-                _ => TestCalendarOfItemsDirectionalQueryHandler
-            );
-        });
+        services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>>(_ =>
+            TestCalendarOfItemsDirectionalQueryHandler
+        );
     }
 }

@@ -9,7 +9,7 @@ public static class OrganisationContextHelper
     public static IOrganisationContext CreateContext(bool canAccess, SchoolType schoolType, out IProvider provider)
     {
         provider = Substitute.For<IProvider>();
-        provider.CanAccess().Returns(canAccess);
+        provider.CanAccess(null).Returns(canAccess);
 
         var context = Substitute.For<IOrganisationContext>();
         context.Type.Returns(schoolType);
@@ -21,7 +21,7 @@ public static class OrganisationContextHelper
     public static IOrganisationContext CreateContext(bool canAccess, SchoolType schoolType, IOrganisation organisation)
     {
         var provider = Substitute.For<IProvider>();
-        provider.CanAccess().Returns(canAccess);
+        provider.CanAccess(null).Returns(canAccess);
 
         var context = Substitute.For<IOrganisationContext>();
         context.Type.Returns(schoolType);
@@ -41,7 +41,8 @@ public static class OrganisationContextHelper
 
         organisation.Name.Returns(name);
         context.Organisation.Returns(organisation);
-        context.IsAuthorised.Returns(isAuthenticated);
+        context.IsAuthorised().Returns(isAuthenticated);
+        context.IsValid().Returns(true);
         context.IsDsiDetermined.Returns(true);
 
         return context;

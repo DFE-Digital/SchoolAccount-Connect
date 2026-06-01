@@ -3,7 +3,7 @@ using SchoolAccount.Integration.DfESignIn.Common;
 
 namespace SchoolAccount.Integration.DfESignIn.Models;
 
-public class OrganisationStateClaim : IdName<int>
+public record OrganisationStateClaim : IdName<int>
 {
     [JsonPropertyName("tagColor")]
     public string? TagColour { get; set; }
