@@ -11,7 +11,7 @@ variables:
   - group: 'Shared Resources - S268Test'
   - group: 'Shared Resources - S268UAT'
   - group: 'Shared Resources - S268PreProd'
-  - group: 'Shared Resources - Prod'
+  - group: 'Shared Resources - S268Prod'
 
 stages:
   - template: job-templates/build.yml
@@ -83,7 +83,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - Prod'
+      - group: 'Shared Resources - S268Prod'
       - group: 'Alert Thresholds - Prod'
     jobs:
       - template: job-templates/deploy.yml
