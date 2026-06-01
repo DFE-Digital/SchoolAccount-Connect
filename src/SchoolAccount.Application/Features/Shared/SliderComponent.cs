@@ -11,6 +11,7 @@ public class SliderComponent
     public Collection<NodeComponent> Conditions { get; init; } = [];
     public Collection<NodeComponent> Metadata { get; init; } = [];
     public NodeComponent? Action { get; set; }
+    public DateOnly? Due { get; init; }
 }
 
 public class NodeComponent

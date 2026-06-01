@@ -54,6 +54,7 @@ public class DashboardViewBuilder(
                 {
                     Title = x.Name,
                     Description = x.Description,
+                    Due = x.Runtime.End,
                     Status = new NodeComponent
                     {
                         Value = string.Join(" ", x.Types.Select(t => t.DisplayValue)),

@@ -1,3 +1,4 @@
+@using SchoolAccount.Application.Extensions
 @using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Organisations
 @using SchoolAccount.Web.Connect.Extensions
@@ -141,7 +142,17 @@ strong.govuk-tag.meta-condition p {
       
       <article class="slide-card govuk-grid-column-two-thirds" role="group" aria-roledescription="slide" aria-label="Slide @i of @Model.Count">
         
-        <govuk-tag class="tag @slide.Status.Colour">@slide.Status.Value</govuk-tag>
+        <div style="display: flex; gap: var(--govuk-spacing-responsive--2);">
+          <govuk-tag class="tag @slide.Status.Colour">@slide.Status.Value</govuk-tag>
+          @if (slide.Due.HasValue && slide.Due.Value < DateOnlyExtensions.Today)
+          {
+            <govuk-tag class="tag govuk-tag--orange" aria-label="Was due on @slide.Due.Value.ToLongDateString()">PASTED</govuk-tag>
+          }
+          @if (slide.Due.HasValue && slide.Due.Value < DateOnlyExtensions.Today.AddDays(7))
+          {
+            <govuk-tag class="tag govuk-tag--red" aria-label="Due on @slide.Due.Value.ToLongDateString()">URGENT</govuk-tag>
+          }
+        </div>
         
         <h3 class="govuk-heading card-title">@slide.Title</h3>
         <p class="govuk-body card-body">@slide.Description</p>
