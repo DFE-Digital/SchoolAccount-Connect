@@ -17,10 +17,10 @@ public sealed class GetTaskByIdHandler(
         var accessibleTags = applicationDbContext.SchoolTypeTagMappings.AsQueryable();
         var task = await applicationDbContext
             .Tasks.AsNoTracking()
-            .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
+            .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type.Values))
             .Where(task => task.Id == query.Id)
             .AsSingleQuery()
-            .Select(GetTaskByIdProjection.ToTaskResponse(accessibleTags, organisationContext.Type))
+            .Select(GetTaskByIdProjection.ToTaskResponse(accessibleTags, organisationContext.Type.Values))
             .FirstOrDefaultAsync(cancellationToken);
 
         if (task is null)

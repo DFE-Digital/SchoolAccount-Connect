@@ -84,7 +84,7 @@ public class DashboardViewBuilder(
                             .ToCollection(),
                         _ => []
                     } ,
-                    Action = new NodeComponent { Value = "Read the guidance", Url = "#" },
+                    Action = new NodeComponent { Value = "Read the guidance", Url = $"/task/{x.ParentId}" },
                 })
             )
         };

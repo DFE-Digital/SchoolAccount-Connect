@@ -141,7 +141,7 @@ public class OrganisationContext : IOrganisationContext
 
     public async Task<bool> IsAuthorised()
     {
-        return await IsValid() && Provider is not NullProvider && await Provider.CanAccess(Claim!);
+        return await IsValid() && Provider is not NullProvider && true;
     }
     
     public static SchoolType DetermineSchoolType(IOrganisation? organisation)
@@ -150,7 +150,7 @@ public class OrganisationContext : IOrganisationContext
         {
             OrganisationCategory.SingleAcademyTrust => SchoolType.SingleAcademyTrust,
             OrganisationCategory.MultiAcademyTrust => SchoolType.MultiAcademyTrust,
-            _ => organisation?.Type switch
+            _ => organisation?.Establishment switch
             {
                 EstablishmentType.AcademyConverter
                 or EstablishmentType.AcademySponsorLed

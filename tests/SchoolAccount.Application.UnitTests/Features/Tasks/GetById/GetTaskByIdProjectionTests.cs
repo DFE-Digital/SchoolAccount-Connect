@@ -16,7 +16,7 @@ public class GetTaskByIdProjectionTests
 {
     private static Func<TaskEntity, GetTaskByIdResponse> _project(IEnumerable<SchoolTypeTagMappingEntity> mapping)
     {
-        return GetTaskByIdProjection.ToTaskResponse(mapping.AsQueryable(), SchoolType.Unknown).Compile();
+        return GetTaskByIdProjection.ToTaskResponse(mapping.AsQueryable(), [SchoolType.Unknown]).Compile();
     }
 
     [Fact]

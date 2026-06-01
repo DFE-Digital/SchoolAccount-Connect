@@ -2,6 +2,7 @@ using System.Globalization;
 using Bogus;
 using Microsoft.FeatureManagement;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
@@ -57,16 +58,28 @@ public sealed class OrganisationContextBuilder(Faker? faker = null, IFeatureMana
         {
             var ukPrn = _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture);
             var name = _faker.GetSchoolName();
-            
+
             _organisation = schoolType switch
             {
-                SchoolType.Academy or SchoolType.AcademySpecial => new EstablishmentOrganisation(ukPrn, name),
-                SchoolType.LocalAuthorityManaged or SchoolType.LocalAuthorityManagedSpecial => new LocalAuthorityOrganisation(ukPrn, name),
-                SchoolType.SingleAcademyTrust or SchoolType.MultiAcademyTrust => new TrustOrganisation(ukPrn, name),
-                _ => null   
+                SchoolType.Academy 
+                or SchoolType.AcademySpecial 
+                    => new EstablishmentOrganisation(ukPrn, name),
+                SchoolType.LocalAuthorityManaged 
+                or SchoolType.LocalAuthorityManagedSpecial 
+                    => new LocalAuthorityOrganisation(ukPrn, name),
+                SchoolType.SingleAcademyTrust 
+                or SchoolType.MultiAcademyTrust 
+                    => new TrustOrganisation
+                    {
+                        Ukrpn = ukPrn,
+                        Name = name,
+                        Establishment = EstablishmentType.Undeclared,
+                        Category = OrganisationCategory.Undeclared
+                    },
+                _ => null
             };
         }
-        
+
         return this;
     }
 

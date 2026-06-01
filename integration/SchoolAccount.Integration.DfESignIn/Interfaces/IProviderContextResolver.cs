@@ -1,3 +1,5 @@
+using SchoolAccount.Integration.DfESignIn.Models;
+
 namespace SchoolAccount.Integration.DfESignIn.Interfaces;
 
 public interface IProviderContextResolver

@@ -2,6 +2,7 @@ using System.Globalization;
 using Bogus;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Common;
+using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Tests.Common.DataSets;
 
 namespace SchoolAccount.Tests.Common.Builders;
@@ -193,7 +194,7 @@ public sealed class OrganisationClaimBuilder(Faker? faker = null)
             Type = BuildType(category?.Id),
             Urn = _urn,
             Upin = _upin,
-            Ukprn = _ukprn ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
+            UkPrn = _ukprn ?? _faker.Random.Number(10000000, 19999999).ToString(CultureInfo.InvariantCulture),
             PhaseOfEducation = _phaseOfEducation,
             Address = _address ?? _faker.Address.FullAddress(),
             Region =

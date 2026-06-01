@@ -11,24 +11,23 @@ namespace SchoolAccount.Tests.Common.Context;
 
 public class TestOrganisationContext : IOrganisationContext
 {
-    private readonly IProvider? _provider;
-    private readonly SchoolType? _schoolType;
-    private readonly IOrganisation? _organisation;
-    
     public TestOrganisationContext()
     {}
     
     public TestOrganisationContext(IProvider? provider, IOrganisation? organisation, SchoolType? type)
     {
-        _provider = provider;
-        _organisation = organisation;
-        _schoolType = type;
+        Provider = provider;
+        Organisation = organisation;
+        Type.Add(organisation?.Ukrpn ?? string.Empty, type ?? SchoolType.Unknown);
     }
 
-    public IProvider Provider => _provider ?? NullProvider.Default;
-    public SchoolType Type => _schoolType ?? SchoolType.Unknown;
-    public IOrganisation Organisation => _organisation ?? NullOrganisation.Default;
-    
+    public IProvider Provider => field ?? NullProvider.Default;
+    public Dictionary<string, SchoolType> Type { get; } = [];
+
+    public IOrganisation Organisation => field ?? NullOrganisation.Default;
+
+    public bool IsDsiDetermined { get; }
+
     public Task<bool> IsValid()
     {
         return Task.FromResult(true);

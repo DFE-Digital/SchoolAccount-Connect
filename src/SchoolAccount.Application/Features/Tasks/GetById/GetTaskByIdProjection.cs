@@ -12,11 +12,11 @@ public static class GetTaskByIdProjection
 {
     public static Expression<Func<TaskEntity, GetTaskByIdResponse>> ToTaskResponse(
         IQueryable<SchoolTypeTagMappingEntity> schoolTypeMappings,
-        SchoolType type
+        IEnumerable<SchoolType> types
     )
     {
         var isVisible = SubTaskEntitySpecifications.IsVisible();
-        var isAccessible = SubTaskEntitySpecifications.IsAccessibleForSchoolType(schoolTypeMappings, type);
+        var isAccessible = SubTaskEntitySpecifications.IsAccessibleForSchoolType(schoolTypeMappings, types);
         return x => new GetTaskByIdResponse
         {
             Id = x.Id,

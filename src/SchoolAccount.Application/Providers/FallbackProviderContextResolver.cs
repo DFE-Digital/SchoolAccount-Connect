@@ -1,6 +1,7 @@
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
+using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Providers;
@@ -17,7 +18,7 @@ public class FallbackProviderContextResolver(IFallbackProviderResolver fallbackP
             return null;
         }
 
-        if (!fallbackProviderResolver.TryGetProvider(organisationClaim.Ukprn, out var fallbackProvider))
+        if (!fallbackProviderResolver.TryGetProvider(organisationClaim.UkPrn, out var fallbackProvider))
         {
             return organisationClaim;
         }

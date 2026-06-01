@@ -12,7 +12,7 @@ public static class OrganisationContextHelper
         provider.CanAccess(null).Returns(canAccess);
 
         var context = Substitute.For<IOrganisationContext>();
-        context.Type.Returns(schoolType);
+        context.Type.Returns(new Dictionary<string, SchoolType> { { string.Empty, schoolType } });
         context.Provider.Returns(provider);
 
         return context;
@@ -24,7 +24,7 @@ public static class OrganisationContextHelper
         provider.CanAccess(null).Returns(canAccess);
 
         var context = Substitute.For<IOrganisationContext>();
-        context.Type.Returns(schoolType);
+        context.Type.Returns(new Dictionary<string, SchoolType> { { organisation.Ukrpn, schoolType } });
         context.Provider.Returns(provider);
         context.Organisation.Returns(organisation);
 

@@ -69,7 +69,7 @@
                             <div class="govuk-task-list__hint access-org">
                                 @foreach (var establishment in trust.Establishments)
                                 {
-                                    <govuk-tag class="govuk-tag--@(row.Organisations.Any(x => x.Id == (int)SchoolAccount.Web.Connect.Authentication.OrganisationContext.ComputeSchoolType(establishment)) ? "green" : "red")">@establishment.Name</govuk-tag>
+                                    <govuk-tag class="govuk-tag--@(row.Organisations.Any(x => x.Id == (int)SchoolAccount.Web.Connect.Authentication.OrganisationContext.DetermineSchoolType(establishment)) ? "green" : "red")">@establishment.Name</govuk-tag>
                                 }
                             </div>
                         }
