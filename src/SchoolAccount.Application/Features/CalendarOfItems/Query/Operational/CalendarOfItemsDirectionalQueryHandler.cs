@@ -1,23 +1,30 @@
+using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
+using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.QueryFactories;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 
-public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator aggregator)
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>
+public class CalendarOfItemsDirectionalQueryHandler(
+    IQueryAggregator aggregator,
+    IApplicationDbContext applicationDbContext,
+    IOrganisationContext organisationContext
+) : IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult<CalendarOfItemsRow>>
 {
-    public async Task<Result<CalendarOfItemsPagedResult>> Handle(
+    public async Task<Result<QueryPagedResult<CalendarOfItemsRow>>> Handle(
         CalendarOfItemsDirectionalQuery query,
         CancellationToken cancellationToken
     )
     {
-        var filter = query.Filter ?? new([]);
+        var filter = query.Filter ?? [];
 
         if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
         {
@@ -40,9 +47,8 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             );
         }
 
-        var model = new CalendarOfItemsCriteria
+        var model = new CalendarOfItemsQueryCriteria
         {
-            ToQuery = query.ToQuery,
             Range = DetermineDateRange(query),
             ViewModes = query.ViewModes,
             PageNumber = query.PageNumber,
@@ -51,8 +57,12 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
             Filter = filter,
             CustomOrderByFunction = query.CustomOrderBy,
         };
+        IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
+        [
+            new SubTaskQueryFactory(applicationDbContext, organisationContext)
+        ];
 
-        return await aggregator.Query(model, cancellationToken);
+        return await aggregator.Query(factories, model, cancellationToken);
     }
 
     public static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)

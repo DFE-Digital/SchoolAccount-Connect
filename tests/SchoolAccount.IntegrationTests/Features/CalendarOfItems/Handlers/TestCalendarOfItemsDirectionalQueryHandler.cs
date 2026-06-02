@@ -5,26 +5,27 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 
 public class TestCalendarOfItemsDirectionalQueryHandler
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>
+    : IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult>
 {
     private readonly List<CalendarOfItemsRow> _rows = [];
     private int _pageSize = 10;
 
-    public async Task<Result<CalendarOfItemsPagedResult>> Handle(
+    public async Task<Result<QueryPagedResult>> Handle(
         CalendarOfItemsDirectionalQuery query,
         CancellationToken cancellationToken
     )
     {
         var paginatedRows = _rows.ToStaticPagedList(1, _pageSize, _rows.Count);
         var emptyFilter = new Collection<Filterable>();
-        var emptyCriteria = new CalendarOfItemsCriteria();
+        var emptyCriteria = new GenericQueryCriteria();
 
-        var result = new CalendarOfItemsPagedResult(emptyCriteria, paginatedRows, emptyFilter);
+        var result = new QueryPagedResult(emptyCriteria, paginatedRows, emptyFilter);
 
         return await Task.FromResult(result);
     }

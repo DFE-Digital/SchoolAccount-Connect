@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
@@ -12,7 +13,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 public class CalendarController(
-    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
+    IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult<CalendarOfItemsRow>> handler,
     IOrganisationContext organisationContext
 ) : Controller
 {

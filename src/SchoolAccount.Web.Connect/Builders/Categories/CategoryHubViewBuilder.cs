@@ -1,5 +1,6 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
@@ -9,7 +10,7 @@ namespace SchoolAccount.Web.Connect.Builders.Categories;
 
 public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsViewBuilder)
 {
-    public CategoryHubViewModel Build(CalendarOfItemsPagedResult items, Uri currentUri, CategoryType? category = null)
+    public CategoryHubViewModel Build(QueryPagedResult<CalendarOfItemsRow> items, Uri currentUri, CategoryType? category = null)
     {
         var options = new CalendarOfItemViewOptions
         {

@@ -3,7 +3,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class CalendarOfItemsAggregatorTests
+public partial class QueryAggregatorTests
 {
     [Fact]
     public async Task Ensure_that_if_the_thread_is_cancelled_the_application_stops()

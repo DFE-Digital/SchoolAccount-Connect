@@ -24,7 +24,7 @@ public class Node<TId> where TId : struct
     public Node(Enum enumValue)
     {
         Id = (TId)(object)enumValue;
-        Name = Enum.GetName(enumValue.GetType(), enumValue);
+        Name = Enum.GetName(enumValue.GetType(), enumValue) ?? throw new InvalidCastException();
     }
 
     public static implicit operator Node<TId>(TId value)
@@ -35,6 +35,11 @@ public class Node<TId> where TId : struct
     public static implicit operator Node<TId>(Enum enumValue)
     {
         return new Node<TId>(enumValue);
+    }
+
+    public static implicit operator TId(Node<TId> node)
+    {
+        return node.Id;
     }
 
     public static implicit operator Node<TId>(string name)

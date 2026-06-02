@@ -3,6 +3,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
@@ -17,7 +18,6 @@ public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfI
         DateOnly? date = null
     )
         : base(
-            CalendarOfItemsQueryTypes.SubTask,
             viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes,
             12,
             date ?? DateOnlyExtensions.Today,

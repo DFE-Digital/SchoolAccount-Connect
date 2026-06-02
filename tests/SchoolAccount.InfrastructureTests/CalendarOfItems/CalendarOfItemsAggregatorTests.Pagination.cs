@@ -6,7 +6,7 @@ using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class CalendarOfItemsAggregatorTests
+public partial class QueryAggregatorTests
 {
     [Theory]
     [InlineData(5, 1, 20)]

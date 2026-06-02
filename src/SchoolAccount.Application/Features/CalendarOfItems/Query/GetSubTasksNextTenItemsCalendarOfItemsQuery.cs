@@ -3,6 +3,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
@@ -12,7 +13,6 @@ public record GetSubTasksNextTenItemsCalendarOfItemsQuery : CalendarOfItemsCusto
 {
     public GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnly date)
         : base(
-            CalendarOfItemsQueryTypes.SubTask,
             new DateOnlyRange(date.StartOfMonth(), date.AddMonths(12).EndOfMonth()),
             10,
             1,

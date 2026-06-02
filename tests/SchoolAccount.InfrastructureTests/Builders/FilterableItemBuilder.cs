@@ -1,5 +1,6 @@
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 
 namespace SchoolAccount.InfrastructureTests.Builders;
 

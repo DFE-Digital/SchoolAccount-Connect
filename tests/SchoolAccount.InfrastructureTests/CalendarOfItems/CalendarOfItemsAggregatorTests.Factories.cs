@@ -5,7 +5,7 @@ using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class CalendarOfItemsAggregatorTests
+public partial class QueryAggregatorTests
 {
     [Fact]
     public async Task Ensure_if_multiple_factories_are_configured_that_they_are_both_queried()

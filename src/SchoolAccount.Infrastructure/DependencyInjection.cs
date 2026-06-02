@@ -3,12 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Infrastructure.Abstraction;
-using SchoolAccount.Infrastructure.Aggregators;
-using SchoolAccount.Infrastructure.Helpers.Filtering;
-using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
+using SchoolAccount.Application.Aggregators;
+using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.Infrastructure.Time;
 using SchoolAccount.Kernel;
@@ -26,8 +26,6 @@ public static class DependencyInjection
         services.AddDatabase(configuration, logger);
         services.AddHealthChecks(configuration, logger);
         services.AddServices();
-        services.AddFilterableServices();
-        services.AddCalendarOfItemsEngine();
 
         services.AddSingleton<IFallbackProviderResolver>(sp =>
         {
@@ -93,35 +91,5 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         return services;
-    }
-
-    private static IServiceCollection AddCalendarOfItemsEngine(this IServiceCollection services)
-    {
-        services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo<ICalendarOfItemsQueryFactory>())
-                .AsImplementedInterfaces()
-                .WithScopedLifetime()
-        );
-
-        services.AddScoped<ICalendarOfItemsAggregator, CalendarOfItemsAggregator>();
-        services.AddScoped<CalendarOfItemsQueryFactoryResolver>();
-
-        return services;
-    }
-
-    private static void AddFilterableServices(this IServiceCollection services)
-    {
-        services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo<IFilterableFactory>())
-                .AsImplementedInterfaces()
-                .WithScopedLifetime()
-                .AddClasses(classes => classes.AssignableTo<IFilterableRegistrar>())
-                .AsImplementedInterfaces()
-                .WithScopedLifetime()
-        );
-
-        services.AddScoped<FilterableFieldRegistry>();
     }
 }

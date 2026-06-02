@@ -3,7 +3,20 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
 
-public class QueryRow : Node<long>
+public interface IQueryRow
+{
+    public long Id { get; }
+    public string? Name { get; }
+    public string? Description { get; }
+    public DateOnly? SortDate { get; }
+    public Node<int> Type { get; } 
+    public DateTime? LastUpdated { get; }
+    public ExtensionNode<int>? Status { get; }
+    public IEnumerable<ExtensionNode<long>> Types { get; }
+    public IEnumerable<ExtensionNode<long>> Tags { get; }
+}
+
+public class QueryRow : Node<long>, IQueryRow
 {
     public string? Description { get; init; }
     public DateOnly? SortDate { get; init; }

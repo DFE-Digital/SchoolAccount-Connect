@@ -12,12 +12,12 @@ public class CalendarOfItemsRowViewBuilder
     public CalendarOfItemsRowItemViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsRow row)
     {
         var url = DetermineUri(
-            row.Type,
+            (CalendarOfItemsRowType)(int)row.Type,
             row.Id,
-            row.Status?.EntityId == (int)WorkflowState.Expired ? "#previous" : string.Empty
+            row.Status?.Id == (int)WorkflowState.Expired ? "#previous" : string.Empty
         );
 
-        return new CalendarOfItemsRowItemViewModel(row.Name, url)
+        return new CalendarOfItemsRowItemViewModel(row.Name ?? string.Empty, url)
         {
             Description = row.Description,
             DateText = !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)

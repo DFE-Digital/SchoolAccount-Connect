@@ -5,6 +5,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using X.PagedList;
@@ -24,7 +25,7 @@ public class CalendarOfItemsViewBuilderTests
         var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
         var currentUri = new Uri("https://localhost:7033/calendar");
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), emptyPagedList, filters);
 
         // Act
         var viewModel = viewBuilder.BuildForPage(items, CalendarOfItemsViewModes.None, currentUri);

@@ -9,12 +9,12 @@ internal static class CalendarOfItemsQueryableExtensions
         this IQueryable<CalendarOfItemsRow> query,
         CalendarOfItemsViewModes viewModes,
         CalendarOfItemsSortMode sortMode,
-        GenericOrderFunction<QueryRow>? customOrderBy = null
+        GenericOrderFunction<CalendarOfItemsRow>? customOrderBy = null
     )
     {
         if (customOrderBy is not null)
         {
-            return (IQueryable<CalendarOfItemsRow>)customOrderBy(query);
+            return customOrderBy(query);
         }
 
         return viewModes switch

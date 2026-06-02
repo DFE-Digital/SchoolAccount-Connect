@@ -6,6 +6,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.AuthenticationTests.Helpers;
 using SchoolAccount.InfrastructureTests.Extensions;
 using SchoolAccount.Kernel;
@@ -30,7 +31,7 @@ public class CategoryHubViewBuilderTests
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/all-tasks");
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), emptyPagedList, filters);
 
         // Act
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);
@@ -53,7 +54,7 @@ public class CategoryHubViewBuilderTests
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/all-tasks");
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), emptyPagedList, filters);
 
         // Act
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);
@@ -81,7 +82,7 @@ public class CategoryHubViewBuilderTests
         var categoryHubViewBuilder = new CategoryHubViewBuilder(calendarViewBuilder);
         var currentUri = new Uri("https://localhost:7033/categories/1");
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), emptyPagedList, filters);
 
         var category = new CategoryType
         {
@@ -116,7 +117,7 @@ public class CategoryHubViewBuilderTests
 
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), emptyPagedList, filters);
 
         // Act
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);
@@ -150,7 +151,7 @@ public class CategoryHubViewBuilderTests
             3
         );
 
-        var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), tasks, filters);
+        var items = new QueryPagedResult(new GenericQueryCriteria(), tasks, filters);
 
         // Act
         var viewModel = categoryHubViewBuilder.Build(items, currentUri);

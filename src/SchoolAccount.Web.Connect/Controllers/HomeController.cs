@@ -5,6 +5,7 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
@@ -20,7 +21,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskSearchResponse> handler,
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
-    IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult> calendarOfItemQueryBuilder,
+    IQueryHandler<CalendarOfItemsCustomQuery, QueryPagedResult<CalendarOfItemsRow>> calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
     TaskSearchCategoryHubViewBuilder taskSearchCategoryHubViewBuilder,
     BasicPageViewBuilder basicPageViewBuilder

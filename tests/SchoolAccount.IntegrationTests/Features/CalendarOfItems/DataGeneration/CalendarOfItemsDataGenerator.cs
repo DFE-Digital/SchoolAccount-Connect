@@ -11,7 +11,7 @@ public class CalendarOfItemsDataGenerator
     private readonly Faker _faker = new("en_GB") { Random = new Randomizer(123) };
 
     public ICollection<CalendarOfItemsRow> GenerateCalendarOfItemsRows(
-        CalendarOfItemsCriteria filter,
+        GenericQueryCriteria filter,
         int numberOfItems,
         int daysForward = 31,
         int daysBack = 180

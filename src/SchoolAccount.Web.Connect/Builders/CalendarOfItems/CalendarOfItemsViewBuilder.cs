@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
@@ -17,7 +18,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
 
     public CalendarOfItemsViewModel Build(
         CalendarOfItemViewOptions options,
-        CalendarOfItemsPagedResult result,
+        QueryPagedResult<CalendarOfItemsRow> result,
         Uri currentUri
     )
     {
@@ -59,7 +60,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
     }
 
     public CalendarOfItemsViewModel BuildForPage(
-        CalendarOfItemsPagedResult items,
+        QueryPagedResult<CalendarOfItemsRow> items,
         CalendarOfItemsViewModes viewModes,
         Uri currentUri
     )
@@ -102,7 +103,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
         return Build(options, items, currentUri);
     }
 
-    public CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items, Uri currentUri)
+    public CalendarOfItemsViewModel BuildForDashboard(QueryPagedResult<CalendarOfItemsRow> items, Uri currentUri)
     {
         var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 

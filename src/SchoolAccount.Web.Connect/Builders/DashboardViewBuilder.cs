@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Kernel;
@@ -15,7 +16,7 @@ public class DashboardViewBuilder(
 )
 {
     public DashboardViewModel Build(
-        CalendarOfItemsPagedResult calendarOfItemsPagedResult,
+        QueryPagedResult<CalendarOfItemsRow> queryPagedResult,
         CategoryPagedResult categoryPagedResult,
         Uri currentUri
     )
@@ -25,7 +26,7 @@ public class DashboardViewBuilder(
         dashboardViewItems.Add(
             new DashboardViewItem(
                 ViewAddressConstraints.CalendarOfItems.Tab,
-                calendarOfItemsViewBuilder.BuildForDashboard(calendarOfItemsPagedResult, currentUri)
+                calendarOfItemsViewBuilder.BuildForDashboard(queryPagedResult, currentUri)
             )
         );
 
