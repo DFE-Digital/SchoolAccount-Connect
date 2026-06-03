@@ -30,7 +30,7 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
             [new SubTaskFilterableFactory(applicationDbContext)],
             new CalendarOfItemsQueryCriteria
             {
-                Range = DetermineDateRange(query),
+                Range = query.DetermineDateRange(),
                 ViewModes = query.ViewModes,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize,
@@ -40,39 +40,6 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
             },
             cancellationToken
         );
-    }
-
-    private static DateOnlyRange DetermineDateRange(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery filter)
-    {
-        var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
-        if ((filter.ViewModes & bothSet) == bothSet)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(filter),
-                filter.ViewModes,
-                "ViewModes cannot have both Forward and Backward set simultaneously."
-            );
-        }
-
-        DateOnly rangeStart;
-        DateOnly rangeEnd;
-
-        if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Backward))
-        {
-            rangeStart = filter.QueryFromDate.AddMonths(-filter.ViewPeriodInMonths).StartOfMonth();
-            rangeEnd = filter.QueryFromDate.EndOfMonth();
-        }
-        else if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Forward))
-        {
-            rangeStart = filter.QueryFromDate.StartOfMonth();
-            rangeEnd = filter.QueryFromDate.AddMonths(filter.ViewPeriodInMonths).EndOfMonth();
-        }
-        else
-        {
-            throw new InvalidOperationException("Unsupported view mode");
-        }
-
-        return new DateOnlyRange(rangeStart, rangeEnd);
     }
 
     private static IList<FilterRequest> BuildFilter(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery query)

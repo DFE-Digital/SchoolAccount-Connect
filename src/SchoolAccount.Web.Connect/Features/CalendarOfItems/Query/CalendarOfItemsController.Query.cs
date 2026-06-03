@@ -18,6 +18,7 @@ public sealed partial class CalendarOfItemsController
     {
         var filter = new GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery(
             query.ViewModes,
+            12,
             query.PageSize,
             query.PageNumber,
             query.Filters,

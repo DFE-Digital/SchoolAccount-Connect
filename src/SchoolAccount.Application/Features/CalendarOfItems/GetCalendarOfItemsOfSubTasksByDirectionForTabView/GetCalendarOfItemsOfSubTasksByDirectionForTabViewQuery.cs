@@ -1,6 +1,8 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.CalendarOfItems.Common;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Interfaces;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
@@ -9,10 +11,11 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 
 public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery
-    : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
+    : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>, ICalendarOfItemsDateQuery
 {
     public GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery(
         CalendarOfItemsViewModes viewModes,
+        int viewPeriodInMonths = 12,
         int pageSize = 10,
         int pageNumber = 1,
         Dictionary<string, List<string>>? filters = null,
@@ -21,7 +24,7 @@ public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery
     )
     {
         ViewModes = viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes;
-        ViewPeriodInMonths = 12;
+        ViewPeriodInMonths = viewPeriodInMonths;
         QueryFromDate = date ?? DateOnlyExtensions.Today;
         PageSize = pageSize <= 0 ? 10 : pageSize;
         PageNumber = pageNumber <= 0 ? 1 : pageNumber;
