@@ -9,7 +9,6 @@ using SchoolAccount.Application.Features.CalendarOfItems.Factories;
 using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
-using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 

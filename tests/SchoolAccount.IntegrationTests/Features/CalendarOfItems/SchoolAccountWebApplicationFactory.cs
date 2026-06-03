@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 using SchoolAccount.Tests.Common;

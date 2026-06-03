@@ -1,5 +1,4 @@
 using NSubstitute;
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;

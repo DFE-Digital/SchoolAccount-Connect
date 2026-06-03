@@ -1,7 +1,5 @@
 using System.Globalization;
-using AwesomeAssertions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using Xunit;
 

@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 
@@ -36,5 +35,9 @@ public class FilterableFieldRegistry
     }
 
     public FieldSelectorMapping All => _all;
-    public IReadOnlyCollection<IFilterableRegistrar> Registrars => new Collection<IFilterableRegistrar>(_registrars);
+    
+    public IReadOnlyList<IFilterableRegistrar> Registrars => _registrars;
+    
+    public IReadOnlyList<IFilterableAndConsolidateRegistrar> Consolidates =>
+        field ??= Registrars.OfType<IFilterableAndConsolidateRegistrar>().ToList();
 }

@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Kernel;
 

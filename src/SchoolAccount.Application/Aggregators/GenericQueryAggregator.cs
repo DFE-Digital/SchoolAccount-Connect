@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.ObjectModel;
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering;
@@ -56,8 +55,7 @@ public class GenericQueryAggregator(
         where TEntity: IEntity
         where TRow: IQueryRow
     {
-        var consumableRegistrars = filterRegistry
-            .Registrars.OfType<IFilterableAndConsolidateRegistrar>()
+        var consumableRegistrars = filterRegistry.Consolidates
             .Where(x => factories.Any(f => f.TypeBeingRegistered == x.TypeBeingRegistered));
         
         foreach (var registrar in consumableRegistrars)

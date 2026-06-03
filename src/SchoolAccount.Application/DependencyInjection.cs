@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Aggregators;

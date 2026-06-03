@@ -6,7 +6,6 @@ using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
-using SchoolAccount.Application.Features.Shared.Query.Delegates;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
