@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
@@ -7,14 +6,15 @@ using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Projections;
 using SchoolAccount.Application.Specifications;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.Shared.Query.QueryFactories;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Factories;
 
-public class SubTaskQueryFactory(
+public class QueryFactoryOfSubTasksForCalendarOfItems(
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryFactory<CalendarOfItemsRow>
+) : IQueryFactory<SubTaskEntity, CalendarOfItemsRow>
 {
     public IQueryable<CalendarOfItemsRow> Query(IList<FilterRequest> filter, FieldSelectorMapping mappings)
     {

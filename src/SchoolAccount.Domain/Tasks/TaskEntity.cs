@@ -3,11 +3,12 @@ using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Types;
+using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Domain.Tasks;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-public class TaskEntity
+public class TaskEntity : IEntity
 {
     public long Id { get; init; }
 

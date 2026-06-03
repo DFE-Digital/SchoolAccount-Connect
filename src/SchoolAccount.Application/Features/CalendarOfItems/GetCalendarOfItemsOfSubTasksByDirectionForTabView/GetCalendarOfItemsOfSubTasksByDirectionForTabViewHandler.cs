@@ -5,10 +5,11 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Factories;
+using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
-using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
@@ -25,48 +26,27 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
         CancellationToken cancellationToken
     )
     {
-        var filter = query.Filter ?? [];
-
-        if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
-        {
-            filter.Add(
-                new FilterRequest
-                {
-                    Field = "state",
-                    Operator = ComparisonType.Equals,
-                    Value = query.ViewModes switch
-                    {
-                        CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
-                        CalendarOfItemsViewModes.Forward => WorkflowState.Published,
-                        _ => throw new ArgumentOutOfRangeException(
-                            nameof(query),
-                            query.ViewModes,
-                            "View Mode incorrectly set"
-                        ),
-                    },
-                }
-            );
-        }
-
-        var model = new CalendarOfItemsQueryCriteria
-        {
-            Range = DetermineDateRange(query),
-            ViewModes = query.ViewModes,
-            PageNumber = query.PageNumber,
-            PageSize = query.PageSize,
-            SortMode = query.SortMode,
-            Filter = filter,
-            CustomOrderByFunction = x => x.WithSorting(query.ViewModes, query.SortMode),
-        };
-        IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
-        [
-            new SubTaskQueryFactory(applicationDbContext, organisationContext)
-        ];
-
-        return await aggregator.Query(factories, model, cancellationToken);
+        return await aggregator.Query(
+            [
+                new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)
+            ], 
+            [
+                new SubTaskFilterableFactory(applicationDbContext)
+            ],
+            new CalendarOfItemsQueryCriteria
+            {
+                Range = DetermineDateRange(query),
+                ViewModes = query.ViewModes,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+                SortMode = query.SortMode,
+                Filter = BuildFilter(query),
+                CustomOrderByFunction = x => x.WithSorting(query.ViewModes, query.SortMode),
+            }, 
+            cancellationToken);
     }
 
-    public static DateOnlyRange DetermineDateRange(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery filter)
+    private static DateOnlyRange DetermineDateRange(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery filter)
     {
         var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
         if ((filter.ViewModes & bothSet) == bothSet)
@@ -97,5 +77,33 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
         }
 
         return new DateOnlyRange(rangeStart, rangeEnd);
+    }
+
+    private static IList<FilterRequest> BuildFilter(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery query)
+    {
+        var filter = query.Filter ?? [];
+
+        if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
+        {
+            filter.Add(
+                new FilterRequest
+                {
+                    Field = "state",
+                    Operator = ComparisonType.Equals,
+                    Value = query.ViewModes switch
+                    {
+                        CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
+                        CalendarOfItemsViewModes.Forward => WorkflowState.Published,
+                        _ => throw new ArgumentOutOfRangeException(
+                            nameof(query),
+                            query.ViewModes,
+                            "View Mode incorrectly set"
+                        ),
+                    },
+                }
+            );
+        }
+
+        return filter;
     }
 }

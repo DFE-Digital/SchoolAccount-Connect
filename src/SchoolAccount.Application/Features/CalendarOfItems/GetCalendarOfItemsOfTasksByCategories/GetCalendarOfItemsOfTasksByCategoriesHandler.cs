@@ -4,9 +4,9 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Factories;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
-using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
@@ -22,21 +22,21 @@ public class GetCalendarOfItemsOfTasksByCategoriesHandler(
         CancellationToken cancellationToken
     )
     {
-        var model = new CalendarOfItemsQueryCriteria
-        {
-            Range = query.QueryRange,
-            ViewModes = CalendarOfItemsViewModes.Custom,
-            PageNumber = query.PageNumber,
-            PageSize = query.PageSize,
-            SortMode = query.SortMode,
-            Filter = query.Filter ?? [],
-            CustomOrderByFunction = query.CustomOrderBy,
-        };
-        IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
-        [
-            new SubTaskQueryFactory(applicationDbContext, organisationContext)
-        ];
-
-        return await aggregator.Query(factories, model, cancellationToken);
+        return await aggregator.Query(
+            [
+                new QueryFactoryOfTasksForCalendarOfItems(applicationDbContext, organisationContext)
+            ], 
+            [],
+            new CalendarOfItemsQueryCriteria
+            {
+                Range = query.QueryRange,
+                ViewModes = CalendarOfItemsViewModes.Custom,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+                SortMode = query.SortMode,
+                Filter = query.Filter ?? [],
+                CustomOrderByFunction = x => x.OrderBy(o => o.Name),
+            }, 
+            cancellationToken);
     }
 }

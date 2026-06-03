@@ -5,7 +5,6 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
-using SchoolAccount.Application.Features.Shared.Query.Models;
 using SchoolAccount.Application.Specifications;
 using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Taxonomies;

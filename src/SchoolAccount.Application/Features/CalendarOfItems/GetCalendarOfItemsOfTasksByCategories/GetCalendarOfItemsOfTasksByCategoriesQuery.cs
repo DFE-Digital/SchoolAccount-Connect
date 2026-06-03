@@ -26,7 +26,6 @@ public record GetCalendarOfItemsOfTasksByCategoriesQuery : IQuery<GenericQueryPa
         SortMode = CalendarOfItemsSortMode.NotSpecified;
         NoResultMessage = "No results found";
         Filter = BuildFilter(categoryIds);
-        CustomOrderBy = x => x.OrderBy(o => o.Name);
     }
 
     public DateOnlyRange QueryRange { get; init; }
@@ -35,7 +34,6 @@ public record GetCalendarOfItemsOfTasksByCategoriesQuery : IQuery<GenericQueryPa
     public CalendarOfItemsSortMode SortMode { get; init; }
     public string NoResultMessage { get; init; }
     public IList<FilterRequest>? Filter { get; init; }
-    public GenericOrderFunction<CalendarOfItemsRow>? CustomOrderBy { get; init; }
 
     private static DateOnlyRange BuildDateRange(DateOnly? date)
     {

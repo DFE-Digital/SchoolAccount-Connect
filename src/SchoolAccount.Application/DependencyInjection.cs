@@ -46,7 +46,7 @@ public static class DependencyInjection
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(IQueryFactory<>)), publicOnly: false)
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryFactory<,>)), publicOnly: false)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
