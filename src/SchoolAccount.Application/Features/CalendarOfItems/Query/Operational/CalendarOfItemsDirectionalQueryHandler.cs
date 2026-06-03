@@ -7,7 +7,9 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
-using SchoolAccount.Application.Features.Shared.QueryFactories;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
+using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 

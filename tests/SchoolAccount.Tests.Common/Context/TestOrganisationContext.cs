@@ -1,11 +1,7 @@
-using SchoolAccount.Application.Resolvers.Interfaces;
-using SchoolAccount.Integration.DfESignIn;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Providers;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
-using SchoolAccount.Tests.Common.Builders;
-using SchoolAccount.Web.Connect.Authentication;
 
 namespace SchoolAccount.Tests.Common.Context;
 

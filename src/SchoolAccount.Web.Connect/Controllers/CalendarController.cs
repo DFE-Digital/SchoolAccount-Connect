@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Extensions;

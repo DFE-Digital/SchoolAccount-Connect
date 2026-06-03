@@ -1,5 +1,4 @@
-﻿using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace SchoolAccount.Web.Connect.Helpers;
 

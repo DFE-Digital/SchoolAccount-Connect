@@ -2,14 +2,10 @@ using NSubstitute;
 using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Aggregators;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
-using SchoolAccount.Infrastructure.Helpers.Filtering;
-using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
-using SchoolAccount.Infrastructure.Resolvers;
 using SchoolAccount.InfrastructureTests.Extensions;
 using SchoolAccount.Kernel;
 

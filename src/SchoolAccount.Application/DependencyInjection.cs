@@ -5,6 +5,7 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Aggregators;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Application;

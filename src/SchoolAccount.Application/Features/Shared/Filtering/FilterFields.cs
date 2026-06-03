@@ -1,6 +1,6 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 namespace SchoolAccount.Application.Features.Shared.Filtering;
 

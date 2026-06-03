@@ -1,5 +1,4 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 

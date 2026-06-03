@@ -1,12 +1,10 @@
 using MockQueryable.NSubstitute;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Tasks.GetById;
 using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Sources;
 using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Tasks;
-using SchoolAccount.Domain.Taxonomies;
 using SchoolAccount.Kernel;
 using SchoolAccount.Tests.Common.Fakes;
 using static SchoolAccount.Domain.Common.WorkflowState;

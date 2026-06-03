@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 

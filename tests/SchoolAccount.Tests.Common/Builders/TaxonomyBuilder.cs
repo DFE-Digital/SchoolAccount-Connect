@@ -1,4 +1,3 @@
-using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Taxonomies;
 
 namespace SchoolAccount.Tests.Common.Builders;

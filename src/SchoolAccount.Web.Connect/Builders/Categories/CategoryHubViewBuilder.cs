@@ -1,7 +1,7 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Category.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.Categories;

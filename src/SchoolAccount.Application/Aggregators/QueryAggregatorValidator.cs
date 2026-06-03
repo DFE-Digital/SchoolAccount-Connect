@@ -1,7 +1,7 @@
 using System.Data.SqlTypes;
 using FluentValidation;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 namespace SchoolAccount.Application.Aggregators;
 

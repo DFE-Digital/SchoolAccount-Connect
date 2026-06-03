@@ -1,10 +1,9 @@
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Delegates;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;

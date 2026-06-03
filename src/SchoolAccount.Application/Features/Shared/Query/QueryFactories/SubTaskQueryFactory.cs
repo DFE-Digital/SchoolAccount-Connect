@@ -4,11 +4,12 @@ using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Projections;
 using SchoolAccount.Application.Specifications;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.Shared.QueryFactories;
+namespace SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 
 public class SubTaskQueryFactory(
     IApplicationDbContext applicationDbContext,

@@ -1,5 +1,6 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Shared.Query.Delegates;
 
 namespace SchoolAccount.Infrastructure.Extensions;
 

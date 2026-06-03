@@ -1,4 +1,3 @@
-using SchoolAccount.Application.Extensions;
 using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Tags;
 using SchoolAccount.Domain.Taxonomies;

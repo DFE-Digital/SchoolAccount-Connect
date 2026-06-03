@@ -3,14 +3,13 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Specifications;
 using SchoolAccount.Kernel;
-using X.PagedList;
 
 namespace SchoolAccount.Application.Aggregators;
 

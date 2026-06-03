@@ -1,7 +1,6 @@
-using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 
-namespace SchoolAccount.Application.Abstractions;
+namespace SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 
 public interface IFilter : IList<FilterRequest>
 {

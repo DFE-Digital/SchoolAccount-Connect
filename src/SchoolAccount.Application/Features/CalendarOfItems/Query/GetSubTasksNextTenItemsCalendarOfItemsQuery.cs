@@ -2,7 +2,6 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
-using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
