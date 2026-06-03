@@ -37,11 +37,6 @@ public static class RouteConstants
         public const string SignedOut = Index + "/signedout";
     }
 
-    public static class Calendar
-    {
-        public const string Index = Root + "calendar";
-    }
-
     public static class Category
     {
         public const string Index = Root + "categories";

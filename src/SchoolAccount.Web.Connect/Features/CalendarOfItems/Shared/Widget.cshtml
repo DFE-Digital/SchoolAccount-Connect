@@ -1,4 +1,4 @@
-@using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Features.CalendarOfItems
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
 <form method="get">
@@ -25,13 +25,13 @@
             </ul>
             
             <div class="dfe-tabs__panel">
-                <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
+                <partial name="@CalendarOfItemsConstants.Views.Tab" model="@Model"/>
             </div>
 
         </div>
     }
     else
     {
-        <partial name="@ViewAddressConstraints.CalendarOfItems.Tab" model="@Model"/>
+        <partial name="@CalendarOfItemsConstants.Views.Tab" model="@Model"/>
     }
 </form>

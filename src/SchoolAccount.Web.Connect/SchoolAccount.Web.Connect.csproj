@@ -41,5 +41,6 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Login\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\CalendarOfItems\Index.cshtml" />
   </ItemGroup>
 </Project>

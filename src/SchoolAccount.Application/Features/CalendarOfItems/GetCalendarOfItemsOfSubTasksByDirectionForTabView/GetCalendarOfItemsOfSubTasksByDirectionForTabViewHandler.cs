@@ -56,6 +56,7 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
             PageSize = query.PageSize,
             SortMode = query.SortMode,
             Filter = filter,
+            CustomOrderByFunction = x => x.WithSorting(query.ViewModes, query.SortMode),
         };
         IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
         [

@@ -6,6 +6,7 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Builders.Categories;
+using SchoolAccount.Web.Connect.Features.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models;
 
 namespace SchoolAccount.Web.Connect.Builders;
@@ -25,7 +26,7 @@ public class DashboardViewBuilder(
 
         dashboardViewItems.Add(
             new DashboardViewItem(
-                ViewAddressConstraints.CalendarOfItems.Tab,
+                CalendarOfItemsConstants.Views.Tab,
                 calendarOfItemsViewBuilder.BuildForDashboard(queryPagedResult, currentUri)
             )
         );
