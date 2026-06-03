@@ -1,7 +1,7 @@
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
@@ -10,16 +10,16 @@ using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public class CalendarOfItemsCustomQueryHandler(
+public class GetSubTasksNextTenItemsCalendarOfItemsQueryHandler(
     IQueryAggregator aggregator,
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryHandler<CalendarOfItemsCustomQuery, QueryPagedResult<CalendarOfItemsRow>>
+) : IQueryHandler<GetSubTasksNextTenItemsCalendarOfItemsQuery, QueryPagedResult<CalendarOfItemsRow>>
 {
     public async Task<Result<QueryPagedResult<CalendarOfItemsRow>>> Handle(
-        CalendarOfItemsCustomQuery query,
+        GetSubTasksNextTenItemsCalendarOfItemsQuery query,
         CancellationToken cancellationToken
     )
     {
@@ -31,7 +31,7 @@ public class CalendarOfItemsCustomQueryHandler(
             PageSize = query.PageSize,
             SortMode = query.SortMode,
             Filter = query.Filter ?? [],
-            CustomOrderByFunction = query.CustomOrderBy,
+            CustomOrderByFunction = x => x.WithSorting(CalendarOfItemsViewModes.Custom, query.SortMode)
         };
         IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
         [

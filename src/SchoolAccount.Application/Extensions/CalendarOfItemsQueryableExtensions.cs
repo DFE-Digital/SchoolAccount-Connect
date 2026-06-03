@@ -2,11 +2,11 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Query.Delegates;
 
-namespace SchoolAccount.Infrastructure.Extensions;
+namespace SchoolAccount.Application.Extensions;
 
 internal static class CalendarOfItemsQueryableExtensions
 {
-    internal static IQueryable<CalendarOfItemsRow> WithSorting(
+    internal static IOrderedQueryable<CalendarOfItemsRow> WithSorting(
         this IQueryable<CalendarOfItemsRow> query,
         CalendarOfItemsViewModes viewModes,
         CalendarOfItemsSortMode sortMode,

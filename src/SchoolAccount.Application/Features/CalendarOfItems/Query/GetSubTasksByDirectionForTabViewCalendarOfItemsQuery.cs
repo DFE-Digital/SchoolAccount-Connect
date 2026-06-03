@@ -1,12 +1,14 @@
+using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfItemsDirectionalQuery
+public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {
     public GetSubTasksByDirectionForTabViewCalendarOfItemsQuery(
         CalendarOfItemsViewModes viewModes,
@@ -16,30 +18,40 @@ public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfI
         CalendarOfItemsSortMode sortMode = CalendarOfItemsSortMode.NotSpecified,
         DateOnly? date = null
     )
-        : base(
-            viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes,
-            12,
-            date ?? DateOnlyExtensions.Today,
-            pageSize <= 0 ? 10 : pageSize,
-            pageNumber <= 0 ? 1 : pageNumber,
-            sortMode,
-            BuildFilter(filters ?? [])
-        ) { }
-
-    private static CalendarOfItemsFilter BuildFilter(Dictionary<string, List<string>> filters)
     {
+        ViewModes = viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes;
+        ViewPeriodInMonths = 12;
+        QueryFromDate = date ?? DateOnlyExtensions.Today;
+        PageSize = pageSize <= 0 ? 10 : pageSize;
+        PageNumber = pageNumber <= 0 ? 1 : pageNumber;
+        SortMode = sortMode;
+        Filter = BuildFilter(filters);
+    }
+
+    public CalendarOfItemsViewModes ViewModes { get; init; }
+    public int ViewPeriodInMonths { get; init; }
+    public DateOnly QueryFromDate { get; init; }
+    public int PageSize { get; init; }
+    public int PageNumber { get; init; }
+    public CalendarOfItemsSortMode SortMode { get; init; }
+    public IList<FilterRequest>? Filter { get; init; }
+        
+    private static CalendarOfItemsFilter BuildFilter(Dictionary<string, List<string>>? filters)
+    {
+        filters ??= [];
+        
         return new CalendarOfItemsFilter(
             filters.Select(filter => new FilterRequest
             {
                 Field = filter.Key,
                 Operator = filter.Key switch
                 {
-                    "name" => ComparisonType.Contains,
+                    SubTaskFilterableRegistrar.Keys.Name => ComparisonType.Contains,
                     _ => ComparisonType.In,
                 },
                 Value = filter.Key switch
                 {
-                    "name" => filter.Value,
+                    SubTaskFilterableRegistrar.Keys.Name => filter.Value,
                     _ => filter.Value.GetType() == typeof(string)
                         ? filter.Value.ToString()?.Split(',').ToList()
                         : filter.Value,

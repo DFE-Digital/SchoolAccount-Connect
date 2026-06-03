@@ -8,7 +8,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 
-public class TestCalendarOfItemsDirectionalQueryHandler
+public class TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler
     : IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult>
 {
     private readonly List<CalendarOfItemsRow> _rows = [];
@@ -28,14 +28,14 @@ public class TestCalendarOfItemsDirectionalQueryHandler
         return await Task.FromResult(result);
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler AddRow(CalendarOfItemsRow row)
+    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler AddRow(CalendarOfItemsRow row)
     {
         _rows.Add(row);
 
         return this;
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
+    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
     {
         foreach (var row in rows)
         {
@@ -50,7 +50,7 @@ public class TestCalendarOfItemsDirectionalQueryHandler
         _rows.Clear();
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler SetPageSize(int pageSize)
+    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler SetPageSize(int pageSize)
     {
         _pageSize = pageSize;
 

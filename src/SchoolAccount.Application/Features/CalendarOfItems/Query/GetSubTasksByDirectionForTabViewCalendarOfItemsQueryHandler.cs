@@ -1,4 +1,3 @@
-using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
@@ -13,16 +12,16 @@ using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public class CalendarOfItemsDirectionalQueryHandler(
+public class GetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler(
     IQueryAggregator aggregator,
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult<CalendarOfItemsRow>>
+) : IQueryHandler<GetSubTasksByDirectionForTabViewCalendarOfItemsQuery, QueryPagedResult<CalendarOfItemsRow>>
 {
     public async Task<Result<QueryPagedResult<CalendarOfItemsRow>>> Handle(
-        CalendarOfItemsDirectionalQuery query,
+        GetSubTasksByDirectionForTabViewCalendarOfItemsQuery query,
         CancellationToken cancellationToken
     )
     {
@@ -57,7 +56,6 @@ public class CalendarOfItemsDirectionalQueryHandler(
             PageSize = query.PageSize,
             SortMode = query.SortMode,
             Filter = filter,
-            CustomOrderByFunction = query.CustomOrderBy,
         };
         IEnumerable<IQueryFactory<CalendarOfItemsRow>> factories =
         [
@@ -67,7 +65,7 @@ public class CalendarOfItemsDirectionalQueryHandler(
         return await aggregator.Query(factories, model, cancellationToken);
     }
 
-    public static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)
+    public static DateOnlyRange DetermineDateRange(GetSubTasksByDirectionForTabViewCalendarOfItemsQuery filter)
     {
         var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
         if ((filter.ViewModes & bothSet) == bothSet)

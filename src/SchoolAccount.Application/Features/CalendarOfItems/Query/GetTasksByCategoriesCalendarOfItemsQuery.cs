@@ -1,14 +1,17 @@
 using System.Collections.ObjectModel;
+using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Delegates;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
 
-public record GetTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQuery
+public record GetTasksByCategoriesCalendarOfItemsQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {
     public GetTasksByCategoriesCalendarOfItemsQuery(
         Collection<int> categoryIds,
@@ -16,15 +19,23 @@ public record GetTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQu
         int pageNumber = 1,
         DateOnly? date = null
     )
-        : base(
-            BuildDateRange(date),
-            pageSize <= 0 ? 10 : pageSize,
-            pageNumber <= 0 ? 1 : pageNumber,
-            CalendarOfItemsSortMode.NotSpecified,
-            "No results found",
-            BuildFilter(categoryIds),
-            x => x.OrderBy(o => o.Name)
-        ) { }
+    {
+        QueryRange = BuildDateRange(date);
+        PageSize = pageSize <= 0 ? 10 : pageSize;
+        PageNumber = pageNumber <= 0 ? 1 : pageNumber;
+        SortMode = CalendarOfItemsSortMode.NotSpecified;
+        NoResultMessage = "No results found";
+        Filter = BuildFilter(categoryIds);
+        CustomOrderBy = x => x.OrderBy(o => o.Name);
+    }
+
+    public DateOnlyRange QueryRange { get; init; }
+    public int PageSize { get; init; }
+    public int PageNumber { get; init; }
+    public CalendarOfItemsSortMode SortMode { get; init; }
+    public string NoResultMessage { get; init; }
+    public IList<FilterRequest>? Filter { get; init; }
+    public GenericOrderFunction<CalendarOfItemsRow>? CustomOrderBy { get; init; }
 
     private static DateOnlyRange BuildDateRange(DateOnly? date)
     {
@@ -41,7 +52,7 @@ public record GetTasksByCategoriesCalendarOfItemsQuery : CalendarOfItemsCustomQu
             options.Add(
                 new FilterRequest
                 {
-                    Field = "category",
+                    Field = TaskFilterableRegistrar.Keys.Categories,
                     Operator = ComparisonType.In,
                     Value = categoryIds,
                 }
