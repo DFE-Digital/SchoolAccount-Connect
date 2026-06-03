@@ -18,7 +18,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public class CategoryController(
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<GetCategoryByIdQuery, CategoryType> exploreCategoryQueryHandler,
-    IQueryHandler<GetCalendarOfItemsOfTasksByCategoriesQuery, QueryPagedResult<CalendarOfItemsRow>> calendarOfItemsQueryHandler,
+    IQueryHandler<GetCalendarOfItemsOfTasksByCategoriesQuery, GenericQueryPagedResult<CalendarOfItemsRow>> calendarOfItemsQueryHandler,
     CategoryHubViewBuilder categoryHubViewBuilder,
     CategoryListViewBuilder categoryListViewBuilder
 ) : Controller

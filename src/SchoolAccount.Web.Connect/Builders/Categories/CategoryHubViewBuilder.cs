@@ -10,7 +10,7 @@ namespace SchoolAccount.Web.Connect.Builders.Categories;
 
 public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsViewBuilder)
 {
-    public CategoryHubViewModel Build(QueryPagedResult<CalendarOfItemsRow> items, Uri currentUri, CategoryType? category = null)
+    public CategoryHubViewModel Build(GenericQueryPagedResult<CalendarOfItemsRow> items, Uri currentUri, CategoryType? category = null)
     {
         var options = new CalendarOfItemViewOptions
         {

@@ -15,9 +15,9 @@ public class GetCalendarOfItemsOfTasksByCategoriesHandler(
     IQueryAggregator aggregator,
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryHandler<GetCalendarOfItemsOfTasksByCategoriesQuery, QueryPagedResult<CalendarOfItemsRow>>
+) : IQueryHandler<GetCalendarOfItemsOfTasksByCategoriesQuery, GenericQueryPagedResult<CalendarOfItemsRow>>
 {
-    public async Task<Result<QueryPagedResult<CalendarOfItemsRow>>> Handle(
+    public async Task<Result<GenericQueryPagedResult<CalendarOfItemsRow>>> Handle(
         GetCalendarOfItemsOfTasksByCategoriesQuery query,
         CancellationToken cancellationToken
     )

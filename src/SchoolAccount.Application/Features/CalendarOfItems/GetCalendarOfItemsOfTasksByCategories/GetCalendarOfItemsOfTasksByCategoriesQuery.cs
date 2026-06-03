@@ -11,7 +11,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
 
-public record GetCalendarOfItemsOfTasksByCategoriesQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
+public record GetCalendarOfItemsOfTasksByCategoriesQuery : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
 {
     public GetCalendarOfItemsOfTasksByCategoriesQuery(
         Collection<int> categoryIds,

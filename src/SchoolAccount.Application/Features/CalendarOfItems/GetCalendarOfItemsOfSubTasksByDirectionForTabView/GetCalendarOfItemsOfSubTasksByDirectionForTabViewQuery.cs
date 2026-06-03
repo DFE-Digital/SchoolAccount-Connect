@@ -8,7 +8,7 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 
-public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
+public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
 {
     public GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery(
         CalendarOfItemsViewModes viewModes,

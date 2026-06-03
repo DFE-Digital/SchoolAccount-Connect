@@ -5,7 +5,7 @@ using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class QueryAggregatorTests
+public partial class GenericQueryAggregatorTests
 {
     [Fact]
     public async Task Ensure_a_QueryType_identifier_is_assigned_to_the_query()

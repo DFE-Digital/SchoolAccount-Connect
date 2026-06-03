@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
@@ -7,7 +8,7 @@ namespace SchoolAccount.Application.Features.Shared.Filtering;
 public static class FilterFields
 {
     public static async Task<List<Filterable>> GetAvailableFiltersAsync<TRow>(
-        IList<IFilterableFactory<TRow>> factories,
+        Collection<IFilterableFactory> factories,
         IQueryable<TRow>? baseQuery = null
     )
         where TRow: IQueryRow

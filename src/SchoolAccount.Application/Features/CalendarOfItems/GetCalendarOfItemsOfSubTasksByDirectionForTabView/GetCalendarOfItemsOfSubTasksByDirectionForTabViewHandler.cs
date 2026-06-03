@@ -18,9 +18,9 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
     IQueryAggregator aggregator,
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, QueryPagedResult<CalendarOfItemsRow>>
+) : IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, GenericQueryPagedResult<CalendarOfItemsRow>>
 {
-    public async Task<Result<QueryPagedResult<CalendarOfItemsRow>>> Handle(
+    public async Task<Result<GenericQueryPagedResult<CalendarOfItemsRow>>> Handle(
         GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery query,
         CancellationToken cancellationToken
     )

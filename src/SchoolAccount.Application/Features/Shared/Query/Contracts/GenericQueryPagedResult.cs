@@ -6,7 +6,7 @@ using X.PagedList;
 
 namespace SchoolAccount.Application.Features.Shared.Query.Contracts;
 
-public class QueryPagedResult<TRow>(
+public class GenericQueryPagedResult<TRow>(
     GenericQueryCriteria<TRow> criteria,
     IPagedList<TRow> payload,
     Collection<Filterable> filter) : IPagedList

@@ -6,7 +6,7 @@ using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class QueryAggregatorTests
+public partial class GenericQueryAggregatorTests
 {
     [Fact]
     public async Task Only_include_filterable_options_when_are_requested_for()

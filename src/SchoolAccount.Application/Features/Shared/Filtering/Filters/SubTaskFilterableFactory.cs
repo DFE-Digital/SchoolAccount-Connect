@@ -4,6 +4,7 @@ using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.Models;
 using SchoolAccount.Application.Specifications;
 using SchoolAccount.Domain.Tags;
@@ -13,9 +14,10 @@ using SchoolAccount.Domain.Types;
 namespace SchoolAccount.Application.Features.Shared.Filtering.Filters;
 
 public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext)
-    : IFilterableFactory<QueryRow>
+    : IFilterableFactory
 {
-    public async Task<List<Filterable>> GetAvailableFiltersAsync(IQueryable<QueryRow>? baseQuery = null)
+    public async Task<List<Filterable>> GetAvailableFiltersAsync<TRow>(IQueryable<TRow>? baseQuery = null)
+        where TRow: IQueryRow
     {
         var items = new List<Filterable>();
 

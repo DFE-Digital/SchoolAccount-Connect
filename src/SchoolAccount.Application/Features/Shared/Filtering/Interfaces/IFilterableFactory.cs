@@ -3,8 +3,8 @@ using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 namespace SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 
-public interface IFilterableFactory<in TRow>
-    where TRow: IQueryRow
+public interface IFilterableFactory
 {
-    Task<List<Filterable>> GetAvailableFiltersAsync(IQueryable<TRow>? baseQuery = null);
+    Task<List<Filterable>> GetAvailableFiltersAsync<TRow>(IQueryable<TRow>? baseQuery = null)
+        where TRow : IQueryRow;
 }

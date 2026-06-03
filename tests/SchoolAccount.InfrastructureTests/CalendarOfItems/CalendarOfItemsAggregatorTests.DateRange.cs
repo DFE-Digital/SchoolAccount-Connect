@@ -4,7 +4,7 @@ using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class QueryAggregatorTests
+public partial class GenericQueryAggregatorTests
 {
     [Fact]
     public async Task Includes_rows_within_range_boundaries_and_excludes_rows_outside()

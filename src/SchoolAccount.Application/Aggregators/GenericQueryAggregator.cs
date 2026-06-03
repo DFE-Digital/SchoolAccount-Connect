@@ -13,12 +13,12 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Aggregators;
 
-public class QueryAggregator(
+public class GenericQueryAggregator(
     FilterableFieldRegistry filterRegistry,
-    IEnumerable<IFilterableFactory<IQueryRow>> filterFactories
+    IEnumerable<IFilterableFactory> filterFactories
 ) : IQueryAggregator
 {
-    public async Task<Result<QueryPagedResult<TRow>>> Query<TRow>(
+    public async Task<Result<GenericQueryPagedResult<TRow>>> Query<TRow>(
         IEnumerable<IQueryFactory<TRow>> factories,
         GenericQueryCriteria<TRow> criteria,
         CancellationToken cancellationToken = default
@@ -30,7 +30,7 @@ public class QueryAggregator(
 
         if (!validation.IsValid)
         {
-            return validation.ToResult<QueryPagedResult<TRow>>();
+            return validation.ToResult<GenericQueryPagedResult<TRow>>();
         }
 
         ConsolidateFilters(criteria);
@@ -45,7 +45,7 @@ public class QueryAggregator(
             .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
         return Result.Success(
-            new QueryPagedResult<TRow>(
+            new GenericQueryPagedResult<TRow>(
                 criteria, 
                 result, 
                 await ProduceAndCorrelateFilter(criteria, query)));
@@ -67,15 +67,12 @@ public class QueryAggregator(
         IQueryable<TRow> query)
         where TRow: IQueryRow
     {
-        if (criteria.PopulateFilterOptions)
+        if (!criteria.PopulateFilterOptions)
         {
             return [];
         }
         
-        var filters = await FilterFields.GetAvailableFiltersAsync<TRow>(
-            (IList<IFilterableFactory<TRow>>)filterFactories,
-            query
-        );
+        var filters = await FilterFields.GetAvailableFiltersAsync(filterFactories.ToCollection(), query);
 
         if (filters.Count == 0)
         {

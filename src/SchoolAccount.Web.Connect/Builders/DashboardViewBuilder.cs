@@ -17,7 +17,7 @@ public class DashboardViewBuilder(
 )
 {
     public DashboardViewModel Build(
-        QueryPagedResult<CalendarOfItemsRow> queryPagedResult,
+        GenericQueryPagedResult<CalendarOfItemsRow> genericQueryPagedResult,
         CategoryPagedResult categoryPagedResult,
         Uri currentUri
     )
@@ -27,7 +27,7 @@ public class DashboardViewBuilder(
         dashboardViewItems.Add(
             new DashboardViewItem(
                 CalendarOfItemsConstants.Views.Tab,
-                calendarOfItemsViewBuilder.BuildForDashboard(queryPagedResult, currentUri)
+                calendarOfItemsViewBuilder.BuildForDashboard(genericQueryPagedResult, currentUri)
             )
         );
 

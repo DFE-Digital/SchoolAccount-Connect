@@ -51,7 +51,7 @@ public static class DependencyInjection
                 .WithScopedLifetime()
         );
 
-        services.AddScoped<IQueryAggregator, QueryAggregator>();
+        services.AddScoped<IQueryAggregator, GenericQueryAggregator>();
 
         return services;
     }
@@ -60,10 +60,10 @@ public static class DependencyInjection
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(IFilterableFactory<>)), publicOnly: false)
+                .AddClasses(classes => classes.AssignableTo<IFilterableFactory>(), publicOnly: false)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
-                .AddClasses(classes => classes.AssignableTo<IFilterableRegistrar>())
+                .AddClasses(classes => classes.AssignableTo<IFilterableRegistrar>(), publicOnly: false)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );

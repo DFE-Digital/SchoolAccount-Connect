@@ -11,7 +11,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class QueryAggregatorTests
+public partial class GenericQueryAggregatorTests
 {
     private static readonly DateOnly Today = DateOnlyExtensions.Today;
     private static readonly DateOnlyRange DefaultRange = new(Today.AddDays(-30), Today.AddDays(30));
@@ -70,7 +70,7 @@ public partial class QueryAggregatorTests
             }
         }
 
-        public static QueryAggregator Aggregator(
+        public static GenericQueryAggregator Aggregator(
             IEnumerable<IQueryFactory> factories,
             FilterableFieldRegistry? registry = null,
             IEnumerable<IFilterableFactory>? filterFactories = null
@@ -79,7 +79,7 @@ public partial class QueryAggregatorTests
             var resolver = new CalendarOfItemsQueryFactoryResolver(factories);
             var reg = registry ?? new FilterableFieldRegistry([]);
             var ff = filterFactories ?? [];
-            return new QueryAggregator(resolver, reg, ff);
+            return new GenericQueryAggregator(resolver, reg, ff);
         }
     }
 }

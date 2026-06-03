@@ -2,7 +2,7 @@ using AwesomeAssertions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
-public partial class QueryAggregatorTests
+public partial class GenericQueryAggregatorTests
 {
     [Fact]
     public async Task Ensure_that_if_the_thread_is_cancelled_the_application_stops()

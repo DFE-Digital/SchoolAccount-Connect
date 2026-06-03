@@ -12,6 +12,6 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
 
 public partial class CalendarOfItemsController(
-    IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, QueryPagedResult<CalendarOfItemsRow>> handler,
+    IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, GenericQueryPagedResult<CalendarOfItemsRow>> handler,
     IOrganisationContext organisationContext
 ) : Controller;

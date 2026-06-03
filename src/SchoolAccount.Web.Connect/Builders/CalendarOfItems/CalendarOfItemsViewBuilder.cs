@@ -17,7 +17,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
 
     public CalendarOfItemsViewModel Build(
         CalendarOfItemViewOptions options,
-        QueryPagedResult<CalendarOfItemsRow> result,
+        GenericQueryPagedResult<CalendarOfItemsRow> result,
         Uri currentUri
     )
     {
@@ -59,7 +59,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
     }
 
     public CalendarOfItemsViewModel BuildForPage(
-        QueryPagedResult<CalendarOfItemsRow> items,
+        GenericQueryPagedResult<CalendarOfItemsRow> items,
         CalendarOfItemsViewModes viewModes,
         Uri currentUri
     )
@@ -101,7 +101,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
         return Build(options, items, currentUri);
     }
 
-    public CalendarOfItemsViewModel BuildForDashboard(QueryPagedResult<CalendarOfItemsRow> items, Uri currentUri)
+    public CalendarOfItemsViewModel BuildForDashboard(GenericQueryPagedResult<CalendarOfItemsRow> items, Uri currentUri)
     {
         var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 

@@ -10,7 +10,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
 
-public record GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
+public record GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
 {
     public GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery(DateOnly date)
     {
