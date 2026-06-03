@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfTasksByCategories;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Category.Models;
@@ -20,7 +18,7 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public class CategoryController(
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
     IQueryHandler<GetCategoryByIdQuery, CategoryType> exploreCategoryQueryHandler,
-    IQueryHandler<CalendarOfItemsCustomQuery, QueryPagedResult<CalendarOfItemsRow>> calendarOfItemsQueryHandler,
+    IQueryHandler<GetCalendarOfItemsOfTasksByCategoriesQuery, QueryPagedResult<CalendarOfItemsRow>> calendarOfItemsQueryHandler,
     CategoryHubViewBuilder categoryHubViewBuilder,
     CategoryListViewBuilder categoryListViewBuilder
 ) : Controller

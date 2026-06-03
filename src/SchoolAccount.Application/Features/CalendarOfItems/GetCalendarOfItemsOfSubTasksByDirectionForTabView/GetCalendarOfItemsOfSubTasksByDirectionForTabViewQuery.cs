@@ -6,7 +6,7 @@ using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 
 public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {

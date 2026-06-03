@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
@@ -67,10 +66,9 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
     {
         CalendarOfItemsTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
         {
-            var key = nameof(CalendarOfItemsDirectionalQuery.ViewModes);
             var value = mode.ToString();
 
-            var updatedUrl = currentUri.SetQueryParam(key, value).RemoveQueryParam("pageNumber");
+            var updatedUrl = currentUri.SetQueryParam("ViewModes", value).RemoveQueryParam("pageNumber");
 
             return new CalendarOfItemsTabViewModel(label, description, updatedUrl, viewModes.HasFlag(mode));
         }

@@ -8,7 +8,7 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
 
 public record GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {

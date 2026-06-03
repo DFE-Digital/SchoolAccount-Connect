@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
@@ -14,7 +12,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 public class CalendarController(
-    IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult<CalendarOfItemsRow>> handler,
+    IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, QueryPagedResult<CalendarOfItemsRow>> handler,
     IOrganisationContext organisationContext
 ) : Controller
 {

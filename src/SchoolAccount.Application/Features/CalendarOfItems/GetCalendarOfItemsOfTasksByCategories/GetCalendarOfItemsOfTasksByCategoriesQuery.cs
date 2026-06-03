@@ -9,7 +9,7 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Application.Features.Shared.Query.Delegates;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfTasksByCategories;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
 
 public record GetCalendarOfItemsOfTasksByCategoriesQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {

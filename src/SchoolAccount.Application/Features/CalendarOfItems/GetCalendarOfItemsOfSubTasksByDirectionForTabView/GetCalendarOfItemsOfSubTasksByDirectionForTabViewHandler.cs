@@ -12,7 +12,7 @@ using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 
 public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
     IQueryAggregator aggregator,

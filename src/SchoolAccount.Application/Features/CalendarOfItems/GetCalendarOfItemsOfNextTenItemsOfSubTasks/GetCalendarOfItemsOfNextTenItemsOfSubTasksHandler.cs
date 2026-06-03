@@ -10,7 +10,7 @@ using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
 
 public class GetCalendarOfItemsOfNextTenItemsOfSubTasksHandler(
     IQueryAggregator aggregator,

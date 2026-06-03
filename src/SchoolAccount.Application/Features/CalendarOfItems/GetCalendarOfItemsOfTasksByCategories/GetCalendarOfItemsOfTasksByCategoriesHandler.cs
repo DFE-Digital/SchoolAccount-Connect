@@ -9,7 +9,7 @@ using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.QueryFactories;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfTasksByCategories;
+namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
 
 public class GetCalendarOfItemsOfTasksByCategoriesHandler(
     IQueryAggregator aggregator,
