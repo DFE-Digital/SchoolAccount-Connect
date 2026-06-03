@@ -45,7 +45,7 @@ public class OrganisationContext : IOrganisationContext
     {
         return await IsValid() && Provider is not NullProvider && await Provider.CanAccess(Claim);
     }
-    
+
     public static SchoolType DetermineSchoolType(OrganisationClaim? claim)
     {
         return claim?.Category?.Id switch

@@ -20,7 +20,10 @@ namespace SchoolAccount.Web.Connect.Controllers;
 public sealed class HomeController(
     IQueryHandler<TaskSearchQuery, TaskSearchResponse> handler,
     IQueryHandler<GetAllParentCategoriesThatHaveAssociatedTasksQuery, CategoryPagedResult> categoryQueryBuilder,
-    IQueryHandler<GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery, GenericQueryPagedResult<CalendarOfItemsRow>> calendarOfItemQueryBuilder,
+    IQueryHandler<
+        GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery,
+        GenericQueryPagedResult<CalendarOfItemsRow>
+    > calendarOfItemQueryBuilder,
     DashboardViewBuilder dashboardViewBuilder,
     TaskSearchCategoryHubViewBuilder taskSearchCategoryHubViewBuilder,
     BasicPageViewBuilder basicPageViewBuilder

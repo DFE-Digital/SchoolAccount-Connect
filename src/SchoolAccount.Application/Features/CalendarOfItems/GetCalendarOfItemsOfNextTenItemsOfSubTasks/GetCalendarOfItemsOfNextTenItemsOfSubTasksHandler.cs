@@ -23,9 +23,7 @@ public class GetCalendarOfItemsOfNextTenItemsOfSubTasksHandler(
     )
     {
         return await aggregator.Query(
-            [
-                new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)
-            ], 
+            [new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)],
             [],
             new CalendarOfItemsQueryCriteria
             {
@@ -35,8 +33,9 @@ public class GetCalendarOfItemsOfNextTenItemsOfSubTasksHandler(
                 PageSize = query.PageSize,
                 SortMode = query.SortMode,
                 Filter = query.Filter ?? [],
-                CustomOrderByFunction = x => x.WithSorting(CalendarOfItemsViewModes.Custom, query.SortMode)
-            }, 
-            cancellationToken);
+                CustomOrderByFunction = x => x.WithSorting(CalendarOfItemsViewModes.Custom, query.SortMode),
+            },
+            cancellationToken
+        );
     }
 }

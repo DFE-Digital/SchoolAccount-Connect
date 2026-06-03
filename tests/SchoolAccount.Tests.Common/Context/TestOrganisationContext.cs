@@ -10,10 +10,9 @@ public class TestOrganisationContext : IOrganisationContext
     private readonly IProvider? _provider;
     private readonly SchoolType? _schoolType;
     private readonly IOrganisation? _organisation;
-    
-    public TestOrganisationContext()
-    {}
-    
+
+    public TestOrganisationContext() { }
+
     public TestOrganisationContext(IProvider? provider, IOrganisation? organisation, SchoolType? type)
     {
         _provider = provider;
@@ -24,7 +23,7 @@ public class TestOrganisationContext : IOrganisationContext
     public IProvider Provider => _provider ?? NullProvider.Default;
     public SchoolType Type => _schoolType ?? SchoolType.Unknown;
     public IOrganisation Organisation => _organisation ?? NullOrganisation.Default;
-    
+
     public Task<bool> IsValid()
     {
         return Task.FromResult(true);

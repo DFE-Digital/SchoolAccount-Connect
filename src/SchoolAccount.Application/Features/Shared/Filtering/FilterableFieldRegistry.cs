@@ -35,9 +35,9 @@ public class FilterableFieldRegistry
     }
 
     public FieldSelectorMapping All => _all;
-    
+
     public IReadOnlyList<IFilterableRegistrar> Registrars => _registrars;
-    
+
     public IReadOnlyList<IFilterableAndConsolidateRegistrar> Consolidates =>
         field ??= Registrars.OfType<IFilterableAndConsolidateRegistrar>().ToList();
 }

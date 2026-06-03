@@ -26,12 +26,8 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
     )
     {
         return await aggregator.Query(
-            [
-                new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)
-            ], 
-            [
-                new SubTaskFilterableFactory(applicationDbContext)
-            ],
+            [new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)],
+            [new SubTaskFilterableFactory(applicationDbContext)],
             new CalendarOfItemsQueryCriteria
             {
                 Range = DetermineDateRange(query),
@@ -41,8 +37,9 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
                 SortMode = query.SortMode,
                 Filter = BuildFilter(query),
                 CustomOrderByFunction = x => x.WithSorting(query.ViewModes, query.SortMode),
-            }, 
-            cancellationToken);
+            },
+            cancellationToken
+        );
     }
 
     private static DateOnlyRange DetermineDateRange(GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery filter)

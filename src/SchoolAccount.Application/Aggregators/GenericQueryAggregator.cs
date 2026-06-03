@@ -12,9 +12,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Aggregators;
 
-public class GenericQueryAggregator(
-    FilterableFieldRegistry filterRegistry
-) : IQueryAggregator
+public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQueryAggregator
 {
     public async Task<Result<GenericQueryPagedResult<TRow>>> Query<TEntity, TRow>(
         IList<IQueryFactory<TEntity, TRow>> queryFactories,
@@ -22,8 +20,8 @@ public class GenericQueryAggregator(
         GenericQueryCriteria<TRow> criteria,
         CancellationToken cancellationToken = default
     )
-        where TEntity: IEntity
-        where TRow: IQueryRow
+        where TEntity : IEntity
+        where TRow : IQueryRow
     {
         var validator = new QueryAggregatorValidator<TRow>();
         var validation = await validator.ValidateAsync(criteria, cancellationToken);
@@ -46,18 +44,24 @@ public class GenericQueryAggregator(
 
         return Result.Success(
             new GenericQueryPagedResult<TRow>(
-                criteria, 
-                result, 
-                await ProduceAndCorrelateFilter(filterableFactories, criteria, query)));
+                criteria,
+                result,
+                await ProduceAndCorrelateFilter(filterableFactories, criteria, query)
+            )
+        );
     }
-    
-    private void ConsolidateFilters<TEntity, TRow>(IEnumerable<IQueryFactory<TEntity, TRow>> factories, GenericQueryCriteria<TRow> criteria)
-        where TEntity: IEntity
-        where TRow: IQueryRow
+
+    private void ConsolidateFilters<TEntity, TRow>(
+        IEnumerable<IQueryFactory<TEntity, TRow>> factories,
+        GenericQueryCriteria<TRow> criteria
+    )
+        where TEntity : IEntity
+        where TRow : IQueryRow
     {
-        var consumableRegistrars = filterRegistry.Consolidates
-            .Where(x => factories.Any(f => f.TypeBeingRegistered == x.TypeBeingRegistered));
-        
+        var consumableRegistrars = filterRegistry.Consolidates.Where(x =>
+            factories.Any(f => f.TypeBeingRegistered == x.TypeBeingRegistered)
+        );
+
         foreach (var registrar in consumableRegistrars)
         {
             registrar.ConsolidateFilters(criteria.Filter);
@@ -67,14 +71,15 @@ public class GenericQueryAggregator(
     private static async Task<Collection<Filterable>> ProduceAndCorrelateFilter<TRow>(
         IEnumerable<IFilterableFactory> filterFactories,
         GenericQueryCriteria<TRow> criteria,
-        IQueryable<TRow> query)
-        where TRow: IQueryRow
+        IQueryable<TRow> query
+    )
+        where TRow : IQueryRow
     {
         if (!criteria.PopulateFilterOptions)
         {
             return [];
         }
-        
+
         var filters = await FilterFields.GetAvailableFiltersAsync(filterFactories.ToCollection(), query);
 
         if (filters.Count == 0)

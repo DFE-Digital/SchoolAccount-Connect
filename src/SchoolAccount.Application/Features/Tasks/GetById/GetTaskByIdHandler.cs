@@ -7,7 +7,7 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public sealed class GetTaskByIdHandler(
-    IApplicationDbContext applicationDbContext, 
+    IApplicationDbContext applicationDbContext,
     IDateTimeProvider dateTimeProvider,
     IOrganisationContext organisationContext
 ) : IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse>

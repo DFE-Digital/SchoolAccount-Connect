@@ -6,7 +6,7 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Features.Shared.Query.Contracts;
 
 public class GenericQueryCriteria<TRow> : IQueryCriteria<TRow>
-where TRow: IQueryRow
+    where TRow : IQueryRow
 {
     public int PageSize { get; init; }
     public int PageNumber { get; init; }

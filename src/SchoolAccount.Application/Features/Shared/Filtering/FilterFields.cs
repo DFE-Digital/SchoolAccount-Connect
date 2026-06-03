@@ -11,7 +11,7 @@ public static class FilterFields
         Collection<IFilterableFactory> factories,
         IQueryable<TRow>? baseQuery = null
     )
-        where TRow: IQueryRow
+        where TRow : IQueryRow
     {
         if (factories.Count == 0)
         {

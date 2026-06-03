@@ -7,7 +7,7 @@ internal static class CalendarOfItemsConstants
         private const string Index = RouteConstants.Root + "calendar";
         public const string Query = Index;
     }
-    
+
     public static class Views
     {
         public const string Query = "~/Features/CalendarOfItems/Query/Query.cshtml";

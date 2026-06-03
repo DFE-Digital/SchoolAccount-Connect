@@ -5,7 +5,7 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 public interface IQueryCriteria<TRow>
-    where TRow: IQueryRow
+    where TRow : IQueryRow
 {
     public int PageSize { get; init; }
     public int PageNumber { get; init; }

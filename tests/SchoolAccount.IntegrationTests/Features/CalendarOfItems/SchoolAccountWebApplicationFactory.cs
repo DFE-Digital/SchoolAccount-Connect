@@ -13,7 +13,8 @@ namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWebApplicationFactory<TStartup>
     where TStartup : class
 {
-    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler { get; } = new();
+    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler { get; } =
+        new();
 
     protected override void ConfigureTestServices(IServiceCollection services)
     {

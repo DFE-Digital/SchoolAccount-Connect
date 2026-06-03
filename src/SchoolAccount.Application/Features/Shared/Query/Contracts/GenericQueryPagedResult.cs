@@ -9,7 +9,8 @@ namespace SchoolAccount.Application.Features.Shared.Query.Contracts;
 public class GenericQueryPagedResult<TRow>(
     GenericQueryCriteria<TRow> criteria,
     IPagedList<TRow> payload,
-    Collection<Filterable> filter) : IPagedList
+    Collection<Filterable> filter
+) : IPagedList
     where TRow : IQueryRow
 {
     public DateTime GeneratedDate { get; } = DateTime.UtcNow;

@@ -13,7 +13,7 @@ public static class QueryRowSpecifications
     }
 
     public static Expression<Func<TRow, bool>> IsWithinDateRange<TRow>(DateOnlyRange range)
-        where TRow: IQueryRow
+        where TRow : IQueryRow
     {
         return IsWithinDateRange<TRow>(range.Start, range.End);
     }

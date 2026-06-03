@@ -8,6 +8,9 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
 
 public partial class CalendarOfItemsController(
-    IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, GenericQueryPagedResult<CalendarOfItemsRow>> handler,
+    IQueryHandler<
+        GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery,
+        GenericQueryPagedResult<CalendarOfItemsRow>
+    > handler,
     IOrganisationContext organisationContext
 ) : Controller;

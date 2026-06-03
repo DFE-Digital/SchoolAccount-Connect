@@ -12,11 +12,10 @@ using SchoolAccount.Domain.Types;
 
 namespace SchoolAccount.Application.Features.Shared.Filtering.Filters;
 
-public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext)
-    : IFilterableFactory
+public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext) : IFilterableFactory
 {
     public async Task<List<Filterable>> GetAvailableFiltersAsync<TRow>(IQueryable<TRow>? baseQuery = null)
-        where TRow: IQueryRow
+        where TRow : IQueryRow
     {
         var items = new List<Filterable>();
 

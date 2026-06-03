@@ -45,10 +45,7 @@ public partial class GenericQueryAggregatorTests
 
         public static class Factory
         {
-            public static IQueryFactory Query(
-                CalendarOfItemsQueryTypes type,
-                IEnumerable<CalendarOfItemsRow> rows
-            )
+            public static IQueryFactory Query(CalendarOfItemsQueryTypes type, IEnumerable<CalendarOfItemsRow> rows)
             {
                 var factory = Substitute.For<IQueryFactory>();
                 factory.IsQueryableFor(type).Returns(true);

@@ -6,7 +6,7 @@ namespace SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 public interface IQueryFactory<TEntity, out TRow>
     where TEntity : IEntity
-    where TRow: IQueryRow
+    where TRow : IQueryRow
 {
     Type TypeBeingRegistered => typeof(TEntity);
     IQueryable<TRow> Query(IList<FilterRequest> filter, FieldSelectorMapping mappings);

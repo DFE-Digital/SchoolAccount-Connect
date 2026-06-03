@@ -8,11 +8,11 @@ using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Kernel;
 using SchoolAccount.Tests.Common.Fakes;
 using static SchoolAccount.Domain.Common.WorkflowState;
-using static SchoolAccount.Tests.Common.Builders.SubTaskBuilder;
-using static SchoolAccount.Tests.Common.Builders.TaskBuilder;
-using static SchoolAccount.Tests.Common.Builders.TagBuilder;
-using static SchoolAccount.Tests.Common.Builders.TaxonomyBuilder;
 using static SchoolAccount.Tests.Common.Builders.OrganisationContextBuilder;
+using static SchoolAccount.Tests.Common.Builders.SubTaskBuilder;
+using static SchoolAccount.Tests.Common.Builders.TagBuilder;
+using static SchoolAccount.Tests.Common.Builders.TaskBuilder;
+using static SchoolAccount.Tests.Common.Builders.TaxonomyBuilder;
 
 namespace SchoolAccount.Application.IntegrationTests;
 
@@ -26,10 +26,8 @@ public class GetTaskByIdHandlerTests
         var dateTimeProvider = Substitute.For<IDateTimeProvider>();
         dateTimeProvider.UtcNow.Returns(new DateTime(2026, 4, 21, 10, 0, 0, DateTimeKind.Utc));
 
-        var organisationContext = AOrganisationContext()
-            .WithSchoolType(SchoolType.Academy)
-            .Build();
-        
+        var organisationContext = AOrganisationContext().WithSchoolType(SchoolType.Academy).Build();
+
         _context = DatabaseContext.Build();
         _sut = new GetTaskByIdHandler(_context, dateTimeProvider, organisationContext);
     }
@@ -46,8 +44,9 @@ public class GetTaskByIdHandlerTests
             x =>
             {
                 x.Tasks.AddRange(tasks);
-            }, 
-            CancellationToken.None);
+            },
+            CancellationToken.None
+        );
 
         // Act
         var result = await _sut.Handle(query, CancellationToken.None);
@@ -61,7 +60,8 @@ public class GetTaskByIdHandlerTests
     public async Task Applies_availability_labels_to_all_subtasks()
     {
         // Arrange
-        await _context.Map(ctx =>
+        await _context.Map(
+            ctx =>
             {
                 var taxonomyEntity = ATaxonomy()
                     .WithId(1)
@@ -69,10 +69,7 @@ public class GetTaskByIdHandlerTests
                     .WithDisplayName("Institution types")
                     .IsMandatory()
                     .IsMultiSelect()
-                    .WithTags(
-                        ATag()
-                            .WithId((int)SchoolType.Academy)
-                            .WithName(nameof(SchoolType.Academy)))
+                    .WithTags(ATag().WithId((int)SchoolType.Academy).WithName(nameof(SchoolType.Academy)))
                     .Build();
                 var taskEntity = ATask()
                     .WithId(1)
@@ -84,30 +81,35 @@ public class GetTaskByIdHandlerTests
                 var subtaskSource = new SourceEntity { Id = (int)Source.Subtask, Name = nameof(Source.Subtask) };
 
                 ctx.Taxonomies.Add(taxonomyEntity);
-                ctx.SchoolTypeTagMappings.AddRange(taxonomyEntity.Tags
-                    .Select((x, i) => WithSchoolType(x, i + 1, (SchoolType)(i + 1))));
+                ctx.SchoolTypeTagMappings.AddRange(
+                    taxonomyEntity.Tags.Select((x, i) => WithSchoolType(x, i + 1, (SchoolType)(i + 1)))
+                );
                 ctx.Tasks.Add(taskEntity);
-                ctx.TagsSourceMappings.AddRange(new TagsSourceMappingEntity
-                {
-                    Id = 1,
-                    Tag = taxonomyEntity.Tags.ElementAt(0),
-                    TagId = taxonomyEntity.Tags.ElementAt(0).Id,
-                    SubTask = taskEntity.SubTasks.ElementAt(0),
-                    EntityId = taskEntity.SubTasks.ElementAt(0).Id,
-                    Source = subtaskSource,
-                    SourceId = subtaskSource.Id,
-                }, new TagsSourceMappingEntity
-                {
-                    Id = 2,
-                    Tag = taxonomyEntity.Tags.ElementAt(0),
-                    TagId = taxonomyEntity.Tags.ElementAt(0).Id,
-                    SubTask = taskEntity.SubTasks.ElementAt(1),
-                    EntityId = taskEntity.SubTasks.ElementAt(1).Id,
-                    Source = subtaskSource,
-                    SourceId = subtaskSource.Id,
-                });
+                ctx.TagsSourceMappings.AddRange(
+                    new TagsSourceMappingEntity
+                    {
+                        Id = 1,
+                        Tag = taxonomyEntity.Tags.ElementAt(0),
+                        TagId = taxonomyEntity.Tags.ElementAt(0).Id,
+                        SubTask = taskEntity.SubTasks.ElementAt(0),
+                        EntityId = taskEntity.SubTasks.ElementAt(0).Id,
+                        Source = subtaskSource,
+                        SourceId = subtaskSource.Id,
+                    },
+                    new TagsSourceMappingEntity
+                    {
+                        Id = 2,
+                        Tag = taxonomyEntity.Tags.ElementAt(0),
+                        TagId = taxonomyEntity.Tags.ElementAt(0).Id,
+                        SubTask = taskEntity.SubTasks.ElementAt(1),
+                        EntityId = taskEntity.SubTasks.ElementAt(1).Id,
+                        Source = subtaskSource,
+                        SourceId = subtaskSource.Id,
+                    }
+                );
             },
-            CancellationToken.None);
+            CancellationToken.None
+        );
 
         var query = new GetTaskByIdQuery(1);
 
@@ -130,7 +132,8 @@ public class GetTaskByIdHandlerTests
     {
         // Arrange
         var taskId = 1;
-        await _context.Map(ctx =>
+        await _context.Map(
+            ctx =>
             {
                 var taxonomyEntity = ATaxonomy()
                     .WithId(1)
@@ -138,10 +141,7 @@ public class GetTaskByIdHandlerTests
                     .WithDisplayName("Institution types")
                     .IsMandatory()
                     .IsMultiSelect()
-                    .WithTags(
-                        ATag()
-                            .WithId((int)SchoolType.Academy)
-                            .WithName(nameof(SchoolType.Academy)))
+                    .WithTags(ATag().WithId((int)SchoolType.Academy).WithName(nameof(SchoolType.Academy)))
                     .Build();
                 var subtaskSource = new SourceEntity { Id = (int)Source.Subtask, Name = nameof(Source.Subtask) };
                 var taskEntity = ATask()
@@ -152,38 +152,46 @@ public class GetTaskByIdHandlerTests
                             .InState(Published)
                             .WithStartDate(2026, 5, 1)
                             .WithDueDate(2026, 6, 1, isExact: true),
-                        ASubTask().WithId(2).InState(Expired).WithStartDate(2026, 3, 1)
+                        ASubTask()
+                            .WithId(2)
+                            .InState(Expired)
+                            .WithStartDate(2026, 3, 1)
                             .WithDueDate(2026, 3, 31, isExact: false)
                     )
                     .Build();
-                
+
                 ctx.Taxonomies.Add(taxonomyEntity);
-                ctx.SchoolTypeTagMappings.AddRange(taxonomyEntity.Tags
-                    .Select((x, i) => WithSchoolType(x, i + 1, (SchoolType)(i + 1))));
+                ctx.SchoolTypeTagMappings.AddRange(
+                    taxonomyEntity.Tags.Select((x, i) => WithSchoolType(x, i + 1, (SchoolType)(i + 1)))
+                );
                 ctx.Tasks.Add(taskEntity);
-                ctx.TagsSourceMappings.AddRange(new TagsSourceMappingEntity
-                {
-                    Id = 1,
-                    Tag = taxonomyEntity.Tags.ElementAt(0),
-                    TagId = taxonomyEntity.Tags.ElementAt(0).Id,
-                    SubTask = taskEntity.SubTasks.ElementAt(0),
-                    EntityId = taskEntity.SubTasks.ElementAt(0).Id,
-                    Source = subtaskSource,
-                    SourceId = subtaskSource.Id,
-                }, new TagsSourceMappingEntity
-                {
-                    Id = 2,
-                    Tag = taxonomyEntity.Tags.ElementAt(0),
-                    TagId = taxonomyEntity.Tags.ElementAt(0).Id,
-                    SubTask = taskEntity.SubTasks.ElementAt(1),
-                    EntityId = taskEntity.SubTasks.ElementAt(1).Id,
-                    Source = subtaskSource,
-                    SourceId = subtaskSource.Id,
-                });
-                
+                ctx.TagsSourceMappings.AddRange(
+                    new TagsSourceMappingEntity
+                    {
+                        Id = 1,
+                        Tag = taxonomyEntity.Tags.ElementAt(0),
+                        TagId = taxonomyEntity.Tags.ElementAt(0).Id,
+                        SubTask = taskEntity.SubTasks.ElementAt(0),
+                        EntityId = taskEntity.SubTasks.ElementAt(0).Id,
+                        Source = subtaskSource,
+                        SourceId = subtaskSource.Id,
+                    },
+                    new TagsSourceMappingEntity
+                    {
+                        Id = 2,
+                        Tag = taxonomyEntity.Tags.ElementAt(0),
+                        TagId = taxonomyEntity.Tags.ElementAt(0).Id,
+                        SubTask = taskEntity.SubTasks.ElementAt(1),
+                        EntityId = taskEntity.SubTasks.ElementAt(1).Id,
+                        Source = subtaskSource,
+                        SourceId = subtaskSource.Id,
+                    }
+                );
+
                 ctx.Tasks.Add(taskEntity);
             },
-            CancellationToken.None);
+            CancellationToken.None
+        );
 
         var query = new GetTaskByIdQuery(taskId);
 

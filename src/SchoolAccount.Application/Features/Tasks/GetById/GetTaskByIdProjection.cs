@@ -24,8 +24,7 @@ public static class GetTaskByIdProjection
             DateUpdated = x.DateUpdated,
             UpdatedBy = x.UpdatedBy,
             SubTasks = x
-                .SubTasks
-                .AsQueryable()
+                .SubTasks.AsQueryable()
                 .Where(isVisible)
                 .Where(isAccessible)
                 .Select(st => new GetTaskByIdResponseSubtask

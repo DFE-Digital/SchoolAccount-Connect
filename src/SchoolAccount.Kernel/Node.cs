@@ -1,14 +1,12 @@
 namespace SchoolAccount.Kernel;
 
-public class Node<TId> where TId : struct
+public class Node<TId>
+    where TId : struct
 {
     public TId Id { get; init; }
     public string? Name { get; init; }
 
-    protected Node()
-    {
-        
-    }
+    protected Node() { }
 
     public Node(TId id)
     {

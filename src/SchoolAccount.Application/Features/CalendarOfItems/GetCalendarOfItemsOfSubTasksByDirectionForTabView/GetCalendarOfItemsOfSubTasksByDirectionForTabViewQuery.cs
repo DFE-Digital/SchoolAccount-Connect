@@ -8,7 +8,8 @@ using SchoolAccount.Application.Features.Shared.Query.Contracts;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 
-public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
+public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery
+    : IQuery<GenericQueryPagedResult<CalendarOfItemsRow>>
 {
     public GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery(
         CalendarOfItemsViewModes viewModes,
@@ -35,11 +36,11 @@ public record GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery : IQuery<Ge
     public int PageNumber { get; init; }
     public CalendarOfItemsSortMode SortMode { get; init; }
     public IList<FilterRequest>? Filter { get; init; }
-        
+
     private static CalendarOfItemsFilter BuildFilter(Dictionary<string, List<string>>? filters)
     {
         filters ??= [];
-        
+
         return new CalendarOfItemsFilter(
             filters.Select(filter => new FilterRequest
             {

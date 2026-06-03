@@ -114,26 +114,24 @@ public sealed class SubTaskBuilder
 
     public SubTaskBuilder AccessibleTo(SchoolType type, out SchoolTypeTagMappingEntity mapping)
     {
-        _schoolTypeTagMappings.Add(mapping = new SchoolTypeTagMappingEntity
-        {
-            SchoolType = new SchoolTypeEntity
+        _schoolTypeTagMappings.Add(
+            mapping = new SchoolTypeTagMappingEntity
             {
-                Id = (int)type,
-                Name = type.ToString()
-            },
-            Tag = new TagEntity
-            {
-                Id = (int)type,
-                Name = type.ToString(),
-                TagName = $"#{type}",
-                Taxonomy = new TaxonomyEntity
+                SchoolType = new SchoolTypeEntity { Id = (int)type, Name = type.ToString() },
+                Tag = new TagEntity
                 {
-                    Id=1,  
+                    Id = (int)type,
                     Name = type.ToString(),
-                    TaxonomyName = type.ToString()
-                }
+                    TagName = $"#{type}",
+                    Taxonomy = new TaxonomyEntity
+                    {
+                        Id = 1,
+                        Name = type.ToString(),
+                        TaxonomyName = type.ToString(),
+                    },
+                },
             }
-        });
+        );
 
         return this;
     }
@@ -182,8 +180,9 @@ public sealed class SubTaskBuilder
                     EntityId = subtask.Id,
                     Tag = schoolType.Tag,
                     Source = new SourceEntity { Id = (int)Source.Subtask, Name = nameof(Source.Subtask) },
-                    SubTask = subtask
-                });
+                    SubTask = subtask,
+                }
+            );
         }
 
         return subtask;

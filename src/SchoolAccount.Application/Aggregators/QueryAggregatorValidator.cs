@@ -5,8 +5,8 @@ using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 namespace SchoolAccount.Application.Aggregators;
 
-public class QueryAggregatorValidator<TRow>: AbstractValidator<GenericQueryCriteria<TRow>>
-    where TRow: IQueryRow
+public class QueryAggregatorValidator<TRow> : AbstractValidator<GenericQueryCriteria<TRow>>
+    where TRow : IQueryRow
 {
     public QueryAggregatorValidator()
     {

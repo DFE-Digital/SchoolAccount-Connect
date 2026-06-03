@@ -10,8 +10,9 @@ public interface IQueryAggregator
     Task<Result<GenericQueryPagedResult<TRow>>> Query<TEntity, TRow>(
         IList<IQueryFactory<TEntity, TRow>> queryFactories,
         IList<IFilterableFactory> filterableFactories,
-        GenericQueryCriteria<TRow> criteria, 
-        CancellationToken cancellationToken = default)
-        where TEntity: IEntity
-        where TRow: IQueryRow;
+        GenericQueryCriteria<TRow> criteria,
+        CancellationToken cancellationToken = default
+    )
+        where TEntity : IEntity
+        where TRow : IQueryRow;
 }

@@ -17,7 +17,7 @@ public static class TaskEntitySpecifications
         {
             return t => true;
         }
-        
+
         return t =>
             t.SubTasks.Any(sub =>
                 sub.TagsSourceMappings.Any(tsm =>

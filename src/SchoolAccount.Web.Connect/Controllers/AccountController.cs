@@ -25,10 +25,10 @@ public class AccountController : Controller
         {
             return RedirectToAction("Index", "Start");
         }
-        
+
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         HttpContext.Session.Clear();
-        
+
         return base.SignOut(
             CookieAuthenticationDefaults.AuthenticationScheme,
             OpenIdConnectDefaults.AuthenticationScheme

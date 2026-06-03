@@ -15,17 +15,14 @@ public class OpenNewTabTagHelper : TagHelper
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.Attributes.RemoveAll(OpenNewTabTagName);
-        
+
         if (OpenInNewTab.HasValue && OpenInNewTab.Value)
         {
             output.Attributes.Add("target", "_blank");
             output.Attributes.Add("rel", "noreferrer noopener");
-            
-            var content = await output.GetChildContentAsync();
-            output.Content.SetHtmlContent(
-                $"{content.GetContent()} (opens in new tab)"
-            );
 
+            var content = await output.GetChildContentAsync();
+            output.Content.SetHtmlContent($"{content.GetContent()} (opens in new tab)");
         }
     }
 }

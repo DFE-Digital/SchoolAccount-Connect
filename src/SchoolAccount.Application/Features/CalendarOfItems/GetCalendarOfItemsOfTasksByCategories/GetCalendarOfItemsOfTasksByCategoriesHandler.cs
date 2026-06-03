@@ -22,9 +22,7 @@ public class GetCalendarOfItemsOfTasksByCategoriesHandler(
     )
     {
         return await aggregator.Query(
-            [
-                new QueryFactoryOfTasksForCalendarOfItems(applicationDbContext, organisationContext)
-            ], 
+            [new QueryFactoryOfTasksForCalendarOfItems(applicationDbContext, organisationContext)],
             [],
             new CalendarOfItemsQueryCriteria
             {
@@ -35,7 +33,8 @@ public class GetCalendarOfItemsOfTasksByCategoriesHandler(
                 SortMode = query.SortMode,
                 Filter = query.Filter ?? [],
                 CustomOrderByFunction = x => x.OrderBy(o => o.Name),
-            }, 
-            cancellationToken);
+            },
+            cancellationToken
+        );
     }
 }
