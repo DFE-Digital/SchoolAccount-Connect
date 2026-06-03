@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;

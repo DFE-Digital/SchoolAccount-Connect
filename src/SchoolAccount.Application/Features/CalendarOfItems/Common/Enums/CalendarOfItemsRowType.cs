@@ -1,4 +1,4 @@
-namespace SchoolAccount.Application.Features.CalendarOfItems.Enums;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 
 public enum CalendarOfItemsRowType
 {

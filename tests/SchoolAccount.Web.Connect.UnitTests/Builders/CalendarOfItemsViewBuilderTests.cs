@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;

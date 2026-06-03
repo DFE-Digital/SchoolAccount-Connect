@@ -1,19 +1,18 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
-using SchoolAccount.Application.Features.Shared.Query.Delegates;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
 
-public record GetSubTasksNextTenItemsCalendarOfItemsQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
+public record GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery : IQuery<QueryPagedResult<CalendarOfItemsRow>>
 {
-    public GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnly date)
+    public GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery(DateOnly date)
     {
         QueryRange = new DateOnlyRange(date.StartOfMonth(), date.AddMonths(12).EndOfMonth());
         PageSize = 10;

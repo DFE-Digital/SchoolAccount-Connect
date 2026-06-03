@@ -4,8 +4,9 @@ using Microsoft.FeatureManagement.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Constants;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfNextTenItemsOfSubTasks;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Query;
@@ -30,7 +31,7 @@ public sealed class HomeController(
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] int? pageNumber, CancellationToken cancellationToken)
     {
-        var calendarOfItemsQuery = new GetSubTasksNextTenItemsCalendarOfItemsQuery(DateOnlyExtensions.Today);
+        var calendarOfItemsQuery = new GetCalendarOfItemsOfNextTenItemsOfSubTasksQuery(DateOnlyExtensions.Today);
         var calendarOfItemsResult = await calendarOfItemQueryBuilder.Handle(calendarOfItemsQuery, cancellationToken);
 
         if (calendarOfItemsResult.IsFailure)

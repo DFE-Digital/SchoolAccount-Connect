@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;

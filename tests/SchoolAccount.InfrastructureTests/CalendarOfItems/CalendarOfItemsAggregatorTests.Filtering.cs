@@ -1,6 +1,6 @@
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 

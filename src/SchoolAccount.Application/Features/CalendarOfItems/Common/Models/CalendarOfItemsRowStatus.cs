@@ -1,6 +1,6 @@
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 
 public class CalendarOfItemsRowStatus : ExtensionNode<int>
 {

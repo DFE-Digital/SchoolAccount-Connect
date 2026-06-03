@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Features.Shared.Query.Models;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
+namespace SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 
 public class CalendarOfItemsRow : QueryRow
 {

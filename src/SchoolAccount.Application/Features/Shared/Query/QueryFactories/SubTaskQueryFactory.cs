@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;

@@ -1,7 +1,7 @@
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;

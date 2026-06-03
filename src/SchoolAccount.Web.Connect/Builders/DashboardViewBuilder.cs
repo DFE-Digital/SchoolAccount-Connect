@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;

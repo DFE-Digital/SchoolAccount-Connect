@@ -14,7 +14,7 @@ namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWebApplicationFactory<TStartup>
     where TStartup : class
 {
-    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler { get; } = new();
+    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler { get; } = new();
 
     protected override void ConfigureTestServices(IServiceCollection services)
     {
@@ -24,7 +24,7 @@ public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWeb
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
 
         services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult>>(_ =>
-            TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler
+            TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler
         );
     }
 }

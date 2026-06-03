@@ -1,14 +1,14 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 
-public class TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler
+public class TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler
     : IQueryHandler<CalendarOfItemsDirectionalQuery, QueryPagedResult>
 {
     private readonly List<CalendarOfItemsRow> _rows = [];
@@ -28,14 +28,14 @@ public class TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler
         return await Task.FromResult(result);
     }
 
-    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler AddRow(CalendarOfItemsRow row)
+    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler AddRow(CalendarOfItemsRow row)
     {
         _rows.Add(row);
 
         return this;
     }
 
-    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
+    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
     {
         foreach (var row in rows)
         {
@@ -50,7 +50,7 @@ public class TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler
         _rows.Clear();
     }
 
-    public TestGetSubTasksByDirectionForTabViewCalendarOfItemsQueryHandler SetPageSize(int pageSize)
+    public TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler SetPageSize(int pageSize)
     {
         _pageSize = pageSize;
 

@@ -1,7 +1,7 @@
 using SchoolAccount.Application;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 

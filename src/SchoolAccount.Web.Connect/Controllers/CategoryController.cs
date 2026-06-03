@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.GetCalendarOfItemsOfTasksByCategories;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Category.Contracts;
 using SchoolAccount.Application.Features.Category.Enums;
@@ -70,7 +71,7 @@ public class CategoryController(
         }
 
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetTasksByCategoriesCalendarOfItemsQuery(
+            new GetCalendarOfItemsOfTasksByCategoriesQuery(
                 category.Value.AllCategoryIds,
                 query.PageSize,
                 query.PageNumber
@@ -100,7 +101,7 @@ public class CategoryController(
     )
     {
         var results = await calendarOfItemsQueryHandler.Handle(
-            new GetTasksByCategoriesCalendarOfItemsQuery([], query.PageSize, query.PageNumber),
+            new GetCalendarOfItemsOfTasksByCategoriesQuery([], query.PageSize, query.PageNumber),
             cancellationToken
         );
 
