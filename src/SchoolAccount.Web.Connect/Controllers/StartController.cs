@@ -14,10 +14,11 @@ using SchoolAccount.Web.Connect.Models.Start;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 public class StartController(
-    IUserContext userContext, 
     IDsiApiService dsiApiService,
     IOrganisationApiService organisationApiService,
     ITrustApiService trustApiService,
+    IUserContext userContext, 
+    IOrganisationContext organisationContext,
     IHttpContextAccessor contextAccessor
 ) : Controller
 {
@@ -27,7 +28,7 @@ public class StartController(
     {
         return !userContext.IsAuthenticated
             ? View(new StartIntroductionViewModel(returnUrl))
-            : Redirect(RouteConstants.Root);
+            : LocalRedirect(RouteConstants.Root);
     }
 
     [HttpGet(RouteConstants.Start.MatAcceptance)]
@@ -41,13 +42,18 @@ public class StartController(
     public IActionResult MatAcceptanceApprove([FromQuery] string? returnAddress)
     {
         HttpContext.Session.SetString(SessionKeyConstants.MatAccepted, bool.TrueString);
-        return Redirect(returnAddress ?? RouteConstants.Root);
+        return LocalRedirect(returnAddress ?? RouteConstants.Root);
     }
 
     [Authorize]
     [HttpGet(RouteConstants.Start.SelectAOrganisation)]
     public async Task<IActionResult> SelectAOrganisationAsync([FromQuery] string? returnAddress)
     {
+        if (organisationContext.IsDsiDetermined)
+        {
+            return LocalRedirect(returnAddress ?? RouteConstants.Root);
+        }
+        
         if (string.IsNullOrEmpty(userContext.DsiIdentifier))
         {
             return View(new SelectAOrganisationViewModel { Message = "Could not determine your user's identifier" });
@@ -102,7 +108,7 @@ public class StartController(
         
         contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.CommunicatedWithAcademyApi + suffix, ukprn);
         
-        return Redirect(returnAddress ?? RouteConstants.Root);
+        return LocalRedirect(returnAddress ?? RouteConstants.Root);
     }
 
     [Authorize]
