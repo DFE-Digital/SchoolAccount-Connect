@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Integration.DfESignIn.Exceptions;
+using SchoolAccount.Web.Connect.Authentication.Exceptions;
 using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Controllers;
@@ -14,7 +15,7 @@ public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEn
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(int? code)
     {
-        var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>() ?? HttpContext.Features.Get<IExceptionHandlerFeature>();
         var reExecute = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
 
         var model = new ErrorViewModel
@@ -32,6 +33,13 @@ public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEn
                 LogWarning(model.OriginalPath);
                 Response.StatusCode = StatusCodes.Status401Unauthorized;
                 return View("Error/InaccessibleProvider", model);
+            case InterruptionException:
+            {
+                LogWarning(model.OriginalPath);
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                model.Messages = [model.Exception?.Message ?? string.Empty];
+                return View("Error/Interruption", model);
+            }
             case not null:
                 LogCriticalError(model.OriginalPath, model.Exception!.Message, model.Exception);
                 Response.StatusCode = StatusCodes.Status500InternalServerError;

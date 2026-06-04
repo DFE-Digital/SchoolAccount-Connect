@@ -1,0 +1,85 @@
+@model SchoolAccount.Web.Connect.Models.Shared.ErrorViewModel
+@{
+    ViewData["Title"] = "Incomplete action";
+}
+
+<style>
+    .step-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 var(--govuk-spacing-responsive--6);
+        counter-reset: steps;
+    }
+
+    .step-list li {
+        display: flex;
+        gap: var(--govuk-spacing-responsive--2);
+        align-items: center;
+        padding: var(--govuk-spacing-responsive--3) 0;
+        margin: 0;
+        border-bottom: 1px solid #f3f2f1;
+        font-size: 90%;
+        color: #0b0c0c;
+        counter-increment: steps;
+    }
+
+    .step-list li::before {
+        content: counter(steps);
+        background: var(--govuk-colour--blue);
+        color: var(--govuk-colour--white);
+        font-weight: 700;
+        font-size: 75%;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+</style>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">Sorry what your doing cannot be completed</h1>
+
+        <p class="govuk-body">
+            The action you where attempting to commit cannot not be completed as either you don't have permission or
+            will make your session invalid, for your safety we have interrupted the request and no action was
+            completed.
+        </p>
+
+        @if (Model.HasMessages)
+        {
+            <div class="govuk-inset-text">
+                <div class="govuk-hint">Message from system administrator</div>
+                @foreach (var message in Model.Messages)
+                {
+                    <p>@message</p>
+                }
+            </div>
+        }
+
+        <p class="govuk-body govuk-!-margin-bottom-1">
+            If you believe this is an error, you can:
+        </p>
+        <ol class="step-list">
+            <li>Check you are signed in with the correct DfE Sign-in account</li>
+            <li>Ask your approver to review your organisation access in DfE Sign-in</li>
+            <li>Contact the support team if the problem persists</li>
+        </ol>
+
+        <div class="govuk-button-group">
+            <a class="govuk-button" asp-controller="Home" asp-action="Index">Return to start</a>
+            <a class="govuk-button govuk-button--secondary" asp-controller="Account" asp-action="SignOut">Sign out</a>
+        </div>
+
+        @if (Model.ShowRequestId && !Model.HandledException)
+        {
+            <div class="ref-box">
+                <div class="ref-box__label">Reference</div>
+                <div class="ref-box__code">@Model.RequestId</div>
+            </div>
+        }
+    </div>
+</div>

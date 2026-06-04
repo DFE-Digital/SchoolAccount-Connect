@@ -12,7 +12,9 @@ public sealed class ErrorViewModel
 
     public string Title { get; set; } = "Error";
     public string? Heading { get; set; }
+    
     public IEnumerable<string> Messages { get; set; } = [];
+    public bool HasMessages => Messages.Any();
 
     public string? OriginalPath { get; set; }
 

@@ -1,13 +1,15 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Extensions;
+using SchoolAccount.Integration.AcademiesApi.Models;
 using SchoolAccount.Integration.AcademiesApi.Services;
+using SchoolAccount.Integration.DfESignIn.Models;
 using SchoolAccount.Integration.DfESignIn.Services;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Organisations;
 using SchoolAccount.Web.Connect.Authentication.Attributes;
+using SchoolAccount.Web.Connect.Authentication.Exceptions;
 using SchoolAccount.Web.Connect.Models;
 using SchoolAccount.Web.Connect.Models.Start;
 
@@ -66,7 +68,7 @@ public class StartController(
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected + SessionKeyConstants.ImpersonateSuffix);
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.CommunicatedWithAcademyApi + SessionKeyConstants.ImpersonateSuffix);
         
-        var organisations = (await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier))
+        var organisations = (await GetUsersScope())
             .Where(o => !string.IsNullOrEmpty(o.UkPrn) && o.Category is not null)
             .ToCollection();
         
@@ -81,6 +83,13 @@ public class StartController(
     public async Task<IActionResult> PickAsync([FromRoute] string type, [FromRoute] string ukprn,
         [FromQuery] string? returnAddress, bool impersonate = false)
     {
+        var context = contextAccessor.HttpContext;
+
+        if (context is null)
+        {
+            return BadRequest();
+        }
+        
         var suffix = string.Empty;
 
         if (impersonate)
@@ -88,24 +97,64 @@ public class StartController(
             suffix = SessionKeyConstants.ImpersonateSuffix;
         }
         
-        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg + suffix);
-        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType + suffix, type);
-        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.UkPrn + suffix, ukprn);
+        context.Session.Remove(SessionKeyConstants.ComputedOrg + suffix);
 
         switch (type)
         {
             case "academy":
-                var organisation = await organisationApiService.GetEstablishment(ukprn);
-                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected + suffix, JsonSerializer.Serialize(organisation));
+            {
+                var establishment = await organisationApiService.GetEstablishment(ukprn);
+
+                if (establishment is null)
+                {
+                    throw new InterruptionException("Establishment not found");
+                }
+
+                var isTrust = context.Session.GetString(SessionKeyConstants.OrgType) == "trust";
+
+                if (!impersonate && !isTrust && (await GetUsersScope()).All(x => x.UkPrn != establishment.Ukprn))
+                {
+                    throw new InterruptionException("Establishment not within your enrollments" );
+                }
+
+                if (isTrust && !string.IsNullOrEmpty(context.Session.GetString(SessionKeyConstants.OrgSelected)))
+                {
+                    var trust = JsonSerializer.Deserialize<AcademyTrust>(
+                        context.Session.GetString(SessionKeyConstants.OrgSelected)!);
+
+                    if (trust?.Establishments.Any(x => establishment.Ukprn == x.Ukprn) == false)
+                    {
+                        throw new InterruptionException("Establishment is not within your trusts scope");
+                    }
+                }
+
+                context.Session.SetString(SessionKeyConstants.OrgSelected + suffix,
+                    JsonSerializer.Serialize(establishment));
+            }
                 break;
             case "trust":
+            {
                 var trust = await trustApiService.GetTrust(ukprn);
-                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected + suffix, JsonSerializer.Serialize(trust));
+
+                if (trust is null)
+                {
+                    throw new InterruptionException("Trust not found");
+                }
+
+                if ((await GetUsersScope()).All(x => x.UkPrn != trust.GiasData?.Ukprn))
+                {
+                    throw new InterruptionException("Trust not within your enrollments");
+                }
+
+                context.Session.SetString(SessionKeyConstants.OrgSelected + suffix, JsonSerializer.Serialize(trust));
+            }
                 break;
             default:
                 throw new NotImplementedException(type);
         }
         
+        context.Session.SetString(SessionKeyConstants.OrgType + suffix, type);
+        context.Session.SetString(SessionKeyConstants.UkPrn + suffix, ukprn);
         contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.CommunicatedWithAcademyApi + suffix, ukprn);
         
         return LocalRedirect(returnAddress ?? RouteConstants.Root);
@@ -124,5 +173,15 @@ public class StartController(
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.CommunicatedWithAcademyApi +
                                                     SessionKeyConstants.ImpersonateSuffix);
         return LocalRedirect(returnAddress ?? RouteConstants.Root);
+    }
+
+    private async Task<List<OrganisationClaim>> GetUsersScope()
+    {
+        if (string.IsNullOrEmpty(userContext.DsiIdentifier))
+        {
+            return [];
+        }
+
+        return await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier);
     }
 }
