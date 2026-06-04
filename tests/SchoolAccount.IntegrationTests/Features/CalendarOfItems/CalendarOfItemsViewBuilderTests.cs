@@ -1,5 +1,6 @@
 using AngleSharp.Dom;
 using AwesomeAssertions;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
@@ -89,7 +90,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
     public async Task Pagination_visible_when_multiple_pages_of_tasks()
     {
         // Arrange
-        var filter = new GenericQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
+        var filter = new CalendarOfItemsQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 40);
 
         _fixture.TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler.AddRows(rows).SetPageSize(10);
@@ -112,7 +113,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
     )
     {
         // Arrange
-        var filter = new GenericQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
+        var filter = new CalendarOfItemsQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, entriesToGenerate);
 
         _fixture.TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler.AddRows(rows).SetPageSize(pageSize);
@@ -128,7 +129,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
     public async Task Pagination_hidden_when_tasks_fit_on_single_page()
     {
         // Arrange
-        var filter = new GenericQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
+        var filter = new CalendarOfItemsQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 5);
 
         _fixture.TestGetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler.AddRows(rows).SetPageSize(10);
@@ -151,7 +152,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
     )
     {
         // Arrange.
-        var filter = new GenericQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
+        var filter = new CalendarOfItemsQueryCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
 
         const int numberOfNoItemsMessageRows = 0;
         const int numberOfCallToActionRows = 0;

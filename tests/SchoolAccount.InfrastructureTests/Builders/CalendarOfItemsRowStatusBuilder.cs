@@ -38,7 +38,7 @@ public sealed class CalendarOfItemsRowStatusBuilder
         return new CalendarOfItemsRowStatus
         {
             DisplayValue = _displayValue,
-            Type = _type,
+            Type = _type!,
             Theme = _theme,
             EntityId = _entityId,
         };

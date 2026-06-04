@@ -4,7 +4,10 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
+using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.InfrastructureTests.Extensions;
 using SchoolAccount.Kernel;
 
@@ -17,7 +20,7 @@ public partial class GenericQueryAggregatorTests
 
     private static class Make
     {
-        public static GenericQueryCriteria Criteria(
+        public static GenericQueryCriteria<> Criteria(
             CalendarOfItemsQueryTypes toQuery = CalendarOfItemsQueryTypes.SubTask,
             DateOnlyRange? range = null,
             int pageSize = 10,
@@ -45,7 +48,7 @@ public partial class GenericQueryAggregatorTests
 
         public static class Factory
         {
-            public static IQueryFactory Query(CalendarOfItemsQueryTypes type, IEnumerable<CalendarOfItemsRow> rows)
+            public static IQueryFactory<,> Query(CalendarOfItemsQueryTypes type, IEnumerable<CalendarOfItemsRow> rows)
             {
                 var factory = Substitute.For<IQueryFactory>();
                 factory.IsQueryableFor(type).Returns(true);

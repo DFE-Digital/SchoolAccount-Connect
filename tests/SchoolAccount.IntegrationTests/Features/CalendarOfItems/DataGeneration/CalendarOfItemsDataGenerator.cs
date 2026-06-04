@@ -1,6 +1,8 @@
 using Bogus;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
@@ -10,7 +12,7 @@ public class CalendarOfItemsDataGenerator
     private readonly Faker _faker = new("en_GB") { Random = new Randomizer(123) };
 
     public ICollection<CalendarOfItemsRow> GenerateCalendarOfItemsRows(
-        GenericQueryCriteria filter,
+        CalendarOfItemsQueryCriteria filter,
         int numberOfItems,
         int daysForward = 31,
         int daysBack = 180
