@@ -9,6 +9,7 @@ public static class SessionKeyConstants
     public const string OrgTypeTrust = "trust";
     public const string OrgTypeAcademy = "academy";
     public const string ComputedOrg = "computed-org";
+    public const string CommunicatedWithAcademyApi = "cwaapi";
     
     public const string ImpersonateSuffix = "--impersonate";
 }

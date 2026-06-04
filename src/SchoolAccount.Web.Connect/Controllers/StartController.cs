@@ -55,8 +55,10 @@ public class StartController(
         
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType);
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.CommunicatedWithAcademyApi);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType + SessionKeyConstants.ImpersonateSuffix);
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected + SessionKeyConstants.ImpersonateSuffix);
-        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected + SessionKeyConstants.ImpersonateSuffix);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.CommunicatedWithAcademyApi + SessionKeyConstants.ImpersonateSuffix);
         
         var organisations = (await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier))
             .Where(o => !string.IsNullOrEmpty(o.UkPrn) && o.Category is not null)
@@ -98,6 +100,8 @@ public class StartController(
                 throw new NotImplementedException(type);
         }
         
+        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.CommunicatedWithAcademyApi + suffix, ukprn);
+        
         return Redirect(returnAddress ?? RouteConstants.Root);
     }
 
@@ -107,7 +111,11 @@ public class StartController(
     {
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg +
                                                     SessionKeyConstants.ImpersonateSuffix);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected +
+                                                    SessionKeyConstants.ImpersonateSuffix);
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType +
+                                                    SessionKeyConstants.ImpersonateSuffix);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.CommunicatedWithAcademyApi +
                                                     SessionKeyConstants.ImpersonateSuffix);
         return LocalRedirect(returnAddress ?? RouteConstants.Root);
     }

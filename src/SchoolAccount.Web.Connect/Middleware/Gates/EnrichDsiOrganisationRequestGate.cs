@@ -26,6 +26,14 @@ public class EnrichDsiOrganisationRequestGate(
 
     public Task<GateResult> EvaluateAsync(HttpContext context)
     {
+        var accepted = context.Session.GetString(SessionKeyConstants.CommunicatedWithAcademyApi);
+
+        if (accepted == bool.TrueString)
+        {
+            return Task.FromResult(
+                GateResult.Continue());
+        }
+
         var url = RouteConstants.Start.PickAOrganisation + "?returnAddress={returnAddress}";
         return Task.FromResult(
             GateResult.Redirect(
