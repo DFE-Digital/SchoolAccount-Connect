@@ -53,7 +53,7 @@ public class StartController(
     {
         if (organisationContext.IsDsiDetermined)
         {
-            return LocalRedirect(returnAddress ?? RouteConstants.Root);
+            throw new InterruptionException("You cannot manually select a organisation outside of DfE Sign In workflow");
         }
         
         if (string.IsNullOrEmpty(userContext.DsiIdentifier))
