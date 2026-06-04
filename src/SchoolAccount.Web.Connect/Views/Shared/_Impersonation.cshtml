@@ -1,0 +1,53 @@
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Extensions
+
+@inject IUserContext CurrentUser
+@inject IOrganisationContext OrganisationContext
+
+@{
+    var hasOrganisation = OrganisationContext is not null;
+    var isAuthenticated = CurrentUser?.IsAuthenticated == true;
+    var isAuthorised = isAuthenticated && hasOrganisation && await OrganisationContext!.IsAuthorised();
+    var shouldShow = Context.Request.Path.Value?.StartsWith("/account") == false;
+}
+
+@if (isAuthenticated
+     && isAuthorised
+     && shouldShow
+     && OrganisationContext?.Impersonation is not null)
+{
+    <style>
+        .dfe-connect-impersonation {
+            padding: var(--govuk-spacing-static--3);
+            background: var(--govuk-colour--turquoise);
+            color: var(--govuk-colour--white);
+            margin: var(--govuk-spacing-responsive--1) 0;
+            border-radius: var(--dfe-border-radius);
+            display: flex;
+            align-items: center;
+        }
+
+        .dfe-connect-impersonation .govuk-button {
+            margin: 0 0 0 auto;
+        }
+    </style>
+
+    <div class="dfe-connect-impersonation">
+
+        <span>
+            You are currently impersonating the establishment<br/>
+            <a class="govuk-link--no-visited-state" title="View impersonating organisation's details" style="color: var(--govuk-colour--white);"
+               asp-controller="Account" asp-action="Organisation" asp-fragment="impersonating">
+                <strong>@OrganisationContext!.Impersonation!.Name</strong>
+            </a>
+        </span>
+
+        <a class="govuk-button govuk-button--secondary govuk-link--no-visited-state"
+           asp-controller="Start" asp-action="ReturnToTrust" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">
+            End Session
+        </a>
+
+    </div>
+}

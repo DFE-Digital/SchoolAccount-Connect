@@ -12,6 +12,6 @@ public class BasicPageViewBuilder(IOrganisationContext organisationContext)
             return new BasicPageViewModel();
         }
 
-        return new BasicPageViewModel(organisationContext.Organisation.Name);
+        return new BasicPageViewModel(organisationContext.Current.Name);
     }
 }

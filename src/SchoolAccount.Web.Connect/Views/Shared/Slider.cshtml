@@ -160,7 +160,7 @@ strong.govuk-tag.meta-condition p {
         @if (slide.Conditions.Any())
         {
           <div class="card-meta card-conitions">
-            @if (Organisation.Organisation is TrustOrganisation)
+            @if (Organisation.Current is TrustOrganisation)
             {
               <h1 class="govuk-heading-s conditions-title">Establishments meeting eligibility conditions</h1>
             }

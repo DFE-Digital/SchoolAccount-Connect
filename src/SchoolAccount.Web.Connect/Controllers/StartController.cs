@@ -69,23 +69,28 @@ public class StartController(
     [Authorize]
     [HttpGet(RouteConstants.Start.PickAOrganisation)]
     public async Task<IActionResult> PickAsync([FromRoute] string type, [FromRoute] string ukprn,
-        [FromQuery] string? returnAddress)
+        [FromQuery] string? returnAddress, bool impersonate = false)
     {
-        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg);
-        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType, type);
-        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.UkPrn, ukprn);
+        var suffix = string.Empty;
+
+        if (impersonate)
+        {
+            suffix = SessionKeyConstants.ImpersonateSuffix;
+        }
         
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg + suffix);
+        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgType + suffix, type);
+        contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.UkPrn + suffix, ukprn);
+
         switch (type)
         {
             case "academy":
                 var organisation = await organisationApiService.GetEstablishment(ukprn);
-                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(organisation));
-                //contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.SelectedTrustUkRpn);
+                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected + suffix, JsonSerializer.Serialize(organisation));
                 break;
             case "trust":
                 var trust = await trustApiService.GetTrust(ukprn);
-                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected, JsonSerializer.Serialize(trust));
-                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.SelectedTrustUkRpn, ukprn);
+                contextAccessor.HttpContext!.Session.SetString(SessionKeyConstants.OrgSelected + suffix, JsonSerializer.Serialize(trust));
                 break;
             default:
                 throw new NotImplementedException(type);
@@ -98,10 +103,10 @@ public class StartController(
     [HttpGet(RouteConstants.Start.ReturnToTrust)]
     public async Task<IActionResult> ReturnToTrustAsync([FromQuery] string? returnAddress)
     {
-        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg);
-        var trustUkRpn = contextAccessor.HttpContext!.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn);
-        return string.IsNullOrEmpty(trustUkRpn)
-            ? throw new ArgumentException(trustUkRpn)
-            : RedirectToAction("Pick", new { type = "trust", ukprn = trustUkRpn, returnAddress });
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.ComputedOrg +
+                                                    SessionKeyConstants.ImpersonateSuffix);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType +
+                                                    SessionKeyConstants.ImpersonateSuffix);
+        return LocalRedirect(returnAddress ?? RouteConstants.Root);
     }
 }

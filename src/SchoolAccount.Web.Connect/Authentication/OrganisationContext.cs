@@ -39,20 +39,20 @@ public class OrganisationContext : IOrganisationContext
         _conditionMapperResolver = conditionMapperResolver;
     }
     
-    private async Task<Organisation?> Populate()
+    private async Task<Organisation?> Populate(string? suffix = null, bool fallback = true)
     {
         Organisation? organisation = null;
 
-        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.ComputedOrg) is { } storedOrg 
+        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.ComputedOrg + suffix) is { } storedOrg 
             && !string.IsNullOrEmpty(storedOrg))
         {
             return JsonSerializer.Deserialize<Organisation>(storedOrg);
         }
         
-        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
+        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType + suffix) ==
             SessionKeyConstants.OrgTypeAcademy)
         {
-            var obj = _contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
+            var obj = _contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected + suffix);
 
             if (!string.IsNullOrEmpty(obj))
             {
@@ -63,10 +63,10 @@ public class OrganisationContext : IOrganisationContext
             }
         }
             
-        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType) ==
+        if (_contextAccessor.HttpContext?.Session.GetString(SessionKeyConstants.OrgType + suffix) ==
             SessionKeyConstants.OrgTypeTrust)
         {
-            var obj = _contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected);
+            var obj = _contextAccessor.HttpContext.Session.GetString(SessionKeyConstants.OrgSelected + suffix);
 
             if (!string.IsNullOrEmpty(obj))
             {
@@ -77,7 +77,7 @@ public class OrganisationContext : IOrganisationContext
             }
         }
 
-        if (organisation is null)
+        if (organisation is null && fallback)
         {
             var claim = _contextAccessor.GetOrganisation();
             var resolved = _providerContextResolvers.FirstOrDefault(x => x.ProviderType == Provider.GetType())?.Resolve(claim) ??
@@ -90,7 +90,7 @@ public class OrganisationContext : IOrganisationContext
         if (organisation is not null)
         {
             _contextAccessor.HttpContext?.Session.SetString(
-                SessionKeyConstants.ComputedOrg,
+                SessionKeyConstants.ComputedOrg + suffix,
                 JsonSerializer.Serialize(organisation));
         }
         
@@ -133,7 +133,42 @@ public class OrganisationContext : IOrganisationContext
             };
         }
     }
-    
+
+    public IOrganisation? Impersonation
+    {
+        [SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations")]
+        get
+        {
+            var organisation = Populate(SessionKeyConstants.ImpersonateSuffix, false).GetAwaiter().GetResult();
+            
+            if (organisation is null)
+            {
+                var cached = _contextAccessor.HttpContext?.Session.GetString(
+                    SessionKeyConstants.ComputedOrg + SessionKeyConstants.ImpersonateSuffix);
+
+                if (!string.IsNullOrEmpty(cached))
+                {
+                    organisation = JsonSerializer.Deserialize<Organisation>(cached);
+                }
+            }
+
+            if (organisation is null)
+            {
+                return null;
+            }
+
+            var type = _contextAccessor.HttpContext?.Session.GetString(
+                SessionKeyConstants.OrgType + SessionKeyConstants.ImpersonateSuffix);
+            
+            return type switch
+            {
+                SessionKeyConstants.OrgTypeAcademy => new EstablishmentOrganisation(organisation),
+                SessionKeyConstants.OrgTypeTrust => TrustOrganisation.CreateFromOrganisation(organisation),
+                _ => _organisationResolver.Resolve(_contextAccessor.GetOrganisation())
+            };
+        }
+    }
+
     public Task<bool> IsValid()
     {
         return Task.FromResult(Claim is not null);

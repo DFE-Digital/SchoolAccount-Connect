@@ -1,0 +1,27 @@
+@using Microsoft.Identity.Web
+@using SchoolAccount.Application.Extensions
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@model SchoolAccount.Application.Features.Account.AccountSchoolViewModel
+@inject IOrganisationContext OrganisationContext
+@inject IUserContext UserContext
+
+@{
+    ViewData["Title"] = "Organisation";
+}
+
+<h1 class="govuk-heading govuk-!-margin-bottom-1">@OrganisationContext.Organisation.Name</h1>
+<p class="govuk-body govuk-!-margin-bottom-6">Here is all the information associated to your organisation.</p>
+
+<partial name="_Metrics" model="@OrganisationContext.Organisation" />
+
+@if (OrganisationContext.Impersonation is not null)
+{
+    <partial name="SVG/DividerLine"></partial>
+    
+    <govuk-tag class="govuk-tag--turquoise" id="impersonating">Impersonating</govuk-tag>
+    <h2 class="govuk-heading govuk-!-padding-top-2 govuk-!-margin-bottom-1">@OrganisationContext.Impersonation.Name</h2>
+    <p class="govuk-body govuk-!-margin-bottom-6">Here is all the information associated to the establishment that your are impersonating.</p>
+    
+    <partial name="_Metrics" model="@OrganisationContext.Impersonation" />
+}

@@ -60,7 +60,7 @@ public class CategoryListViewBuilder(IOrganisationContext organisationContext)
 
         return new CategoryListViewModel(options.ViewMode, rows, _paginationViewBuilder.Build(result, currentUri))
         {
-            Caption = organisationContext.Organisation.Name,
+            Caption = organisationContext.Current.Name,
             NoResultsMessage = options.NoResultsMessage,
             Heading = options.Heading,
             SubHeading = options.SubHeading,

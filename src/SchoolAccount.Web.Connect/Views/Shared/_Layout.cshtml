@@ -68,6 +68,7 @@
 }
 
 @section BeforeContent {
+    
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
         This is a new service. Help us improve it and
@@ -78,6 +79,8 @@
             give your feedback (opens in a new tab)
         </a>
     </govuk-phase-banner>
+    
+    <partial name="_Impersonation"/>
     
     @{
         if (ViewData["Breadcrumbs"] is List<Breadcrumb> breadcrumbs && breadcrumbs.Any())
@@ -103,6 +106,28 @@
         }
     }
 }
+
+<style>
+    :root {
+        --dfe-border-radius: 4px;
+    }
+    
+    .govuk-checkboxes__label:after, 
+    .govuk-checkboxes__label:before,
+    .govuk-button,
+    .govuk-tabs__list-item,
+    .moj-filter {
+        border-radius: var(--dfe-border-radius);
+    }
+
+    .moj-filter {
+        overflow: hidden;
+    }
+
+    .govuk-tabs__list-item.govuk-tabs__list-item--selected {
+        border-radius: var(--dfe-border-radius) var(--dfe-border-radius) 0 0;
+    }
+</style>
 
 @await RenderSectionAsync("Header", false)
 

@@ -4,10 +4,11 @@ public static class SessionKeyConstants
 {
     public const string MatAccepted = "mat_accepted";
     public const string OrgSelected = "org_selected";
-    public const string SelectedTrustUkRpn = "SelectedTrustUkRpn";
     public const string UkPrn = "ukprn";
     public const string OrgType = "org_type";
     public const string OrgTypeTrust = "trust";
     public const string OrgTypeAcademy = "academy";
     public const string ComputedOrg = "computed-org";
+    
+    public const string ImpersonateSuffix = "--impersonate";
 }

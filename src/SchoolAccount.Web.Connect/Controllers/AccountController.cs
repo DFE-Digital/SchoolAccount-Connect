@@ -53,7 +53,7 @@ public class AccountController : Controller
 
     [Authorize]
     [HttpGet("/account/school")]
-    public IActionResult School()
+    public IActionResult Organisation()
     {
         return View(new AccountSchoolViewModel());
     }

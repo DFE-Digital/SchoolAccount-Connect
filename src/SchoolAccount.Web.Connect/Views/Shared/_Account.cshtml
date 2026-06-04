@@ -1,0 +1,150 @@
+@using SchoolAccount.Kernel
+@using SchoolAccount.Kernel.Organisations
+@using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Extensions
+
+@inject IUserContext CurrentUser
+@inject IOrganisationContext OrganisationContext
+
+@{
+    var isAuthenticated = CurrentUser?.IsAuthenticated == true;
+    var isAuthorised = isAuthenticated && OrganisationContext is not null && await OrganisationContext.IsAuthorised();
+}
+
+<style>
+    header.dfe-connect-header .dfe-connect-header__account {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        margin: 0;
+        padding: 0;
+        gap: 1px;
+        list-style: none;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account > * {
+        background: #19609f;
+        padding: var(--govuk-spacing-static--2) var(--govuk-spacing-static--3);
+        display: block;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account * {
+        border: none;
+        height: unset;
+        width: unset;
+        padding: 0;
+        margin: 0;
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account a, 
+    header.dfe-connect-header .dfe-connect-header__account button {
+        padding: var(--govuk-spacing-static--2) var(--govuk-spacing-static--3);
+        display: flex;
+        gap: var(--govuk-spacing-static--2);
+        align-items: center;
+        color: var(--govuk-colour--white);
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account > *:first-child {
+        border-top-left-radius: var(--dfe-border-radius);
+        border-bottom-left-radius: var(--dfe-border-radius);
+    }
+
+    header.dfe-connect-header .dfe-connect-header__account > *:last-child {
+        border-top-right-radius: var(--dfe-border-radius);
+        border-bottom-right-radius: var(--dfe-border-radius);
+    }
+
+    header.dfe-connect-header .dfe-connect-header__school {
+        font-weight: 500;
+    }
+</style>
+
+<ul class="dfe-connect-header__account">
+    @if (isAuthenticated)
+    {
+        <li class="dfe-connect-header__account_item">
+            <a class="govuk-link--no-visited-state" title="See your profile"
+               asp-controller="Account" asp-action="Profile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="18" style="fill: white;">
+                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                </svg>
+                <span class="dfe-connect-header__school">
+                    @CurrentUser!.ToString()
+                </span>
+            </a>
+        </li>
+        if (!string.IsNullOrWhiteSpace(OrganisationContext?.Organisation.Name))
+        {
+            <li class="dfe-connect-header__account_item">
+                <a class="govuk-link--no-visited-state" title="See organisation profile"
+                   asp-controller="Account" asp-action="Organisation">
+                    
+                    @if (OrganisationContext.Organisation is TrustOrganisation)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="18" height="18" style="fill: white;">
+                            <path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/>
+                        </svg>
+                    }
+                    else
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="20" style="fill: white;">
+                            <path d="M337.8 5.4C327-1.8 313-1.8 302.2 5.4L166.3 96 48 96C21.5 96 0 117.5 0 144L0 464c0 26.5 21.5 48 48 48l208 0 0-96c0-35.3 28.7-64 64-64s64 28.7 64 64l0 96 208 0c26.5 0 48-21.5 48-48l0-320c0-26.5-21.5-48-48-48L473.7 96 337.8 5.4zM96 192l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM96 320l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM232 176a88 88 0 1 1 176 0 88 88 0 1 1 -176 0zm88-48c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-16 0 0-16c0-8.8-7.2-16-16-16z"/>
+                        </svg>
+                    }
+                    <span class="dfe-connect-header__school">
+                        @OrganisationContext.Organisation.Name
+                    </span>
+                </a>
+            </li>
+            <li  class="dfe-connect-header__account_item">
+                <a class="govuk-link--no-visited-state" title="Change Organisation"
+                   asp-controller="Start" asp-action="SelectAOrganisation" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="20" style="fill: white;">
+                        <path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c25.6 0 46.6-20.1 47.9-45.3C327.5 441.9 288 385.6 288 320c0-11 1.1-21.7 3.2-32L272 288c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l32 0c4.8 0 9.1 2.1 12.1 5.5c16.9-24.5 40.4-44.1 67.9-56.2L384 48c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zM448 240.1a80 80 0 1 1 0 160 80 80 0 1 1 0-160zm0 208c26.7 0 51.4-8.2 71.9-22.1L599 505.1c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-79.1-79.1c14-20.5 22.1-45.3 22.1-71.9c0-70.7-57.3-128-128-128s-128 57.3-128 128s57.3 128 128 128z"/>
+                    </svg>
+                </a>
+            </li>
+        }
+
+        if (isAuthorised)
+        {
+            <li class="dfe-connect-header__account_item">
+                <button class="dfe-connect-header__search-toggle"
+                        id="dfe-connect-search-toggle"
+                        type="button"
+                        aria-controls="dfe-connect-search-panel"
+                        aria-expanded="false">
+                    <span class="govuk-visually-hidden">Open search</span>
+
+                    <svg class="dfe-connect-header__icon dfe-connect-header__icon--search"
+                         xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false"
+                         width="24"
+                         height="24">
+                        <path
+                            d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+                    </svg>
+
+                    <svg class="dfe-connect-header__icon dfe-connect-header__icon--close"
+                         xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false"
+                         width="24"
+                         height="24">
+                        <path
+                            d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+                    </svg>
+                </button>
+            </li>
+        }
+
+        <li class="dfe-connect-header__account_item">
+            <a asp-controller="Account" asp-action="SignOut" class="dfe-connect-header__signout govuk-link--no-visited-state">Sign out</a>
+        </li>
+    }
+</ul>

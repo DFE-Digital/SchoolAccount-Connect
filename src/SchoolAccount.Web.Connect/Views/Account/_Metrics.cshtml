@@ -1,16 +1,7 @@
-@using Microsoft.Identity.Web
+@using SchoolAccount.Application.Extensions
 @using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Organisations
-@model SchoolAccount.Application.Features.Account.AccountSchoolViewModel
-@inject IOrganisationContext OrganisationContext
-@inject IUserContext UserContext
-
-@{
-    ViewData["Title"] = "Organisation";
-}
-
-<h1 class="govuk-heading govuk-!-margin-bottom-1">@OrganisationContext.Organisation.Name</h1>
-<p class="govuk-body govuk-!-margin-bottom-6">Inspecting content as <strong>@UserContext.ToString()</strong> <strong>@User.GetDisplayName()</strong></p>
+@model IOrganisation
 
 <h3 class="govuk-heading govuk-!-margin-bottom-1">Organisation Details</h3>
 <p class="govuk-body-s govuk-!-margin-bottom-3">This is information that identifies the organisation and it's scope</p>
@@ -20,7 +11,7 @@
             Name
         </dt>
         <dd class="govuk-summary-list__value">
-            @OrganisationContext.Organisation.Name
+            @Model.Name
         </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -28,7 +19,7 @@
             Category
         </dt>
         <dd class="govuk-summary-list__value">
-            @OrganisationContext.Organisation.Category.ToString()
+            @Model.Category.ToString().ToSentence(true)
         </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -36,12 +27,12 @@
             Type
         </dt>
         <dd class="govuk-summary-list__value">
-            @OrganisationContext.Organisation.Establishment.ToString()
+            @Model.Establishment.ToString().ToSentence(true)
         </dd>
     </div>
 </dl>
 
-@if (OrganisationContext.Organisation is EstablishmentOrganisation establishment)
+@if (Model is EstablishmentOrganisation establishment)
 {
     <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishment Details</h3>
     <p class="govuk-body-s govuk-!-margin-bottom-3">Information on which forms the schools core requirements</p>
@@ -51,7 +42,7 @@
                 Category
             </dt>
             <dd class="govuk-summary-list__value">
-                @establishment.Category.ToString()
+                @establishment.Category.ToString().ToSentence(true)
             </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -59,7 +50,7 @@
                 Type
             </dt>
             <dd class="govuk-summary-list__value">
-                @establishment.Establishment.ToString()
+                @establishment.Establishment.ToString().ToSentence(true)
             </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -67,7 +58,7 @@
                 Phase of Education
             </dt>
             <dd class="govuk-summary-list__value">
-                @establishment.PhaseOfEducation?.Name
+                @establishment.PhaseOfEducation?.Name.ToSentence(true)
             </dd>
         </div>
         @*<div class="govuk-summary-list__row">
@@ -97,32 +88,49 @@
     </dl>
     
     <h3 class="govuk-heading govuk-!-margin-bottom-1">Conditions</h3>
-    <p class="govuk-body-s govuk-!-margin-bottom-3">These are properties that can be used to see if schools meet task conditions</p>
+    <p class="govuk-body-s govuk-!-margin-bottom-3">These are properties that can be used to see if schools meet task conditions.</p>
     <dl class="govuk-summary-list">
-        @foreach (var condition in establishment.Conditions)
+        @foreach (var group in establishment.Conditions.GroupBy(x => x.Identifier.Split(".").First()))
         {
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    @condition.Identifier
+                    @group.Key
                 </dt>
-                <dd class="govuk-summary-list__value">
-                    @condition.Value
-                </dd>
+                <dd class="govuk-summary-list__value"></dd>
             </div>
+
+            foreach (var condition in group)
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key" style="font-weight: 400;">
+                        @(string.Join(" ", condition.Identifier.Split(".").Skip(1)).ToSentence(true))
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @if (!string.IsNullOrEmpty(condition.Value?.ToString()))
+                        {
+                            <text>@condition.Value</text>
+                        }
+                        else
+                        {
+                            <i style="color: var(--govuk-colour--dark-grey);">No Data</i>
+                        }
+                    </dd>
+                </div>
+            }
         }
     </dl>
 }
 
-@if (OrganisationContext.Organisation is TrustOrganisation trust)
+@if (Model is TrustOrganisation trust)
 {
     <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishments</h3>
-    <p class="govuk-body-s govuk-!-margin-bottom-3">A list of all the establishments that this organisation has maintains</p>
+    <p class="govuk-body-s govuk-!-margin-bottom-3">A list of all the establishments that this organisation has maintains. You can select an establishment to impersonate your experience as if you where that school.</p>
     <ul class="govuk-task-list">
         @foreach (var school in trust.Establishments ?? [])
         {
             <li class="govuk-task-list__item govuk-task-list__item--with-link">
                 <div class="govuk-task-list__name-and-hint">
-                    <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@school.Ukrpn">
+                    <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@school.Ukrpn" asp-route-impersonate="true">
                         <strong>@school.Name</strong>
                     </a>
                     <div class="govuk-task-list__hint">
@@ -133,11 +141,11 @@
                         
                         @if (school.Establishment > 0)
                         {
-                            <text><strong>Type</strong> @school.Establishment</text><br />
+                            <text><strong>Type</strong> @school.Establishment.ToString().ToSentence(true)</text><br />
                         }
                         @if (school.PhaseOfEducation is not null)
                         {
-                            <text><strong>Phase</strong> (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name</text><br />
+                            <text><strong>Phase</strong> (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name.ToSentence(true)</text><br />
                         }
                     </div>
                 </div>

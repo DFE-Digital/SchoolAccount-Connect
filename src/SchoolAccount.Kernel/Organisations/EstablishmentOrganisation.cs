@@ -48,4 +48,4 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
     public Collection<EstablishmentCondition> Conditions { get; init; } = [];
 }
 
-public record EstablishmentCondition(string Identifier, object Value); 
+public record EstablishmentCondition(string Identifier, object Value, DateTime? Populated = null); 

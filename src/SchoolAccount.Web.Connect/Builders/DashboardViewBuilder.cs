@@ -67,7 +67,7 @@ public class DashboardViewBuilder(
                             Group = t.Group
                         })
                         .ToCollection(),
-                    Conditions = organisationContext.Organisation switch
+                    Conditions = organisationContext.Current switch
                     {
                         TrustOrganisation trust => trust.Establishments
                             .Select(t => new NodeComponent

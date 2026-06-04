@@ -7,7 +7,7 @@ using SchoolAccount.Kernel.Extensions;
 
 namespace SchoolAccount.Kernel;
 
-public record OrganisationCondition(string Identifier, object? Value); 
+public record OrganisationCondition(string Identifier, object? Value, DateTime? Populated = null); 
 
 public class Organisation
 {

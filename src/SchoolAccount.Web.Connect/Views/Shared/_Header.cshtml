@@ -50,70 +50,19 @@
 <header class="dfe-connect-header" role="banner">
     <div class="dfe-connect-header__top">
         <div class="govuk-width-container dfe-connect-header__top-inner">
+            
             <div class="dfe-connect-header__brand">
                 <a href="/"
                    class="dfe-connect-header__brand-link"
                    aria-label="Department for Education home">
                     <img src="~/lib/dfe-frontend/assets/image/department-for-education_white.png"
                          alt="Department for Education"
-                         class="dfe-connect-header__dept-image" />
+                         class="dfe-connect-header__dept-image"/>
                 </a>
             </div>
 
-            <div class="dfe-connect-header__account">
-                @if (isAuthenticated)
-                {
-                    if (!string.IsNullOrWhiteSpace(displayName))
-                    {
-                        <a asp-controller="Account" asp-action="School">
-                            <span class="dfe-connect-header__school">@displayName</span>
-                        </a>
-                        <a asp-controller="Start" asp-action="SelectAOrganisation" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">Chg Org</a>
-                        
-                        if (OrganisationContext?.Organisation is not TrustOrganisation && !string.IsNullOrEmpty(Context.Session.GetString(SessionKeyConstants.SelectedTrustUkRpn)))
-                        {
-                            <a asp-controller="Start" asp-action="ReturnToTrust" asp-route-returnAddress="@Context.Request.GetFullRequestUri().AbsolutePath">Bck 2 Trust</a>
-                        }
-                    }
-                    
-                    if (isAuthorised)
-                    {
-                        <button class="dfe-connect-header__search-toggle"
-                                id="dfe-connect-search-toggle"
-                                type="button"
-                                aria-controls="dfe-connect-search-panel"
-                                aria-expanded="false">
-                            <span class="govuk-visually-hidden">Open search</span>
-
-                            <svg class="dfe-connect-header__icon dfe-connect-header__icon--search"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 24 24"
-                                 aria-hidden="true"
-                                 focusable="false"
-                                 width="24"
-                                 height="24">
-                                <path
-                                    d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
-                            </svg>
-
-                            <svg class="dfe-connect-header__icon dfe-connect-header__icon--close"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 24 24"
-                                 aria-hidden="true"
-                                 focusable="false"
-                                 width="24"
-                                 height="24">
-                                <path
-                                    d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
-                            </svg>
-                        </button>
-                    }
-
-                    <a asp-controller="Account"
-                       asp-action="SignOut"
-                       class="dfe-connect-header__signout">Sign out</a>
-                }
-            </div>
+            <partial name="_Account" />
+            
         </div>
     </div>
 

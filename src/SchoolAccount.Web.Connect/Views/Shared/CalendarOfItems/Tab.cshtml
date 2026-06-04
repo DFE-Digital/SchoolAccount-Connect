@@ -16,7 +16,7 @@
     <h3 class="govuk-caption-m">@Model.LastUpdatedMessage</h3>
 }
 
-@if (OrganisationContext.Organisation is TrustOrganisation)
+@if (OrganisationContext.Current is TrustOrganisation)
 {
     <style>
         .access-org strong.govuk-tag {
@@ -24,7 +24,7 @@
             width: 250px;
             min-width: 250px;
             max-width: 250px;
-            border-radius: var(--govuk-spacing-responsive--1);
+            border-radius: var(--dfe-border-radius);
             padding: var(--govuk-spacing-responsive--1) var(--govuk-spacing-responsive--2);
         }
 
@@ -64,7 +64,7 @@
                         <div class="govuk-task-list__hint">
                             <strong>@row.DateText</strong>
                         </div>
-                        @if (row.HasOrganisation && OrganisationContext.Organisation is TrustOrganisation trust)
+                        @if (row.HasOrganisation && OrganisationContext.Current is TrustOrganisation trust)
                         {
                             <div class="govuk-task-list__hint access-org">
                                 @foreach (var establishment in trust.Establishments)

@@ -54,7 +54,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             SubHeading = options.SubHeading,
             Title = options.Title,
             Description = options.Description,
-            Caption = organisationContext.Organisation.Name,
+            Caption = organisationContext.Current.Name,
         };
     }
 
