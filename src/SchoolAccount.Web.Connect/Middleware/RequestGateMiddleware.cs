@@ -9,6 +9,11 @@ public class RequestGateMiddleware(RequestDelegate next)
     {
         foreach (var gate in gates.OrderBy(x => x.Priority))
         {
+            if (!await gate.CanEvaluateAsync(context))
+            {
+                continue;
+            }
+            
             var result = await gate.EvaluateAsync(context);
 
             if (!result.ShouldRedirect)

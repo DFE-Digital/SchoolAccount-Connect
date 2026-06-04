@@ -3,8 +3,12 @@
 @using SchoolAccount.Kernel.Organisations
 @model IOrganisation
 
+@{
+    var sectionSplitterClass = " govuk-!-margin-top-7";
+}
+
 <h3 class="govuk-heading govuk-!-margin-bottom-1">Organisation Details</h3>
-<p class="govuk-body-s govuk-!-margin-bottom-3">This is information that identifies the organisation and it's scope</p>
+<p class="govuk-body govuk-!-margin-bottom-3">This is information that identifies the organisation and it's scope</p>
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -34,8 +38,8 @@
 
 @if (Model is EstablishmentOrganisation establishment)
 {
-    <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishment Details</h3>
-    <p class="govuk-body-s govuk-!-margin-bottom-3">Information on which forms the schools core requirements</p>
+    <h3 class="govuk-heading govuk-!-margin-bottom-1 @sectionSplitterClass">Establishment Details</h3>
+    <p class="govuk-body govuk-!-margin-bottom-3">Information on which forms the schools core requirements</p>
     <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
@@ -87,69 +91,85 @@
         </div>*@
     </dl>
     
-    <h3 class="govuk-heading govuk-!-margin-bottom-1">Conditions</h3>
-    <p class="govuk-body-s govuk-!-margin-bottom-3">These are properties that can be used to see if schools meet task conditions.</p>
-    <dl class="govuk-summary-list">
-        @foreach (var group in establishment.Conditions.GroupBy(x => x.Identifier.Split(".").First()))
-        {
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @group.Key
-                </dt>
-                <dd class="govuk-summary-list__value"></dd>
-            </div>
+    <h3 class="govuk-heading govuk-!-margin-bottom-1 @sectionSplitterClass">Conditions</h3>
+    <p class="govuk-body govuk-!-margin-bottom-3">These are properties that can be used to see if schools meet task conditions.</p>
 
-            foreach (var condition in group)
+    if (establishment.Conditions.Count > 0)
+    {
+        <dl class="govuk-summary-list">
+            @foreach (var group in establishment.Conditions.GroupBy(x => x.Identifier.Split(".").First()))
             {
                 <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key" style="font-weight: 400;">
-                        @(string.Join(" ", condition.Identifier.Split(".").Skip(1)).ToSentence(true))
+                    <dt class="govuk-summary-list__key">
+                        @group.Key
                     </dt>
-                    <dd class="govuk-summary-list__value">
-                        @if (!string.IsNullOrEmpty(condition.Value?.ToString()))
-                        {
-                            <text>@condition.Value</text>
-                        }
-                        else
-                        {
-                            <i style="color: var(--govuk-colour--dark-grey);">No Data</i>
-                        }
-                    </dd>
+                    <dd class="govuk-summary-list__value"></dd>
                 </div>
+
+                foreach (var condition in group)
+                {
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key" style="font-weight: 400;">
+                            @(string.Join(" ", condition.Identifier.Split(".").Skip(1)).ToSentence(true))
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @if (!string.IsNullOrEmpty(condition.Value?.ToString()))
+                            {
+                                <text>@condition.Value</text>
+                            }
+                            else
+                            {
+                                <i style="color: var(--govuk-colour--dark-grey);">No Data</i>
+                            }
+                        </dd>
+                    </div>
+                }
             }
-        }
-    </dl>
+        </dl>
+    }
+    else
+    {
+        <govuk-warning-text>No conditions have been determined for this establishment</govuk-warning-text>
+    }
 }
 
 @if (Model is TrustOrganisation trust)
 {
-    <h3 class="govuk-heading govuk-!-margin-bottom-1">Establishments</h3>
-    <p class="govuk-body-s govuk-!-margin-bottom-3">A list of all the establishments that this organisation has maintains. You can select an establishment to impersonate your experience as if you where that school.</p>
-    <ul class="govuk-task-list">
-        @foreach (var school in trust.Establishments ?? [])
-        {
-            <li class="govuk-task-list__item govuk-task-list__item--with-link">
-                <div class="govuk-task-list__name-and-hint">
-                    <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@school.Ukrpn" asp-route-impersonate="true">
-                        <strong>@school.Name</strong>
-                    </a>
-                    <div class="govuk-task-list__hint">
-                        @if (!string.IsNullOrEmpty(school.Ukrpn))
-                        {
-                            <text><strong>UKPRN</strong> @school.Ukrpn</text><br />
-                        }
-                        
-                        @if (school.Establishment > 0)
-                        {
-                            <text><strong>Type</strong> @school.Establishment.ToString().ToSentence(true)</text><br />
-                        }
-                        @if (school.PhaseOfEducation is not null)
-                        {
-                            <text><strong>Phase</strong> (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name.ToSentence(true)</text><br />
-                        }
+    <h3 class="govuk-heading govuk-!-margin-bottom-1 @sectionSplitterClass">Establishments</h3>
+    <p class="govuk-body govuk-!-margin-bottom-3">A list of all the establishments that this organisation has maintains. You can select an establishment to impersonate your experience as if you where that school.</p>
+    
+    if (trust.Establishments.Count > 0) 
+    {
+        <ul class="govuk-task-list">
+            @foreach (var school in trust.Establishments)
+            {
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" asp-controller="Start" asp-action="Pick" asp-route-type="academy" asp-route-ukprn="@school.Ukrpn" asp-route-impersonate="true">
+                            <strong>@school.Name</strong>
+                        </a>
+                        <div class="govuk-task-list__hint">
+                            @if (!string.IsNullOrEmpty(school.Ukrpn))
+                            {
+                                <text><strong>UKPRN</strong> @school.Ukrpn</text><br />
+                            }
+                            
+                            @if (school.Establishment > 0)
+                            {
+                                <text><strong>Type</strong> @school.Establishment.ToString().ToSentence(true)</text><br />
+                            }
+                            @if (school.PhaseOfEducation is not null)
+                            {
+                                <text><strong>Phase</strong> (@school.PhaseOfEducation.Id) @school.PhaseOfEducation.Name.ToSentence(true)</text><br />
+                            }
+                        </div>
                     </div>
-                </div>
-            </li>
-        }
-    </ul>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <govuk-warning-text>No establishments have been listed under this trust</govuk-warning-text>
+    }
 }

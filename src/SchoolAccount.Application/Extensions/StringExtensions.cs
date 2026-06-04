@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SchoolAccount.Application.Extensions;
 
@@ -25,5 +27,24 @@ public static class StringExtensions
         }
         
         return newText.ToString();
+    }
+    
+    public static string Format(this string template, object values)
+    {
+        return Regex.Replace(template, @"\{(\w+)\}", m =>
+        {
+            var prop = values.GetType().GetProperty(m.Groups[1].Value);
+            return prop?.GetValue(values)?.ToString() ?? m.Value;
+        });
+    }
+
+    public static string Format(this string template, params object[] values)
+    {
+        return string.Format(CultureInfo.InvariantCulture, template, values);
+    }
+
+    public static string RemoveOptionalUrlProperties(this string template)
+    {
+        return Regex.Replace(template, @"\{.*?\}/?", "").TrimEnd('/');
     }
 }

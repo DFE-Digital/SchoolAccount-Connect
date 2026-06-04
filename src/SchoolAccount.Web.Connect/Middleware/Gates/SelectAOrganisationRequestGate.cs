@@ -9,20 +9,20 @@ public class SelectAOrganisationRequestGate(IUserContext userContext, IOrganisat
 {
     public int Priority { get; } = 5;
 
+    public Task<bool> CanEvaluateAsync(HttpContext context)
+    {
+        var outcome = !userContext.IsAuthenticated
+                      || organisationContext.IsDsiDetermined
+                      || context.Request.Path.StartsWithSegments(
+                          RouteConstants.Start.SelectAOrganisation,
+                          StringComparison.InvariantCultureIgnoreCase
+                      );
+        
+        return Task.FromResult(!outcome);
+    }
+
     public Task<GateResult> EvaluateAsync(HttpContext context)
     {
-        if (
-            !userContext.IsAuthenticated
-            || organisationContext.IsDsiDetermined
-            || context.Request.Path.StartsWithSegments(
-                RouteConstants.Start.SelectAOrganisation,
-                StringComparison.InvariantCultureIgnoreCase
-            )
-        )
-        {
-            return Task.FromResult(GateResult.Continue());
-        }
-
         var accepted = context.Session.GetString(SessionKeyConstants.OrgType);
 
         if (!string.IsNullOrEmpty(accepted))

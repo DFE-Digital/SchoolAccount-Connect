@@ -11,7 +11,7 @@
 }
 
 <h1 class="govuk-heading govuk-!-margin-bottom-1">@OrganisationContext.Organisation.Name</h1>
-<p class="govuk-body govuk-!-margin-bottom-6">Here is all the information associated to your organisation.</p>
+<p class="govuk-body-l govuk-!-margin-bottom-6">Here is all the information associated to your organisation.</p>
 
 <partial name="_Metrics" model="@OrganisationContext.Organisation" />
 
@@ -21,7 +21,7 @@
     
     <govuk-tag class="govuk-tag--turquoise" id="impersonating">Impersonating</govuk-tag>
     <h2 class="govuk-heading govuk-!-padding-top-2 govuk-!-margin-bottom-1">@OrganisationContext.Impersonation.Name</h2>
-    <p class="govuk-body govuk-!-margin-bottom-6">Here is all the information associated to the establishment that your are impersonating.</p>
+    <p class="govuk-body-l govuk-!-margin-bottom-6">Here is all the information associated to the establishment that your are impersonating.</p>
     
     <partial name="_Metrics" model="@OrganisationContext.Impersonation" />
 }

@@ -10,18 +10,16 @@ public class MatAcceptanceRequestGate(IUserContext userContext, IOrganisationCon
 {
     public int Priority { get; } = 10;
 
+    public async Task<bool> CanEvaluateAsync(HttpContext context)
+    {
+        return !(!userContext.IsAuthenticated
+               || !await organisationContext.IsAuthorised()
+               || organisationContext.Organisation is not TrustOrganisation
+               || context.Request.IsRestrictedPath(RouteConstants.Start.MatAcceptance));
+    }
+
     public async Task<GateResult> EvaluateAsync(HttpContext context)
     {
-        if (
-            !userContext.IsAuthenticated
-            || !await organisationContext.IsAuthorised()
-            || organisationContext.Organisation is not TrustOrganisation
-            || context.Request.IsRestrictedPath(RouteConstants.Start.MatAcceptance)
-        )
-        {
-            return GateResult.Continue();
-        }
-
         var accepted = context.Session.GetString(SessionKeyConstants.MatAccepted);
 
         if (accepted == bool.TrueString)

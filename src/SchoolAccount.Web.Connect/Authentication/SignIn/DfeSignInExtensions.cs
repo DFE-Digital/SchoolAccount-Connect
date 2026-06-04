@@ -74,11 +74,11 @@ internal static class DfeSignInExtensions
 
                 options.MapInboundClaims = false;
 
-                // options.Scope.Clear();
-                // foreach (var scope in configuration.Scopes)
-                // {
-                //     options.Scope.Add(scope);
-                // }
+                options.Scope.Clear();
+                foreach (var scope in configuration.Scopes)
+                {
+                    options.Scope.Add(scope);
+                }
 
                 options.Events = new OpenIdConnectEvents
                 {

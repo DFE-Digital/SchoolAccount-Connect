@@ -4,12 +4,18 @@ using SchoolAccount.Web.Connect.Middleware.Models;
 using static System.StringComparison;
 using static SchoolAccount.Application.Constants.FeatureFlagConstants;
 using static SchoolAccount.Web.Connect.RouteConstants;
+using Task = System.Threading.Tasks.Task;
 
 namespace SchoolAccount.Web.Connect.Middleware.Gates;
 
 public class MaintenanceRequestGate(IFeatureManager featureManager) : IRequestGate
 {
     public int Priority { get; } = 1;
+
+    public Task<bool> CanEvaluateAsync(HttpContext context)
+    {
+        return Task.FromResult(true);
+    }
 
     public async Task<GateResult> EvaluateAsync(HttpContext context)
     {

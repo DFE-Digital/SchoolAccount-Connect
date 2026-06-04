@@ -10,6 +10,7 @@ public interface IOrganisationContext : IProviderContext
     public IOrganisation Current => Impersonation ?? Organisation;
 
     public bool IsDsiDetermined { get; }
+    
     public Task<bool> IsValid();
     public Task<bool> IsAuthorised();
 }
