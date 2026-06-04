@@ -1,0 +1,198 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "launch: connect",
+            "dependsOn": [
+                "docker-compose: up",
+                "build"
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "schoolaccount-connect",
+                "target": "debug",
+                "dockerfile": "${workspaceFolder}/src/SchoolAccount.Web.Connect/Dockerfile",
+                "context": "${workspaceFolder}"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj"
+            }
+        },
+        {
+            "type": "docker-compose",
+            "label": "docker-compose: up",
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true,
+                    "services": [
+                        "migrations",
+                        "app-config-emulator",
+                        "seq"
+                    ]
+                },
+                "files": [
+                    "${workspaceFolder}/compose.yml"
+                ]
+            }
+        },
+        {
+            "label": "docker-compose: down",
+            "type": "shell",
+            "command": "docker compose -f ${workspaceFolder}/compose.yml -f ${workspaceFolder}/compose.yml down connect",
+            "problemMatcher": []
+        },
+        {
+            "label": "docker-compose: down full",
+            "type": "shell",
+            "command": "docker compose -f ${workspaceFolder}/compose.yml -f ${workspaceFolder}/compose.yml down connect tsi-frontend schoolaccount-frontend",
+            "problemMatcher": []
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug",
+                "docker-compose: up"
+            ],
+            "dockerRun": {
+                "network": "db-network",
+                "containerName": "schoolaccount-connect",
+                "ports": [
+                    {
+                        "containerPort": 7034,
+                        "hostPort": 7034
+                    }
+                ],
+                "volumes": [
+                    {
+                        "containerPath": "/https",
+                        "localPath": "${workspaceFolder}/certs",
+                        "readOnly": true
+                    }
+                ],
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development",
+                    "ConnectionStrings__SchoolAccount": "Server=schoolaccount-database;Database=sa-sql-db-dev;User Id=sa;Password=MyStrongPassword123!;TrustServerCertificate=true",
+                    "AzureAppConfiguration__Endpoint": "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890",
+                    "Kestrel__Endpoints__Https__Url": "https://*:7034",
+                    "Kestrel__Endpoints__Https__Certificate__Path": "/https/connect.pem",
+                    "Kestrel__Endpoints__Https__Certificate__KeyPath": "/https/connect-key.pem"
+                }
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-compose",
+            "label": "docker-compose: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true,
+                    "services": [
+                        "connect"
+                    ]
+                },
+                "files": [
+                    "${workspaceFolder}/compose.yml"
+                ]
+            }
+        },
+        {
+            "type": "docker-compose",
+            "label": "docker-compose: debug full",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true
+                },
+                "files": [
+                    "${workspaceFolder}/compose.yml"
+                ]
+            }
+        },
+        {
+            "label": "docker-compose: open-wait",
+            "type": "shell",
+            "dependsOn": [
+                "docker-compose: debug"
+            ],
+            "isBackground": true,
+            "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | { grep -m1 'Now listening on: https' && open https://127.0.0.1:7034; cat; }",
+            "linux": {
+                "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | { grep -m1 'Now listening on: https' && xdg-open https://127.0.0.1:7034; cat; }"
+            },
+            "windows": {
+                "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | Select-String -Pattern 'Now listening on: https' -SimpleMatch | Select-Object -First 1 | ForEach-Object { Start-Process 'https://127.0.0.1:7034' }"
+            },
+            "problemMatcher": {
+                "owner": "docker-compose-ready",
+                "pattern": {
+                    "regexp": "^.*$",
+                    "message": 1
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^Attaching to",
+                    "endsPattern": "Now listening on: https"
+                }
+            }
+        },
+        {
+            "label": "docker-compose: open-wait full",
+            "type": "shell",
+            "dependsOn": [
+                "docker-compose: debug full"
+            ],
+            "isBackground": true,
+            "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | { grep -m1 'Now listening on: https' && open https://127.0.0.1:7034; cat; }",
+            "linux": {
+                "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | { grep -m1 'Now listening on: https' && xdg-open https://127.0.0.1:7034; cat; }"
+            },
+            "windows": {
+                "command": "docker compose -f ${workspaceFolder}/compose.yml logs -f connect | Select-String -Pattern 'Now listening on: https' -SimpleMatch | Select-Object -First 1 | ForEach-Object { Start-Process 'https://127.0.0.1:7034' }"
+            },
+            "problemMatcher": {
+                "owner": "docker-compose-ready-full",
+                "pattern": {
+                    "regexp": "^.*$",
+                    "message": 1
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^Attaching to",
+                    "endsPattern": "Now listening on: https"
+                }
+            }
+        }
+    ]
+}

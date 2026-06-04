@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration
+    default="false"
+    name="Connect: docker compose full and launch browser"
+    type="CompoundRunConfigurationType"
+  >
+    <toRun name="wait-and-open" type="RunDotNetFile" />
+    <toRun name="Connect: docker compose full" type="docker-deploy" />
+    <method v="2" />
+  </configuration>
+</component>

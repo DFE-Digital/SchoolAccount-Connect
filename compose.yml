@@ -1,0 +1,195 @@
+﻿name: schoolaccount
+services:
+  connect:
+    hostname: schoolaccount-connect
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      AzureAppConfiguration__Endpoint: "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890"
+      ConnectionStrings__SchoolAccount: "Server=schoolaccount-database,1433;Initial Catalog=sa-sql-db-dev;User ID=sa;Password=MyStrongPassword123!;TrustServerCertificate=True;Connection Timeout=30;"
+      Kestrel__Endpoints__Https__Url: "https://*:7034"
+      Kestrel__Endpoints__Https__Certificate__Path: "/https/connect.pem"
+      Kestrel__Endpoints__Https__Certificate__KeyPath: "/https/connect-key.pem"
+    build:
+      context: .
+      dockerfile: ./src/SchoolAccount.Web.Connect/Dockerfile
+      target: debug
+      secrets:
+        - personal_access_token
+    depends_on:
+      - database
+      - migrations
+      - app-config-emulator
+      - seq
+    ports:
+      - "7034:7034"
+    networks:
+      - default
+    volumes:
+      - ./certs/:/https:ro      
+      - dataprotection-keys:/home/app/.aspnet/DataProtection-Keys
+
+  database:
+    hostname: schoolaccount-database
+    platform: linux/amd64
+    build:
+      context: ../SchoolAccount-Database/src/SchoolAccount.Database/sql-server/
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+      - MSSQL_SQLCMD_PATH=${MSSQL_SQLCMD_PATH}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    user: root
+    volumes:
+      - database-data:/var/opt/mssql
+    healthcheck:
+      test: ${MSSQL_SQLCMD_PATH} -S localhost -U sa -P $MSSQL_SA_PASSWORD -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - default
+
+  migrations:
+    image: flyway/flyway:latest
+    environment:
+      - FLYWAY_PASSWORD=${MSSQL_SA_PASSWORD}
+    command: migrate
+    volumes:
+      - ../SchoolAccount-Database/src/SchoolAccount.Database/flyway/conf:/flyway/conf
+      - ../SchoolAccount-Database/src/SchoolAccount.Database/flyway/migrations:/flyway/migrations
+      - ../SchoolAccount-Database/src/SchoolAccount.Database/flyway/repeatable:/flyway/repeatable
+      - ../SchoolAccount-Database/src/SchoolAccount.Database/flyway/callbacks:/flyway/callbacks
+      - ../SchoolAccount-Database/src/SchoolAccount.Database/flyway/seed:/flyway/seed
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - default
+  
+  tsi-frontend:
+    hostname: tsi-frontend
+    build:
+      context: ../TSI-Frontend/ClientApp
+      dockerfile: ./Dockerfile
+    depends_on:
+      - tsi-backend
+    ports:
+      - "4201:8443"
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+      - ../SchoolAccount-LocalDevTools/nginx/nginx.conf:/etc/nginx/nginx.conf
+  
+  tsi-backend:
+    hostname: tsi-backend
+    environment:
+      TSI_DomainService_url: "https://tsi-domain-service:5186/api"
+      ASPNETCORE_URLS: "https://0.0.0.0:5080"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/backend.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "changeit"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    build:
+      context: ../TSI-Backend
+      dockerfile: ./TSI.Api/Dockerfile
+    depends_on:
+      - tsi-domain-service
+    ports:
+      - "5080:5080"
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+  
+  tsi-domain-service:
+    hostname: tsi-domain-service
+    environment:
+      saSQLConnectionString: "Server=schoolaccount-database,1433;Initial Catalog=sa-sql-db-dev;User ID=sa;Password=MyStrongPassword123!;TrustServerCertificate=True;Connection Timeout=30;"
+      ASPNETCORE_URLS: "https://0.0.0.0:5186"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/domain-service.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "changeit"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      AzureAppConfiguration__Endpoint: "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890"
+    build:
+      context: ../TSI-DomainService
+      dockerfile: ./TSI.DomainService/Dockerfile
+    depends_on:
+      - migrations
+      - app-config-emulator
+    ports:
+      - "5186:5186"
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+
+  frontend:
+    hostname: schoolaccount-frontend
+    build:
+      context: ../SchoolAccount-Frontend
+      dockerfile: SchoolAccount/SchoolAccount.FrontEnd/Dockerfile
+      secrets:
+        - personal_access_token
+    environment:
+      Kestrel__Endpoints__Https__Url: "https://0.0.0.0:7033"
+      Kestrel__Endpoints__Https__Certificate__Path: "/https/SchoolAccount.FrontEnd.pem"
+      Kestrel__Endpoints__Https__Certificate__KeyPath: "/https/SchoolAccount.FrontEnd-key.pem"
+      TSI_Pre16APIURL: "https://tsi-domain-service:5186/api"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      AzureAppConfiguration__Endpoint: "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890"
+    depends_on:
+      - tsi-domain-service
+      - app-config-emulator
+    ports:
+      - "7033:7033"
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+  
+  app-config-emulator:
+    hostname: app-config-emulator
+    platform: linux/amd64
+    image: mcr.microsoft.com/azure-app-configuration/app-configuration-emulator:1.0.2
+    ports:
+      - "8483:8483"
+    environment:
+      - Tenant:AnonymousAuthEnabled=true
+      - Tenant:HmacSha256Enabled=true
+      - Tenant:AccessKeys:0:Id=emulator-test-id
+      - Tenant:AccessKeys:0:Secret=abcdefghijklmnopqrstuvwxyz1234567890
+      - Authentication:Anonymous:AnonymousUserRole=Owner
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-LocalDevTools/config/azure-app-config:/app/.aace
+  
+  seq:
+    hostname: seq
+    image: datalust/seq:latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    ports:
+      - "5341:80"
+    volumes:
+      - seq-data:/data
+    networks:
+      - default
+
+networks:
+  default:
+    name: db-network
+    driver: bridge
+
+secrets:
+  personal_access_token:
+    environment: 'DEV_PAT'
+
+volumes:
+  database-data:
+  seq-data:
+  dataprotection-keys:

@@ -6,6 +6,11 @@
     <File Path="build/job-templates/build.yml" />
     <File Path="build/job-templates/deploy.yml" />
   </Folder>
+  <Folder Name="/certs/">
+    <File Path="certs\connect-key.pem" />
+    <File Path="certs\connect.pem" />
+    <File Path="certs\rootCA.crt" />
+  </Folder>
   <Folder Name="/infrastructure/" />
   <Folder Name="/infrastructure/arm-templates/">
     <File Path="infrastructure/arm-templates/template.json" />
@@ -20,10 +25,15 @@
   <Folder Name="/requests/">
     <File Path="requests/SchoolAccount.http" />
   </Folder>
+  <Folder Name="/scripts/">
+    <File Path="scripts\wait-and-open.cs" />
+  </Folder>
   <Folder Name="/solution/">
     <File Path=".csharpierignore" />
+    <File Path=".dockerignore" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="compose.yml" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />

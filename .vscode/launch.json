@@ -1,0 +1,80 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Connect: dotnet",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "launch: connect",
+            "program": "${workspaceFolder}/src/SchoolAccount.Web.Connect/bin/Debug/net10.0/SchoolAccount.Web.Connect.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/SchoolAccount.Web.Connect",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Now listening on: https://\\S+:(\\d+)",
+                "uriFormat": "https://127.0.0.1:%s"
+            }
+        },
+        {
+            "name": "Connect: docker run",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "dockerServerReadyAction": {
+                "action": "openExternally",
+                "uriFormat": "%s://127.0.0.1:%s"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj"
+            }
+        },
+        {
+            "name": "Connect: docker compose",
+            "type": "coreclr",
+            "request": "attach",
+            "preLaunchTask": "docker-compose: open-wait",
+            "postDebugTask": "docker-compose: down",
+            "processName": "dotnet",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec",
+                    "-i",
+                    "schoolaccount-connect-1",
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}"
+            },
+            "sourceFileMap": {
+                "/build/src/SchoolAccount.Web.Connect": "${workspaceFolder}/src/SchoolAccount.Web.Connect"
+            }
+        },
+        {
+            "name": "Connect: docker compose full",
+            "type": "coreclr",
+            "request": "attach",
+            "preLaunchTask": "docker-compose: open-wait full",
+            "postDebugTask": "docker-compose: down full",
+            "processName": "dotnet",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec",
+                    "-i",
+                    "schoolaccount-connect-1",
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}"
+            },
+            "sourceFileMap": {
+                "/build/src/SchoolAccount.Web.Connect": "${workspaceFolder}/src/SchoolAccount.Web.Connect"
+            }
+        }
+    ]
+}

@@ -503,5 +503,9 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,rider,visualstudiocode
 
+### Application Specific ###
+certs/
+.env
+
 # MacOS specific files
 .[Dd][Ss]_[Ss]tore

@@ -1,20 +1,56 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Introduction
+SchoolAccount-Connect is an ASP.NET Core web application that provides the public-facing frontend for the DfE School Account service. It handles user authentication via DfE Sign In and acts as the primary entry point for schools interacting with the platform.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Follow these steps to start the web application locally.
+
+1. Install prerequisites — see [Prerequisites](docs/prerequisites.md) for detailed instructions:
+   - Docker Desktop
+   - Rider or Visual Studio Code
+   - .NET 10 SDK
+   - Related repositories checked out alongside this one
+
+2. Run the appropriate initialization script for your OS. This installs dotnet tools, generates SSL certificates, downloads the DfE VPN root CA, and sets up your `DEV_PAT`:
+
+    | macOS / Linux | Windows PowerShell |
+    |---------------|--------------------|
+    | `./init.sh`   | `.\init.ps1`       |
+
+    > You will be prompted for a Personal Access Token (PAT) if `DEV_PAT` is not already set in your environment. 
+      The script will persist it to your shell profile for future sessions. 
+      See [Personal Access Token](docs/personal-access-token.md) for instructions on generating one.
+
+3. Starting the app in Rider:
+   - Open the project in Rider
+   - Use Rider's run configurations from the toolbar
+
+     | Run Configuration                                         | Type     | Outcome                                                                                                                                           |
+     |-----------------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+     | ![img.png](docs/images/connect-compose-compound.png)      | Compound | Starts the Connect app and its direct dependencies (database, migrations, app-config-emulator, seq) via Docker Compose and launches a browser     |
+     | ![img.png](docs/images/connect-compose-full-compound.png) | Compound | Starts all services including TSI Frontend, TSI Backend, TSI Domain Service, and SchoolAccount Frontend via Docker Compose and launches a browser |
+     | ![img.png](docs/images/connect-dotnet.png)                | Dotnet   | Runs the app directly using `dotnet run` against an `https` launch profile, no dependencies are started                                           |
+
+4. Once running, the application is available at `https://localhost:7034/`
+
+5. Debugging guidance:
+   - Set breakpoints in your C# files under `src/SchoolAccount.Web.Connect` any of the above run configurations will 
+     automatically start the app with debugging enabled.
+   - Structured logs are available in Seq at `http://localhost:5341` when running via Compound run configurations.
 
 # Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Use the .NET CLI to build or test the application.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+- To build locally:
+  ```bash
+  dotnet build
+  ```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+- To run all tests:
+  ```bash
+  dotnet test
+  ```
+
+- To run a specific test project:
+  ```bash
+  dotnet test tests/SchoolAccount.Application.UnitTests
+  ```

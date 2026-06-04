@@ -1,0 +1,21 @@
+services:
+  frontend:
+    labels:
+      - "com.jetbrains.rider.debug=false"
+    volumes:
+      - rider-debugger-tools:/root/.RiderDebuggerTools
+  tsi-frontend:
+    labels:
+      - "com.jetbrains.rider.debug=false"
+  tsi-backend:
+    labels:
+      - "com.jetbrains.rider.debug=false"
+    volumes:
+      - rider-debugger-tools:/root/.RiderDebuggerTools
+  tsi-domain-service:
+    labels:
+      - "com.jetbrains.rider.debug=false"
+    volumes:
+      - rider-debugger-tools:/root/.RiderDebuggerTools
+volumes:
+  rider-debugger-tools:

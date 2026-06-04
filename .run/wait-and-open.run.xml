@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration
+    default="false"
+    name="wait-and-open"
+    type="RunDotNetFile"
+    factoryName="RunDotNetFile"
+  >
+    <option name="filePath" value="$PROJECT_DIR$/scripts/wait-and-open.cs" />
+    <option name="programParameters" value="" />
+    <option name="terminalMode" value="Auto" />
+    <option name="workingDirectory" value="$PROJECT_DIR$/scripts" />
+    <method v="2">
+      <option name="BuildDotNetFile" />
+    </method>
+  </configuration>
+</component>

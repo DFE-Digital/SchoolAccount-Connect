@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <UserSecretsId>4e50a46d-becc-4223-ac73-f9f5704af747</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\integration\SchoolAccount.Integration.DfESignIn\SchoolAccount.Integration.DfESignIn.csproj" />
