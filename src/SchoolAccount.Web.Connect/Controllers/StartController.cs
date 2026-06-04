@@ -55,6 +55,8 @@ public class StartController(
         
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgType);
         contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected + SessionKeyConstants.ImpersonateSuffix);
+        contextAccessor.HttpContext!.Session.Remove(SessionKeyConstants.OrgSelected + SessionKeyConstants.ImpersonateSuffix);
         
         var organisations = (await dsiApiService.GetUserOrganisations(userContext.DsiIdentifier))
             .Where(o => !string.IsNullOrEmpty(o.UkPrn) && o.Category is not null)
