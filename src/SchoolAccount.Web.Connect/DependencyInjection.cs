@@ -15,6 +15,7 @@ using SchoolAccount.Application.Features.Feedback;
 using SchoolAccount.Kernel;
 using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
+using SchoolAccount.Web.Connect.Authentication.Attributes;
 using SchoolAccount.Web.Connect.Authentication.SignIn;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
@@ -43,10 +44,7 @@ internal static class DependencyInjection
         configurationManager.AddAzureAppConfigurationIfEnabled(bootstrapLogger);
 
         services.AddFluentValidation();
-        services.AddGovUkFrontend(options =>
-        {
-            options.Rebrand = true;
-        });
+        services.AddGovUkFrontend();
 
         services.AddAntiforgery();
         services.AddHttpContextAccessor();
@@ -65,6 +63,7 @@ internal static class DependencyInjection
         {
             options.Filters.AddService<AppInsightsFilter>();
             options.Filters.Add<BreadcrumbActionFilter>();
+            options.Filters.Add<NoCacheAttribute>();
         });
 
         services.AddDfeSignInAuthentication(configurationManager);

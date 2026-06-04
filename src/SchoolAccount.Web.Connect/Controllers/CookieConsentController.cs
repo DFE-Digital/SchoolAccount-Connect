@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Kernel.Cookie;
 
 namespace SchoolAccount.Web.Connect.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("cookies")]
 public class CookieConsentController(IDataProtectionProvider dataProtectionProvider) : ControllerBase
