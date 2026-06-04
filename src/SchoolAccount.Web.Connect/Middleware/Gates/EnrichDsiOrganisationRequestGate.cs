@@ -39,7 +39,7 @@ public class EnrichDsiOrganisationRequestGate(
             GateResult.Redirect(
                 url.Format(new
                 {
-                    type = organisationContext.Organisation is TrustOrganisation ? "trust" : "establishment",
+                    type = organisationContext.Organisation is TrustOrganisation ? "trust" : "academy",
                     ukprn = organisationContext.Organisation.Ukrpn,
                     returnAddress = context.Request.Path.Value
                 })));
