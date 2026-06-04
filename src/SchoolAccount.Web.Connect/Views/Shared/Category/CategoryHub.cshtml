@@ -2,7 +2,7 @@
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
 <form method="get">
-    <input type="hidden" asp-for="@Model.ViewModes"/>
+    <input type="hidden" for="@Model.ViewModes"/>
         
     <ul class="govuk-task-list">
         @if (Model.Pagination.TotalItemCount > 0 || Model.Items.Count > 0)

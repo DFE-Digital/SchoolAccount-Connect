@@ -1,5 +1,4 @@
-﻿using GovUk.Frontend.AspNetCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SchoolAccount.Web.Connect.HtmlGeneration;
 
@@ -10,14 +9,16 @@ internal partial class ComponentGenerator
         string? className = null,
         string? text = null,
         bool treatAsHtml = false,
-        params (string, string?)[] attributes
-    )
+        params (string, string?)[] attributes)
     {
         var node = new TagBuilder(nodeName);
 
-        if (!string.IsNullOrEmpty(className))
+        if (!string.IsNullOrWhiteSpace(className))
         {
-            node.MergeCssClass(className);
+            foreach (var cssClass in className.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            {
+                node.AddCssClass(cssClass);
+            }
         }
 
         if (!string.IsNullOrEmpty(text))
@@ -32,14 +33,9 @@ internal partial class ComponentGenerator
             }
         }
 
-        if (attributes.Length > 0)
-        {
-            return node;
-        }
-
         foreach (var (key, property) in attributes)
         {
-            if (property == null)
+            if (property is null)
             {
                 node.Attributes.Remove(key);
             }
