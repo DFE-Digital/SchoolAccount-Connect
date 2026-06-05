@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      name: Build App
+      - name: Build App
         uses: ./.github/actions/build-app
         with:
           version: ${{ env.DOTNET_VERSION }}
