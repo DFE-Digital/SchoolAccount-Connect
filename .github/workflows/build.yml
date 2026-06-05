@@ -20,10 +20,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build App
-        uses: ./.github/actions/build-app
-        with:
-          version: ${{ env.DOTNET_VERSION }}
-          enviroment: ${{ env.DOTNET_CONFIG }}
+          uses: ./.github/actions/build-app
+          with:
+            version: ${{ env.DOTNET_VERSION }}
+            enviroment: ${{ env.DOTNET_CONFIG }}
 
       - name: Test ConformanceTests
           uses: ./.github/actions/run-tests
