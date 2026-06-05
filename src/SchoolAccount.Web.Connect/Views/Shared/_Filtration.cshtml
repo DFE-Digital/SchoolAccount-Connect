@@ -81,10 +81,10 @@
                     </govuk-accordion>
 
                     <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-0">
-                        <button type="submit" class="govuk-button" data-module="govuk-button" data-test-id="submit-button">
+                        <button type="submit" class="govuk-button" role="button" data-module="govuk-button" data-test-id="submit-button">
                             Apply filters
                         </button>
-                        <a href="@Model.GetUriWithoutFilters()" class="govuk-link govuk-link--no-visited-state">
+                        <a href="@Model.GetUriWithoutFilters()" role="button" class="govuk-link govuk-link--no-visited-state">
                             Clear filters
                         </a>
                     </div>
