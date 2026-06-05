@@ -1,0 +1,20 @@
+@model SchoolAccount.Web.Connect.Models.Shared.ITaskListViewModel
+
+<form method="get">
+    <ul class="govuk-task-list">
+        @if (Model.Pagination.TotalItemCount > 0 || Model.Tasks.Any())
+        {
+            foreach (var task in Model.Tasks)
+            {
+                <partial name="_ListItem" model="task"/>
+            }
+        }
+        else if (Model.NoTasksFound)
+        {
+            <li class="govuk-task-list__item">
+                <p class="govuk-body">@Model.NoTasksFoundMessage</p>
+            </li>
+        }
+    </ul>
+    <partial name="_Pagination" model="@Model.Pagination"/>
+</form>

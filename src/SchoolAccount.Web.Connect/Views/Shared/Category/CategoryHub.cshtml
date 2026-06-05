@@ -20,13 +20,8 @@
 
                 foreach (var row in group)
                 {
-                    <partial name="_ListItem" model='new ListItemViewModel
-                             (
-                                 name: @row.Name,
-                                 url: @row.Url,
-                                 description: @row.Description
-                             )'
-                    />
+                    <partial name="_ListItem"
+                             model="@(new ListItemViewModel(row.Name, row.Url, false, row.Description))"/>
                 }
             }
         }

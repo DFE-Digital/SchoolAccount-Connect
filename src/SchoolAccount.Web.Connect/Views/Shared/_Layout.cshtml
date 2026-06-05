@@ -2,12 +2,15 @@
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
+@using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Authentication
 @using SchoolAccount.Web.Connect.Extensions
 @using SchoolAccount.Web.Connect.Models.Breadcrumb
 @inject IFeatureManager FeatureManager
 @inject ICookieConsentContext CookieConsent
+@inject IOrganisationContext OrganisationContext
 
 @* ReSharper disable Razor.LayoutNotResolved *@
 @* ReSharper disable Razor.SectionNotResolved *@
@@ -21,6 +24,7 @@
 
     var isAuthenticated = Context.User.Identity?.IsAuthenticated == true;
     var showRightHandSide = ViewData["ShowRightHandSide"] as bool? ?? true;
+    var organisationName = OrganisationContext?.Organisation.Name;
 }
 
 @section Head {
@@ -78,11 +82,11 @@
             give your feedback (opens in a new tab)
         </a>
     </govuk-phase-banner>
-    
+
     @{
         if (ViewData["Breadcrumbs"] is List<Breadcrumb> breadcrumbs && breadcrumbs.Any())
         {
-            <partial name="_Breadcrumbs" model="breadcrumbs" />
+            <partial name="_Breadcrumbs" model="breadcrumbs"/>
         }
     }
 
@@ -110,6 +114,9 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+
+            <p class="govuk-caption govuk-caption-l">@organisationName</p>
+
             @await RenderSectionAsync("PageHeading", required: false)
         </div>
     </div>
@@ -150,7 +157,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/feedback.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    
+
 }
 
 @section GovUkFooter {
@@ -187,6 +194,6 @@
             except where otherwise stated
         </govuk-footer-content-licence>
 
-        <govuk-footer-copyright />
+        <govuk-footer-copyright/>
     </govuk-footer>
 }

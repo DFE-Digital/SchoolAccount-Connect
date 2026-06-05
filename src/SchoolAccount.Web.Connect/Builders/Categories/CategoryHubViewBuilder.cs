@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.Category.Models;
+using SchoolAccount.Application.Features.Categories.Models;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.Categories;
@@ -15,7 +15,7 @@ public class CategoryHubViewBuilder(CalendarOfItemsViewBuilder calendarOfItemsVi
         {
             ViewMode = CalendarOfItemsViewModes.Custom,
             Tabs = [],
-            Description = $"Explore all tasks and support",
+            Description = $"Explore all tasks and support.",
             Heading = category is not null ? category.DisplayName : "All tasks",
             SubHeading = category is not null
                 ? category.HubViewDescription

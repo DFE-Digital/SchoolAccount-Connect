@@ -45,12 +45,12 @@ public static class RouteConstants
     public static class Category
     {
         public const string Index = Root + "categories";
-        public const string Hub = Root + "categories/{id}";
-        public const string AllTasks = Root + "categories/all-tasks";
+        public static readonly CompositeFormat Hub = CompositeFormat.Parse(Root + "categories/{0}");
     }
 
     public static class Task
     {
+        public const string AllTasks = Root + "task/all-tasks";
         public static readonly CompositeFormat Index = CompositeFormat.Parse(Root + "task/{0}");
     }
 }

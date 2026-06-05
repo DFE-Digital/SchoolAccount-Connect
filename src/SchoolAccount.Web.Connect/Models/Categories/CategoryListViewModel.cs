@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.Category.Enums;
+using SchoolAccount.Application.Features.Categories.Enums;
 using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Models.Categories;

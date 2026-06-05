@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.Category.Contracts;
-using SchoolAccount.Application.Features.Category.Enums;
+using SchoolAccount.Application.Features.Categories.Contracts;
+using SchoolAccount.Application.Features.Categories.Enums;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Models.Categories;
 

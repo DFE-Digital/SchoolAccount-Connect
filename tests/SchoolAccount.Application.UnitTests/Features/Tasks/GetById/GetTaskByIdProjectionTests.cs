@@ -6,9 +6,9 @@ using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Kernel;
 using Xunit;
 using static SchoolAccount.Domain.Common.WorkflowState;
-using static SchoolAccount.Tests.Common.Builders.ResourceBuilder;
-using static SchoolAccount.Tests.Common.Builders.SubTaskBuilder;
-using static SchoolAccount.Tests.Common.Builders.TaskBuilder;
+using static SchoolAccount.Tests.Common.Builders.Tasks.ResourceBuilder;
+using static SchoolAccount.Tests.Common.Builders.Tasks.SubTaskBuilder;
+using static SchoolAccount.Tests.Common.Builders.Tasks.TaskBuilder;
 
 namespace SchoolAccount.Application.UnitTests.Features.Tasks.GetById;
 

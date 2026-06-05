@@ -12,7 +12,7 @@ namespace SchoolAccount.Web.Connect.Features.Tasks;
 public sealed partial class TasksController
 {
     [Breadcrumb("Home", Root)]
-    [Breadcrumb("Tasks", Category.AllTasks)]
+    [Breadcrumb("Tasks", RouteConstants.Task.AllTasks)]
     [HttpGet("Task/{id:long}")]
     public async Task<ActionResult<GetTaskByIdResponse>> GetById(
         [FromRoute] long id,

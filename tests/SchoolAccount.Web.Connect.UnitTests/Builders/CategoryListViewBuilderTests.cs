@@ -1,8 +1,8 @@
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.Category.Contracts;
-using SchoolAccount.Application.Features.Category.Enums;
-using SchoolAccount.Application.Features.Category.Models;
+using SchoolAccount.Application.Features.Categories.Contracts;
+using SchoolAccount.Application.Features.Categories.Enums;
+using SchoolAccount.Application.Features.Categories.Models;
 using SchoolAccount.AuthenticationTests.Helpers;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders.Categories;

@@ -7,11 +7,11 @@
 }
 
 @section PageHeading{
-    <div id="cookiesNotification" 
-         class="govuk-notification-banner govuk-notification-banner--success" 
-         role="alert" 
-         aria-labelledby="govuk-notification-banner-title" 
-         data-module="govuk-notification-banner" 
+    <div id="cookiesNotification"
+         class="govuk-notification-banner govuk-notification-banner--success"
+         role="alert"
+         aria-labelledby="govuk-notification-banner-title"
+         data-module="govuk-notification-banner"
          style="display:none;"
          tabindex="-1">
         <div class="govuk-notification-banner__header">
@@ -25,11 +25,7 @@
             </h3>
         </div>
     </div>
-    
-    @if (Model.HasOrganisationName)
-    {
-        <p class="govuk-caption govuk-caption-l">@Model.OrganisationName</p>
-    }
+
     <h1 class="govuk-heading-l govuk-!-padding-top-0">Cookies</h1>
     <p class="govuk-body">
         Cookies are small files saved on your phone, tablet or computer when you visit a website.

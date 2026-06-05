@@ -7,9 +7,6 @@
 
 @section PageHeading
 {
-    <p class="govuk-caption-l">
-        Task
-    </p>
     <h1 class="govuk-heading-l govuk-!-padding-top-0">
         @Model.Task.Name
     </h1>
@@ -20,10 +17,10 @@
 }
 
 <div class="govuk-tabs">
-    <partial name="@Partials.Tabs" model="@Model" />
-        
+    <partial name="@Partials.Tabs" model="@Model"/>
+
     @if (!Model.SubTasks.Any())
-    {   
+    {
         <hr class="govuk-section-break govuk-section-break--visible">
         <p>@Model.NoTasksFoundMessage</p>
     }
@@ -32,7 +29,7 @@
         <ul class="govuk-task-list">
             @foreach (var subTask in Model.SubTasks)
             {
-                <partial name="@Partials.Subtasks" model="subTask" />
+                <partial name="@Partials.Subtasks" model="subTask"/>
             }
         </ul>
     }
@@ -42,11 +39,11 @@
 {
     @if (Model.HasResources)
     {
-        <partial name="@Partials.Guidance" model="Model.ResourcesWithALink" />
+        <partial name="@Partials.Guidance" model="Model.ResourcesWithALink"/>
     }
 
     @if (Model.HasRelatedTasks)
     {
-        <partial name="@Partials.RelatedTasks" model="Model.Task.RelatedTasks" />
+        <partial name="@Partials.RelatedTasks" model="Model.Task.RelatedTasks"/>
     }
 }

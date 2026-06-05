@@ -17,7 +17,7 @@ public static class TaskEntitySpecifications
         {
             return t => true;
         }
-        
+
         return t =>
             t.SubTasks.Any(sub =>
                 sub.TagsSourceMappings.Any(tsm =>
@@ -32,5 +32,10 @@ public static class TaskEntitySpecifications
             t.SubTasks.Any(sub =>
                 sub.WorkflowState == WorkflowState.Published || sub.WorkflowState == WorkflowState.Expired
             );
+    }
+
+    public static Expression<Func<TaskEntity, bool>> InCategory(int categoryId)
+    {
+        return task => task.TypeTaskMappings.Any(ttm => ttm.TypeId == categoryId);
     }
 }

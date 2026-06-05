@@ -1,7 +1,7 @@
 using AwesomeAssertions;
 using Xunit;
-using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseBuilder;
-using static SchoolAccount.Tests.Common.Builders.GetTaskByIdResponseSubtaskBuilder;
+using static SchoolAccount.Tests.Common.Builders.Tasks.GetTaskByIdResponseBuilder;
+using static SchoolAccount.Tests.Common.Builders.Tasks.GetTaskByIdResponseSubtaskBuilder;
 
 namespace SchoolAccount.Application.UnitTests.Features.Tasks.GetById;
 
