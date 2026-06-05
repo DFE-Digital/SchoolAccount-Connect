@@ -20,4 +20,6 @@ public record FilterCheckboxViewModel(Filterable Filter, Collection<FilterableIt
     {
         return new FilterCheckboxViewModel(filterable, children.ToCollection());
     }
+
+    public bool HasItems => Children.Count > 0;
 }

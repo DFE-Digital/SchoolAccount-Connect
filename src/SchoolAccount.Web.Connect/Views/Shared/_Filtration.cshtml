@@ -69,12 +69,12 @@
                 <div class="moj-filter__options">
 
                     <govuk-accordion id="accordion-filter" heading-level="4" remember-expanded="true">
-                        @foreach (var filter in Model)
+                        @foreach (var filter in Model.TemplatedItems)
                         {
                             <govuk-accordion-item>
                                 <govuk-accordion-item-heading>@filter.DisplayName</govuk-accordion-item-heading>
                                 <govuk-accordion-item-content>
-                                    <partial name="DisplayComponents/FilterCheckbox" model="@FilterCheckboxViewModel.Parent(filter)"/>
+                                    <partial name="@filter.DetermineTemplate()" model="@FilterCheckboxViewModel.Parent(filter)"/>
                                 </govuk-accordion-item-content>
                             </govuk-accordion-item>
                         }

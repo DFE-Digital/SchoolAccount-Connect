@@ -3,7 +3,7 @@ using SchoolAccount.Application.Extensions;
 
 namespace SchoolAccount.Application.Features.Shared.Filtering;
 
-public record Filterable(string Field, string DisplayName)
+public record Filterable(FilterableItemType Type, string Field, string DisplayName)
 {
     public Collection<FilterableItem> Values { get; init; } = [];
 
@@ -11,7 +11,7 @@ public record Filterable(string Field, string DisplayName)
 
     private static bool HasSelection(FilterableItem item)
     {
-        return item.IsSelected || (item.Children?.Any(HasSelection) ?? false);
+        return item.IsSelected;
     }
 
     public Collection<FilterableItem> GetValuesWithCountOnly(bool includeNullables = false)
@@ -25,4 +25,10 @@ public record Filterable(string Field, string DisplayName)
     {
         return Values.Where(x => x.IsSelected).ToCollection();
     }
+}
+
+public enum FilterableItemType
+{
+    Unspecified = 0,
+    Checkbox = 1
 }

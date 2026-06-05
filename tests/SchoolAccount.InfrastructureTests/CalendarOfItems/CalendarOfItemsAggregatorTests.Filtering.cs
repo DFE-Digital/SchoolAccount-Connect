@@ -5,6 +5,8 @@ using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Infrastructure.Helpers.Filtering.Interfaces;
 using SchoolAccount.InfrastructureTests.Extensions;
+using static SchoolAccount.InfrastructureTests.Builders.FilterableBuilder;
+using static SchoolAccount.InfrastructureTests.Builders.FilterableItemBuilder;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
@@ -56,9 +58,9 @@ public partial class CalendarOfItemsAggregatorTests
     public async Task Ensure_filterable_items_within_catalog_are_present_when_requested()
     {
         // Arrange
-        Filterable filterableOptions = FilterableExtensions
-            .Create("Status")
-            .WithValues(FilterableItemExtensions.Create("Active").UnSelected());
+        Filterable filterableOptions = AFilter("Status")
+            .WithType(FilterableItemType.Checkbox)
+            .WithValues(AFilterItem("Active").UnSelected());
         var filterFactory = Make.Factory.Filterable(filterableOptions);
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
@@ -86,9 +88,9 @@ public partial class CalendarOfItemsAggregatorTests
     public async Task If_a_filter_query_doesnt_match_item_in_filter_catelog_nothing_is_selected()
     {
         // Arrange
-        Filterable filterable = FilterableExtensions
-            .Create("Status")
-            .WithValues(FilterableItemExtensions.Create("Archived"));
+        Filterable filterable = AFilter("Status")
+            .WithType(FilterableItemType.Checkbox)
+            .WithValues(AFilterItem("Archived"));
         var filterFactory = Make.Factory.Filterable(filterable);
         var queryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
@@ -128,7 +130,9 @@ public partial class CalendarOfItemsAggregatorTests
     {
         // Arrange
         var filterFactory = Make.Factory.Filterable(
-            FilterableExtensions.Create("Status").WithValues(FilterableItemExtensions.Create("Active"))
+            AFilter("Status")
+                .WithType(FilterableItemType.Checkbox)
+                .WithValues(AFilterItem("Active"))
         );
         var factoryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,
@@ -160,34 +164,34 @@ public partial class CalendarOfItemsAggregatorTests
         // Arrange
         List<Filterable> filterables =
         [
-            FilterableExtensions
-                .Create("Status")
+            AFilter("Status")
+                .WithType(FilterableItemType.Checkbox)
                 .WithValues(
-                    FilterableItemExtensions.Create("Active"),
-                    FilterableItemExtensions.Create("Inactive"),
-                    FilterableItemExtensions.Create("Urgent"),
-                    FilterableItemExtensions.Create("Dismissed")
+                    AFilterItem("Active"),
+                    AFilterItem("Inactive"),
+                    AFilterItem("Urgent"),
+                    AFilterItem("Dismissed")
                 ),
-            FilterableExtensions
-                .Create("Colours")
+            AFilter("Colours")
+                .WithType(FilterableItemType.Checkbox)
                 .WithValues(
-                    FilterableItemExtensions.Create("Red"),
-                    FilterableItemExtensions.Create("Blue"),
-                    FilterableItemExtensions.Create("Green"),
-                    FilterableItemExtensions.Create("Pink"),
-                    FilterableItemExtensions.Create("Orange"),
-                    FilterableItemExtensions.Create("Purple"),
-                    FilterableItemExtensions.Create("Black"),
-                    FilterableItemExtensions.Create("White")
+                    AFilterItem("Red"),
+                    AFilterItem("Blue"),
+                    AFilterItem("Green"),
+                    AFilterItem("Pink"),
+                    AFilterItem("Orange"),
+                    AFilterItem("Purple"),
+                    AFilterItem("Black"),
+                    AFilterItem("White")
                 ),
-            FilterableExtensions
-                .Create("SchoolType")
+            AFilter("SchoolType")
+                .WithType(FilterableItemType.Checkbox)
                 .WithDisplayName("School Type")
                 .WithValues(
-                    FilterableItemExtensions.Create("Primary"),
-                    FilterableItemExtensions.Create("Secondary"),
-                    FilterableItemExtensions.Create("College"),
-                    FilterableItemExtensions.Create("University")
+                    AFilterItem("Primary"),
+                    AFilterItem("Secondary"),
+                    AFilterItem("College"),
+                    AFilterItem("University")
                 ),
         ];
         var filterFactory = Make.Factory.Filterable(filterables.ToArray());

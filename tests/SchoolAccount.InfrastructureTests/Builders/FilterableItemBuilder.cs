@@ -9,13 +9,22 @@ public sealed class FilterableItemBuilder
     private readonly string _value;
 
     private bool _isSelected;
-    private List<FilterableItem>? _children;
     private int? _count;
 
     internal FilterableItemBuilder(string displayValue, string value)
     {
         _displayValue = displayValue;
         _value = value;
+    }
+    
+    public static FilterableItemBuilder AFilterItem(string displayValue, string value)
+    {
+        return new FilterableItemBuilder(displayValue, value);
+    }
+
+    public static FilterableItemBuilder AFilterItem(string value)
+    {
+        return new FilterableItemBuilder(value, value);
     }
 
     public FilterableItemBuilder IsSelected()
@@ -35,35 +44,7 @@ public sealed class FilterableItemBuilder
         _count = count;
         return this;
     }
-
-    public FilterableItemBuilder WithChild(IEnumerable<FilterableItem> children)
-    {
-        _children ??= [];
-        _children.AddRange(children);
-        return this;
-    }
-
-    public FilterableItemBuilder WithChild(params FilterableItem[] children)
-    {
-        _children ??= [];
-        _children.AddRange(children);
-        return this;
-    }
-
-    public FilterableItemBuilder WithChild(IEnumerable<FilterableItemBuilder> children)
-    {
-        _children ??= [];
-        _children.AddRange(children.Select(x => x.Build()));
-        return this;
-    }
-
-    public FilterableItemBuilder WithChild(params FilterableItemBuilder[] children)
-    {
-        _children ??= [];
-        _children.AddRange(children.Select(x => x.Build()));
-        return this;
-    }
-
+    
     public FilterableItem Build()
     {
         return new FilterableItem
@@ -71,7 +52,6 @@ public sealed class FilterableItemBuilder
             DisplayName = _displayValue,
             Value = _value,
             IsSelected = _isSelected,
-            Children = _children?.ToCollection() ?? null,
             Count = _count,
         };
     }

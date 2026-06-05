@@ -1,0 +1,43 @@
+﻿@using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Models.Shared
+@model FilterCheckboxViewModel
+@inject IHostEnvironment Env;
+
+@if (Model.HasItems)
+{
+    <govuk-checkboxes name="filters[@Model.Filter.Field]" class="govuk-checkboxes--small">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-visually-hidden">
+                @Model.Filter.DisplayName
+            </govuk-checkboxes-fieldset-legend>
+            @foreach (var value in Model.Children)
+            {
+                @* Due to how tag helpers work we cannot use our "test-id" builder here *@
+                @* Due to the whole form input being captured in the govuk-checkout-item we can't set the "test-id"
+                   attribute to the input which is required to tbe set via the "input-attributes" attribute *@
+                var inputAttributes = new Dictionary<string, string?>();
+
+                if (!Env.IsProduction())
+                {
+                    inputAttributes.Add(
+                        "data-test-id", 
+                        HtmlContentExtensions.GenerateTestId("filters", Model.Filter.Field, value.Value));
+                }
+                
+                <govuk-checkboxes-item
+                    value="@value.Value"
+                    checked="@value.IsSelected"
+                    input-attributes="inputAttributes">
+
+                    <span class="govuk-visually-hidden">@Model.Filter.DisplayName</span>
+                    @value.DisplayName
+                    @if (value.Count.HasValue)
+                    {
+                        <span class="govuk-hint" style="color: #505a5f;"> (@value.Count)</span>
+                    }
+
+                </govuk-checkboxes-item>
+            }
+        </govuk-checkboxes-fieldset>
+    </govuk-checkboxes>
+}
