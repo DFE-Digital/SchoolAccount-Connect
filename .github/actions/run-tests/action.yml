@@ -17,6 +17,7 @@ runs:
 
   steps:
     - name: Run test
+      shell: bash
       run: >
         dotnet test ${{ inputs.solution }}
         --no-build --configuration Release

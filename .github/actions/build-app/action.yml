@@ -19,7 +19,9 @@ runs:
         dotnet-version: ${{ inputs.version }}
 
     - name: Restore dependencies
+      shell: bash
       run: dotnet restore
 
     - name: Build
+      shell: bash
       run: dotnet build --no-restore --configuration ${{ inputs.enviroment }}
