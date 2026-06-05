@@ -37,7 +37,7 @@ jobs:
           output_location: ${{ env.TEST_LOCATION }}
 
       - name: Test AuthenticationTests
-        uses: /.github/actions/run-tests
+        uses: ./.github/actions/run-tests
         with:
           solution: 'tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
           output_name: 'AuthenticationTests'
