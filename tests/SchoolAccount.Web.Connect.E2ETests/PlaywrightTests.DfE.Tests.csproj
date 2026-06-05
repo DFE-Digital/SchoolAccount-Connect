@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
+    <UserSecretsId>0f6cd60b-7b0c-4d65-bc7d-648139399095</UserSecretsId>
+    <NoWarn>$(NoWarn);NU1900</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PlaywrightTests.DfE.Infrastructure" />
+    <PackageReference Include="PlaywrightTests.DfE.UIMapping" />
+    <PackageReference Include="PlaywrightTests.DfE.Browsers" />
+    <PackageReference Include="PlaywrightTests.GlobalConstants" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="playwright\test-run-config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

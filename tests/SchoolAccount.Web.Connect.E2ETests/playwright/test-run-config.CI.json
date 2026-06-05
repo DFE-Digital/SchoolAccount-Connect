@@ -1,0 +1,12 @@
+{
+  "ScreenshotOnSuccess": true,
+  "DisableScreenshots": false,
+  "Video": {
+    "Enabled": true,
+    "SaveFailedOnly":  false
+  },
+  "Logging": {
+    "IncludeCSharp": true,
+    "IncludeJavascript": true
+  }
+}
