@@ -3,7 +3,7 @@ using FluentValidation.Results;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Behaviours;
+namespace SchoolAccount.Application.Abstractions.Behaviours;
 
 internal static class ValidationDecorator
 {

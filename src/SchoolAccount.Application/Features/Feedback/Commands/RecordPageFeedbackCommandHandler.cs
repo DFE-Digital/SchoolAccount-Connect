@@ -13,36 +13,6 @@ public sealed class RecordPageFeedbackCommandHandler(
 {
     public async Task<Result> Handle(RecordPageFeedbackCommand command, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(command.EventName))
-        {
-            return Result.Failure(Error.Problem("Feedback.EventNameRequired", "Event name is required."));
-        }
-
-        if (string.IsNullOrWhiteSpace(command.PageId))
-        {
-            return Result.Failure(Error.Problem("Feedback.PageIdRequired", "Page id is required."));
-        }
-
-        if (string.IsNullOrWhiteSpace(command.CtaType))
-        {
-            return Result.Failure(Error.Problem("Feedback.CtaTypeRequired", "CTA type is required."));
-        }
-
-        if (!IsAllowedEvent(command.EventName))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidEvent", "Unsupported feedback event."));
-        }
-
-        if (!IsAllowedCtaType(command.CtaType))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidCtaType", "Unsupported CTA type."));
-        }
-
-        if (command.EventName == AnalyticsEvents.CtaYesNoInteraction && !IsAllowedAnswer(command.SelectedAnswer))
-        {
-            return Result.Failure(Error.Problem("Feedback.InvalidAnswer", "Selected answer must be yes or no."));
-        }
-
         var context = await feedbackTelemetryContextProvider.GetContext();
 
         var tags = BuildTags(command.PageId, command.CtaType, command.SelectedAnswer, context);
@@ -98,23 +68,5 @@ public sealed class RecordPageFeedbackCommandHandler(
         }
 
         return tags;
-    }
-
-    private static bool IsAllowedEvent(string eventName)
-    {
-        return eventName
-            is AnalyticsEvents.CtaYesNoInteraction
-                or AnalyticsEvents.CtaCancelled
-                or AnalyticsEvents.CtaDismissed;
-    }
-
-    private static bool IsAllowedCtaType(string ctaType)
-    {
-        return ctaType is AnalyticsCtaTypes.YesNo or AnalyticsCtaTypes.Banner;
-    }
-
-    private static bool IsAllowedAnswer(string? answer)
-    {
-        return answer is AnalyticsAnswers.Yes or AnalyticsAnswers.No;
     }
 }
