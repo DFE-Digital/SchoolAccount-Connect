@@ -1,0 +1,25 @@
+<RunSettings>
+  <!-- See https://xunit.net/docs/runsettings -->
+  <xUnit>
+    <MaxParallelThreads>8</MaxParallelThreads>
+	  <ParallelizeTestCollections>true</ParallelizeTestCollections>
+  </xUnit>
+  <!-- Playwright -->  
+  <Playwright>
+    <BrowserName>chromium</BrowserName>
+    <ExpectTimeout>5000</ExpectTimeout>
+    <LaunchOptions>
+      <!-- <Headless>true</Headless> -->
+      <Channel>chrome</Channel>
+      <SlowMo>100</SlowMo>
+    </LaunchOptions>
+  </Playwright>
+  <!-- Environment variables for Playwright -->
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <!-- <DEBUG>pw:api</DEBUG> -->
+      <!-- <PWDEBUG>1</PWDEBUG> -->
+	    <HEADED>1</HEADED> Works in Visual Studio under v1.58. Note "1", NOT "true"
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>
