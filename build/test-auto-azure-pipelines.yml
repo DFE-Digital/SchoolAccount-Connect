@@ -1,0 +1,116 @@
+
+pool:
+  vmImage: 'ubuntu-latest' 
+
+trigger: none
+
+variables:
+  - group: 'Test Automation - Dev'
+
+stages:
+  - stage: Test
+    displayName: 'Run Automation Test Suite'
+    variables:
+      - group: 'Test Automation - Dev'
+    jobs:
+      - job: RunTests
+        displayName: 'Run Automation Test Suite'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET SDK 8.x'
+            inputs:
+              packageType: 'sdk'
+              version: '8.x'
+
+          - script: dotnet restore "$(ProjectPath)"
+            displayName: 'Restore'
+
+          - script: dotnet build "$(ProjectPath)" -c $(BuildConfiguration) --no-restore
+            displayName: 'Build'
+
+          - script: |
+              dotnet tool install --global Microsoft.Playwright.CLI
+              echo "##vso[task.setvariable variable=PATH]$PATH:~/.dotnet/tools"
+              playwright install --with-deps
+            displayName: 'Install Playwright browsers'
+            workingDirectory: '$(Build.SourcesDirectory)/$(ProjectDir)'
+
+          - task: AzureCLI@2
+            displayName: 'Add Agent IP to App Service Allow list'
+            inputs:
+              azureSubscription: "$(AzureSubscription)"
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                $agentAddress = (Invoke-RestMethod "http://ipinfo.io/json").ip
+                $ruleName = "HostedAgent_SA_$agentAddress"
+                  
+                az webapp config access-restriction add `
+                  --resource-group "$(sharedResourceGroup)" `
+                  --name "$(schoolAccountAppServiceName)" `
+                  --rule-name $ruleName `
+                  --action Allow `
+                  --ip-address "$agentAddress" `
+                  --priority 100
+
+          - script: |
+              dotnet test "$(ProjectPath)" \
+                -c $(BuildConfiguration) \
+                --no-build \
+                --logger "trx;LogFileName=test-results.trx" \
+                --filter "Category=Filter_Check"
+            displayName: 'Run tests (headless)'
+            env:
+              HEADED: $(HEADED)
+              Connect__Password: $(Connect__Password)
+              Manage__Password: $(Manage__Password)
+              Database__ClientSecret: $(Database__ClientSecret)
+
+          - task: PublishTestResults@2
+            displayName: 'Publish TRX results'
+            inputs:
+              testResultsFormat: 'VSTest'
+              testResultsFiles: '**/*.trx'
+              searchFolder: '$(System.DefaultWorkingDirectory)'
+              mergeTestResults: true
+              testRunTitle: 'Playwright .NET (xUnit)'
+              failTaskOnFailedTests: false
+          
+          - task: AzureCLI@2
+            displayName: 'Remove Agent IP from App Service Allow list'
+            condition: always()
+            inputs:
+              azureSubscription: "$(AzureSubscription)"
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                $agentAddress = (Invoke-RestMethod "http://ipinfo.io/json").ip
+                $ruleName = "HostedAgent_SA_$agentAddress"
+                  
+                az webapp config access-restriction remove `
+                  --resource-group "$(sharedResourceGroup)" `
+                  --name "$(schoolAccountAppServiceName)" `
+                  --rule-name $ruleName
+            
+          
+          - task: PublishBuildArtifacts@1
+            condition: always()
+            displayName: 'Publish screenshots'
+            inputs:
+              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net8.0/screenshots'
+              artifactName: 'screenshots'
+
+          - task: PublishBuildArtifacts@1
+            condition: always()
+            displayName: 'Publish video captures'
+            inputs:
+              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net8.0/videos'
+              artifactName: 'videos'
+
+
+          - script: |
+              echo "PWD: $(System.DefaultWorkingDirectory)"
+              echo "Repo: $(Build.SourcesDirectory)"
+              echo "Looking for screenshots..."
+              find "$(Build.SourcesDirectory)" -type d -name screenshots -maxdepth 3 -print
+            displayName: 'Diagnose screenshots location'
