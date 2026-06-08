@@ -52,7 +52,7 @@ stages:
                   
                 az webapp config access-restriction add `
                   --resource-group "$(sharedResourceGroup)" `
-                  --name "$(schoolAccountAppServiceName)" `
+                  --name "$(schoolAccountConnectAppServiceName)" `
                   --rule-name $ruleName `
                   --action Allow `
                   --ip-address "$agentAddress" `
@@ -94,7 +94,7 @@ stages:
                   
                 az webapp config access-restriction remove `
                   --resource-group "$(sharedResourceGroup)" `
-                  --name "$(schoolAccountAppServiceName)" `
+                  --name "$(schoolAccountConnectAppServiceName)" `
                   --rule-name $ruleName
             
           
