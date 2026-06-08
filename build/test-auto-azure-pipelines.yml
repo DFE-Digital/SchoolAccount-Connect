@@ -19,10 +19,10 @@ stages:
         displayName: 'Run Automation Test Suite'
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET SDK 8.x'
+            displayName: 'Use .NET SDK 10.x'
             inputs:
               packageType: 'sdk'
-              version: '8.x'
+              version: '10.x'
 
           - script: dotnet restore "$(ProjectPath)"
             displayName: 'Restore'
