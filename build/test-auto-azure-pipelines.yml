@@ -30,7 +30,7 @@ stages:
           - script: dotnet restore "$(ProjectPath)"
             displayName: 'Restore'
 
-          - script: dotnet build "$(ProjectPath)" -c $(BuildConfiguration) --no-restore -p:UseAppHost=false
+          - script: dotnet build "$(ProjectPath)" -c $(BuildConfiguration) --no-restore
             displayName: 'Build'
 
           - script: |
@@ -102,14 +102,14 @@ stages:
             condition: always()
             displayName: 'Publish screenshots'
             inputs:
-              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net8.0/screenshots'
+              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net10.0/screenshots'
               artifactName: 'screenshots'
 
           - task: PublishBuildArtifacts@1
             condition: always()
             displayName: 'Publish video captures'
             inputs:
-              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net8.0/videos'
+              pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net10.0/videos'
               artifactName: 'videos'
 
 
