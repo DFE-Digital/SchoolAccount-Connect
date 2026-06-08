@@ -24,6 +24,9 @@ stages:
               packageType: 'sdk'
               version: '10.x'
 
+          - task: NuGetAuthenticate@0
+            displayName: 'Authenticate with Azure Artifacts'
+
           - script: dotnet restore "$(ProjectPath)"
             displayName: 'Restore'
 
