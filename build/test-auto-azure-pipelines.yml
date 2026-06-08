@@ -30,7 +30,7 @@ stages:
           - script: dotnet restore "$(ProjectPath)"
             displayName: 'Restore'
 
-          - script: dotnet build "$(ProjectPath)" -c $(BuildConfiguration) --no-restore
+          - script: dotnet build "$(ProjectPath)" -c $(BuildConfiguration) --no-restore -p:UseAppHost=false
             displayName: 'Build'
 
           - script: |
