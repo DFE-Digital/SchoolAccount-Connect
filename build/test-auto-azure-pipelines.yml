@@ -100,6 +100,7 @@ stages:
           
           - task: PublishBuildArtifacts@1
             condition: always()
+            continueOnError: true
             displayName: 'Publish screenshots'
             inputs:
               pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net10.0/screenshots'
@@ -107,6 +108,7 @@ stages:
 
           - task: PublishBuildArtifacts@1
             condition: always()
+            continueOnError: true
             displayName: 'Publish video captures'
             inputs:
               pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net10.0/videos'
