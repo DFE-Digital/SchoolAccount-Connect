@@ -19,8 +19,7 @@ public class TaskFilterableRegistrar : IFilterableRegistrar
     public FieldSelector FieldSelectorsBeingRegistered =>
         new()
         {
-            [Keys.Categories] =
-                (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.TypeTaskMappings.Select(ttm => ttm.TypeId)),
+            [Keys.Categories] = (Expression<Func<TaskEntity, IEnumerable<int>>>)(x => x.Types.Select(ttm => ttm.Id)),
             [Keys.State] = (Expression<Func<TaskEntity, WorkflowState>>)(x => x.WorkflowState),
         };
 }

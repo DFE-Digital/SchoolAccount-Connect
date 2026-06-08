@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchoolAccount.Domain.Tasks;
 
 namespace SchoolAccount.Domain.Types;
 
@@ -25,7 +26,7 @@ public class TypeEntity
 
     public virtual TypeGroupingEntity? TypeGrouping { get; set; }
 
-    public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
+    public virtual ICollection<TaskEntity> Tasks { get; } = [];
 
     public virtual ICollection<TypeEntity> Children { get; } = [];
 }

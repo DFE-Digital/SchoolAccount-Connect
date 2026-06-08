@@ -36,6 +36,6 @@ public static class TaskEntitySpecifications
 
     public static Expression<Func<TaskEntity, bool>> InCategory(int categoryId)
     {
-        return task => task.TypeTaskMappings.Any(ttm => ttm.TypeId == categoryId);
+        return task => task.Types.Any(type => type.Id == categoryId);
     }
 }

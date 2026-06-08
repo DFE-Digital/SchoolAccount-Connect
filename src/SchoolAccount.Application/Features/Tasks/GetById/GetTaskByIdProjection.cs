@@ -25,8 +25,7 @@ public static class GetTaskByIdProjection
             DateUpdated = x.DateUpdated,
             UpdatedBy = x.UpdatedBy,
             SubTasks = x
-                .SubTasks
-                .AsQueryable()
+                .SubTasks.AsQueryable()
                 .Where(isVisible)
                 .Where(isAccessible)
                 .Select(st => new GetTaskByIdResponseSubtask
@@ -56,8 +55,8 @@ public static class GetTaskByIdProjection
                 .RelatedTasks.Select(rt => new GetTaskByIdResponseRelatedTask { Id = rt.Id, Name = rt.Name })
                 .ToArray(),
             TaskTypes = x
-                .TypeTaskMappings.Where(t => t.Type.ParentTypeId == null && t.Type.TypeGroupingId == 1)
-                .Select(t => new GetTaskByIdResponseTaskType { Id = t.Type.Id, Name = t.Type.DisplayName })
+                .Types.Where(t => t.ParentTypeId == null && t.TypeGroupingId == 1)
+                .Select(t => new GetTaskByIdResponseTaskType { Id = t.Id, Name = t.DisplayName })
                 .ToArray(),
         };
     }

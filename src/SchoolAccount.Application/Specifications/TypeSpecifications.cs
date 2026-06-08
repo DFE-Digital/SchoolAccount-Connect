@@ -17,6 +17,6 @@ public static class TypeSpecifications
 
     public static Expression<Func<TypeEntity, bool>> HasAssociatedTasks()
     {
-        return x => x.TypeTaskMappings.Any();
+        return x => x.Tasks.Any();
     }
 }

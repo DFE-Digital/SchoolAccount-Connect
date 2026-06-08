@@ -35,11 +35,11 @@ public static class CalendarOfItemsRowProjection
                 DisplayValue = t.Tag.Name,
                 Type = CalendarOfItemsExtensionNodeType.Tag,
             }),
-            Types = x.Task.TypeTaskMappings.Select(t => new CalendarOfItemsExtensionNode
+            Types = x.Task.Types.Select(t => new CalendarOfItemsExtensionNode
             {
-                Id = t.Type.Id,
-                Name = t.Type.Name,
-                DisplayValue = t.Type.Name,
+                Id = t.Id,
+                Name = t.Name,
+                DisplayValue = t.Name,
                 Type = CalendarOfItemsExtensionNodeType.Type,
             }),
         };

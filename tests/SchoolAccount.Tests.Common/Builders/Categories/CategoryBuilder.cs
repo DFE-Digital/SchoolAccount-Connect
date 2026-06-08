@@ -1,4 +1,6 @@
+using SchoolAccount.Domain.Tasks;
 using SchoolAccount.Domain.Types;
+using SchoolAccount.Tests.Common.Builders.Tasks;
 
 namespace SchoolAccount.Tests.Common.Builders.Categories;
 
@@ -10,7 +12,7 @@ public sealed class CategoryBuilder
     private string _tagName = "TEST-TAG";
     private string? _description;
     private string? _hubViewDescription;
-    private readonly List<TypeTaskMappingEntity> _typeTaskMappings = [];
+    private readonly List<TaskEntity> _tasks = [];
     private readonly List<TypeEntity> _children = [];
 
     public static CategoryBuilder ACategory() => new();
@@ -45,17 +47,11 @@ public sealed class CategoryBuilder
         return this;
     }
 
-    public CategoryBuilder WithTypeTaskMapping(TypeTaskMappingEntity entity)
+    public CategoryBuilder WithTasks(params TaskBuilder[] builders)
     {
-        _typeTaskMappings.Add(entity);
-        return this;
-    }
-
-    public CategoryBuilder WithSubTasks(params TypeTaskMappingBuilder[] builders)
-    {
-        foreach (var b in builders)
+        foreach (var builder in builders)
         {
-            _typeTaskMappings.Add(b.Build());
+            _tasks.Add(builder.Build());
         }
 
         return this;
@@ -69,7 +65,7 @@ public sealed class CategoryBuilder
 
     public TypeEntity Build()
     {
-        var task = new TypeEntity
+        var type = new TypeEntity
         {
             Id = _id,
             Name = _name,
@@ -79,16 +75,16 @@ public sealed class CategoryBuilder
             HubViewDescription = _hubViewDescription,
         };
 
-        foreach (var typeTaskMapping in _typeTaskMappings)
+        foreach (var task in _tasks)
         {
-            task.TypeTaskMappings.Add(typeTaskMapping);
+            type.Tasks.Add(task);
         }
 
         foreach (var child in _children)
         {
-            task.Children.Add(child);
+            type.Children.Add(child);
         }
 
-        return task;
+        return type;
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Domain.Types;
 using SchoolAccount.Infrastructure.Configuration.Constants;
 using static SchoolAccount.Infrastructure.Configuration.Constants.TableConstants;
 
@@ -54,6 +55,19 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
             .UsingEntity<TaskRelationEntity>(
                 l => l.HasOne<TaskEntity>().WithMany().HasForeignKey(tr => tr.RelatedTaskId),
                 r => r.HasOne<TaskEntity>().WithMany().HasForeignKey(tr => tr.TaskId)
+            );
+
+        builder
+            .HasMany(t => t.Types)
+            .WithMany(p => p.Tasks)
+            .UsingEntity<TypeTaskMappingEntity>(
+                j => j.HasOne<TypeEntity>().WithMany().HasForeignKey(ttm => ttm.TypeId),
+                j => j.HasOne<TaskEntity>().WithMany().HasForeignKey(ttm => ttm.TaskId),
+                j =>
+                {
+                    j.HasKey(e => e.Id);
+                    j.ToTable(Mapping.Type, SchemaConstants.Transactional);
+                }
             );
     }
 }

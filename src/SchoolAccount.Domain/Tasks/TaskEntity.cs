@@ -47,7 +47,7 @@ public class TaskEntity
 
     public virtual ICollection<SubTaskEntity> SubTasks { get; } = [];
 
-    public virtual ICollection<TypeTaskMappingEntity> TypeTaskMappings { get; } = [];
+    public virtual ICollection<TypeEntity> Types { get; } = [];
 
     public virtual ICollection<ResourceEntity> Resources { get; } = [];
 
