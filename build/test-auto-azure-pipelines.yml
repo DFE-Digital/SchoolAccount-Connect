@@ -6,12 +6,14 @@ trigger: none
 
 variables:
   - group: 'Test Automation - Dev'
+  - group: 'Shared Resources - S268Dev'
 
 stages:
   - stage: Test
     displayName: 'Run Automation Test Suite'
     variables:
       - group: 'Test Automation - Dev'
+      - group: 'Shared Resources - S268Dev'
     jobs:
       - job: RunTests
         displayName: 'Run Automation Test Suite'
