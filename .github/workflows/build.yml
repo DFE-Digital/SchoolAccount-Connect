@@ -79,7 +79,7 @@ jobs:
   release:
     name: Create GitHub Release
     needs: build #[build, deploy-prod]
-    if: github.ref == 'refs/heads/main' 
+    #if: github.ref == 'refs/heads/main' 
     runs-on: ubuntu-latest
     permissions:
       contents: write 
