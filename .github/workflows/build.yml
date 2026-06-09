@@ -5,10 +5,6 @@ on:
     branches: [main, 'feature/github-actions']
   workflow_dispatch:
 
-env:
-  DOTNET_VERSION: '10.0.x'
-  PROJECT_NAME: 'schoolaccount-connect'
-
 concurrency:
   group: pipeline-${{ github.ref }}
   cancel-in-progress: false
@@ -17,7 +13,7 @@ jobs:
   tests:
     uses: ./.github/workflows/_test.yml
     with:
-      dotnet-version: ${{ env.DOTNET_VERSION }}
+      dotnet-version: '10.0.x'
 
   build:
     name: Build & Push Image
@@ -27,13 +23,13 @@ jobs:
       contents: read
       packages: write 
     outputs:
-      image-tag: ${{ steps.meta.outputs.image-tag }}
+      image-tag: ${{ steps.tag.outputs.image }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Compute image tag
-        id: meta
-        run: echo "image-tag=sha-${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
+        id: tag
+        run: echo "image=sha-${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -57,6 +53,7 @@ jobs:
       - uses: docker/setup-buildx-action@v3
 
       - name: Build & Push
+        needs: [tag, meta]
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -64,7 +61,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ghcr.io/dfe-digital/${{ env.PROJECT_NAME }}:${{ steps.meta.outputs.image-tag }}
+            ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.tag.outputs.image }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
