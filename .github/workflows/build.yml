@@ -51,9 +51,6 @@ jobs:
             personal_access_token=${{ secrets.AZURE_DEVOPS_PAT }}
           push: true
           tags: ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.tag.outputs.image }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false
 
   deploy-dev:
     needs: build
