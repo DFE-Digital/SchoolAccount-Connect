@@ -42,7 +42,7 @@ jobs:
             --results-directory ./test-results
       - name: Upload results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: unit-results-${{ matrix.project.name }}
           path: ./test-results
