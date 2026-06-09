@@ -1,96 +1,86 @@
-name: Build
+name: CI/CD Pipeline
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
-      
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   DOTNET_VERSION: '10.0.x'
-  DOTNET_CONFIG: 'Release'
-  TEST_LOCATION: 'test-results'
+  PROJECT_NAME: 'schoolaccount-connect'
 
 jobs:
-  build-and-test:
-    name: Build and run test suites
+  tests:
+    uses: ./.github/workflows/_test.yml
+    with:
+      dotnet-version: ${{ env.DOTNET_VERSION }}
+
+  build:
+    name: Build & Push Image
+    needs: tests
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      packages: write 
+    outputs:
+      image-tag: ${{ steps.meta.outputs.image-tag }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Build App
-        uses: ./.github/actions/build-app
-        with:
-          version: ${{ env.DOTNET_VERSION }}
-          enviroment: ${{ env.DOTNET_CONFIG }}
+      - name: Compute image tag
+        id: meta
+        run: echo "image-tag=sha-${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
 
-      - name: Test Application.UnitTests
-        if: success()
-        uses: ./.github/actions/run-tests
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          solution: 'tests/SchoolAccount.Application.UnitTests/SchoolAccount.Application.UnitTests.csproj'
-          output_name: 'ApplicationUnitTests'
-          output_location: ${{ env.TEST_LOCATION }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test Application.IntegrationTests
-        uses: ./.github/actions/run-tests
-        with:
-          solution: 'tests/SchoolAccount.Application.IntegrationTests/SchoolAccount.Application.IntegrationTests.csproj'
-          output_name: 'ApplicationIntegrationTests'
-          output_location: ${{ env.TEST_LOCATION }}
+      - name: Extract metadata
+          id: meta
+          uses: docker/metadata-action@v5
+          with:
+            images: ${{ env.IMAGE }}
+            tags: |
+              type=sha
+              type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+              type=ref,event=branch
+              type=semver,pattern={{version}}
+              type=semver,pattern={{major}}.{{minor}}
 
-      - name: Test AuthenticationTests
-        uses: ./.github/actions/run-tests
-        with:
-          solution: 'tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
-          output_name: 'AuthenticationTests'
-          output_location: ${{ env.TEST_LOCATION }}
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Test ConformanceTests
-        uses: ./.github/actions/run-tests
+      - name: Build & Push
+        uses: docker/build-push-action@v6
         with:
-          solution: 'tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj'
-          output_name: 'ConformanceTests'
-          output_location: ${{ env.TEST_LOCATION }}
+          context: .
+          file: src/SchoolAccount.Web.Connect/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ghcr.io/dfe-digital/${{ env.PROJECT_NAME }}:${{ steps.meta.outputs.image-tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
 
-      - name: Test InfrastructureTests
-        uses: ./.github/actions/run-tests
-        with:
-          solution: 'tests/SchoolAccount.InfrastructureTests/SchoolAccount.InfrastructureTests.csproj'
-          output_name: 'IntegrationTests'
-          output_location: ${{ env.TEST_LOCATION }}
+  deploy-dev:
+    needs: build
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      environment: dev
+      image-tag: ${{ needs.build.outputs.image-tag }}
+    secrets: inherit
 
-      - name: Test IntegrationTests
-        uses: ./.github/actions/run-tests
-        with:
-          solution: 'tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj'
-          output_name: 'IntegrationTests'
-          output_location: ${{ env.TEST_LOCATION }}
-
-      - name: Test Web.Connect.UnitTests
-        uses: ./.github/actions/run-tests
-        with:
-          solution: 'tests/SchoolAccount.Web.Connect.UnitTests/SchoolAccount.Web.Connect.UnitTests.csproj'
-          output_name: 'WebConnectUnitTests'
-          output_location: ${{ env.TEST_LOCATION }}
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-pr-${{ github.event.pull_request.number }}
-          path: ${{ env.TEST_LOCATION }}/
-          retention-days: 7
-          
-      - name: Publish test report
-        if: ${{ !cancelled() }}
-        uses: dorny/test-reporter@v1
-        with:
-          name: Test Results
-          path: ${{ env.TEST_LOCATION }}/*.trx
-          reporter: dotnet-trx
-          fail-on-error: true
+  deploy-prod:
+    needs: [build, deploy-dev]
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      environment: prod
+      image-tag: ${{ needs.build.outputs.image-tag }}
+    secrets: inherit

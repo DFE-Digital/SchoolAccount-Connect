@@ -1,0 +1,10 @@
+name: Pull Request Health Checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  tests:
+    uses: ./.github/workflows/_test.yml

@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        type: string
+        required: true
+
+jobs:
+  
+  unit-tests:
+    name: Unit (${{ matrix.project.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false  
+      matrix:
+        project:
+          - { name: Application.UnitTests,   path: tests/SchoolAccount.Application.UnitTests/SchoolAccount.Application.UnitTests.csproj }
+          - { name: Application.IntegrationTests,   path: tests/SchoolAccount.Application.IntegrationTests/SchoolAccount.Application.IntegrationTests.csproj }
+          - { name: AuthenticationTests,   path: tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj }
+          - { name: InfrastructureTests,   path: tests/SchoolAccount.InfrastructureTests/SchoolAccount.InfrastructureTests.csproj }
+          - { name: IntegrationTests,   path: tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj }
+          - { name: Web.Connect.UnitTests,   path: tests/SchoolAccount.Web.Connect.UnitTests/SchoolAccount.Web.Connect.UnitTests.csproj }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: nuget-
+      - name: Test
+        run: |
+          dotnet test ${{ matrix.project.path }} \
+            --configuration Release \
+            --logger "trx;LogFileName=${{ matrix.project.name }}.trx" \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./test-results
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-results-${{ matrix.project.name }}
+          path: ./test-results
+          
+  publish:
+    name: Publish Test Results
+    needs: [ unit-tests ]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: all-results
+      - uses: dorny/test-reporter@v1
+        with:
+          name: .NET Tests
+          path: 'all-results/**/*.trx'
+          reporter: dotnet-trx
