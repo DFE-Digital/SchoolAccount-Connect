@@ -75,3 +75,28 @@ jobs:
       environment: prod
       image-tag: ${{ needs.build.outputs.image-tag }}
     secrets: inherit
+    
+  release:
+    name: Create GitHub Release
+    needs: build #[build, deploy-prod]
+    if: github.ref == 'refs/heads/main' 
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+    steps:
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.build.outputs.version }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+        run: |
+          TAG="v${VERSION}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists — skipping."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
+            --generate-notes
