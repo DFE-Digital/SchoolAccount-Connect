@@ -1,0 +1,53 @@
+name: Compute Version
+description: >-
+  Computes a CalVer version (year.month.revision) where the revision is the
+  number of commits in the current month, resetting at the start of each month.
+  Also emits the short commit SHA and a convenience image tag.
+
+inputs:
+  first-parent:
+    description: Count only mainline commits (recommended for merge-based history).
+    required: false
+    default: 'true'
+
+outputs:
+  version:
+    description: CalVer version, e.g. 2026.6.3
+    value: ${{ steps.compute.outputs.version }}
+  short-sha:
+    description: 8-character commit SHA, e.g. abc12345
+    value: ${{ steps.compute.outputs.short-sha }}
+  image-tag:
+    description: Convenience image tag, e.g. sha-abc12345
+    value: ${{ steps.compute.outputs.image-tag }}
+
+runs:
+  using: composite
+  steps:
+    - id: compute
+      shell: bash
+      run: |
+        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+          echo "::error::Repository is shallow — check out with 'fetch-depth: 0' before compute-version, or the revision count will be wrong."
+          exit 1
+        fi
+
+        YEAR=$(date -u +'%Y')
+        MONTH=$(date -u +'%-m')
+        SINCE="$(date -u +'%Y-%m')-01T00:00:00Z"
+
+        FP=""
+        if [ "${{ inputs.first-parent }}" = "true" ]; then FP="--first-parent"; fi
+
+        REVISION=$(git rev-list --count $FP --since="$SINCE" HEAD)
+        if [ "$REVISION" -lt 1 ]; then REVISION=1; fi
+
+        SHORT_SHA="${GITHUB_SHA::8}"
+
+        {
+          echo "version=${YEAR}.${MONTH}.${REVISION}"
+          echo "short-sha=${SHORT_SHA}"
+          echo "image-tag=sha-${SHORT_SHA}"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "Computed ${YEAR}.${MONTH}.${REVISION} (sha ${SHORT_SHA})"
