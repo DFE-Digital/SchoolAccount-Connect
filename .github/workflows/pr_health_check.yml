@@ -3,7 +3,6 @@ name: Pull Request Health Checks
 on:
   pull_request:
     branches: [main]
-  workflow_dispatch:
     
 permissions:
   contents: read
@@ -11,3 +10,5 @@ permissions:
 jobs:
   tests:
     uses: ./.github/workflows/_test.yml
+    with:
+      dotnet-version: '10.0.x'

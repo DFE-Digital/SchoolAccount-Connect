@@ -3,7 +3,6 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [main, 'feature/github-actions']
-  workflow_dispatch:
 
 concurrency:
   group: pipeline-${{ github.ref }}
