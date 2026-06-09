@@ -42,18 +42,18 @@ jobs:
       - uses: docker/setup-buildx-action@v3
 
       - name: Build & Push
-          uses: docker/build-push-action@v6
-          with:
-            context: .
-            file: src/SchoolAccount.Web.Connect/Dockerfile
-            target: final
-            secrets: |
-              personal_access_token=${{ secrets.AZURE_DEVOPS_PAT }}
-            push: true
-            tags: ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.tag.outputs.image }}
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
-            provenance: false
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: src/SchoolAccount.Web.Connect/Dockerfile
+          target: final
+          secrets: |
+            personal_access_token=${{ secrets.AZURE_DEVOPS_PAT }}
+          push: true
+          tags: ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.tag.outputs.image }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
 
   deploy-dev:
     needs: build
