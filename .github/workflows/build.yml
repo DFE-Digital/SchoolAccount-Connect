@@ -5,13 +5,13 @@ on:
     branches: [main, 'feature/github-actions']
   workflow_dispatch:
 
-concurrency:
-  group: pipeline-${{ github.ref }}
-  cancel-in-progress: false
-
 env:
   DOTNET_VERSION: '10.0.x'
   PROJECT_NAME: 'schoolaccount-connect'
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   tests:
