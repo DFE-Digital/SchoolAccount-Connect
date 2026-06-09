@@ -16,6 +16,8 @@ USER app
 # =============================================================================
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ARG VERSION=0.0.0
+ARG GIT_SHA=local
 WORKDIR /build
 COPY .nuget/NuGet.Config ./
 COPY ["src/SchoolAccount.Application/SchoolAccount.Application.csproj", "src/SchoolAccount.Application/"]
@@ -45,7 +47,7 @@ RUN dotnet build src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj 
 # publish — produce the production artefacts.
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj --no-restore -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj --no-restore -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:Version=$VERSION -p:SourceRevisionId=$GIT_SHA
 
 # --- debug stage ---
 FROM build AS debug
