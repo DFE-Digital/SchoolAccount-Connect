@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   tests:
+    name: Test Image
     uses: ./.github/workflows/_test.yml
     with:
       dotnet-version: '10.0.x'
@@ -64,6 +65,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
+          target: final
+          secrets: |
+            personal_access_token=${{ secrets.AZURE_DEVOPS_PAT }}
 
   deploy-dev:
     needs: build
