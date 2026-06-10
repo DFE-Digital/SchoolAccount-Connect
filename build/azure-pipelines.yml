@@ -8,6 +8,10 @@ trigger:
 
 variables:
   - group: 'Shared Resources - S268Dev'
+  - group: 'Shared Resources - S268Test'
+  - group: 'Shared Resources - S268UAT'
+  - group: 'Shared Resources - S268PreProd'
+  - group: 'Shared Resources - Prod'
   - name: BuildConfiguration
     value: Release
 
