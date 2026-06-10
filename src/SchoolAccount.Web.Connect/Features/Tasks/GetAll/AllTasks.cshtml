@@ -8,6 +8,8 @@
     <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Heading</h1>
 
     <p class="govuk-body">@Model.HubViewDescription</p>
+
+    <partial name="@ViewAddressConstants.Tasks.Partials.AlphabetNavBar" model="@Model"/>
 }
 
 <partial name="@ViewAddressConstants.Tasks.Partials.TaskList" model="@Model"/>

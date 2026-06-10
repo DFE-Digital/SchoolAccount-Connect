@@ -1,0 +1,17 @@
+﻿@using SchoolAccount.Web.Connect.Features.Tasks
+@model SchoolAccount.Web.Connect.Features.Tasks.GetAll.GetAllTasksViewModel
+
+<nav aria-label="A to Z navigation">
+    <ol class="a-to-z-nav">
+        @foreach (char character in Model.NavBarList)
+        {
+            <li>
+                <a class="govuk-link govuk-task-list__link" href="" aria-label="navigate to @character">
+                    @character
+                </a>
+            </li>
+        }
+    </ol>
+</nav>
+
+

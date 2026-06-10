@@ -1,0 +1,21 @@
+@model SchoolAccount.Web.Connect.Features.Tasks.GetAll.GetAllTasksViewModel
+
+<form method="get">
+    <ul class="govuk-task-list">
+        @if (Model.NoTasksFound)
+        {
+            {
+                <li class="govuk-task-list__item">
+                    <p class="govuk-body">@Model.NoTasksFoundMessage</p>
+                </li>
+            }
+        }
+        else
+        {
+            foreach (var task in Model.Tasks)
+            {
+                <partial name="_ListItem" model="task"/>
+            }
+        }
+    </ul>
+</form>

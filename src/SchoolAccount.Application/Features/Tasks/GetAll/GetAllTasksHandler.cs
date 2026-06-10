@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Specifications;
-using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Tasks.GetAll;
@@ -18,7 +16,8 @@ public sealed class GetAllTasksHandler(IApplicationDbContext applicationDbContex
             .Where(TaskEntitySpecifications.IsVisible())
             .AsSingleQuery()
             .Select(GetAllTasksProjection.ToGetAllTasksResponseTasks())
-            .PaginateAsync(query.PageSize, query.PageNumber, cancellationToken);
+            .OrderBy(t => t.Name)
+            .ToListAsync(cancellationToken);
 
         return Result.Success(new GetAllTasksResponse(tasks));
     }

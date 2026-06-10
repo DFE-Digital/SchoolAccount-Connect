@@ -3,7 +3,7 @@ using X.PagedList;
 
 namespace SchoolAccount.Application.Features.Tasks.GetAll;
 
-public sealed record GetAllTasksResponse(IPagedList<GetAllTasksResponseTasks> Tasks);
+public sealed record GetAllTasksResponse(IReadOnlyCollection<GetAllTasksResponseTasks> Tasks);
 
 public sealed record GetAllTasksResponseTasks
 {

@@ -1,13 +1,11 @@
 using SchoolAccount.Application.Features.Tasks.GetAll;
 using SchoolAccount.Web.Connect.Models.Shared;
-using X.PagedList.Extensions;
 
 namespace SchoolAccount.Web.Connect.Features.Tasks.GetAll;
 
-public sealed record GetAllTasksViewModel(GetAllTasksResponse GetAllTasksResponse, PaginationViewModel Pagination)
-    : ITaskListViewModel
+public sealed record GetAllTasksViewModel(GetAllTasksResponse GetAllTasksResponse)
 {
-    public IReadOnlyCollection<ListItemViewModel> Tasks =>
+    public IEnumerable<ListItemViewModel> Tasks =>
         GetAllTasksResponse.Tasks.Select(t => new ListItemViewModel(
             t.Name,
             string.Format(Thread.CurrentThread.CurrentCulture, RouteConstants.Task.Index, t.Id),
@@ -15,8 +13,14 @@ public sealed record GetAllTasksViewModel(GetAllTasksResponse GetAllTasksRespons
         ));
 
     public string Heading => "All tasks";
+
     public string Description => "Explore all tasks and support.";
+
     public string HubViewDescription => "See all your tasks, returns and policies from DfE.";
-    public bool NoTasksFound => !GetAllTasksResponse.Tasks.Any();
+
+    public bool NoTasksFound => GetAllTasksResponse.Tasks.Count == 0;
+
     public string NoTasksFoundMessage => "No tasks found.";
+
+    public string NavBarList => "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 }

@@ -1,26 +1,26 @@
 :root {
     /** Colour Scheme */
     /* See (16/07/25): https://design-system.service.gov.uk/styles/colour/ */
-    --govuk-colour--red:	        #d4351c;
-    --govuk-colour--yellow:	        #ffdd00;
-    --govuk-colour--green:	        #00703c;
-    --govuk-colour--blue:	        #1d70b8;
-    --govuk-colour--dark-blue:	    #003078;
-    --govuk-colour--light-blue:	    #5694ca;
-    --govuk-colour--purple:	        #4c2c92;
-    --govuk-colour--black:	        #0b0c0c;
-    --govuk-colour--dark-grey:	    #505a5f;
-    --govuk-colour--mid-grey:	    #b1b4b6;
-    --govuk-colour--light-grey:	    #f3f2f1;
-    --govuk-colour--white:	        #ffffff;
-    --govuk-colour--light-purple:	#6f72af;
-    --govuk-colour--bright-purple:	#912b88;
-    --govuk-colour--pink:	        #d53880;
-    --govuk-colour--light-pink:	    #f499be;
-    --govuk-colour--orange:	        #f47738;
-    --govuk-colour--brown:	        #b58840;
-    --govuk-colour--light-green:	#85994b;
-    --govuk-colour--turquoise:	    #28a197;
+    --govuk-colour--red: #d4351c;
+    --govuk-colour--yellow: #ffdd00;
+    --govuk-colour--green: #00703c;
+    --govuk-colour--blue: #1d70b8;
+    --govuk-colour--dark-blue: #003078;
+    --govuk-colour--light-blue: #5694ca;
+    --govuk-colour--purple: #4c2c92;
+    --govuk-colour--black: #0b0c0c;
+    --govuk-colour--dark-grey: #505a5f;
+    --govuk-colour--mid-grey: #b1b4b6;
+    --govuk-colour--light-grey: #f3f2f1;
+    --govuk-colour--white: #ffffff;
+    --govuk-colour--light-purple: #6f72af;
+    --govuk-colour--bright-purple: #912b88;
+    --govuk-colour--pink: #d53880;
+    --govuk-colour--light-pink: #f499be;
+    --govuk-colour--orange: #f47738;
+    --govuk-colour--brown: #b58840;
+    --govuk-colour--light-green: #85994b;
+    --govuk-colour--turquoise: #28a197;
     /** Component Colours */
     /* See (16/07/25): https://design-system.service.gov.uk/styles/colour/ */
     --govuk-text-colour: var(--govuk-colour--black, #0b0c0c);
@@ -38,16 +38,16 @@
     --govuk-brand-colour: var(--govuk-colour--blue, #1d70b8);
     /** Responsive Spacing */
     /* See (16/07/25): https://design-system.service.gov.uk/styles/spacing/ */
-    --govuk-spacing-responsive--0 : 0px;
-    --govuk-spacing-responsive--1 : 5px;
-    --govuk-spacing-responsive--2 : 10px;
-    --govuk-spacing-responsive--3 : 15px;
-    --govuk-spacing-responsive--4 : 20px;
-    --govuk-spacing-responsive--5 : 25px;
-    --govuk-spacing-responsive--6 : 30px;
-    --govuk-spacing-responsive--7 : 40px;
-    --govuk-spacing-responsive--8 : 50px;
-    --govuk-spacing-responsive--9 : 60px;
+    --govuk-spacing-responsive--0: 0px;
+    --govuk-spacing-responsive--1: 5px;
+    --govuk-spacing-responsive--2: 10px;
+    --govuk-spacing-responsive--3: 15px;
+    --govuk-spacing-responsive--4: 20px;
+    --govuk-spacing-responsive--5: 25px;
+    --govuk-spacing-responsive--6: 30px;
+    --govuk-spacing-responsive--7: 40px;
+    --govuk-spacing-responsive--8: 50px;
+    --govuk-spacing-responsive--9: 60px;
     /** Static Spacing */
     /* See (16/07/25): https://design-system.service.gov.uk/styles/spacing/ */
     --govuk-spacing-static--0: 0px;
@@ -64,16 +64,16 @@
 
 @media screen and (max-width: 640px) {
     :root {
-        --govuk-spacing-responsive--0 : 0px;
-        --govuk-spacing-responsive--1 : 5px;
-        --govuk-spacing-responsive--2 : 10px;
-        --govuk-spacing-responsive--3 : 15px;
-        --govuk-spacing-responsive--4 : 15px;
-        --govuk-spacing-responsive--5 : 15px;
-        --govuk-spacing-responsive--6 : 20px;
-        --govuk-spacing-responsive--7 : 25px;
-        --govuk-spacing-responsive--8 : 30px;
-        --govuk-spacing-responsive--9 : 40px;
+        --govuk-spacing-responsive--0: 0px;
+        --govuk-spacing-responsive--1: 5px;
+        --govuk-spacing-responsive--2: 10px;
+        --govuk-spacing-responsive--3: 15px;
+        --govuk-spacing-responsive--4: 15px;
+        --govuk-spacing-responsive--5: 15px;
+        --govuk-spacing-responsive--6: 20px;
+        --govuk-spacing-responsive--7: 25px;
+        --govuk-spacing-responsive--8: 30px;
+        --govuk-spacing-responsive--9: 40px;
     }
 }
 
@@ -84,11 +84,11 @@ html {
     padding: 0;
 }
 
-.govuk-header__link .govuk-header__logotype{
+.govuk-header__link .govuk-header__logotype {
     height: 30px;
 }
 
-.govuk-header__link:focus .govuk-header__logotype{
+.govuk-header__link:focus .govuk-header__logotype {
     content: url("/lib/dfe-frontend/assets/image/department-for-education_black.png");
     height: 30px;
 }
@@ -107,6 +107,7 @@ html {
     background-position: 50% 0 !important;
     background-size: 125px 102px !important;
 }
+
 /* Top Navigation */
 
 .dfe-header-container {
@@ -202,7 +203,7 @@ a.dfe-nav-link {
 .cards {
     display: flex;
     flex-wrap: wrap;
-    margin: 0  calc(var(--govuk-spacing-responsive--2) * -1);
+    margin: 0 calc(var(--govuk-spacing-responsive--2) * -1);
 }
 
 .card {
@@ -653,7 +654,7 @@ header.dfe-connect-header .dfe-connect-header__mobile-nav-link:hover {
     }
 
     header.dfe-connect-header .dfe-connect-header__search-toggle {
-        width: 36px;        
+        width: 36px;
     }
 
     header.dfe-connect-header .dfe-connect-header__signout {
@@ -888,11 +889,11 @@ header.dfe-connect-header .dfe-connect-header__nav-list {
     margin-top: var(--govuk-spacing-responsive--4);
 }
 
- .govuk-task-list__item--with-link {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
- }
+.govuk-task-list__item--with-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .govuk-task-list__name-and-hint {
     flex: 1;
@@ -914,4 +915,43 @@ header.dfe-connect-header .dfe-connect-header__nav-list {
 .govuk-heading-m {
     margin-bottom: 10px;
     margin-top: 20px;
+}
+
+.a-to-z-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 19px;
+    width: 100%
+}
+
+.a-to-z-nav li {
+    display: inline;
+}
+
+.a-to-z-nav a {
+    color: #1d70b8; /* GDS link blue */
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 2px 4px;
+}
+
+.a-to-z-nav a:hover {
+    color: #003078; /* GDS link hover */
+    text-decoration-thickness: 3px;
+}
+
+.a-to-z-nav a:focus {
+    outline: 3px solid #ffdd00; /* GDS focus yellow */
+    outline-offset: 0;
+    background-color: #ffdd00;
+    color: #0b0c0c;
+}
+
+.a-to-z-nav__disabled {
+    color: #0b0c0c; /* GDS black — plain text, no link */
+    padding: 2px 4px;
 }
