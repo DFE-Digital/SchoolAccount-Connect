@@ -12,6 +12,9 @@ variables:
   - group: 'Shared Resources - S268UAT'
   - group: 'Shared Resources - S268PreProd'
   - group: 'Shared Resources - Prod'
+  - name: BuildConfiguration
+    value: Release
+
 
 stages:
   - template: job-templates/build.yml
@@ -30,6 +33,26 @@ stages:
         parameters:
           Environment: dev
           EnvironmentDisplayName: Dev
+
+  - stage: RunE2ETests
+    displayName: 'Run E2E Tests'
+    dependsOn: DeployToDev
+
+    condition: and(
+      succeeded(),
+      ne(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+    variables:
+      - group: 'Test Automation - Dev'
+      - group: 'Shared Resources - S268Dev'
+
+    jobs:
+      - template: job-templates/run-e2e-tests.yml
+        parameters:
+          ProjectPath: 'tests/SchoolAccount.Web.Connect.E2ETests/PlaywrightTests.DfE.Tests.csproj'
+          BuildConfiguration: '$(BuildConfiguration)'
+
 
   - stage: DeployToTest
     displayName: Deploy to Test
