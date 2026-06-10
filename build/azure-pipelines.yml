@@ -42,8 +42,8 @@ stages:
     #  ne(variables['Build.Reason'], 'PullRequest'),
     #  eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Test Automation - Dev'
       - group: 'Shared Resources - S268Dev'
+      - group: 'Test Automation - Dev'
     jobs:
       - template: job-templates/run-e2e-tests.yml
         parameters:
