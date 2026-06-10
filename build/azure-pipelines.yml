@@ -37,16 +37,13 @@ stages:
   - stage: RunE2ETests
     displayName: 'Run E2E Tests'
     dependsOn: DeployToDev
-
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-
+    #condition: and(
+    #  succeeded(),
+    #  ne(variables['Build.Reason'], 'PullRequest'),
+    #  eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Test Automation - Dev'
       - group: 'Shared Resources - S268Dev'
-
     jobs:
       - template: job-templates/run-e2e-tests.yml
         parameters:
