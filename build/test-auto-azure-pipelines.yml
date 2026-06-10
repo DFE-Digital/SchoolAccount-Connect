@@ -17,20 +17,20 @@ variables:
 stages:
   - template: job-templates/build.yml
 
-  - stage: DeployToDev
-    displayName: Deploy to Dev
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268Dev'
-      - group: 'Alert Thresholds - Dev'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: dev
-          EnvironmentDisplayName: Dev
+  # - stage: DeployToDev
+  #   displayName: Deploy to Dev
+  #   condition: and(
+  #     succeeded(),
+  #     ne(variables['Build.Reason'], 'PullRequest'),
+  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  #   variables:
+  #     - group: 'Shared Resources - S268Dev'
+  #     - group: 'Alert Thresholds - Dev'
+  #   jobs:
+  #     - template: job-templates/deploy.yml
+  #       parameters:
+  #         Environment: dev
+  #         EnvironmentDisplayName: Dev
 
   - stage: RunE2ETests
     displayName: 'Run E2E Tests'
@@ -148,36 +148,36 @@ stages:
               find "$(Build.SourcesDirectory)" -type d -name screenshots -maxdepth 3 -print
             displayName: 'Diagnose screenshots location'
 
-  - stage: DeployToTest
-    displayName: Deploy to Test
-    dependsOn: RunE2ETests
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268Test'
-      - group: 'Alert Thresholds - Test'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: test
-          EnvironmentDisplayName: Test
+  # - stage: DeployToTest
+  #   displayName: Deploy to Test
+  #   dependsOn: RunE2ETests
+  #   condition: and(
+  #     succeeded(),
+  #     ne(variables['Build.Reason'], 'PullRequest'),
+  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  #   variables:
+  #     - group: 'Shared Resources - S268Test'
+  #     - group: 'Alert Thresholds - Test'
+  #   jobs:
+  #     - template: job-templates/deploy.yml
+  #       parameters:
+  #         Environment: test
+  #         EnvironmentDisplayName: Test
 
-  - stage: DeployToUAT
-    displayName: Deploy to UAT
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268UAT'
-      - group: 'Alert Thresholds - UAT'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: uat
-          EnvironmentDisplayName: UAT
+  # - stage: DeployToUAT
+  #   displayName: Deploy to UAT
+  #   condition: and(
+  #     succeeded(),
+  #     ne(variables['Build.Reason'], 'PullRequest'),
+  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  #   variables:
+  #     - group: 'Shared Resources - S268UAT'
+  #     - group: 'Alert Thresholds - UAT'
+  #   jobs:
+  #     - template: job-templates/deploy.yml
+  #       parameters:
+  #         Environment: uat
+  #         EnvironmentDisplayName: UAT
 
   # - stage: DeployToPreProd
   #   displayName: Deploy to PreProd
