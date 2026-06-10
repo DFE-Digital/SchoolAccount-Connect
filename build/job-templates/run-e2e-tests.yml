@@ -62,6 +62,7 @@ jobs:
 
 
       - task: PublishTestResults@2
+        condition: always()
         displayName: 'Publish TRX results'
         inputs:
           testResultsFormat: 'VSTest'
