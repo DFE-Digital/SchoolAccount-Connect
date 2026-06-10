@@ -21,10 +21,10 @@ stages:
 
   - stage: DeployToDev
     displayName: Deploy to Dev
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    #condition: and(
+    #  succeeded(),
+    #  ne(variables['Build.Reason'], 'PullRequest'),
+    #  eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Shared Resources - S268Dev'
       - group: 'Alert Thresholds - Dev'
