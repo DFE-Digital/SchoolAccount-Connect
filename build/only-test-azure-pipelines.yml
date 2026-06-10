@@ -1,44 +1,16 @@
-pool:
-  vmImage: ubuntu-latest
 
-trigger:
-  branches:
-    include:
-      - main
+pool:
+  vmImage: 'ubuntu-latest' 
+
+trigger: none
 
 variables:
-  - group: 'Shared Resources - S268Dev'
-  - group: 'Shared Resources - S268Test'
-  - group: 'Shared Resources - S268UAT'
-  - group: 'Shared Resources - S268PreProd'
-  - group: 'Shared Resources - Prod'
   - group: 'Test Automation - Dev'
+  - group: 'Shared Resources - S268Dev'
 
 stages:
-  - template: job-templates/build.yml
-
-  - stage: DeployToDev
-    displayName: Deploy to Dev
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268Dev'
-      - group: 'Alert Thresholds - Dev'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: dev
-          EnvironmentDisplayName: Dev
-
-  - stage: RunE2ETests
-    displayName: 'Run E2E Tests'
-    dependsOn: DeployToDev
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  - stage: Test
+    displayName: 'Run Automation Test Suite'
     variables:
       - group: 'Test Automation - Dev'
       - group: 'Shared Resources - S268Dev'
@@ -77,10 +49,10 @@ stages:
               inlineScript: |
                 $agentAddress = (Invoke-RestMethod "http://ipinfo.io/json").ip
                 $ruleName = "HostedAgent_SA_$agentAddress"
-
+                  
                 az webapp config access-restriction add `
                   --resource-group "$(sharedResourceGroup)" `
-                  --name "$(schoolAccountConnectAppServiceName)" `
+                  --name "$(schoolAccountAppServiceName)" `
                   --rule-name $ruleName `
                   --action Allow `
                   --ip-address "$agentAddress" `
@@ -108,7 +80,7 @@ stages:
               mergeTestResults: true
               testRunTitle: 'Playwright .NET (xUnit)'
               failTaskOnFailedTests: false
-
+          
           - task: AzureCLI@2
             displayName: 'Remove Agent IP from App Service Allow list'
             condition: always()
@@ -119,12 +91,13 @@ stages:
               inlineScript: |
                 $agentAddress = (Invoke-RestMethod "http://ipinfo.io/json").ip
                 $ruleName = "HostedAgent_SA_$agentAddress"
-
+                  
                 az webapp config access-restriction remove `
                   --resource-group "$(sharedResourceGroup)" `
-                  --name "$(schoolAccountConnectAppServiceName)" `
+                  --name "$(schoolAccountAppServiceName)" `
                   --rule-name $ruleName
-
+            
+          
           - task: PublishBuildArtifacts@1
             condition: always()
             continueOnError: true
@@ -141,70 +114,10 @@ stages:
               pathToPublish: '$(Build.SourcesDirectory)/$(ProjectDir)/bin/$(BuildConfiguration)/net10.0/videos'
               artifactName: 'videos'
 
+
           - script: |
               echo "PWD: $(System.DefaultWorkingDirectory)"
               echo "Repo: $(Build.SourcesDirectory)"
               echo "Looking for screenshots..."
               find "$(Build.SourcesDirectory)" -type d -name screenshots -maxdepth 3 -print
             displayName: 'Diagnose screenshots location'
-
-  - stage: DeployToTest
-    displayName: Deploy to Test
-    dependsOn: RunE2ETests
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268Test'
-      - group: 'Alert Thresholds - Test'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: test
-          EnvironmentDisplayName: Test
-
-  - stage: DeployToUAT
-    displayName: Deploy to UAT
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268UAT'
-      - group: 'Alert Thresholds - UAT'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: uat
-          EnvironmentDisplayName: UAT
-
-  # - stage: DeployToPreProd
-  #   displayName: Deploy to PreProd
-  #   condition: and(
-  #     succeeded(),
-  #     ne(variables['Build.Reason'], 'PullRequest'),
-  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  #   variables:
-  #     - group: 'Shared Resources - S268PreProd'
-  #     - group: 'Alert Thresholds - PreProd'
-  #   jobs:
-  #     - template: job-templates/deploy.yml
-  #       parameters:
-  #         Environment: pp
-  #         EnvironmentDisplayName: PreProd
-
-  # - stage: DeployToProd
-  #   displayName: Deploy to Prod
-  #   condition: and(
-  #     succeeded(),
-  #     ne(variables['Build.Reason'], 'PullRequest'),
-  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  #   variables:
-  #     - group: 'Shared Resources - Prod'
-  #     - group: 'Alert Thresholds - Prod'
-  #   jobs:
-  #     - template: job-templates/deploy.yml
-  #       parameters:
-  #         Environment: pd
-  #         EnvironmentDisplayName: Prod
