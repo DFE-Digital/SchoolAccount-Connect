@@ -1,0 +1,96 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_CONFIG: 'Release'
+  TEST_LOCATION: 'test-results'
+
+jobs:
+  build-and-test:
+    name: Build and run test suites
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build App
+        uses: ./.github/actions/build-app
+        with:
+          version: ${{ env.DOTNET_VERSION }}
+          enviroment: ${{ env.DOTNET_CONFIG }}
+
+      - name: Test Application.UnitTests
+        if: success()
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.Application.UnitTests/SchoolAccount.Application.UnitTests.csproj'
+          output_name: 'ApplicationUnitTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test Application.IntegrationTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.Application.IntegrationTests/SchoolAccount.Application.IntegrationTests.csproj'
+          output_name: 'ApplicationIntegrationTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test AuthenticationTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.AuthenticationTests/SchoolAccount.AuthenticationTests.csproj'
+          output_name: 'AuthenticationTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test ConformanceTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.ConformanceTests/SchoolAccount.ConformanceTests.csproj'
+          output_name: 'ConformanceTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test InfrastructureTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.InfrastructureTests/SchoolAccount.InfrastructureTests.csproj'
+          output_name: 'IntegrationTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test IntegrationTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.IntegrationTests/SchoolAccount.IntegrationTests.csproj'
+          output_name: 'IntegrationTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Test Web.Connect.UnitTests
+        uses: ./.github/actions/run-tests
+        with:
+          solution: 'tests/SchoolAccount.Web.Connect.UnitTests/SchoolAccount.Web.Connect.UnitTests.csproj'
+          output_name: 'WebConnectUnitTests'
+          output_location: ${{ env.TEST_LOCATION }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-pr-${{ github.event.pull_request.number }}
+          path: ${{ env.TEST_LOCATION }}/
+          retention-days: 7
+          
+      - name: Publish test report
+        if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          path: ${{ env.TEST_LOCATION }}/*.trx
+          reporter: dotnet-trx
+          fail-on-error: true

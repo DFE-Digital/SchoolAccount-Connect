@@ -1,0 +1,25 @@
+name: Run Unit Tests
+description: Runs the unit tests and publishes them to the workflow runs
+
+inputs:
+  solution:
+    required: true
+    type: string
+  output_name:
+    required: true
+    type: string
+  output_location:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Run test
+      shell: bash
+      run: >
+        dotnet test ${{ inputs.solution }}
+        --no-build --configuration Release
+        --logger "trx;LogFileName=${{ inputs.output_name }}.trx"
+        --results-directory ./${{ inputs.output_location }}
