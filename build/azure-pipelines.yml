@@ -11,9 +11,7 @@ variables:
   - group: 'Shared Resources - S268Test'
   - group: 'Shared Resources - S268UAT'
   - group: 'Shared Resources - S268PreProd'
-  - group: 'Shared Resources - S268Prod'
-  - name: BuildConfiguration
-    value: Release
+  - group: 'Shared Resources - Prod'
 
 
 stages:
@@ -48,7 +46,7 @@ stages:
       - template: job-templates/run-e2e-tests.yml
         parameters:
           ProjectPath: 'tests/SchoolAccount.Web.Connect.E2ETests/PlaywrightTests.DfE.Tests.csproj'
-          BuildConfiguration: '$(BuildConfiguration)'
+          BuildConfiguration: 'release'
 
 
   - stage: DeployToTest
@@ -103,7 +101,7 @@ stages:
       ne(variables['Build.Reason'], 'PullRequest'),
       eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
-      - group: 'Shared Resources - S268Prod'
+      - group: 'Shared Resources - Prod'
       - group: 'Alert Thresholds - Prod'
     jobs:
       - template: job-templates/deploy.yml
