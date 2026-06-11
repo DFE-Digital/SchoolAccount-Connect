@@ -9,8 +9,8 @@ trigger:
 variables:
   DevSubscription: 's268d.azdo.deployment'
   TestSubscription: 's268t.azdo.deployment'
-  UATSubscription: 's268u.azdo.deployment'
-  PreProdSubscription: 's268pp.azdo.deployment'
+  UATSubscription: 's268t.azdo.deployment'
+  PreProdSubscription: 's268t.azdo.deployment'
   ProdSubscription: 's268p.azdo.deployment'
 
 stages:
