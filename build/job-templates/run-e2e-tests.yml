@@ -9,6 +9,10 @@ jobs:
     steps:
       - checkout: self
 
+      - script: |
+              echo "AzureSubscription variable = $(AzureSubscription)"
+              displayName: 'Debug AzureSubscription value'
+
       - task: UseDotNet@2
         displayName: 'Use .NET SDK 10.x'
         inputs:
@@ -29,6 +33,10 @@ jobs:
           echo "##vso[task.setvariable variable=PATH]$PATH:~/.dotnet/tools"
           playwright install --with-deps
         displayName: 'Install Playwright browsers'
+      
+      - script: |
+              echo "AzureSubscription variable = $(AzureSubscription)"
+              displayName: 'Debug AzureSubscription value'
 
       - task: AzureCLI@2
         displayName: 'Add Agent IP to App Service Allow list'

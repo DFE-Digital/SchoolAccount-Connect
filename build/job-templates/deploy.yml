@@ -12,9 +12,13 @@ jobs:
       runOnce:
         deploy:
           steps:
+            - script: |
+              echo "AzureSubscription variable = $(AzureSubscription)"
+              displayName: 'Debug AzureSubscription value'
+
             - task: AzureResourceManagerTemplateDeployment@2
               displayName: Deploy infrastructure
-              enabled: false
+              enabled: true
               inputs:
                 azureSubscription: '$(AzureSubscription)'
                 resourceGroupName: '$(sharedResourceGroup)'
@@ -24,7 +28,7 @@ jobs:
 
             - task: AzureWebApp@1
               displayName: Deploy web app to staging slot
-              enabled: false
+              enabled: true
               inputs:
                 azureSubscription: '$(AzureSubscription)'
                 appType: webApp
@@ -36,7 +40,7 @@ jobs:
 
             - task: AzureAppServiceManage@0
               displayName: Swap staging to production
-              enabled: false
+              enabled: true
               inputs:
                 azureSubscription: '$(AzureSubscription)'
                 Action: 'Swap Slots'
