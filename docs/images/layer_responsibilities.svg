@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg" role="img" font-family="ui-monospace, 'Cascadia Code', 'Fira Code', monospace" font-size="13">
+  <title>SchoolAccount Connect — Layer Responsibilities</title>
+  <desc>Architecture diagram showing Clean Architecture layers and their dependency directions</desc>
+
+  <rect width="680" height="530" fill="#f8f8f8" rx="8"/>
+
+  <!-- ── Presentation ── -->
+  <rect x="40" y="30" width="600" height="68" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="300" y="56" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="14">SchoolAccount.Web.Connect</text>
+  <text x="300" y="75" text-anchor="middle" fill="#475569" font-size="12">Controllers · Razor Views · Middleware · Auth config</text>
+  <text x="632" y="66" text-anchor="end" fill="#3b82f6" font-size="11" font-style="italic">Presentation</text>
+
+  <!-- Arrow down -->
+  <line x1="340" y1="98" x2="340" y2="132" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="340,136 335,126 345,126" fill="#94a3b8"/>
+  <text x="352" y="119" fill="#94a3b8" font-size="11">depends on</text>
+
+  <!-- ── Application ── -->
+  <rect x="40" y="136" width="600" height="68" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="300" y="162" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="14">SchoolAccount.Application</text>
+  <text x="300" y="181" text-anchor="middle" fill="#475569" font-size="12">CQRS Handlers · Pipeline Behaviours · Validation · Abstractions</text>
+  <text x="632" y="170" text-anchor="end" fill="#3b82f6" font-size="11" font-style="italic">Use cases</text>
+
+  <!-- Arrow → Domain -->
+  <line x1="190" y1="204" x2="190" y2="272" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="190,276 185,266 195,266" fill="#94a3b8"/>
+
+  <!-- Arrow → Infrastructure -->
+  <line x1="490" y1="204" x2="490" y2="272" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="490,276 485,266 495,266" fill="#94a3b8"/>
+
+  <!-- ── Domain ── -->
+  <rect x="40" y="276" width="270" height="86" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="175" y="300" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="14">SchoolAccount.Domain</text>
+  <text x="175" y="319" text-anchor="middle" fill="#475569" font-size="12">Entities · Value Objects</text>
+  <text x="175" y="336" text-anchor="middle" fill="#475569" font-size="12">Domain Events · Exceptions</text>
+  <text x="175" y="354" text-anchor="middle" fill="#22c55e" font-size="11" font-style="italic">Innermost layer</text>
+
+  <!-- ── Infrastructure ── -->
+  <rect x="370" y="276" width="270" height="86" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="505" y="300" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="14">SchoolAccount.Infrastructure</text>
+  <text x="505" y="319" text-anchor="middle" fill="#475569" font-size="12">EF Core · SQL Server</text>
+  <text x="505" y="336" text-anchor="middle" fill="#475569" font-size="12">External services · Jobs</text>
+  <text x="505" y="354" text-anchor="middle" fill="#f97316" font-size="11" font-style="italic">Data &amp; integrations</text>
+
+  <!-- Infrastructure → Domain -->
+  <line x1="370" y1="319" x2="314" y2="319" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="310,319 320,314 320,324" fill="#94a3b8"/>
+
+  <!-- Infrastructure → DfESignIn -->
+  <line x1="505" y1="362" x2="505" y2="386" stroke="#f97316" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- ── DfE Sign-In ── -->
+  <rect x="370" y="386" width="270" height="48" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="505" y="408" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="12">SchoolAccount.Integration.DfESignIn</text>
+  <text x="505" y="425" text-anchor="middle" fill="#475569" font-size="11">DfE Sign-In authentication</text>
+
+  <!-- ── Kernel ── -->
+  <rect x="40" y="456" width="600" height="52" rx="6" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="340" y="479" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="14">SchoolAccount.Kernel</text>
+  <text x="340" y="497" text-anchor="middle" fill="#475569" font-size="12">Result&lt;T&gt; · Error · Entity · IUserContext — no dependencies, usable by any layer</text>
+
+  <!-- Legend -->
+  <line x1="44" y1="516" x2="64" y2="516" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="68,516 58,512 58,520" fill="#94a3b8"/>
+  <text x="72" y="520" fill="#94a3b8" font-size="11">depends on</text>
+  <line x1="160" y1="516" x2="180" y2="516" stroke="#f97316" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="184" y="520" fill="#94a3b8" font-size="11">part of infrastructure tier</text>
+</svg>

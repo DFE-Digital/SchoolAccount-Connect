@@ -7,9 +7,24 @@
     <File Path="build/job-templates/deploy.yml" />
   </Folder>
   <Folder Name="/certs/">
-    <File Path="certs\connect-key.pem" />
-    <File Path="certs\connect.pem" />
-    <File Path="certs\rootCA.crt" />
+    <File Path="certs/connect-key.pem" />
+    <File Path="certs/connect.pem" />
+    <File Path="certs/rootCA.crt" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs/clean-architecture.md" />
+    <File Path="docs\coding-standards.md" />
+    <File Path="docs\personal-access-token.md" />
+    <File Path="docs\prerequisites.md" />
+    <File Path="docs\project-structure.md" />
+  </Folder>
+  <Folder Name="/docs/images/">
+    <File Path="docs/images/architecture_comparison.png" />
+    <File Path="docs/images/clean_architecture_layers.png" />
+    <File Path="docs/images/component_architecture.png" />
+    <File Path="docs/images/feature_folder_architecture.png" />
+    <File Path="docs/images/layered_architecture.png" />
+    <File Path="docs/images/uncle_bob_clean_architecture.jpg" />
   </Folder>
   <Folder Name="/infrastructure/" />
   <Folder Name="/infrastructure/arm-templates/">
@@ -39,6 +54,7 @@
     <File Path="global.json" />
     <File Path="init.ps1" />
     <File Path="init.sh" />
+    <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/SchoolAccount.Application/SchoolAccount.Application.csproj" />
