@@ -6,9 +6,6 @@ trigger:
     include:
       - main
 
-variables:
-  - group: 'Shared Resources - S268Dev'
-
 
 stages:
   - template: job-templates/build.yml
