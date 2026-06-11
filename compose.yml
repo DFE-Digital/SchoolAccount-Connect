@@ -77,12 +77,12 @@ services:
     depends_on:
       - tsi-backend
     ports:
-      - "4201:8443"
+      - "4200:8443"
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/certs:/https:ro
-      - ../SchoolAccount-LocalDevTools/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../TSI-Frontend/ClientApp/Certs:/https:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
   
   tsi-backend:
     hostname: tsi-backend
@@ -102,7 +102,7 @@ services:
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+      - ../TSI-Backend/Certs:/https:ro
   
   tsi-domain-service:
     hostname: tsi-domain-service
@@ -124,10 +124,10 @@ services:
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+      - ../TSI-DomainService/Certs:/https:ro
 
-  frontend:
-    hostname: schoolaccount-frontend
+  sa-frontend-connect:
+    hostname: sa-frontend-connect
     build:
       context: ../SchoolAccount-Frontend
       dockerfile: SchoolAccount/SchoolAccount.FrontEnd/Dockerfile
@@ -148,7 +148,7 @@ services:
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/certs:/https:ro
+      - ../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates:/https:ro
   
   app-config-emulator:
     hostname: app-config-emulator
@@ -165,7 +165,7 @@ services:
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/config/azure-app-config:/app/.aace
+      - ./config/azure-app-config:/app/.aace
   
   seq:
     hostname: seq
