@@ -1,6 +1,7 @@
 parameters:
   ProjectPath: ''
   BuildConfiguration: ''
+  azureSubscription: ''
 
 jobs:
   - job: RunTests
@@ -41,7 +42,7 @@ jobs:
       - task: AzureCLI@2
         displayName: 'Add Agent IP to App Service Allow list'
         inputs:
-          azureSubscription: "$(AzureSubscription)"
+          azureSubscription: ${{ parameters.azureSubscription }}
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
@@ -82,7 +83,7 @@ jobs:
         displayName: 'Remove Agent IP from App Service Allow list'
         condition: always()
         inputs:
-          azureSubscription: "$(AzureSubscription)"
+          azureSubscription: ${{ parameters.azureSubscription }}
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
