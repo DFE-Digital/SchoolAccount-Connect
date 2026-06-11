@@ -7,12 +7,11 @@ trigger:
       - main
 
 variables:
-  - group: 'Shared Resources - S268Dev'
-  - group: 'Shared Resources - S268Test'
-  - group: 'Shared Resources - S268UAT'
-  - group: 'Shared Resources - S268PreProd'
-  - group: 'Shared Resources - Prod'
-
+  DevSubscription: 's268d.azdo.deployment'
+  TestSubscription: 's268t.azdo.deployment'
+  UATSubscription: 's268t.azdo.deployment'
+  PreProdSubscription: 's268t.azdo.deployment'
+  ProdSubscription: 's268p.azdo.deployment'
 
 stages:
   - template: job-templates/build.yml
@@ -31,6 +30,7 @@ stages:
         parameters:
           Environment: dev
           EnvironmentDisplayName: Dev
+          AzureSubscription: ${{ variables.DevSubscription }}
 
   - stage: RunE2ETests
     displayName: 'Run E2E Tests'
@@ -47,8 +47,7 @@ stages:
         parameters:
           ProjectPath: 'tests/SchoolAccount.Web.Connect.E2ETests/PlaywrightTests.DfE.Tests.csproj'
           BuildConfiguration: 'release'
-          azureSubscription: 's268d.azdo.deployment'
-
+          AzureSubscription: ${{ variables.DevSubscription }}
 
   - stage: DeployToTest
     displayName: Deploy to Test
@@ -64,6 +63,7 @@ stages:
         parameters:
           Environment: test
           EnvironmentDisplayName: Test
+          AzureSubscription: ${{ variables.TestSubscription }}
 
   - stage: DeployToUAT
     displayName: Deploy to UAT
@@ -79,6 +79,7 @@ stages:
         parameters:
           Environment: uat
           EnvironmentDisplayName: UAT
+          AzureSubscription: ${{ variables.UATSubscription }}
 
   - stage: DeployToPreProd
     displayName: Deploy to PreProd
@@ -94,6 +95,7 @@ stages:
         parameters:
           Environment: pp
           EnvironmentDisplayName: PreProd
+          AzureSubscription: ${{ variables.PreProdSubscription }}
 
   - stage: DeployToProd
     displayName: Deploy to Prod
@@ -109,3 +111,4 @@ stages:
         parameters:
           Environment: pd
           EnvironmentDisplayName: Prod
+          AzureSubscription: ${{ variables.ProdSubscription }}
