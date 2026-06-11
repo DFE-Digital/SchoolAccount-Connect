@@ -10,8 +10,8 @@ jobs:
       - checkout: self
 
       - script: |
-              echo "AzureSubscription variable = $(AzureSubscription)"
-              displayName: 'Debug AzureSubscription value'
+          echo "AzureSubscription variable = $(AzureSubscription)"
+        displayName: 'Debug AzureSubscription value'
 
       - task: UseDotNet@2
         displayName: 'Use .NET SDK 10.x'
@@ -35,8 +35,8 @@ jobs:
         displayName: 'Install Playwright browsers'
       
       - script: |
-              echo "AzureSubscription variable = $(AzureSubscription)"
-              displayName: 'Debug AzureSubscription value'
+          echo "AzureSubscription variable = $(AzureSubscription)"
+        displayName: 'Debug AzureSubscription value'
 
       - task: AzureCLI@2
         displayName: 'Add Agent IP to App Service Allow list'

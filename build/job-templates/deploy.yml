@@ -13,7 +13,7 @@ jobs:
         deploy:
           steps:
             - script: |
-              echo "AzureSubscription variable = $(AzureSubscription)"
+                echo "AzureSubscription variable = $(AzureSubscription)"
               displayName: 'Debug AzureSubscription value'
 
             - task: AzureResourceManagerTemplateDeployment@2
