@@ -149,6 +149,7 @@ services:
       - default
     volumes:
       - ../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates:/https:ro
+      - ../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates/Keys:/https:ro
   
   app-config-emulator:
     hostname: app-config-emulator
