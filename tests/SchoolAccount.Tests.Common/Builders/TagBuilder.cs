@@ -21,7 +21,7 @@ public sealed class TagBuilder
     private string? _description;
 
     private long? _parentTagId;
-    
+
     public static TagBuilder ATag() => new();
 
     public TagBuilder WithId(int id)
@@ -82,7 +82,7 @@ public sealed class TagBuilder
 
         ArgumentNullException.ThrowIfNull(_name);
         ArgumentNullException.ThrowIfNull(_tagName);
-        
+
         if (!_taxonomyId.HasValue)
         {
             throw new ArgumentNullException(nameof(_taxonomyId));
@@ -93,12 +93,12 @@ public sealed class TagBuilder
         {
             Id = _id.Value,
             Name = _name,
-            TagName =  _tagName,
+            TagName = _tagName,
             DisplayName = _displayName,
             Description = _description,
             ParentTagId = _parentTagId,
             Taxonomy = _taxonomy,
-            TaxonomyId = _taxonomyId.Value
+            TaxonomyId = _taxonomyId.Value,
         };
     }
 
@@ -110,10 +110,10 @@ public sealed class TagBuilder
             Tag = tag,
             TagId = tag.Id,
             SchoolType = new SchoolTypeEntity { Id = (int)type, Name = type.ToString() },
-            SchoolTypeId = (int)type
+            SchoolTypeId = (int)type,
         };
     }
-    
+
     public static implicit operator TagEntity(TagBuilder builder)
     {
         return builder.Build();

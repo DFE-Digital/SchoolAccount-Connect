@@ -16,8 +16,11 @@ public static class DatabaseContext
         return context;
     }
 
-    public static async Task<IApplicationDbContext> Map(this IApplicationDbContext context, Action<IApplicationDbContext> mapper, 
-        CancellationToken cancellationToken = default)
+    public static async Task<IApplicationDbContext> Map(
+        this IApplicationDbContext context,
+        Action<IApplicationDbContext> mapper,
+        CancellationToken cancellationToken = default
+    )
     {
         mapper(context);
         await context.SaveChangesAsync(cancellationToken);

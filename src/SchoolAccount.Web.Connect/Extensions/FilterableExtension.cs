@@ -9,7 +9,7 @@ public static class FilterableExtension
         return filterable.Type switch
         {
             FilterableItemType.Checkbox => "DisplayComponents/Filter/Checkbox",
-            _ => null
+            _ => null,
         };
     }
 

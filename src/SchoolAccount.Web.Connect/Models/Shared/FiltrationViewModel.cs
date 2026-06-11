@@ -22,7 +22,7 @@ public class FiltrationViewModel(CalendarOfItemsViewModes viewModes, Uri baseUrl
     {
         return baseUrl.RemoveQueryParamsStartingWith("filter");
     }
-    
+
     public IEnumerable<Filterable> TemplatedItems => this.Where(x => x.HasTemplate());
 
     public static FiltrationViewModel Build(

@@ -130,9 +130,7 @@ public partial class CalendarOfItemsAggregatorTests
     {
         // Arrange
         var filterFactory = Make.Factory.Filterable(
-            AFilter("Status")
-                .WithType(FilterableItemType.Checkbox)
-                .WithValues(AFilterItem("Active"))
+            AFilter("Status").WithType(FilterableItemType.Checkbox).WithValues(AFilterItem("Active"))
         );
         var factoryFactory = Make.Factory.Query(
             CalendarOfItemsQueryTypes.SubTask,

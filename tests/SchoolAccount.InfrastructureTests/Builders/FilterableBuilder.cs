@@ -19,7 +19,7 @@ public sealed class FilterableBuilder
     {
         return new(id);
     }
-    
+
     public FilterableBuilder WithDisplayName(string displayName)
     {
         _displayName = displayName;

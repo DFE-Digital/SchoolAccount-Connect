@@ -9,7 +9,8 @@ internal partial class ComponentGenerator
         string? className = null,
         string? text = null,
         bool treatAsHtml = false,
-        params (string, string?)[] attributes)
+        params (string, string?)[] attributes
+    )
     {
         var node = new TagBuilder(nodeName);
 

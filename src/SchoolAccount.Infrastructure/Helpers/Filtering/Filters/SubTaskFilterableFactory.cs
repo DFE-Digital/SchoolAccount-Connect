@@ -29,7 +29,11 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
         var byTags = baseQuery is not null ? await baseQuery.Select(x => x.Tags.Select(t => t.Id)).ToListAsync() : null;
 
         items.Add(
-            new Filterable(FilterableItemType.Checkbox, SubTaskFilterableRegistrar.Keys.PhaseOfEducation, "Phase of education")
+            new Filterable(
+                FilterableItemType.Checkbox,
+                SubTaskFilterableRegistrar.Keys.PhaseOfEducation,
+                "Phase of education"
+            )
             {
                 Values = BuildTagTree(
                     await applicationDbContext
@@ -49,7 +53,7 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             : null;
 
         items.Add(
-            new Filterable(FilterableItemType.Checkbox , SubTaskFilterableRegistrar.Keys.Categories, "Categories")
+            new Filterable(FilterableItemType.Checkbox, SubTaskFilterableRegistrar.Keys.Categories, "Categories")
             {
                 Values = BuildTypeTree(
                     await applicationDbContext

@@ -30,5 +30,5 @@ public record Filterable(FilterableItemType Type, string Field, string DisplayNa
 public enum FilterableItemType
 {
     Unspecified = 0,
-    Checkbox = 1
+    Checkbox = 1,
 }

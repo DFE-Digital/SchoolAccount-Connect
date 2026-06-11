@@ -16,7 +16,7 @@ public sealed class FilterableItemBuilder
         _displayValue = displayValue;
         _value = value;
     }
-    
+
     public static FilterableItemBuilder AFilterItem(string displayValue, string value)
     {
         return new FilterableItemBuilder(displayValue, value);
@@ -44,7 +44,7 @@ public sealed class FilterableItemBuilder
         _count = count;
         return this;
     }
-    
+
     public FilterableItem Build()
     {
         return new FilterableItem

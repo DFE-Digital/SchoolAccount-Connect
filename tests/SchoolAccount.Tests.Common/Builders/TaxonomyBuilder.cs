@@ -22,7 +22,7 @@ public sealed class TaxonomyBuilder
     private TaxonomyGroupingEntity? _taxonomyGrouping;
 
     private List<TagBuilder> _tags = [];
-    
+
     public static TaxonomyBuilder ATaxonomy() => new();
 
     public TaxonomyBuilder WithId(int id)
@@ -90,7 +90,7 @@ public sealed class TaxonomyBuilder
 
         ArgumentNullException.ThrowIfNull(_name);
         ArgumentNullException.ThrowIfNull(_taxonomyName);
-        
+
         var taxonomy = new TaxonomyEntity
         {
             Id = _id.Value,
@@ -109,7 +109,7 @@ public sealed class TaxonomyBuilder
             tag.WithTaxonomy(taxonomy, true);
             taxonomy.Tags.Add(tag.Build());
         }
-        
+
         return taxonomy;
     }
 
