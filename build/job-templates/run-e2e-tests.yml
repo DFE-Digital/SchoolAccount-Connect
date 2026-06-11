@@ -42,7 +42,7 @@ jobs:
       - task: AzureCLI@2
         displayName: 'Add Agent IP to App Service Allow list'
         inputs:
-          azureSubscription: ${{ parameters.azureSubscription }}
+          azureSubscription: "$(AzureSubscription)"
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |
