@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: EnvironmentDisplayName
     type: string
+  - name: AzureSubscription
+    type: string
 
 jobs:
   - deployment: Deploy_to_${{ parameters.Environment }}
@@ -12,15 +14,11 @@ jobs:
       runOnce:
         deploy:
           steps:
-            - script: |
-                echo "AzureSubscription variable = $(AzureSubscription)"
-              displayName: 'Debug AzureSubscription value'
-
             - task: AzureResourceManagerTemplateDeployment@2
               displayName: Deploy infrastructure
               enabled: true
               inputs:
-                azureSubscription: '$(AzureSubscription)'
+                azureSubscription: '${{ parameters.AzureSubscription }}'
                 resourceGroupName: '$(sharedResourceGroup)'
                 location: 'West Europe'
                 csmFile: '$(Pipeline.Workspace)/saConnect.ArmTemplates.shared/template.json'
@@ -30,7 +28,7 @@ jobs:
               displayName: Deploy web app to staging slot
               enabled: true
               inputs:
-                azureSubscription: '$(AzureSubscription)'
+                azureSubscription: '${{ parameters.AzureSubscription }}'
                 appType: webApp
                 appName: '$(schoolAccountConnectAppServiceName)'
                 package: '$(Pipeline.Workspace)/drop/SchoolAccount.Web.Connect.zip'
@@ -42,7 +40,7 @@ jobs:
               displayName: Swap staging to production
               enabled: true
               inputs:
-                azureSubscription: '$(AzureSubscription)'
+                azureSubscription: '${{ parameters.AzureSubscription }}'
                 Action: 'Swap Slots'
                 WebAppName: '$(schoolAccountConnectAppServiceName)'
                 ResourceGroupName: '$(sharedResourceGroup)'
