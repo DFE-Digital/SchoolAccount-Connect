@@ -65,30 +65,22 @@
                 @establishment.PhaseOfEducation?.Name.ToSentence(true)
             </dd>
         </div>
-        @*<div class="govuk-summary-list__row">
+        <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                Number of Pupils
+                Authority
             </dt>
             <dd class="govuk-summary-list__value">
-                @Model.NumberOfPupils
+                @establishment.LocalAuthority?.Name.ToSentence(true)
             </dd>
         </div>
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                Percentage Eligible for Free School Meals (6 years)
+                Region
             </dt>
             <dd class="govuk-summary-list__value">
-                @Model.PercentageEligibleForFsm
+                @establishment.Region?.Name.ToSentence(true)
             </dd>
         </div>
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Percentage Free School Meals
-            </dt>
-            <dd class="govuk-summary-list__value">
-                @Model.PercentageFsm %
-            </dd>
-        </div>*@
     </dl>
     
     <h3 class="govuk-heading govuk-!-margin-bottom-1 @sectionSplitterClass">Conditions</h3>

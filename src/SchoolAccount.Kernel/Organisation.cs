@@ -65,7 +65,7 @@ public class Organisation
             Region = establishment.Address is not null
                 ? new IdName<string>
                 {
-                    Name = establishment.Address.Locality
+                    Name = establishment.Address.County
                 }
                 : null,
             LocalAuthority = new IdCodeName<Guid, string>

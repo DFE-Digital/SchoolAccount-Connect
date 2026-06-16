@@ -24,6 +24,9 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
         Data = organisation;
         
         PhaseOfEducation = organisation.PhaseOfEducation;
+        Region = organisation.Region;
+        LocalAuthority = organisation.LocalAuthority;
+        
         Category = organisation.Category;
         Establishment = organisation.Establishment;
 
@@ -44,6 +47,8 @@ public class EstablishmentOrganisation(string ukrpn, string name) : IOrganisatio
     public object? Data { get; }
     
     public IdName<int>? PhaseOfEducation { get; set; }
+    public IdName<string>? Region { get; set; }
+    public IdCodeName<Guid, string>? LocalAuthority { get; set; }
 
     public Collection<EstablishmentCondition> Conditions { get; init; } = [];
 }
