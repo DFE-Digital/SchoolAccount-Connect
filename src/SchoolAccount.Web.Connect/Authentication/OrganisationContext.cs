@@ -168,6 +168,8 @@ public class OrganisationContext : IOrganisationContext
             };
         }
     }
+    
+    public IOrganisation Current => Impersonation ?? Organisation;
 
     public Task<bool> IsValid()
     {
@@ -188,14 +190,14 @@ public class OrganisationContext : IOrganisationContext
             _ => organisation?.Establishment switch
             {
                 EstablishmentType.AcademyConverter
-                or EstablishmentType.AcademySponsorLed
                 or EstablishmentType.AcademyAlternativeProvisionConverter
-                or EstablishmentType.AcademyAlternativeProvisionSponsorLed
                 or EstablishmentType.FreeSchools
                 or EstablishmentType.FreeSchoolsAlternativeProvision => SchoolType.Academy,
-
-                EstablishmentType.AcademySpecialConverter
+                
+                EstablishmentType.AcademySponsorLed
                 or EstablishmentType.AcademySpecialSponsorLed
+                or EstablishmentType.AcademyAlternativeProvisionSponsorLed
+                or EstablishmentType.AcademySpecialConverter
                 or EstablishmentType.FreeSchoolsSpecial => SchoolType.AcademySpecial,
 
                 _ => SchoolType.Unknown,
@@ -207,10 +209,10 @@ public class OrganisationContext : IOrganisationContext
     {
         var response = new Dictionary<string, SchoolType>
         {
-            { Organisation.Ukrpn, DetermineSchoolType(Organisation) }
+            { Current.Ukrpn, DetermineSchoolType(Current) }
         };
 
-        if (Organisation is TrustOrganisation trust)
+        if (Current is TrustOrganisation trust)
         {
             foreach (var establishment in trust.Establishments)
             {
