@@ -57,8 +57,8 @@ public class SubTaskFilterableFactory(IApplicationDbContext applicationDbContext
             {
                 Values = BuildTypeTree(
                     await applicationDbContext
-                        .Types.Where(TypeSpecifications.OnlyActiveHubTypes())
-                        .Where(TypeSpecifications.TopLevelOnly())
+                        .Types.Where(TypeEntitySpecifications.OnlyActiveHubTypes())
+                        .Where(TypeEntitySpecifications.TopLevelOnly())
                         .ToListAsync(),
                     byTypes: byTypes
                 ),

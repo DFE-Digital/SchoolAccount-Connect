@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SchoolAccount.Application.Common;
 using X.PagedList;
 
 namespace SchoolAccount.Application.Extensions;
@@ -15,7 +16,8 @@ public static class PagedListExtensions
         return new StaticPagedList<T>(query, pageNumber, pageSize, totalCount);
     }
 
-    public static async Task<IPagedList<T>> PaginateAsync<T>(
+    //[Obsolete("Use the new PaginateAsync method")]
+    public static async Task<IPagedList<T>> PaginateAsyncOld<T>(
         this IQueryable<T> query,
         int pageSize,
         int pageNumber,
@@ -27,10 +29,21 @@ public static class PagedListExtensions
         return paginated.ToStaticPagedList(pageNumber, pageSize, count);
     }
 
-    public static IPagedList<T> PaginateForExtraItem<T>(this IEnumerable<T> source, int pageSize, int pageNumber)
+    public static async Task<PagedResult<T>> PaginateAsync<T>(
+        this IQueryable<T> query,
+        int pageSize,
+        int pageNumber,
+        CancellationToken cancellationToken = default
+    )
     {
-        var list = source.ToList();
-        var paginated = list.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToList();
-        return paginated.ToStaticPagedList(pageNumber, pageSize, list.Count);
+        var count = await query.CountAsync(cancellationToken);
+        var paginated = await query.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync(cancellationToken);
+        return new PagedResult<T>
+        {
+            Items = paginated,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = count,
+        };
     }
 }

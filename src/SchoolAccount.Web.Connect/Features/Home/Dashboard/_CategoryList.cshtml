@@ -1,0 +1,34 @@
+@using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Features.Shared
+@using SchoolAccount.Web.Connect.Features.Shared.ListItem
+@model SchoolAccount.Web.Connect.Features.Home.Dashboard.DashboardViewModel
+
+<h2 class="govuk-heading-m govuk-!-padding-top-0 govuk-!-margin-bottom-1">Explore categories</h2>
+<p class="govuk-body-m govuk-!-margin-bottom-1">View required tasks and optional guidance by category.</p>
+
+@if (Model.NoCategoriesFound)
+{
+    <li class="govuk-task-list__item">
+        <p class="govuk-body">No tasks found for the category.</p>
+    </li>
+}
+else
+{
+    <ul class="govuk-task-list">
+        <partial name="@PartialViewAddressConstants.ListItem"
+                 model="@(new ListItemViewModel("All tasks", RouteConstants.Task.AllTasks))"/>
+        @foreach (var category in Model.Categories)
+        {
+            <partial name="@PartialViewAddressConstants.ListItem" model=@category/>
+        }
+    </ul>
+}
+
+@if (Model.DisplayCategoryCallToAction)
+{
+    <div class="govuk-body">
+        <a class="govuk-link" asp-controller="CategoryList" asp-action="GetParentCategories">See the full list of
+            categories</a>
+        <partial name="@PartialViewAddressConstants.Arrow"/>
+    </div>
+}

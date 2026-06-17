@@ -66,6 +66,8 @@ public sealed class TaskEntityConfiguration : IEntityTypeConfiguration<TaskEntit
                 j =>
                 {
                     j.HasKey(e => e.Id);
+                    j.Property(e => e.TypeId).HasColumnName("TypeId");
+                    j.Property(e => e.TaskId).HasColumnName("TaskId");
                     j.ToTable(Mapping.Type, SchemaConstants.Transactional);
                 }
             );

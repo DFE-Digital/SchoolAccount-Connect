@@ -1,0 +1,39 @@
+﻿@model SchoolAccount.Web.Connect.Features.Shared.ListItem.ListItemViewModel
+
+<li class="govuk-task-list__item govuk-task-list__item--with-link">
+    <div class="govuk-task-list__name-and-hint">
+        @if (Model is { HasUrl: true, OpenInNewTab: true })
+        {
+            <a class="govuk-link govuk-task-list__link"
+               href="@Model.Url"
+               target="_blank"
+               rel="noopener noreferrer">
+                @Model.Name
+            </a>
+        }
+        else if (Model is { HasUrl: true })
+        {
+            <a class="govuk-link govuk-task-list__link" href="@Model.Url">
+                @Model.Name
+            </a>
+        }
+        else
+        {
+            <p class="govuk-body">@Model.Name</p>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <div class="govuk-task-list__hint">
+                @Model.Description
+            </div>
+        }
+    </div>
+
+    @if (Model is { HasUrl: true })
+    {
+        <div class="govuk-task-list__status">
+            <partial name="SVG/ChevronRight"/>
+        </div>
+    }
+</li>

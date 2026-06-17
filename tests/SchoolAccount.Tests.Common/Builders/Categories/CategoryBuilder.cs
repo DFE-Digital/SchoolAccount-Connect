@@ -29,6 +29,12 @@ public sealed class CategoryBuilder
         return this;
     }
 
+    public CategoryBuilder WithDisplayName(string displayName)
+    {
+        _displayName = displayName;
+        return this;
+    }
+
     public CategoryBuilder WithTagName(string tagName)
     {
         _tagName = tagName;
@@ -47,6 +53,12 @@ public sealed class CategoryBuilder
         return this;
     }
 
+    public CategoryBuilder WithTask(TaskBuilder builder)
+    {
+        _tasks.Add(builder.Build());
+        return this;
+    }
+
     public CategoryBuilder WithTasks(params TaskBuilder[] builders)
     {
         foreach (var builder in builders)
@@ -57,10 +69,25 @@ public sealed class CategoryBuilder
         return this;
     }
 
-    public CategoryBuilder WithChildren(CategoryBuilder builder)
+    public CategoryBuilder WithChild(CategoryBuilder builder)
     {
         _children.Add(builder.Build());
         return this;
+    }
+
+    public CategoryBuilder WithChildren(params CategoryBuilder[] builders)
+    {
+        foreach (var b in builders)
+        {
+            _children.Add(b.Build());
+        }
+
+        return this;
+    }
+
+    public static implicit operator TypeEntity(CategoryBuilder builder)
+    {
+        return builder.Build();
     }
 
     public TypeEntity Build()
@@ -69,8 +96,8 @@ public sealed class CategoryBuilder
         {
             Id = _id,
             Name = _name,
-            TagName = _tagName,
             DisplayName = _displayName,
+            TagName = _tagName,
             Description = _description,
             HubViewDescription = _hubViewDescription,
         };

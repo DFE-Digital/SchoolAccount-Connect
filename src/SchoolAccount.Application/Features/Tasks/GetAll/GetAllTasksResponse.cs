@@ -1,11 +1,14 @@
+using SchoolAccount.Application.Common;
 using SchoolAccount.Domain.Common;
-using X.PagedList;
 
 namespace SchoolAccount.Application.Features.Tasks.GetAll;
 
-public sealed record GetAllTasksResponse(IPagedList<GetAllTasksResponseTasks> Tasks);
+public sealed record GetAllTasksResponse
+{
+    public PagedResult<GetAllTasksResponseTask> Tasks { get; init; } = new();
+};
 
-public sealed record GetAllTasksResponseTasks
+public sealed record GetAllTasksResponseTask
 {
     public long Id { get; init; }
 

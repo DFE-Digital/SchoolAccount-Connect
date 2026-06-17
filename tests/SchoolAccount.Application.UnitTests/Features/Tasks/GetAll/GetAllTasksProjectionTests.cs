@@ -9,7 +9,7 @@ namespace SchoolAccount.Application.UnitTests.Features.Tasks.GetAll;
 
 public class GetAllTasksProjectionTests
 {
-    private readonly Func<TaskEntity, GetAllTasksResponseTasks> _project = GetAllTasksProjection
+    private readonly Func<TaskEntity, GetAllTasksResponseTask> _project = GetAllTasksProjection
         .ToGetAllTasksResponseTasks()
         .Compile();
 
@@ -106,7 +106,7 @@ public class GetAllTasksProjectionTests
         result
             .Should()
             .BeEquivalentTo(
-                new GetAllTasksResponseTasks
+                new GetAllTasksResponseTask
                 {
                     Id = 99,
                     Name = "Corporation Tax Return",

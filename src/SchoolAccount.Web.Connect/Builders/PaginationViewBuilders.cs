@@ -1,3 +1,4 @@
+using SchoolAccount.Application.Common;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models.Interfaces;
 using SchoolAccount.Web.Connect.Models.Shared;

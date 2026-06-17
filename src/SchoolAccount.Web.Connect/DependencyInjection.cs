@@ -17,10 +17,6 @@ using SchoolAccount.Kernel.Cookie;
 using SchoolAccount.Web.Connect.Authentication;
 using SchoolAccount.Web.Connect.Authentication.Attributes;
 using SchoolAccount.Web.Connect.Authentication.SignIn;
-using SchoolAccount.Web.Connect.Builders;
-using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
-using SchoolAccount.Web.Connect.Builders.Categories;
-using SchoolAccount.Web.Connect.Builders.Shared;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Filters;
 using SchoolAccount.Web.Connect.Infrastructure;
@@ -54,7 +50,6 @@ internal static class DependencyInjection
         services.AddApplicationTelemetry(configurationManager, environment, bootstrapLogger);
         services.AddRequestGates();
         services.AddAppInsightsFilter();
-        services.AddViewBuilders();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
         services.AddScoped<IRequestContext, RequestContext>();
@@ -211,15 +206,5 @@ internal static class DependencyInjection
     private static void AddAppInsightsFilter(this IServiceCollection services)
     {
         services.AddScoped<AppInsightsFilter>();
-    }
-
-    private static void AddViewBuilders(this IServiceCollection services)
-    {
-        services.AddScoped<DashboardViewBuilder>();
-        services.AddScoped<CalendarOfItemsViewBuilder>();
-        services.AddScoped<CategoryHubViewBuilder>();
-        services.AddScoped<CategoryListViewBuilder>();
-        services.AddScoped<BasicPageViewBuilder>();
-        services.AddScoped<TaskSearchCategoryHubViewBuilder>();
     }
 }

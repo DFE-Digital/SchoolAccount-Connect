@@ -1,0 +1,27 @@
+﻿@using SchoolAccount.Web.Connect
+@using SchoolAccount.Web.Connect.Features.Shared
+@model SchoolAccount.Web.Connect.Features.Categories.CategoryHub.CategoryHubViewModel
+@{
+    ViewData["Title"] = "Explore categories";
+}
+
+@section PageHeading{
+    <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Name</h1>
+    <p class="govuk-body">@Model.HubViewDescription</p>
+}
+
+<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Tasks"/>
+
+@if (Model.IsAcademyTrustHandbookCategory)
+{
+    @section RightSide{
+        <h2 class="govuk-heading-s govuk-!-padding-top-1 govuk-!-margin-bottom-3">
+            Academy trust handbook
+        </h2>
+
+        <a href="@RouteConstants.AcademyTrustHandbook"
+           class="govuk-link govuk-link--no-visited-state govuk-body">
+            Academy trust handbook
+        </a>
+    }
+}

@@ -1,0 +1,13 @@
+﻿@using SchoolAccount.Web.Connect.Features.Shared
+@model SchoolAccount.Web.Connect.Features.Tasks.Search.SearchTasksViewModel
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section PageHeading{
+    <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Heading</h1>
+
+    <p class="govuk-body">@Model.Description</p>
+}
+
+<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Tasks"/>

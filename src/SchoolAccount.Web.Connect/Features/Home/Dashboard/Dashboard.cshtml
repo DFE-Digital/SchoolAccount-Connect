@@ -1,0 +1,17 @@
+@model SchoolAccount.Web.Connect.Features.Home.Dashboard.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+@section PageHeading{
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Welcome to DfE Connect</h1>
+    <p class="govuk-body-l govuk-!-margin-bottom-6">
+        Manage your tasks, access services and find related guidance
+        to help you run your school and work with us.
+    </p>
+}
+
+<partial name="~/Features/Home/Dashboard/_Calendar.cshtml" model="@Model"/>
+<partial name="SVG/DividerLine"/>
+<partial name="~/Features/Home/Dashboard/_CategoryList.cshtml" model="@Model"/>

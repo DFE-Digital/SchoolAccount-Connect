@@ -101,24 +101,4 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
 
         return Build(options, items, currentUri);
     }
-
-    public CalendarOfItemsViewModel BuildForDashboard(CalendarOfItemsPagedResult items, Uri currentUri)
-    {
-        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
-
-        var options = new CalendarOfItemViewOptions
-        {
-            ViewMode = CalendarOfItemsViewModes.Custom | CalendarOfItemsViewModes.Standalone,
-            Tabs = [],
-            Title = "Upcoming tasks",
-            Description = "These are the next required tasks that you must complete for your school.",
-            GroupingFunction = x => x.SortDate?.ToString("MMMMM yyyy", null)!,
-            NoResultsMessage = "No results found",
-            LastUpdatedMessage = lastUpdatedDate is not null
-                ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"
-                : string.Empty,
-        };
-
-        return Build(options, items, currentUri);
-    }
 }

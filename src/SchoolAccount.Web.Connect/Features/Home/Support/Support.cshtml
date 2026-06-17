@@ -1,0 +1,198 @@
+﻿@using SchoolAccount.Web.Connect.Features.Home
+@using SchoolAccount.Web.Connect.Features.Shared
+@using SchoolAccount.Web.Connect.Features.Shared.ListItem
+
+@{
+    ViewData["Title"] = "Support";
+}
+
+@section PageHeading{
+    <h1 class="govuk-heading-l govuk-!-padding-top-0">
+        Support
+    </h1>
+    <p class="govuk-body">
+        Resources and guidance that can help guide your decisions or provide support with your mandatory tasks.
+        All links open in new tabs.
+    </p>
+}
+
+<div class="govuk-grid-row" id="networks-section">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">
+            Networks
+        </h2>
+        <p class="govuk-body">
+            Networks help professionals connect and share information with each other. There are many school business
+            professional networks that provide support on work activities, including finance and buying for schools.
+        </p>
+
+        <ul class="govuk-task-list">
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         "Find, join or create a network",
+                         "https://www.gov.uk/government/publications/join-or-create-a-network-for-school-business-professionals",
+                         true
+                     )'
+            />
+        </ul>
+    </div>
+</div>
+
+<div class="govuk-grid-row" id="data-and-insights-section">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">
+            Data and insights
+        </h2>
+        <p class="govuk-body">Get data and insights that can help you with finance plans and decisions.</p>
+
+        <ul class="govuk-task-list">
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Access the Financial Benchmarking and Insights Tool",
+                         url: "https://financial-benchmarking-and-insights-tool.education.gov.uk",
+                         openInNewTab: true,
+                         description: "Compare your school or trust’s income and expenses with other schools in England."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Compare financial management systems",
+                         url: "https://www.gov.uk/government/publications/choosing-a-trusts-financial-management-system-fms/guide-to-the-fms-comparison-matrix",
+                         openInNewTab: true,
+                         description: "Use DfE’s financial management system (FMS) comparison matrix to choose the best FMS for you."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "View your education data",
+                         url: "https://viewyourdata.education.gov.uk/",
+                         openInNewTab: true,
+                         description: "Financial insights for your school as part of the education data service."
+                     )'
+            />
+        </ul>
+    </div>
+</div>
+
+<div class="govuk-grid-row" id="statutory-guidance-section">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">
+            Statutory guidance
+        </h2>
+        <p class="govuk-body">Read about statutory guidance to find out what you must do to comply with the law.</p>
+
+        <ul class="govuk-task-list">
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Academy Trust Handbook",
+                         url: "https://www.gov.uk/guidance/academy-trust-handbook",
+                         openInNewTab: true,
+                         description: "An overarching framework academy trusts must comply with as a condition of their funding agreement."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Keeping children safe in education",
+                         url: "https://www.gov.uk/government/publications/keeping-children-safe-in-education--2",
+                         openInNewTab: true,
+                         description: "Statutory guidance for schools on safeguarding children and safer recruitment."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Public procurement policy",
+                         url: "https://www.gov.uk/guidance/public-sector-procurement-policy",
+                         openInNewTab: true,
+                         description: "Directives, regulations, policies and guidance relating to the procurement of supplies, services and works for the public sector."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "School admissions code",
+                         url: "https://www.gov.uk/government/publications/school-admissions-code--2",
+                         openInNewTab: true,
+                         description: "Statutory guidance schools must follow when carrying out duties relating to admissions."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "SEND code of practice",
+                         url: "https://www.gov.uk/government/publications/send-code-of-practice-0-to-25",
+                         openInNewTab: true,
+                         description: "Guidance on the special educational needs and disability (SEND) system for children and young people."
+                     )'
+            />
+        </ul>
+    </div>
+</div>
+
+<div class="govuk-grid-row" id="advice-support-section">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">
+            Advice and support
+        </h2>
+        <p class="govuk-body">
+            Read advice and support that could help with the work you do as a school leader, academy
+            trust professional or school business manager.
+        </p>
+
+        <ul class="govuk-task-list">
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Buying for schools",
+                         url: "https://www.gov.uk/guidance/get-help-buying-for-schools",
+                         openInNewTab: true,
+                         description: "Get impartial help and advice from procurement specialists."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "DfE help centre",
+                         url: "https://customerhelp.education.gov.uk/hc/en-gb/categories/360002506639-Articles",
+                         openInNewTab: true,
+                         description: "Help for using DfE and ESFA services."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Financial good practice guides for trusts",
+                         url: "https://www.gov.uk/government/publications/academy-trust-financial-management-good-practice-guides",
+                         openInNewTab: true,
+                         description: "Good practice guidance for academy trust financial management and assurance."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Funding allocation",
+                         url: "https://www.gov.uk/government/publications/estimating-your-academy-funding-allocation",
+                         openInNewTab: true,
+                         description: "A guide for schools opening as academies to estimate their revenue funding."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Integrated curriculum and financial planning (ICFP)",
+                         url: "https://www.gov.uk/guidance/integrated-curriculum-and-financial-planning-icfp",
+                         openInNewTab: true,
+                         description: "Guidance on how you can use ICFP to create the best curriculum for pupils with available funding."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "Risk protection arrangement",
+                         url: "https://www.gov.uk/guidance/the-risk-protection-arrangement-rpa-for-schools",
+                         openInNewTab: true,
+                         description: "The risk protection arrangement (RPA) is an alternative to commercial insurance. Joining might save you time and money."
+                     )'
+            />
+            <partial name="@PartialViewAddressConstants.ListItem" model='new ListItemViewModel
+                     (
+                         name: "School resource management advisers",
+                         url: "https://www.gov.uk/government/publications/the-school-resource-management-advisers-srma-programme",
+                         openInNewTab: true,
+                         description: "A school resource management adviser can help you manage school finances and resources."
+                     )'
+            />
+        </ul>
+    </div>
+</div>

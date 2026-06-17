@@ -1,0 +1,12 @@
+﻿@using SchoolAccount.Web.Connect.Features.Shared
+@model SchoolAccount.Web.Connect.Features.Categories.CategoryList.CategoryListViewModel
+@{
+    ViewData["Title"] = "Explore categories";
+}
+
+@section PageHeading {
+    <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Title</h1>
+    <p class="govuk-body">@Model.Description</p>
+}
+
+<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Categories"/>

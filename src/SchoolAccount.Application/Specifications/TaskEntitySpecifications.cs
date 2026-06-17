@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.SchoolTypes;
 using SchoolAccount.Domain.Tasks;
@@ -37,5 +38,10 @@ public static class TaskEntitySpecifications
     public static Expression<Func<TaskEntity, bool>> InCategory(int categoryId)
     {
         return task => task.Types.Any(type => type.Id == categoryId);
+    }
+
+    public static Expression<Func<TaskEntity, bool>> ContainsTerm(string term)
+    {
+        return task => EF.Functions.Like(task.Name, term) || EF.Functions.Like(task.Description ?? string.Empty, term);
     }
 }

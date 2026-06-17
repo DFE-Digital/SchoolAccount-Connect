@@ -1,0 +1,47 @@
+@model SchoolAccount.Web.Connect.Features.Home.Dashboard.DashboardViewModel
+
+<h2 class="govuk-heading-m @(Model.HasCalendarLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">Upcoming tasks</h2>
+<p class="govuk-body-m @(Model.HasCalendarLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">These are the next required tasks that you must complete for your school.</p>
+
+@if (Model.HasCalendarLastUpdatedMessage)
+{
+    <h3 class="govuk-caption-m">@Model.CalendarLastUpdatedMessage</h3>
+}
+
+<ul class="govuk-task-list">
+    @if (Model.HasCalendarItems)
+    {
+        foreach (var group in Model.CalendarGroups)
+        {
+            <li class="govuk-task-list__item dfe-task-list__group">
+                <div class="govuk-task-list__name-and-hint">
+                    <strong>@group.MonthLabel</strong>
+                </div>
+            </li>
+
+            foreach (var item in group.Items)
+            {
+                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                    <div class="govuk-task-list__name-and-hint">
+                        <a class="govuk-link govuk-task-list__link" href="@item.Url">@item.Name</a>
+                        <div class="govuk-task-list__hint">@item.Description</div>
+                        <div class="govuk-task-list__hint">
+                            <strong>@item.DateText</strong>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    }
+    else
+    {
+        <li class="govuk-task-list__item">
+            <p class="govuk-body">No results found</p>
+        </li>
+    }
+</ul>
+
+<div class="govuk-body">
+    <a class="govuk-link" asp-controller="Calendar" asp-action="Index">See the full calendar of tasks</a>
+    <partial name="SVG/ArrowRight"/>
+</div>

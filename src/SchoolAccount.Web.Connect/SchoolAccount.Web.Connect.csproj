@@ -42,5 +42,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Login\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Category\AllTasks.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Category\CategoryHub.cshtml" />
   </ItemGroup>
 </Project>

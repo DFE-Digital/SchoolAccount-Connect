@@ -1,14 +1,9 @@
+using SchoolAccount.Application.Common;
 using SchoolAccount.Domain.Common;
-using X.PagedList;
 
 namespace SchoolAccount.Application.Features.Categories.GetCategoryHub;
 
-public sealed record GetCategoryHubResponse(
-    GetCategoryHubResponseCategory Category,
-    IPagedList<GetCategoryHubResponseTasks> Tasks
-);
-
-public sealed record GetCategoryHubResponseCategory
+public sealed record GetCategoryHubResponse
 {
     public int Id { get; init; }
 
@@ -23,6 +18,8 @@ public sealed record GetCategoryHubResponseCategory
     public GetCategoryHubResponseTypeGrouping? TypeGrouping { get; init; }
 
     public IReadOnlyCollection<GetCategoryHubResponseChildren> Children { get; init; } = [];
+
+    public PagedResult<GetCategoryHubResponseTasks> Tasks { get; init; } = new();
 }
 
 public sealed record GetCategoryHubResponseTypeGrouping

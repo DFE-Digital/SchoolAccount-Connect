@@ -1,4 +1,4 @@
-﻿@using SchoolAccount.Web.Connect.Features.Tasks
+﻿@using SchoolAccount.Web.Connect.Features.Shared
 @model SchoolAccount.Web.Connect.Features.Tasks.GetAll.GetAllTasksViewModel
 @{
     ViewData["Title"] = Model.Heading;
@@ -10,4 +10,4 @@
     <p class="govuk-body">@Model.HubViewDescription</p>
 }
 
-<partial name="@ViewAddressConstants.Tasks.Partials.TaskList" model="@Model"/>
+<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Tasks"/>

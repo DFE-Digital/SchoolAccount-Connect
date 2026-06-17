@@ -33,4 +33,19 @@ public static class SubTaskEntitySpecifications
     {
         return s => s.WorkflowState == WorkflowState.Published || s.WorkflowState == WorkflowState.Expired;
     }
+
+    public static Expression<Func<SubTaskEntity, bool>> IsPublished()
+    {
+        return s => s.WorkflowState == WorkflowState.Published;
+    }
+
+    public static Expression<Func<SubTaskEntity, bool>> HasDate()
+    {
+        return s => s.DueDate != null || s.StartDate != null;
+    }
+
+    public static Expression<Func<SubTaskEntity, bool>> WithinDateRange(DateOnly start, DateOnly end)
+    {
+        return s => (s.DueDate ?? s.StartDate) >= start && (s.DueDate ?? s.StartDate) <= end;
+    }
 }

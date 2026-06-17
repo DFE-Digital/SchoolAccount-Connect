@@ -8,5 +8,6 @@
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);NU1900</NoWarn>
   </PropertyGroup>
 </Project>

@@ -1,14 +1,17 @@
 using System.Linq.Expressions;
-using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Application.Common;
 using SchoolAccount.Domain.Types;
 
 namespace SchoolAccount.Application.Features.Categories.GetCategoryHub;
 
 public static class GetCategoryHubProjection
 {
-    public static Expression<Func<TypeEntity, GetCategoryHubResponseCategory>> ToCategoryHubResponseCategory()
+    public static Expression<Func<TypeEntity, GetCategoryHubResponse>> ToCategoryHubResponse(
+        int pageNumber,
+        int pageSize
+    )
     {
-        return x => new GetCategoryHubResponseCategory
+        return x => new GetCategoryHubResponse
         {
             Id = x.Id,
             Name = x.Name,
@@ -30,17 +33,23 @@ public static class GetCategoryHubProjection
             Children = x
                 .Children.Select(c => new GetCategoryHubResponseChildren { Id = c.Id, Name = c.DisplayName })
                 .ToArray(),
-        };
-    }
-
-    public static Expression<Func<TaskEntity, GetCategoryHubResponseTasks>> ToCategoryHubResponseTasks()
-    {
-        return x => new GetCategoryHubResponseTasks
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Description = x.Description,
-            Requirement = x.Requirement,
+            Tasks = new PagedResult<GetCategoryHubResponseTasks>
+            {
+                Items = x
+                    .Tasks.Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(t => new GetCategoryHubResponseTasks
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        Description = t.Description,
+                        Requirement = t.Requirement,
+                    })
+                    .ToArray(),
+                TotalCount = x.Tasks.Count,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+            },
         };
     }
 }

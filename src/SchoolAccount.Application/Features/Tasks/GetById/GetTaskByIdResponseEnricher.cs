@@ -1,11 +1,11 @@
-using SchoolAccount.Application.Features.Tasks.Common.Labels;
+using SchoolAccount.Application.Common;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
 public sealed class GetTaskByIdResponseEnricher(IDateTimeProvider dateTimeProvider)
 {
-    private readonly SubTaskAvailabilityLabel _subTaskAvailabilityLabel = new(dateTimeProvider);
+    private readonly AvailabilityLabel _availabilityLabel = new(dateTimeProvider);
 
     public GetTaskByIdResponse Enrich(GetTaskByIdResponse getTaskByIdResponse)
     {
@@ -16,13 +16,13 @@ public sealed class GetTaskByIdResponseEnricher(IDateTimeProvider dateTimeProvid
     {
         return subtask with
         {
-            AvailabilityLabel = _subTaskAvailabilityLabel.Generate(
+            AvailabilityLabel = _availabilityLabel.Generate(
                 subtask.WorkflowState,
                 subtask.StartDate,
                 subtask.StartDateIsExact,
                 subtask.DueDate
             ),
-            DueDateLabel = SubTaskDueDateLabel.Generate(subtask.DueDate, subtask.DueDateIsExact),
+            DueDateLabel = Common.DueDateLabel.Generate(subtask.DueDate, subtask.DueDateIsExact),
         };
     }
 }

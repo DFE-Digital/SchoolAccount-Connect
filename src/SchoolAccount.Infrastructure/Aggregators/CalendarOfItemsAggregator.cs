@@ -112,7 +112,7 @@ public class CalendarOfItemsAggregator(
 
         var result = await query
             .WithSorting(criteria.ViewModes, criteria.SortMode, criteria.CustomOrderByFunction)
-            .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
+            .PaginateAsyncOld(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
         var filters = criteria.IncludeFilterOptions
             ? (await ProduceAndCorrelateFilter(criteria, query)).ToCollection()

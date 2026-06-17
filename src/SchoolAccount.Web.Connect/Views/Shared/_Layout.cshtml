@@ -5,7 +5,6 @@
 @using SchoolAccount.Kernel
 @using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect
-@using SchoolAccount.Web.Connect.Authentication
 @using SchoolAccount.Web.Connect.Extensions
 @using SchoolAccount.Web.Connect.Models.Breadcrumb
 @inject IFeatureManager FeatureManager
@@ -109,6 +108,15 @@
 }
 
 @await RenderSectionAsync("Header", false)
+
+@if (IsSectionDefined("SuccessBanner"))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @await RenderSectionAsync("SuccessBanner", required: false)
+        </div>
+    </div>
+}
 
 @if (IsSectionDefined("PageHeading"))
 {

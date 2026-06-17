@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Http
+@using SchoolAccount.Web.Connect.Extensions
+@using X.PagedList
+@model IPagedList
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var query = HttpContextAccessor.HttpContext!.Request.Query
+        .Where(q => q.Key != "pageNumber")
+        .Select(q => $"{q.Key}={q.Value}")
+        .ToList();
+
+    string BuildUrl(int page)
+    {
+        var parts = query.Append($"pageNumber={page}");
+        return "?" + string.Join("&", parts);
+    }
+}
+
+@if (Model.PageCount > 1)
+{
+    <govuk-pagination>
+        @if (Model.HasPreviousPage)
+        {
+            <govuk-pagination-previous href="@BuildUrl(Model.PageNumber - 1)"/>
+        }
+
+        @for (var page = 1; page <= Model.PageCount; page++)
+        {
+            var p = page;
+            if (Model.ShouldShowPage(p))
+            {
+                <govuk-pagination-item current="@Model.IsCurrentPage(p)" href="@BuildUrl(p)">
+                    @(p)
+                </govuk-pagination-item>
+            }
+            else if (Model.ShouldShowEllipsis(p))
+            {
+                <govuk-pagination-ellipsis/>
+            }
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <govuk-pagination-next href="@BuildUrl(Model.PageNumber + 1)"/>
+        }
+    </govuk-pagination>
+}

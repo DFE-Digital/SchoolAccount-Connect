@@ -23,7 +23,7 @@ public class GetCategoryHubHandlerTests
         // Arrange
         var categories = Array.Empty<TypeEntity>().BuildMockDbSet();
         var expectedError = GetCategoryHubErrors.NotFound(999);
-        var query = new GetCategoryHubQuery(999);
+        var query = new GetCategoryHubQuery(999, 1, 10);
 
         await _context.Map(
             x =>

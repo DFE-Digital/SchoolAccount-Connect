@@ -1,6 +1,6 @@
 ﻿@using SchoolAccount.Application.Extensions
 @using SchoolAccount.Web.Connect.Features.Tasks.GetById
-@model SchoolAccount.Web.Connect.Features.Tasks.GetById.TaskViewModel
+@model SchoolAccount.Web.Connect.Features.Tasks.GetById.GetTaskByIdViewModel
 
 <div class="dfe-tabs" aria-label="Task tab view navigation">
         <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
@@ -9,13 +9,13 @@
     <ul class="govuk-tabs__list">
         <li class="govuk-tabs__list-item @(Model.IsUpcomingTasksView ? "govuk-tabs__list-item--selected" : string.Empty)">
             <a class="govuk-tabs__tab"
-               href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.UpcomingTasks })">
+               href="@Url.Action("GetById", "GetTaskById", new { ViewMode = TaskViewMode.UpcomingTasks })">
                 Upcoming tasks
             </a>
         </li>
         <li class="govuk-tabs__list-item @(Model.IsPreviousTasksView ? "govuk-tabs__list-item--selected" : string.Empty)">
             <a class="govuk-tabs__tab"
-               href="@Url.Action("GetById", "Tasks", new { ViewMode = TaskViewMode.PreviousTasks })">
+               href="@Url.Action("GetById", "GetTaskById", new { ViewMode = TaskViewMode.PreviousTasks })">
                 Previous 12 months
             </a>
         </li>

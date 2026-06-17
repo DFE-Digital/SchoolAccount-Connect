@@ -5,9 +5,9 @@ namespace SchoolAccount.Application.Features.Tasks.GetAll;
 
 public static class GetAllTasksProjection
 {
-    public static Expression<Func<TaskEntity, GetAllTasksResponseTasks>> ToGetAllTasksResponseTasks()
+    public static Expression<Func<TaskEntity, GetAllTasksResponseTask>> ToGetAllTasksResponseTasks()
     {
-        return x => new GetAllTasksResponseTasks
+        return x => new GetAllTasksResponseTask
         {
             Id = x.Id,
             Name = x.Name,
