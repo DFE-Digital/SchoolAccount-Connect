@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Aggregators;
+using SchoolAccount.Application.Abstractions.Pipelines;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
@@ -14,13 +15,12 @@ namespace SchoolAccount.Application.Aggregators;
 
 public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQueryAggregator
 {
-    public async Task<Result<GenericQueryPagedResult<TRow>>> Query<TEntity, TRow>(
-        IList<IQueryFactory<TEntity, TRow>> queryFactories,
-        IList<IFilterableFactory> filterableFactories,
+    public async Task<Result<GenericQueryPagedResult<TRow>>> Query<TRow>(
+        IQueryFactoryPipeline<TRow> factoryPipeline,
+        IFilterablePipeline filterPipeline,
         GenericQueryCriteria<TRow> criteria,
         CancellationToken cancellationToken = default
     )
-        where TEntity : IEntity
         where TRow : IQueryRow
     {
         var validator = new QueryAggregatorValidator<TRow>();
@@ -31,9 +31,9 @@ public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQ
             return validation.ToResult<GenericQueryPagedResult<TRow>>();
         }
 
-        ConsolidateFilters(queryFactories, criteria);
+        ConsolidateFilters(factoryPipeline.Factories, criteria);
 
-        var query = queryFactories
+        var query = factoryPipeline.Factories
             .Select(f => f.Query(criteria.Filter, filterRegistry.All))
             .Aggregate((current, next) => current.Union(next))
             .Where(QueryRowSpecifications.IsWithinDateRange<TRow>(criteria.Range));
@@ -46,16 +46,15 @@ public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQ
             new GenericQueryPagedResult<TRow>(
                 criteria,
                 result,
-                await ProduceAndCorrelateFilter(filterableFactories, criteria, query)
+                await ProduceAndCorrelateFilter(filterPipeline.Factories, criteria, query)
             )
         );
     }
 
-    private void ConsolidateFilters<TEntity, TRow>(
-        IEnumerable<IQueryFactory<TEntity, TRow>> factories,
+    private void ConsolidateFilters<TRow>(
+        IEnumerable<IQueryFactory<TRow>> factories,
         GenericQueryCriteria<TRow> criteria
     )
-        where TEntity : IEntity
         where TRow : IQueryRow
     {
         var consumableRegistrars = filterRegistry.Consolidates.Where(x =>

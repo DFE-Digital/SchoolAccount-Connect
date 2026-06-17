@@ -5,10 +5,12 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Factories;
 using SchoolAccount.Application.Features.Shared.Filtering.Filters;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Pipelines;
+using SchoolAccount.Application.Pipelines.Query;
+using SchoolAccount.Application.Pipelines.Filters;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
@@ -16,8 +18,7 @@ namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsO
 
 public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
     IQueryAggregator aggregator,
-    IApplicationDbContext applicationDbContext,
-    IOrganisationContext organisationContext
+    CalendarOfItemsPipeline calendarOfItemsPipeline
 ) : IQueryHandler<GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery, GenericQueryPagedResult<CalendarOfItemsRow>>
 {
     public async Task<Result<GenericQueryPagedResult<CalendarOfItemsRow>>> Handle(
@@ -26,8 +27,8 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
     )
     {
         return await aggregator.Query(
-            [new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)],
-            [new SubTaskFilterableFactory(applicationDbContext)],
+            calendarOfItemsPipeline.Query,
+            calendarOfItemsPipeline.Filters,
             new CalendarOfItemsQueryCriteria
             {
                 Range = query.DetermineDateRange(),

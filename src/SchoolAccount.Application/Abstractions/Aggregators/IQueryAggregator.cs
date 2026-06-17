@@ -1,3 +1,4 @@
+using SchoolAccount.Application.Abstractions.Pipelines;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
@@ -7,12 +8,11 @@ namespace SchoolAccount.Application.Abstractions.Aggregators;
 
 public interface IQueryAggregator
 {
-    Task<Result<GenericQueryPagedResult<TRow>>> Query<TEntity, TRow>(
-        IList<IQueryFactory<TEntity, TRow>> queryFactories,
-        IList<IFilterableFactory> filterableFactories,
+    Task<Result<GenericQueryPagedResult<TRow>>> Query<TRow>(
+        IQueryFactoryPipeline<TRow> factoryPipeline,
+        IFilterablePipeline filterPipeline,
         GenericQueryCriteria<TRow> criteria,
         CancellationToken cancellationToken = default
     )
-        where TEntity : IEntity
         where TRow : IQueryRow;
 }

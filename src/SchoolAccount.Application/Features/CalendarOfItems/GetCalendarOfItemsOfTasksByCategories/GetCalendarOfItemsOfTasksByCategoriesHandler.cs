@@ -1,11 +1,15 @@
+using Microsoft.AspNetCore.Mvc.Filters;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Factories.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Factories;
 using SchoolAccount.Application.Features.Shared.Query.Contracts;
+using SchoolAccount.Application.Pipelines;
+using SchoolAccount.Application.Pipelines.Filters;
+using SchoolAccount.Application.Pipelines.Query;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfTasksByCategories;
@@ -22,8 +26,9 @@ public class GetCalendarOfItemsOfTasksByCategoriesHandler(
     )
     {
         return await aggregator.Query(
-            [new QueryFactoryOfTasksForCalendarOfItems(applicationDbContext, organisationContext)],
-            [],
+            new DynamicQueryPipeline<CalendarOfItemsRow>(
+                new QueryFactoryOfTasksForCalendarOfItems(applicationDbContext, organisationContext)),
+            new EmptyFilterPipeline(),
             new CalendarOfItemsQueryCriteria
             {
                 Range = query.QueryRange,

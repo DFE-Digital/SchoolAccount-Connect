@@ -1,10 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
+using SchoolAccount.Application.Abstractions.Pipelines;
 using SchoolAccount.Application.Aggregators;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Interfaces;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
+using SchoolAccount.Application.Pipelines;
+using SchoolAccount.Application.Pipelines.Filters;
+using SchoolAccount.Application.Pipelines.Query;
 using SchoolAccount.Integration.DfESignIn.Interfaces;
 
 namespace SchoolAccount.Application;
@@ -45,12 +50,15 @@ public static class DependencyInjection
     {
         services.Scan(scan =>
             scan.FromAssembliesOf(typeof(DependencyInjection))
-                .AddClasses(classes => classes.AssignableTo(typeof(IQueryFactory<,>)), publicOnly: false)
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryFactory<>)), publicOnly: false)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
 
         services.AddScoped<IQueryAggregator, GenericQueryAggregator>();
+        services.AddScoped<CalendarOfItemsQueryPipeline>();
+        services.AddScoped<CalendarOfItemsFilterPipeline>();
+        services.AddScoped<CalendarOfItemsPipeline>();
 
         return services;
     }

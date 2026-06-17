@@ -4,10 +4,9 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
-public interface IQueryFactory<TEntity, out TRow>
-    where TEntity : IEntity
+public interface IQueryFactory<out TRow> 
     where TRow : IQueryRow
 {
-    Type TypeBeingRegistered => typeof(TEntity);
+    Type? TypeBeingRegistered { get; }
     IQueryable<TRow> Query(IList<FilterRequest> filter, FieldSelectorMapping mappings);
 }

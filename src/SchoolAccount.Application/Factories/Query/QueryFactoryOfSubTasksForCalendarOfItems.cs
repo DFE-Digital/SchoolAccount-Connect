@@ -6,27 +6,27 @@ using SchoolAccount.Application.Features.Shared.Filtering.Models;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Projections;
 using SchoolAccount.Application.Specifications;
-using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Factories;
+namespace SchoolAccount.Application.Factories.Query;
 
-public class QueryFactoryOfTasksForCalendarOfItems(
+public class QueryFactoryOfSubTasksForCalendarOfItems(
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
-) : IQueryFactory<TaskEntity, CalendarOfItemsRow>
+) : IQueryFactory<CalendarOfItemsRow>
 {
+    public Type TypeBeingRegistered => typeof(SubTaskEntity);
+
     public IQueryable<CalendarOfItemsRow> Query(IList<FilterRequest> filter, FieldSelectorMapping mappings)
     {
         var accessibleTags = applicationDbContext.SchoolTypeTagMappings.AsQueryable();
         return applicationDbContext
-            .Tasks.AsNoTracking()
-            .Include(x => x.SubTasks)
-                .ThenInclude(x => x.TagsSourceMappings)
-            .Include(x => x.TypeTaskMappings)
-            .Where(TaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
-            .Where(TaskEntitySpecifications.IsVisible())
+            .SubTasks.AsNoTracking()
+            .Include(x => x.Task)
+            .Include(x => x.TagsSourceMappings)
+            .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
             .Apply(filter, mappings)
-            .Select(CalendarOfItemsRowProjection.FromTask());
+            .Select(CalendarOfItemsRowProjection.FromSubTask());
     }
 }
