@@ -1,0 +1,14 @@
+﻿classDiagram
+    BasePage <|-- LoginPage
+    LoginPage <|-- DfEConnectLoginPage
+    LoginPage <|-- ManageLoginPage
+    LoginPage : #EmailInput
+    LoginPage : #PasswordInput
+    LoginPage : #NextButton
+    LoginPage : #SignInButton
+    BasePage : #IPage PageContext
+    BasePage: #WaitForPageLoadAsync()
+    BasePage: #TakeScreenshotAsync()
+    LoginPage : +LoginAsync()
+    DfEConnectLoginPage : +LoginAsync()
+    ManageLoginPage : +LoginAsync()

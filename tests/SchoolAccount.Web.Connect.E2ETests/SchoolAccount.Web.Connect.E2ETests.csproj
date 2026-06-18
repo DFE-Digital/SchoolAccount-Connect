@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="PlaywrightTests.DfE.Infrastructure" />
-    <PackageReference Include="PlaywrightTests.DfE.UIMapping" />
+    <ProjectReference Include="..\SchoolAccount.Web.Connect.UIMapping\SchoolAccount.Web.Connect.UIMapping.csproj" />
     <PackageReference Include="PlaywrightTests.DfE.Browsers" />
     <PackageReference Include="PlaywrightTests.GlobalConstants" />
   </ItemGroup>

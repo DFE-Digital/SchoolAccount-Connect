@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AnalysisMode>None</AnalysisMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Playwright.Xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PlaywrightTests.Kernel" />
+    <PackageReference Include="PlaywrightTests.GlobalConstants" />
+  </ItemGroup>
+
+</Project>
