@@ -2,23 +2,27 @@ using AngleSharp.Dom;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
-using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
+using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 using SchoolAccount.Tests.Common.Extensions;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
+public class CalendarOfItemsViewBuilderTests : IClassFixture<SchoolAccountWebApplicationFactory>
 {
-    private readonly HttpServerFixture _fixture;
+    private readonly SchoolAccountWebApplicationFactory _fixture;
+    private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewBuilderTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewBuilderTests(SchoolAccountWebApplicationFactory fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
         _fixture.OutputHelper = outputHelper;
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.Clear();
+        _fixture.HandlerRegistry.Clear();
+        _fixture.HandlerRegistry.Register(_handler);
+        _handler.Clear();
     }
 
     [Fact]
@@ -93,7 +97,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 40);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(10);
 
         // Act
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
@@ -116,7 +120,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, entriesToGenerate);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(pageSize);
+        _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
@@ -132,7 +136,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 5);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(10);
 
         // Act
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
@@ -158,7 +162,7 @@ public class CalendarOfItemsViewBuilderTests : IClassFixture<HttpServerFixture>
         const int numberOfCallToActionRows = 0;
 
         var rows = _generator.GenerateCalendarOfItemsRows(filter, numberToGenerate);
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(10);
         int numberOfItemRows = rows.Count;
         int expectedRows = numberOfItemRows + numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
