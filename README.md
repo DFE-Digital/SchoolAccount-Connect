@@ -7,6 +7,7 @@ interacting with the platform.
 
 - [Clean Architecture](docs/clean-architecture.md) - layers, dependency rules, and code organisation
 - [Coding Standards](docs/coding-standards.md) - coding conventions, CQRS patterns, testing, and repository standards
+- [Instrumentation](docs/instrumentation.md) - logging, metrics, distributed tracing, and analytics events
 - [Project Structure](docs/project-structure.md) - solution layout, feature organisation, and Web.Connect folder conventions
 
 # Getting Started
