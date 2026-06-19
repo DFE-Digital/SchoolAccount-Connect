@@ -1,5 +1,5 @@
-﻿@using SchoolAccount.Web.Connect
-@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+﻿@using static SchoolAccount.Web.Connect.Features.ViewAddressConstants.CalendarOfItems.Partials;
+@model SchoolAccount.Web.Connect.Features.CalendarOfItems.CalendarOfItemsViewModel
 @{
     ViewData["Title"] = Model.Heading;
 }
@@ -19,11 +19,11 @@
     }
 }
 
-<partial name="@ViewAddressConstraints.CalendarOfItems.Widget" model="@Model"/>
+<partial name="@Widget" model="@Model"/>
 
 @section RightSide{
     @if (Model.HasFilters)
     {
-        <partial name="_Filtration" model="Model.Filters"/>
+        <partial name="@Filtration" model="Model.Filters"/>
     }
 }

@@ -4,11 +4,11 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
+using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models.CalendarOfItems;
 using SchoolAccount.Web.Connect.Models.Shared;
 
-namespace SchoolAccount.Web.Connect.Builders.CalendarOfItems;
+namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
 
 public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext)
 {

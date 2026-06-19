@@ -4,12 +4,10 @@ using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Controllers;
+namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
 
 public class CalendarController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
@@ -40,6 +38,6 @@ public class CalendarController(
         var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
         var viewModel = viewBuilder.BuildForPage(result.Value, filter.ViewModes, currentUri);
 
-        return View(viewModel);
+        return View(ViewAddressConstants.CalendarOfItems.Index, viewModel);
     }
 }
