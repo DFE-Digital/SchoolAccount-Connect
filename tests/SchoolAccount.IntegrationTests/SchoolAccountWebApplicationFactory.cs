@@ -35,7 +35,6 @@ public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>
     private void ConfigureTestServices(IServiceCollection services)
     {
         services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
-        services.ReplaceWithSingleton<IFallbackProviderResolver>(x => FallbackProviderResolver);
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
         services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
