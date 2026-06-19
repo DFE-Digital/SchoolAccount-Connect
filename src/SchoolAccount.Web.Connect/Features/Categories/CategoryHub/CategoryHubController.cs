@@ -31,6 +31,6 @@ public sealed class CategoryHubController(IQueryHandler<GetCategoryHubQuery, Get
 
         this.AddBreadcrumb(categoryHubResult.Value.DisplayName);
 
-        return View(ViewAddressConstants.CategoryHub, categoryHubViewModel);
+        return View(ViewAddressConstants.Categories.Hub, categoryHubViewModel);
     }
 }

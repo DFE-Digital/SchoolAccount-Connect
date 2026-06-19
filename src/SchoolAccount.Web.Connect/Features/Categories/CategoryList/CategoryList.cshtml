@@ -1,5 +1,4 @@
-﻿@using SchoolAccount.Web.Connect.Features.Shared
-@model SchoolAccount.Web.Connect.Features.Categories.CategoryList.CategoryListViewModel
+﻿@model SchoolAccount.Web.Connect.Features.Categories.CategoryList.CategoryListViewModel
 @{
     ViewData["Title"] = "Explore categories";
 }
@@ -9,4 +8,4 @@
     <p class="govuk-body">@Model.Description</p>
 }
 
-<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Categories"/>
+<partial name="@PaginatedList" model="@Model.Categories"/>

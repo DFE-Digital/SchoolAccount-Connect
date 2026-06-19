@@ -1,5 +1,4 @@
 ﻿@using SchoolAccount.Web.Connect
-@using SchoolAccount.Web.Connect.Features.Shared
 @model SchoolAccount.Web.Connect.Features.Categories.CategoryHub.CategoryHubViewModel
 @{
     ViewData["Title"] = "Explore categories";
@@ -10,7 +9,7 @@
     <p class="govuk-body">@Model.HubViewDescription</p>
 }
 
-<partial name="@PartialViewAddressConstants.PaginatedList" model="@Model.Tasks"/>
+<partial name="@PaginatedList" model="@Model.Tasks"/>
 
 @if (Model.IsAcademyTrustHandbookCategory)
 {

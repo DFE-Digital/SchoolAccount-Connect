@@ -1,4 +1,3 @@
-@using SchoolAccount.Web.Connect.Features.Shared
 @model SchoolAccount.Web.Connect.Features.Shared.ListItem.PaginatedListViewModel
 
 <ul class="govuk-task-list">
@@ -6,7 +5,7 @@
     {
         foreach (var item in Model.PaginatedItems)
         {
-            <partial name="@PartialViewAddressConstants.ListItem" model="item"/>
+            <partial name="@ListItem" model="item"/>
         }
     }
     else if (Model.PaginatedItems.TotalItemCount == 0)
@@ -19,5 +18,5 @@
 
 @if (Model.PaginatedItems.PageCount > 1)
 {
-    <partial name="@PartialViewAddressConstants.Pagination" model="@(Model.PaginatedItems)"/>
+    <partial name="@Pagination" model="@(Model.PaginatedItems)"/>
 }
