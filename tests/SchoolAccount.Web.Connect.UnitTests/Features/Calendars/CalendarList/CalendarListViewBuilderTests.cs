@@ -10,7 +10,7 @@ using SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 using X.PagedList;
 using Xunit;
 
-namespace SchoolAccount.Web.Connect.UnitTests.Builders;
+namespace SchoolAccount.Web.Connect.UnitTests.Features.Calendars.CalendarList;
 
 public class CalendarListViewBuilderTests
 {

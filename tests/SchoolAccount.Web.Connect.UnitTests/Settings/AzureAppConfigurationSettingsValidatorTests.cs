@@ -3,7 +3,7 @@ using SchoolAccount.Web.Connect.Settings;
 using SchoolAccount.Web.Connect.Validation.Validators;
 using Xunit;
 
-namespace SchoolAccount.Web.Connect.UnitTests;
+namespace SchoolAccount.Web.Connect.UnitTests.Settings;
 
 public class AzureAppConfigurationSettingsValidatorTests
 {
