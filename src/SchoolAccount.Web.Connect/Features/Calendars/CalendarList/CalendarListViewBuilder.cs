@@ -10,13 +10,13 @@ using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext)
+public class CalendarListViewBuilder(IOrganisationContext organisationContext)
 {
-    private readonly CalendarOfItemsRowViewBuilder _rowViewBuilder = new();
+    private readonly CalendarListRowViewBuilder _rowViewBuilder = new();
     private readonly PaginationViewBuilder _paginationViewBuilder = new();
 
-    public CalendarOfItemsViewModel Build(
-        CalendarOfItemViewOptions options,
+    public CalendarListViewModel Build(
+        CalendarListViewOptions options,
         CalendarOfItemsPagedResult result,
         Uri currentUri
     )
@@ -34,7 +34,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
                 .ToCollection();
         }
 
-        return new CalendarOfItemsViewModel(
+        return new CalendarListViewModel(
             options.Title,
             options.Description,
             options.ViewMode,
@@ -58,20 +58,20 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
         };
     }
 
-    public CalendarOfItemsViewModel BuildForPage(
+    public CalendarListViewModel BuildForPage(
         CalendarOfItemsPagedResult items,
         CalendarOfItemsViewModes viewModes,
         Uri currentUri
     )
     {
-        CalendarOfItemsTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
+        CalendarListTabViewModel BuildTab(CalendarOfItemsViewModes mode, string label, string? description = null)
         {
             var key = nameof(CalendarOfItemsDirectionalQuery.ViewModes);
             var value = mode.ToString();
 
             var updatedUrl = currentUri.SetQueryParam(key, value).RemoveQueryParam("pageNumber");
 
-            return new CalendarOfItemsTabViewModel(label, description, updatedUrl, viewModes.HasFlag(mode));
+            return new CalendarListTabViewModel(label, description, updatedUrl, viewModes.HasFlag(mode));
         }
 
         var tabOptions = new[]
@@ -84,7 +84,7 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
 
         var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 
-        var options = new CalendarOfItemViewOptions
+        var options = new CalendarListViewOptions
         {
             ViewMode = viewModes,
             Tabs = tabOptions.ToCollection(),

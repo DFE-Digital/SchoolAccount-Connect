@@ -33,7 +33,7 @@ internal static class ViewAddressConstants
 
     internal static class CalendarOfItems
     {
-        public const string Index = "~/Features/CalendarOfItems/Index.cshtml";
+        public const string Index = "~/Features/CalendarOfItems/CalendarList.cshtml";
 
         internal static class Partials
         {

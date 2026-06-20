@@ -9,14 +9,14 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemsController(
+public class CalendarListController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
     IOrganisationContext organisationContext
 ) : Controller
 {
     [HttpGet(RouteConstants.Calendar.Index)]
     public async Task<IActionResult> Index(
-        [FromQuery] CalendarOfItemsRequest request,
+        [FromQuery] CalendarListRequest request,
         CancellationToken cancellationToken = default
     )
     {
@@ -40,7 +40,7 @@ public class CalendarOfItemsController(
         }
 
         var currentUri = Request.GetFullRequestUri();
-        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var viewBuilder = new CalendarListViewBuilder(organisationContext);
         var viewModel = viewBuilder.BuildForPage(result.Value, filter.ViewModes, currentUri);
 
         return View(ViewAddressConstants.CalendarOfItems.Index, viewModel);

@@ -1,6 +1,6 @@
 ﻿namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public record CalendarOfItemsRowItemViewModel(string Name, string Url)
+public record CalendarListRowViewModel(string Name, string Url)
 {
     public string? Description { get; init; }
     public string? DateText { get; init; }

@@ -4,11 +4,11 @@ using SchoolAccount.Application.Features.CalendarOfItems.Models;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemViewOptions
+public class CalendarListViewOptions
 {
     public string? BaseUri { get; set; }
     public CalendarOfItemsViewModes ViewMode { get; set; }
-    public Collection<CalendarOfItemsTabViewModel>? Tabs { get; init; }
+    public Collection<CalendarListTabViewModel>? Tabs { get; init; }
     public string? CallToActionMessage { get; init; }
     public string? NoResultsMessage { get; init; }
     public Func<CalendarOfItemsRow, string>? GroupingFunction { get; init; }

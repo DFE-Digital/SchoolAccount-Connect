@@ -2,7 +2,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemsRequest
+public class CalendarListRequest
 {
     public CalendarOfItemsViewModes ViewModes { get; init; } = CalendarOfItemsViewModes.None;
 

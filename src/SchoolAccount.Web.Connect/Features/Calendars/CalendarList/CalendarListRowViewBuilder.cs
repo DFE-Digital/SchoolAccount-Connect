@@ -6,9 +6,9 @@ using SchoolAccount.Domain.Common;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemsRowViewBuilder
+public class CalendarListRowViewBuilder
 {
-    public CalendarOfItemsRowItemViewModel Build(CalendarOfItemViewOptions options, CalendarOfItemsRow row)
+    public CalendarListRowViewModel Build(CalendarListViewOptions options, CalendarOfItemsRow row)
     {
         var url = DetermineUri(
             row.Type,
@@ -16,7 +16,7 @@ public class CalendarOfItemsRowViewBuilder
             row.Status?.EntityId == (int)WorkflowState.Expired ? "#previous" : string.Empty
         );
 
-        return new CalendarOfItemsRowItemViewModel(row.Name, url)
+        return new CalendarListRowViewModel(row.Name, url)
         {
             Description = row.Description,
             DateText = !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)

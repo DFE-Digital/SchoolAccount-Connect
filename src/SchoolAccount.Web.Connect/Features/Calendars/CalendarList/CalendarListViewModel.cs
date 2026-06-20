@@ -5,18 +5,18 @@ using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarOfItemsRowGroupViewModel(string value, IEnumerable<CalendarOfItemsRowItemViewModel> items)
-    : Collection<CalendarOfItemsRowItemViewModel>(items.ToCollection())
+public class CalendarOfItemsRowGroupViewModel(string value, IEnumerable<CalendarListRowViewModel> items)
+    : Collection<CalendarListRowViewModel>(items.ToCollection())
 {
     public string? DisplayValue { get; } = value;
     public bool HasDisplayValue => !string.IsNullOrEmpty(DisplayValue);
 }
 
-public record CalendarOfItemsViewModel(
+public record CalendarListViewModel(
     string? Title,
     string? Description,
     CalendarOfItemsViewModes ViewModes,
-    Collection<CalendarOfItemsTabViewModel> Tabs,
+    Collection<CalendarListTabViewModel> Tabs,
     Collection<CalendarOfItemsRowGroupViewModel> Items,
     PaginationViewModel Pagination,
     FiltrationViewModel Filters
@@ -40,7 +40,7 @@ public record CalendarOfItemsViewModel(
         Title ?? SelectedTab?.Label ?? throw new InvalidOperationException("Display title cannot be determined");
 
     public bool HasTabs => Tabs.Count > 0;
-    public CalendarOfItemsTabViewModel? SelectedTab => Tabs.FirstOrDefault(x => x.IsSelected);
+    public CalendarListTabViewModel? SelectedTab => Tabs.FirstOrDefault(x => x.IsSelected);
     public bool HasSelectedTab => SelectedTab is not null;
     public string CurrentlyActiveTabAccessibilityLabel => $"Currently active tab is {SelectedTab?.Label}";
 

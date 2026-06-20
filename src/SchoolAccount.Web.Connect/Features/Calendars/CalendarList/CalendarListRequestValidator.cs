@@ -4,9 +4,9 @@ using FluentValidation;
 namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
-public sealed class CalendarOfItemsRequestValidator : AbstractValidator<CalendarOfItemsRequest>
+public sealed class CalendarListRequestValidator : AbstractValidator<CalendarListRequest>
 {
-    public CalendarOfItemsRequestValidator()
+    public CalendarListRequestValidator()
     {
         RuleFor(x => x.PageSize).GreaterThanOrEqualTo(1);
 

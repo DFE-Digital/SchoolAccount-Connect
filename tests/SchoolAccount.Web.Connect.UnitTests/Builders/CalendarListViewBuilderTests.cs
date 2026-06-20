@@ -12,7 +12,7 @@ using Xunit;
 
 namespace SchoolAccount.Web.Connect.UnitTests.Builders;
 
-public class CalendarOfItemsViewBuilderTests
+public class CalendarListViewBuilderTests
 {
     [Fact]
     public void Successfully_handles_an_empty_list_of_items()
@@ -21,7 +21,7 @@ public class CalendarOfItemsViewBuilderTests
         var organisationContext = Substitute.For<IOrganisationContext>();
         var emptyPagedList = new StaticPagedList<CalendarOfItemsRow>(new List<CalendarOfItemsRow>(), 1, 10, 0);
         var filters = new Collection<Filterable>();
-        var viewBuilder = new CalendarOfItemsViewBuilder(organisationContext);
+        var viewBuilder = new CalendarListViewBuilder(organisationContext);
         var currentUri = new Uri("https://localhost:7033/calendar");
 
         var items = new CalendarOfItemsPagedResult(new CalendarOfItemsCriteria(), emptyPagedList, filters);
