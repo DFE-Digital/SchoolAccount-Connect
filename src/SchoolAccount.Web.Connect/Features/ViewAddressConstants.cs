@@ -33,13 +33,13 @@ internal static class ViewAddressConstants
 
     internal static class CalendarOfItems
     {
-        public const string Index = "~/Features/CalendarOfItems/CalendarList.cshtml";
+        public const string Index = "~/Features/Calendars/CalendarList/CalendarList.cshtml";
 
         internal static class Partials
         {
-            public const string Widget = "~/Features/CalendarOfItems/_Widget.cshtml";
-            public const string Tab = "~/Features/CalendarOfItems/_Tab.cshtml";
-            public const string Filtration = "~/Features/CalendarOfItems/_Filtration.cshtml";
+            public const string Widget = "~/Features/Calendars/CalendarList/_Widget.cshtml";
+            public const string Tab = "~/Features/Calendars/CalendarList/_Tab.cshtml";
+            public const string Filtration = "~/Features/Calendars/CalendarList/_Filtration.cshtml";
         }
     }
 

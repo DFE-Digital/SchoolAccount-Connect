@@ -3,7 +3,7 @@ using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Models.Shared;
 
-namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
+namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 
 public class CalendarOfItemsRowGroupViewModel(string value, IEnumerable<CalendarListRowViewModel> items)
     : Collection<CalendarListRowViewModel>(items.ToCollection())

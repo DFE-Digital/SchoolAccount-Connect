@@ -5,9 +5,8 @@ using SchoolAccount.Application.Features.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
-using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
+namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 
 public class CalendarListController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,

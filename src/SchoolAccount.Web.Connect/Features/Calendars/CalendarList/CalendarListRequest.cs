@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 
-namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
+namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 
 public class CalendarListRequest
 {

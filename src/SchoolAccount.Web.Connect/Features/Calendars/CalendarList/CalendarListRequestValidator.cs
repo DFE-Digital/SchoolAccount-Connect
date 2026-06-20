@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 
-namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
+namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public sealed class CalendarListRequestValidator : AbstractValidator<CalendarListRequest>
