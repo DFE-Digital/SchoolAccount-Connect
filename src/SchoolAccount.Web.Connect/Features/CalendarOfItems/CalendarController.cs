@@ -16,16 +16,21 @@ public class CalendarController(
 {
     [HttpGet(Calendar.Index)]
     public async Task<IActionResult> Index(
-        [FromQuery] CalendarQuery query,
+        [FromQuery] CalendarOfItemsRequest request,
         CancellationToken cancellationToken = default
     )
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var filter = new GetSubTasksByDirectionForTabViewCalendarOfItemsQuery(
-            query.ViewModes,
-            query.PageSize,
-            query.PageNumber,
-            query.Filters,
-            query.SortMode
+            request.ViewModes,
+            request.PageSize,
+            request.PageNumber,
+            request.Filters,
+            request.SortMode
         );
         var result = await handler.Handle(filter, cancellationToken);
 
