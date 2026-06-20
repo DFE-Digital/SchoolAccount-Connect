@@ -23,4 +23,7 @@
     <ProjectReference Include="..\SchoolAccount.InfrastructureTests\SchoolAccount.InfrastructureTests.csproj" />
     <ProjectReference Include="..\SchoolAccount.Tests.Common\SchoolAccount.Tests.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Calendars\" />
+  </ItemGroup>
 </Project>

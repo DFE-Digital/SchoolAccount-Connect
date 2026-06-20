@@ -7,14 +7,14 @@ using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
+namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
-public class CalendarController(
+public class CalendarOfItemsController(
     IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
     IOrganisationContext organisationContext
 ) : Controller
 {
-    [HttpGet(Calendar.Index)]
+    [HttpGet(RouteConstants.Calendar.Index)]
     public async Task<IActionResult> Index(
         [FromQuery] CalendarOfItemsRequest request,
         CancellationToken cancellationToken = default

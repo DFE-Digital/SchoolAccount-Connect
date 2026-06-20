@@ -4,7 +4,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Domain.Common;
 
-namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
+namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
 public class CalendarOfItemsRowViewBuilder
 {

@@ -1,4 +1,4 @@
-@model SchoolAccount.Web.Connect.Features.CalendarOfItems.CalendarOfItemsViewModel
+@model SchoolAccount.Web.Connect.Features.Calendar.CalendarList.CalendarOfItemsViewModel
 
 @if (Model.HasTitle)
 {
@@ -64,7 +64,7 @@
 @if (Model.ShowNavigator)
 {
     <div class="govuk-body">
-        <a class="govuk-link" asp-controller="Calendar" asp-action="Index">@Model.CallToActionMessage</a>
+        <a class="govuk-link" asp-controller="CalendarOfItems" asp-action="Index">@Model.CallToActionMessage</a>
         <partial name="SVG/ArrowRight"/>
     </div>
 }

@@ -6,7 +6,7 @@ using SchoolAccount.Application.Features.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Features.CalendarOfItems;
+using SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 using X.PagedList;
 using Xunit;
 

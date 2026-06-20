@@ -1,4 +1,4 @@
-﻿namespace SchoolAccount.Web.Connect.Features.CalendarOfItems;
+﻿namespace SchoolAccount.Web.Connect.Features.Calendar.CalendarList;
 
 public record CalendarOfItemsRowItemViewModel(string Name, string Url)
 {
