@@ -9,12 +9,12 @@ using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarListViewBuilderTests : IClassFixture<HttpServerFixture>
+public class CalendarListViewModelBuilderTests : IClassFixture<HttpServerFixture>
 {
     private readonly HttpServerFixture _fixture;
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarListViewBuilderTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    public CalendarListViewModelBuilderTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
         _fixture.OutputHelper = outputHelper;

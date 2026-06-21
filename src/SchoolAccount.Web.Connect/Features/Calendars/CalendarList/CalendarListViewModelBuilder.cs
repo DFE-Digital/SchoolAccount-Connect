@@ -10,7 +10,7 @@ using SchoolAccount.Web.Connect.Models.Shared;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 
-public class CalendarListViewBuilder(IOrganisationContext organisationContext)
+public class CalendarListViewModelBuilder(IOrganisationContext organisationContext)
 {
     private readonly CalendarListRowViewBuilder _rowViewBuilder = new();
     private readonly PaginationViewBuilder _paginationViewBuilder = new();
