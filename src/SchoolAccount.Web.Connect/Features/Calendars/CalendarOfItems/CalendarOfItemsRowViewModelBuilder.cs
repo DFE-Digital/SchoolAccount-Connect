@@ -6,7 +6,7 @@ using SchoolAccount.Domain.Common;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 
-public class CalendarOfItemsRowViewBuilder
+public class CalendarOfItemsRowViewModelBuilder
 {
     public CalendarOfItemsRowViewModel Build(CalendarOfItemsViewOptions options, CalendarOfItemsRow row)
     {

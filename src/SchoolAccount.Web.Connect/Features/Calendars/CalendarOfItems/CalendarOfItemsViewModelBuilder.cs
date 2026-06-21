@@ -12,7 +12,7 @@ namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 
 public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationContext)
 {
-    private readonly CalendarOfItemsRowViewBuilder _rowViewBuilder = new();
+    private readonly CalendarOfItemsRowViewModelBuilder _rowViewModelBuilder = new();
     private readonly PaginationViewBuilder _paginationViewBuilder = new();
 
     public CalendarOfItemsViewModel Build(
@@ -29,7 +29,7 @@ public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationCo
                 .Payload.GroupBy(x => options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty)
                 .Select(x => new CalendarOfItemsRowGroupViewModel(
                     x.Key,
-                    x.Select(r => _rowViewBuilder.Build(options, r))
+                    x.Select(r => _rowViewModelBuilder.Build(options, r))
                 ))
                 .ToCollection();
         }

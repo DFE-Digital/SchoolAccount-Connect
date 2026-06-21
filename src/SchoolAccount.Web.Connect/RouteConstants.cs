@@ -44,7 +44,7 @@ public static class RouteConstants
 
     public static class Calendar
     {
-        public const string Index = Root + "calendar";
+        public const string CalendarOfItems = Root + "calendar";
     }
 
     public static class Category

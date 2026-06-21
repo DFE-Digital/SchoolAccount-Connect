@@ -13,8 +13,8 @@ public class CalendarOfItemsController(
     IOrganisationContext organisationContext
 ) : Controller
 {
-    [HttpGet(RouteConstants.Calendar.Index)]
-    public async Task<IActionResult> Index(
+    [HttpGet(RouteConstants.Calendar.CalendarOfItems)]
+    public async Task<IActionResult> GetCalendarOfItems(
         [FromQuery] CalendarOfItemsRequest request,
         CancellationToken cancellationToken = default
     )
