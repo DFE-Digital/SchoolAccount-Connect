@@ -1,5 +1,5 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
 
 namespace SchoolAccount.InfrastructureTests.Builders;
 

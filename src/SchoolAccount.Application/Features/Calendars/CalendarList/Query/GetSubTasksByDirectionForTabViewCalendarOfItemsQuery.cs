@@ -1,10 +1,10 @@
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query;
+namespace SchoolAccount.Application.Features.Calendars.CalendarList.Query;
 
 public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfItemsDirectionalQuery
 {

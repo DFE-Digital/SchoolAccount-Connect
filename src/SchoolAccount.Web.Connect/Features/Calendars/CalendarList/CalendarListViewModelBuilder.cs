@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Extensions;

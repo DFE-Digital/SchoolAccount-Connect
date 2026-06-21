@@ -1,4 +1,4 @@
-namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
+namespace SchoolAccount.Application.Features.Calendars.CalendarList.Models;
 
 public class CalendarOfItemsExtensionNode
 {

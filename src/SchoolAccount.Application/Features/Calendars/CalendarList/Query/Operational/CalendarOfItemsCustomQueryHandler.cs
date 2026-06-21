@@ -1,10 +1,10 @@
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+namespace SchoolAccount.Application.Features.Calendars.CalendarList.Query.Operational;
 
 public class CalendarOfItemsCustomQueryHandler(ICalendarOfItemsAggregator aggregator)
     : IQueryHandler<CalendarOfItemsCustomQuery, CalendarOfItemsPagedResult>

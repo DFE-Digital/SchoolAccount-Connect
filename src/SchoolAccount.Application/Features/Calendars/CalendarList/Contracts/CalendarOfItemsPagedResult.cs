@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 using X.PagedList;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+namespace SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
 
 public class CalendarOfItemsPagedResult(
     CalendarOfItemsCriteria criteria,

@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarList;
 

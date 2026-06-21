@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 using SchoolAccount.Infrastructure.Abstraction;
 
 namespace SchoolAccount.Infrastructure.Resolvers;

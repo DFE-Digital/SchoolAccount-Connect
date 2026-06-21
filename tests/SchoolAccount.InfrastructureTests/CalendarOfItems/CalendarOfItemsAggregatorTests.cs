@@ -1,8 +1,8 @@
 using NSubstitute;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Infrastructure.Abstraction;
 using SchoolAccount.Infrastructure.Aggregators;

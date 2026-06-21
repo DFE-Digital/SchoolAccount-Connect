@@ -1,7 +1,7 @@
 using AngleSharp.Dom;
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
 using SchoolAccount.Tests.Common.Extensions;

@@ -1,6 +1,6 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 
-namespace SchoolAccount.Application.Features.CalendarOfItems.Models;
+namespace SchoolAccount.Application.Features.Calendars.CalendarList.Models;
 
 public class CalendarOfItemsRow
 {

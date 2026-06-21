@@ -1,7 +1,7 @@
 using System.Data.SqlTypes;
 using FluentValidation;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
 using SchoolAccount.Infrastructure.Resolvers;
 
 namespace SchoolAccount.Infrastructure.Aggregators;
