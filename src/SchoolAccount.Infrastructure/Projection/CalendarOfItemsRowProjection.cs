@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
 

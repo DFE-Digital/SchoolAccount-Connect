@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.InfrastructureTests.Builders;
 using SchoolAccount.Kernel;
 

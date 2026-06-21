@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Specifications;
 using SchoolAccount.Domain.Tags;

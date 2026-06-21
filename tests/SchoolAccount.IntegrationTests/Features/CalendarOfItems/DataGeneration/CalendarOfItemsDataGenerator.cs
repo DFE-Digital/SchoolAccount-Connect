@@ -1,7 +1,7 @@
 using Bogus;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Contracts;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Enums;
-using SchoolAccount.Application.Features.Calendars.CalendarList.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;

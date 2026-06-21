@@ -1,0 +1,16 @@
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+
+namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
+
+public class CalendarOfItemsRequest
+{
+    public CalendarOfItemsViewModes ViewModes { get; init; } = CalendarOfItemsViewModes.None;
+
+    public int PageSize { get; init; } = 10;
+
+    public int PageNumber { get; init; } = 1;
+
+    public CalendarOfItemsSortMode SortMode { get; init; } = CalendarOfItemsSortMode.NotSpecified;
+
+    public Dictionary<string, List<string>> Filters { get; init; } = [];
+}
