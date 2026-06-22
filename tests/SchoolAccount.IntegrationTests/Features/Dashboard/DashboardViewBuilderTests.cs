@@ -1,20 +1,21 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Dashboard;
 using SchoolAccount.IntegrationTests.Features.Dashboard.Handlers;
+using SchoolAccount.IntegrationTests.Fixtures;
 using SchoolAccount.Tests.Common.Extensions;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.Dashboard;
 
-public class DashboardViewBuilderTests : IClassFixture<SchoolAccountWebApplicationFactory>
+public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
 {
-    private readonly SchoolAccountWebApplicationFactory _fixture;
+    private readonly TestServerFixture _fixture;
     private readonly TestGetDashboardQueryHandler _handler = new();
 
-    public DashboardViewBuilderTests(SchoolAccountWebApplicationFactory fixture, ITestOutputHelper outputHelper)
+    public DashboardViewBuilderTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
-        _fixture.OutputHelper = outputHelper;
+        _fixture.SetOutputHelper(outputHelper);
         _fixture.HandlerRegistry.Clear();
         _fixture.HandlerRegistry.Register(_handler);
         _handler.Clear();

@@ -11,17 +11,15 @@ using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
+public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
 {
-    private readonly PlaywrightFixture _fixture;
-    private readonly SchoolAccountWebApplicationFactory _factory;
+    private readonly KestrelServerFixture _fixture;
     private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewTests(PlaywrightFixture fixture, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewTests(KestrelServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
-        _factory = _fixture.Factory ?? throw new ArgumentNullException(nameof(fixture));
         _fixture.SetOutputHelper(outputHelper);
         _fixture.HandlerRegistry.Clear();
         _fixture.HandlerRegistry.Register(_handler);
@@ -32,7 +30,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     public async Task Calendar_endpoint_returns_success_page()
     {
         // Act
-        var request = await _factory.RequestPageAsync("/calendar");
+        var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert
         request.Should().NotBeNull();
@@ -47,7 +45,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     public async Task Calendar_endpoint_returns_expected_title()
     {
         // Act
-        var request = await _factory.RequestPageAsync("/calendar");
+        var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert
         request.Should().NotBeNull();
@@ -58,7 +56,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     public async Task Calendar_contains_upcoming_and_previous_task_tabs()
     {
         // Act
-        var request = await _factory.RequestPageAsync("/calendar");
+        var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert
         request.QuerySelectorAll(".govuk-tabs__tab").Should().HaveCount(2);
@@ -72,7 +70,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     public async Task Correct_tab_selected_based_on_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
         request
@@ -87,7 +85,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     public async Task Page_heading_matches_selected_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
         request.QuerySelector(".dfe-tabs__panel .govuk-heading-m").Should().HaveTextContent(expectedTitle);
@@ -103,7 +101,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BePaginationWithLabels("1", "2", "3", "4", "Next page");
@@ -133,7 +131,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
         _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
-        var request = await _factory.RequestPageAsync(
+        var request = await _fixture.RequestPageAsync(
             $"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}&pageNumber={pageNumber}"
         );
 
@@ -151,7 +149,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BeNull();
@@ -181,7 +179,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
         _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act.
-        var request = await _factory.RequestPageAsync("/calendar");
+        var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert.
         request.Should().NotBeNull();
@@ -198,7 +196,7 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
         const int expectedRows = numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
         // Act.
-        var request = await _factory.RequestPageAsync("/calendar");
+        var request = await _fixture.RequestPageAsync("/calendar");
 
         // Assert.
         request.Should().NotBeNull();
@@ -210,9 +208,6 @@ public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
     [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
     public async Task Test_With_Real_Kestrel_Port()
     {
-        // Force the server to start initializing
-        var defaultClient = _factory.CreateClient();
-
         // Get the real random URI assigned by the OS
         var actualAddress = _fixture.BaseUrl;
 

@@ -2,6 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 using MartinCostello.Logging.XUnit;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,11 +20,27 @@ namespace SchoolAccount.IntegrationTests;
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
+    private string? _baseUrl;
+
     public TestQueryHandlerRegistry HandlerRegistry { get; } = new();
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
     public StubFallbackProviderResolver FallbackProviderResolver { get; } = new();
+
+    public string StartKestrel()
+    {
+        if (_baseUrl is not null)
+            return _baseUrl;
+
+        UseKestrel(port: 0);
+        StartServer();
+
+        var addresses = Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses;
+
+        _baseUrl = addresses.First();
+        return _baseUrl;
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
