@@ -1,0 +1,37 @@
+@using static SchoolAccount.Web.Connect.Features.ViewAddressConstants.CalendarOfItems.Partials;
+@model SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems.CalendarOfItemsViewModel
+
+<form method="get">
+
+    <input type="hidden" for="ViewModes"/>
+    @if (Model.HasTabs)
+    {
+        <div class="dfe-tabs" aria-label="Calendar of items view navigation">
+            @if (Model.HasSelectedTab)
+            {
+                <span aria-live="polite" aria-atomic="true" class="govuk-visually-hidden">
+                    @Model.CurrentlyActiveTabAccessibilityLabel
+                </span>
+            }
+            <ul class="govuk-tabs__list">
+                @foreach (var tab in Model.Tabs)
+                {
+                    <li class="govuk-tabs__list-item @(tab.IsSelected ? "govuk-tabs__list-item--selected" : string.Empty)">
+                        <a class="govuk-tabs__tab" href="@tab.Href">
+                            @tab.Label
+                        </a>
+                    </li>
+                }
+            </ul>
+            
+            <div class="dfe-tabs__panel">
+                <partial name="@Tab" model="@Model"/>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <partial name="@Tab" model="@Model"/>
+    }
+</form>

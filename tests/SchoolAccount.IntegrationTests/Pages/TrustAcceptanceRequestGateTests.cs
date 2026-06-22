@@ -17,7 +17,10 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
     {
         var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Trust);
 
-        var response = await client.GetAsync(RouteConstants.Calendar.Index, TestContext.Current.CancellationToken);
+        var response = await client.GetAsync(
+            RouteConstants.Calendar.CalendarOfItems,
+            TestContext.Current.CancellationToken
+        );
 
         response.RequestMessage.Should().NotBeNull();
         response.RequestMessage.RequestUri.Should().NotBeNull();
@@ -32,11 +35,14 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
         using var content = new StringContent(string.Empty);
         await client.PostAsync(RouteConstants.Start.MatAcceptance, content, TestContext.Current.CancellationToken);
 
-        var response = await client.GetAsync(RouteConstants.Calendar.Index, TestContext.Current.CancellationToken);
+        var response = await client.GetAsync(
+            RouteConstants.Calendar.CalendarOfItems,
+            TestContext.Current.CancellationToken
+        );
 
         response.RequestMessage.Should().NotBeNull();
         response.RequestMessage.RequestUri.Should().NotBeNull();
-        response.RequestMessage.RequestUri.AbsolutePath.Should().Be(RouteConstants.Calendar.Index);
+        response.RequestMessage.RequestUri.AbsolutePath.Should().Be(RouteConstants.Calendar.CalendarOfItems);
     }
 
     [Fact]
@@ -49,7 +55,10 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
         await client.GetAsync("/Account/SignOut", TestContext.Current.CancellationToken);
 
         // After sign out, should redirect to terms again
-        var response = await client.GetAsync(RouteConstants.Calendar.Index, TestContext.Current.CancellationToken);
+        var response = await client.GetAsync(
+            RouteConstants.Calendar.CalendarOfItems,
+            TestContext.Current.CancellationToken
+        );
 
         response.RequestMessage.Should().NotBeNull();
         response.RequestMessage.RequestUri.Should().NotBeNull();
@@ -61,10 +70,13 @@ public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFix
     {
         var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Academy);
 
-        var response = await client.GetAsync(RouteConstants.Calendar.Index, TestContext.Current.CancellationToken);
+        var response = await client.GetAsync(
+            RouteConstants.Calendar.CalendarOfItems,
+            TestContext.Current.CancellationToken
+        );
 
         response.RequestMessage.Should().NotBeNull();
         response.RequestMessage.RequestUri.Should().NotBeNull();
-        response.RequestMessage.RequestUri.AbsolutePath.Should().Be(RouteConstants.Calendar.Index);
+        response.RequestMessage.RequestUri.AbsolutePath.Should().Be(RouteConstants.Calendar.CalendarOfItems);
     }
 }

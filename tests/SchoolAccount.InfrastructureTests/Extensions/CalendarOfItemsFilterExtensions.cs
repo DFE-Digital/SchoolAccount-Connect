@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.InfrastructureTests.Builders;
 
 namespace SchoolAccount.InfrastructureTests.Extensions;

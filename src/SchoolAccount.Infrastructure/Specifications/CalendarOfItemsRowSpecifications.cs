@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Infrastructure.Specifications;

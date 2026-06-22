@@ -1,4 +1,4 @@
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Abstractions.Aggregators;

@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 

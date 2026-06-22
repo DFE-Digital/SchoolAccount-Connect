@@ -31,6 +31,18 @@ internal static class ViewAddressConstants
         public const string List = "~/Features/Categories/CategoryList/CategoryList.cshtml";
     }
 
+    internal static class CalendarOfItems
+    {
+        public const string Index = "~/Features/Calendars/CalendarOfItems/CalendarOfItems.cshtml";
+
+        internal static class Partials
+        {
+            public const string Widget = "~/Features/Calendars/CalendarOfItems/_Widget.cshtml";
+            public const string Tab = "~/Features/Calendars/CalendarOfItems/_Tab.cshtml";
+            public const string Filtration = "~/Features/Calendars/CalendarOfItems/_Filtration.cshtml";
+        }
+    }
+
     internal static class Shared
     {
         public const string PaginatedList = "~/Features/Shared/ListItem/_PaginatedList.cshtml";

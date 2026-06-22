@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using Bogus;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 using SchoolAccount.Kernel;
 

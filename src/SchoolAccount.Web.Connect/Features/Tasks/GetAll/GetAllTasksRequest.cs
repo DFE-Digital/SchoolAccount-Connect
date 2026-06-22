@@ -1,4 +1,4 @@
-namespace SchoolAccount.Web.Connect.Features.Tasks;
+namespace SchoolAccount.Web.Connect.Features.Tasks.GetAll;
 
 public class GetAllTasksRequest
 {
