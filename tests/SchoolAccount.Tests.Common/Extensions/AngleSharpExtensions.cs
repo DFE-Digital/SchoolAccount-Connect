@@ -18,7 +18,9 @@ public static class AngleSharpExtensions
         var paginationContainer = assertions.Subject as IElement;
         paginationContainer.Should().NotBeNull("the pagination container was not found");
 
-        var labels = paginationContainer.QuerySelectorAll("a").Select(a => a.TextContent.Trim());
+        var labels = paginationContainer
+            .QuerySelectorAll("a, .govuk-pagination__item--ellipsis")
+            .Select(el => el.TextContent.Trim());
 
         labels.Should().Equal(expectedLabels);
     }

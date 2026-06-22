@@ -33,7 +33,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo(
                 [rowOnStartBoundary, rowOnEndBoundary],
                 because: "rows within range boundaries should be included, rows outside should not"
@@ -57,7 +57,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo(
                 [rowWithDate],
                 because: "Has only one as the other row is not in scope as it has a missing date"

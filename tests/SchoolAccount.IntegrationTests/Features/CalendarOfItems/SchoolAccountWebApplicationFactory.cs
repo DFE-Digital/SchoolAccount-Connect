@@ -24,7 +24,7 @@ public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWeb
         services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
 
-        services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>>(_ =>
+        services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>>(_ =>
             TestCalendarOfItemsDirectionalQueryHandler
         );
     }

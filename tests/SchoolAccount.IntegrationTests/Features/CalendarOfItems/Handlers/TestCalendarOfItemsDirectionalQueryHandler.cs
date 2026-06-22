@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Common;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
@@ -10,21 +10,23 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 
 public class TestCalendarOfItemsDirectionalQueryHandler
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>
+    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>
 {
     private readonly List<CalendarOfItemsRow> _rows = [];
     private int _pageSize = 10;
 
-    public async Task<Result<CalendarOfItemsPagedResult>> Handle(
+    public async Task<Result<CalendarOfItemsResponse>> Handle(
         CalendarOfItemsDirectionalQuery query,
         CancellationToken cancellationToken
     )
     {
-        var paginatedRows = _rows.ToStaticPagedList(1, _pageSize, _rows.Count);
+        var pageNumber = query.PageNumber;
+        var paginatedRows = PaginateRows(pageNumber);
+
         var emptyFilter = new Collection<Filterable>();
         var emptyCriteria = new CalendarOfItemsCriteria();
 
-        var result = new CalendarOfItemsPagedResult(emptyCriteria, paginatedRows, emptyFilter);
+        var result = new CalendarOfItemsResponse(emptyCriteria, paginatedRows, emptyFilter);
 
         return await Task.FromResult(result);
     }
@@ -56,5 +58,19 @@ public class TestCalendarOfItemsDirectionalQueryHandler
         _pageSize = pageSize;
 
         return this;
+    }
+
+    private PagedResult<CalendarOfItemsRow> PaginateRows(int pageNumber)
+    {
+        var totalCount = _rows.Count;
+        var paginatedItems = _rows.Skip(_pageSize * (pageNumber - 1)).Take(_pageSize).ToList();
+
+        return new PagedResult<CalendarOfItemsRow>
+        {
+            Items = paginatedItems,
+            PageNumber = pageNumber,
+            PageSize = _pageSize,
+            TotalCount = totalCount,
+        };
     }
 }

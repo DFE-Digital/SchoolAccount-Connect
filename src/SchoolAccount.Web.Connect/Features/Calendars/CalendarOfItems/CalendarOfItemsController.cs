@@ -9,7 +9,7 @@ using SchoolAccount.Web.Connect.Extensions;
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 
 public class CalendarOfItemsController(
-    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult> handler,
+    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse> handler,
     IOrganisationContext organisationContext
 ) : Controller
 {
@@ -31,6 +31,7 @@ public class CalendarOfItemsController(
             request.Filters,
             request.SortMode
         );
+
         var result = await handler.Handle(filter, cancellationToken);
 
         if (result.IsFailure)

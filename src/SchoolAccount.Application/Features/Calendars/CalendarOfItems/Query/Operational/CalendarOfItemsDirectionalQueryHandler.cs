@@ -10,9 +10,9 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 
 public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator aggregator)
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsPagedResult>
+    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>
 {
-    public async Task<Result<CalendarOfItemsPagedResult>> Handle(
+    public async Task<Result<CalendarOfItemsResponse>> Handle(
         CalendarOfItemsDirectionalQuery query,
         CancellationToken cancellationToken
     )

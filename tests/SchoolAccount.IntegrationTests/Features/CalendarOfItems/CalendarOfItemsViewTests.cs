@@ -9,12 +9,12 @@ using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarOfItemsViewModelBuilderTests : IClassFixture<HttpServerFixture>
+public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
 {
     private readonly HttpServerFixture _fixture;
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewModelBuilderTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
         _fixture.OutputHelper = outputHelper;
@@ -103,12 +103,19 @@ public class CalendarOfItemsViewModelBuilderTests : IClassFixture<HttpServerFixt
     }
 
     [Theory]
-    [InlineData(20, 100, new[] { "1", "2", "3", "4", "5", "Next page" })]
-    [InlineData(40, 80, new[] { "1", "2", "Next page" })]
-    [InlineData(65, 66, new[] { "1", "2", "Next page" })]
+    [InlineData(10, 200, 1, new[] { "1", "2", "3", "⋯", "20", "Next page" })]
+    [InlineData(10, 200, 2, new[] { "Previous page", "1", "2", "3", "⋯", "20", "Next page" })]
+    [InlineData(10, 200, 3, new[] { "Previous page", "1", "2", "3", "4", "⋯", "20", "Next page" })]
+    [InlineData(10, 200, 4, new[] { "Previous page", "1", "2", "3", "4", "5", "⋯", "20", "Next page" })]
+    [InlineData(10, 200, 5, new[] { "Previous page", "1", "⋯", "4", "5", "6", "⋯", "20", "Next page" })]
+    [InlineData(10, 200, 17, new[] { "Previous page", "1", "⋯", "16", "17", "18", "19", "20", "Next page" })]
+    [InlineData(10, 200, 18, new[] { "Previous page", "1", "⋯", "17", "18", "19", "20", "Next page" })]
+    [InlineData(10, 200, 19, new[] { "Previous page", "1", "⋯", "18", "19", "20", "Next page" })]
+    [InlineData(10, 200, 20, new[] { "Previous page", "1", "⋯", "18", "19", "20" })]
     public async Task Pagination_changes_according_to_page_size(
         int pageSize,
         int entriesToGenerate,
+        int pageNumber,
         string[] expectedLabels
     )
     {
@@ -119,7 +126,9 @@ public class CalendarOfItemsViewModelBuilderTests : IClassFixture<HttpServerFixt
         _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _fixture.RequestPageAsync(
+            $"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}&pageNumber={pageNumber}"
+        );
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BePaginationWithLabels(expectedLabels);
@@ -151,16 +160,18 @@ public class CalendarOfItemsViewModelBuilderTests : IClassFixture<HttpServerFixt
         int numberToGenerate
     )
     {
-        // Arrange.
-        var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
+        // Arrange
+        var pageSize = 10;
+        var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
 
         const int numberOfNoItemsMessageRows = 0;
         const int numberOfCallToActionRows = 0;
 
         var rows = _generator.GenerateCalendarOfItemsRows(filter, numberToGenerate);
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
-        int numberOfItemRows = rows.Count;
-        int expectedRows = numberOfItemRows + numberOfNoItemsMessageRows + numberOfCallToActionRows;
+        var numberOfItemRows = rows.Count > pageSize ? pageSize : rows.Count;
+        var expectedRows = numberOfItemRows + numberOfNoItemsMessageRows + numberOfCallToActionRows;
+
+        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(pageSize);
 
         // Act.
         var request = await _fixture.RequestPageAsync("/calendar");

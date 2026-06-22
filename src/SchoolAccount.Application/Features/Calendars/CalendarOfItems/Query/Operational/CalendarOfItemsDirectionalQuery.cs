@@ -15,4 +15,4 @@ public abstract record CalendarOfItemsDirectionalQuery(
     CalendarOfItemsSortMode SortMode,
     CalendarOfItemsFilter? Filter = null,
     CalendarOfItemsOrderFunction? CustomOrderBy = null
-) : IQuery<CalendarOfItemsPagedResult>;
+) : IQuery<CalendarOfItemsResponse>;

@@ -4,7 +4,6 @@ using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
-using SchoolAccount.Web.Connect.Builders;
 using SchoolAccount.Web.Connect.Extensions;
 using SchoolAccount.Web.Connect.Models.Shared;
 
@@ -13,20 +12,21 @@ namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationContext)
 {
     private readonly CalendarOfItemsRowViewModelBuilder _rowViewModelBuilder = new();
-    private readonly PaginationViewBuilder _paginationViewBuilder = new();
 
     public CalendarOfItemsViewModel Build(
         CalendarOfItemsViewOptions options,
-        CalendarOfItemsPagedResult result,
+        CalendarOfItemsResponse result,
         Uri currentUri
     )
     {
         Collection<CalendarOfItemsRowGroupViewModel> rows = [];
 
-        if (result.Payload.Count > 0)
+        if (result.Payload.Items.Count > 0)
         {
             rows = result
-                .Payload.GroupBy(x => options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty)
+                .Payload.Items.GroupBy(x =>
+                    options.GroupingFunction is not null ? options.GroupingFunction(x) : string.Empty
+                )
                 .Select(x => new CalendarOfItemsRowGroupViewModel(
                     x.Key,
                     x.Select(r => _rowViewModelBuilder.Build(options, r))
@@ -34,15 +34,18 @@ public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationCo
                 .ToCollection();
         }
 
+        var pagedList = rows.ToStaticPagedList(
+            result.Payload.PageNumber,
+            result.Payload.PageSize,
+            result.Payload.TotalCount
+        );
+
         return new CalendarOfItemsViewModel(
             options.Title,
             options.Description,
             options.ViewMode,
             options.Tabs ?? [],
-            rows,
-            !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Standalone)
-                ? _paginationViewBuilder.Build(result, currentUri)
-                : new PaginationViewModel(false),
+            pagedList,
             FiltrationViewModel.Build(options.ViewMode, currentUri, result.Filter)
         )
         {
@@ -59,7 +62,7 @@ public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationCo
     }
 
     public CalendarOfItemsViewModel BuildForPage(
-        CalendarOfItemsPagedResult items,
+        CalendarOfItemsResponse items,
         CalendarOfItemsViewModes viewModes,
         Uri currentUri
     )
@@ -82,7 +85,7 @@ public class CalendarOfItemsViewModelBuilder(IOrganisationContext organisationCo
 
         var selectedTab = tabOptions.FirstOrDefault(x => x.IsSelected);
 
-        var lastUpdatedDate = items.Payload.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
+        var lastUpdatedDate = items.Payload.Items.Select(x => x.LastUpdated).OfType<DateTime>().Cast<DateTime?>().Max();
 
         var options = new CalendarOfItemsViewOptions
         {

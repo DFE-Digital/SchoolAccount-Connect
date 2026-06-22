@@ -2,6 +2,7 @@
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.Web.Connect.Models.Shared;
+using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 
@@ -17,8 +18,7 @@ public record CalendarOfItemsViewModel(
     string? Description,
     CalendarOfItemsViewModes ViewModes,
     Collection<CalendarOfItemsTabViewModel> Tabs,
-    Collection<CalendarOfItemsRowGroupViewModel> Items,
-    PaginationViewModel Pagination,
+    IPagedList<CalendarOfItemsRowGroupViewModel> Items,
     FiltrationViewModel Filters
 )
 {
