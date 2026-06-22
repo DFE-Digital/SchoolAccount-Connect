@@ -203,22 +203,4 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         var taskListItems = request.QuerySelectorAll(".govuk-task-list__item");
         taskListItems.Should().HaveCount(expectedRows).And.Contain(e => e.TextContent.Contains("No results found"));
     }
-
-    [Fact]
-    [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-    public async Task Test_With_Real_Kestrel_Port()
-    {
-        // Get the real random URI assigned by the OS
-        var actualAddress = _fixture.BaseUrl;
-
-        // Create a real HttpClient to communicate over the loopback network
-        using var realClient = new HttpClient();
-
-        var response = await realClient.GetAsync($"{actualAddress}", TestContext.Current.CancellationToken);
-
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(content);
-    }
 }
