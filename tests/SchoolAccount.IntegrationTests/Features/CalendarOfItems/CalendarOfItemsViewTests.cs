@@ -1,26 +1,30 @@
+using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
+using SchoolAccount.IntegrationTests.Fixtures;
 using SchoolAccount.Tests.Common.Extensions;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicationFactory>
+public class CalendarOfItemsViewTests : IClassFixture<PlaywrightFixture>
 {
+    private readonly PlaywrightFixture _fixture;
     private readonly SchoolAccountWebApplicationFactory _factory;
     private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewTests(SchoolAccountWebApplicationFactory factory, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewTests(PlaywrightFixture fixture, ITestOutputHelper outputHelper)
     {
-        _factory = factory;
-        _factory.OutputHelper = outputHelper;
-        _factory.HandlerRegistry.Clear();
-        _factory.HandlerRegistry.Register(_handler);
+        _fixture = fixture;
+        _factory = _fixture.Factory ?? throw new ArgumentNullException(nameof(fixture));
+        _fixture.SetOutputHelper(outputHelper);
+        _fixture.HandlerRegistry.Clear();
+        _fixture.HandlerRegistry.Register(_handler);
         _handler.Clear();
     }
 
@@ -200,5 +204,26 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         request.Should().NotBeNull();
         var taskListItems = request.QuerySelectorAll(".govuk-task-list__item");
         taskListItems.Should().HaveCount(expectedRows).And.Contain(e => e.TextContent.Contains("No results found"));
+    }
+
+    [Fact]
+    [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
+    public async Task Test_With_Real_Kestrel_Port()
+    {
+        // Force the server to start initializing
+        var defaultClient = _factory.CreateClient();
+
+        // Get the real random URI assigned by the OS
+        var actualAddress = _fixture.BaseUrl;
+
+        // Create a real HttpClient to communicate over the loopback network
+        using var realClient = new HttpClient();
+
+        var response = await realClient.GetAsync($"{actualAddress}", TestContext.Current.CancellationToken);
+
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(content);
     }
 }
