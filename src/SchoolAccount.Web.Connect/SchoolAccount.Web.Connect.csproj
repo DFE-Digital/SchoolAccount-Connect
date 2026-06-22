@@ -45,8 +45,4 @@
     <_ContentIncludedByDefault Remove="Views\Category\AllTasks.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Category\CategoryHub.cshtml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Features\Shared\_PaginatedList.cshtml" />
-  </ItemGroup>
 </Project>
