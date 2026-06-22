@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.IntegrationTests.Testing;
 using SchoolAccount.Tests.Common.Extensions;
@@ -38,15 +37,22 @@ public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
         services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
-
-        var queryHandlerType = typeof(IQueryHandler<,>);
-        var handlersToRemove = services
-            .Where(d => d.ServiceType.IsGenericType && d.ServiceType.GetGenericTypeDefinition() == queryHandlerType)
-            .ToList();
-        foreach (var descriptor in handlersToRemove)
-            services.Remove(descriptor);
-
         services.AddSingleton(HandlerRegistry);
-        services.AddTransient(typeof(IQueryHandler<,>), typeof(TestQueryHandlerAdapter<,>));
+
+        ReplaceHandlersWithTestAdapters(services);
+    }
+
+    private void ReplaceHandlersWithTestAdapters(IServiceCollection services)
+    {
+        foreach (var serviceType in HandlerRegistry.ServiceTypes)
+        {
+            var existing = services.FirstOrDefault(d => d.ServiceType == serviceType);
+            if (existing is not null)
+                services.Remove(existing);
+
+            var typeArgs = serviceType.GetGenericArguments();
+            var adapterType = typeof(TestQueryHandlerAdapter<,>).MakeGenericType(typeArgs);
+            services.AddTransient(serviceType, adapterType);
+        }
     }
 }

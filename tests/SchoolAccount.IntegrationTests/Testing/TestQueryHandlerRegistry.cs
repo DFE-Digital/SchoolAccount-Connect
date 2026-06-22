@@ -5,11 +5,16 @@ namespace SchoolAccount.IntegrationTests.Testing;
 public class TestQueryHandlerRegistry
 {
     private readonly Dictionary<Type, object> _handlers = new();
+    private readonly HashSet<Type> _serviceTypes = [];
+
+    public IReadOnlySet<Type> ServiceTypes => _serviceTypes;
 
     public void Register<TQuery, TResponse>(IQueryHandler<TQuery, TResponse> handler)
         where TQuery : IQuery<TResponse>
     {
-        _handlers[typeof(IQueryHandler<TQuery, TResponse>)] = handler;
+        var serviceType = typeof(IQueryHandler<TQuery, TResponse>);
+        _handlers[serviceType] = handler;
+        _serviceTypes.Add(serviceType);
     }
 
     public IQueryHandler<TQuery, TResponse>? TryGet<TQuery, TResponse>()

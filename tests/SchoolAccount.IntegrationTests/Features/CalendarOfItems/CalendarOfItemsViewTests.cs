@@ -11,16 +11,16 @@ namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
 public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicationFactory>
 {
-    private readonly SchoolAccountWebApplicationFactory _fixture;
+    private readonly SchoolAccountWebApplicationFactory _factory;
     private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewTests(SchoolAccountWebApplicationFactory fixture, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewTests(SchoolAccountWebApplicationFactory factory, ITestOutputHelper outputHelper)
     {
-        _fixture = fixture;
-        _fixture.OutputHelper = outputHelper;
-        _fixture.HandlerRegistry.Clear();
-        _fixture.HandlerRegistry.Register(_handler);
+        _factory = factory;
+        _factory.OutputHelper = outputHelper;
+        _factory.HandlerRegistry.Clear();
+        _factory.HandlerRegistry.Register(_handler);
         _handler.Clear();
     }
 
@@ -28,7 +28,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
     public async Task Calendar_endpoint_returns_success_page()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _factory.RequestPageAsync("/calendar");
 
         // Assert
         request.Should().NotBeNull();
@@ -43,7 +43,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
     public async Task Calendar_endpoint_returns_expected_title()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _factory.RequestPageAsync("/calendar");
 
         // Assert
         request.Should().NotBeNull();
@@ -54,7 +54,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
     public async Task Calendar_contains_upcoming_and_previous_task_tabs()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _factory.RequestPageAsync("/calendar");
 
         // Assert
         request.QuerySelectorAll(".govuk-tabs__tab").Should().HaveCount(2);
@@ -68,7 +68,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
     public async Task Correct_tab_selected_based_on_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
         request
@@ -83,7 +83,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
     public async Task Page_heading_matches_selected_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={mode}");
 
         // Assert
         request.QuerySelector(".dfe-tabs__panel .govuk-heading-m").Should().HaveTextContent(expectedTitle);
@@ -99,7 +99,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BePaginationWithLabels("1", "2", "3", "4", "Next page");
@@ -129,7 +129,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
-        var request = await _fixture.RequestPageAsync(
+        var request = await _factory.RequestPageAsync(
             $"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}&pageNumber={pageNumber}"
         );
 
@@ -147,7 +147,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _factory.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BeNull();
@@ -169,14 +169,15 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         const int numberOfNoItemsMessageRows = 0;
         const int numberOfCallToActionRows = 0;
 
+        const int pageSize = 10;
         var rows = _generator.GenerateCalendarOfItemsRows(filter, numberToGenerate);
-        var numberOfItemRows = rows.Count;
+        var numberOfItemRows = Math.Min(rows.Count, pageSize);
         var expectedRows = numberOfItemRows + numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
-        _handler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act.
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _factory.RequestPageAsync("/calendar");
 
         // Assert.
         request.Should().NotBeNull();
@@ -193,7 +194,7 @@ public class CalendarOfItemsViewTests : IClassFixture<SchoolAccountWebApplicatio
         const int expectedRows = numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
         // Act.
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _factory.RequestPageAsync("/calendar");
 
         // Assert.
         request.Should().NotBeNull();
