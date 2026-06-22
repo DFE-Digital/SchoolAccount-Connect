@@ -1,8 +1,8 @@
 using System.Collections;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Extensions;
-using SchoolAccount.Application.Features.CalendarOfItems.Contracts;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
@@ -89,7 +89,7 @@ public class CalendarOfItemsAggregator(
         return filters;
     }
 
-    public async Task<Result<CalendarOfItemsPagedResult>> Query(
+    public async Task<Result<CalendarOfItemsResponse>> Query(
         CalendarOfItemsCriteria criteria,
         CancellationToken cancellationToken = default
     )
@@ -98,7 +98,7 @@ public class CalendarOfItemsAggregator(
 
         if (!validation.IsValid)
         {
-            return validation.ToResult<CalendarOfItemsPagedResult>();
+            return validation.ToResult<CalendarOfItemsResponse>();
         }
 
         ConsolidateFilters(criteria);
@@ -112,12 +112,12 @@ public class CalendarOfItemsAggregator(
 
         var result = await query
             .WithSorting(criteria.ViewModes, criteria.SortMode, criteria.CustomOrderByFunction)
-            .PaginateAsyncOld(criteria.PageSize, criteria.PageNumber, cancellationToken);
+            .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
 
         var filters = criteria.IncludeFilterOptions
             ? (await ProduceAndCorrelateFilter(criteria, query)).ToCollection()
             : [];
 
-        return Result.Success(new CalendarOfItemsPagedResult(criteria, result, filters));
+        return Result.Success(new CalendarOfItemsResponse(criteria, result, filters));
     }
 }

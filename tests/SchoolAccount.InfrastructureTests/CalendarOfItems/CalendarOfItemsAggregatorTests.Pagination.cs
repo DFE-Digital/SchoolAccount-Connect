@@ -1,11 +1,13 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
 
+[SuppressMessage("Performance", "CA1826:Do not use Enumerable methods on indexable collections")]
 public partial class CalendarOfItemsAggregatorTests
 {
     [Theory]
@@ -35,21 +37,23 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         var firstId = (pageNumber - 1) * pageSize + 1;
-        var pages = numberOfRows / pageSize;
         var lastId = Math.Min(pageNumber * pageSize, numberOfRows);
 
         result.IsSuccess.Should().BeTrue(because: "Should always succeed");
-        result.Value.Payload.Should().HaveCount(pageSize, because: "The requested page size");
+        result.Value.Payload.Items.Should().HaveCount(pageSize, because: "The requested page size");
         result
-            .Value.FirstItemOnPage.Should()
+            .Value.Payload.Items.First()
+            .Id.Should()
             .Be(firstId, because: "This should be the min ID from range of possible data");
         result
-            .Value.LastItemOnPage.Should()
+            .Value.Payload.Items.Last()
+            .Id.Should()
             .Be(lastId, because: "This should be the max ID from range of possible data");
-        result.Value.PageCount.Should().Be(pages, because: "Based on the number of rows vs page number and size");
-        result.Value.PageSize.Should().Be(pageSize, because: "The requested page size");
-        result.Value.PageNumber.Should().Be(pageNumber, because: "The requested page");
-        result.Value.TotalItemCount.Should().Be(numberOfRows, because: "The pool of items that should be returning");
+        result.Value.Payload.PageSize.Should().Be(pageSize, because: "The requested page size");
+        result.Value.Payload.PageNumber.Should().Be(pageNumber, because: "The requested page");
+        result
+            .Value.Payload.TotalCount.Should()
+            .Be(numberOfRows, because: "The pool of items that should be returning");
     }
 
     [Fact]
@@ -69,7 +73,7 @@ public partial class CalendarOfItemsAggregatorTests
         // Assert
         result.IsSuccess.Should().BeTrue(because: "Should always succeed");
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEmpty(because: "We are outside of the one row pool so nothing should be returned");
     }
 }

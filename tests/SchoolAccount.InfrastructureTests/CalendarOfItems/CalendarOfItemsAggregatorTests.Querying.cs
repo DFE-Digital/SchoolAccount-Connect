@@ -1,7 +1,7 @@
 using AwesomeAssertions;
 using NSubstitute;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.Infrastructure.Helpers.Filtering;
 using SchoolAccount.InfrastructureTests.Extensions;
 
@@ -42,10 +42,10 @@ public partial class CalendarOfItemsAggregatorTests
         result.IsSuccess.Should().BeTrue(because: "Should always succeed regardless of query state");
         result.Value.Should().NotBeNull(because: "Should always have a object regardless of query state");
         result
-            .Value.Payload.Count.Should()
+            .Value.Payload.Items.Count.Should()
             .Be(Math.Min(poolSize, pageSize), because: "Should always match the query limit");
-        result.Value.PageSize.Should().Be(pageSize, because: "Should always match the query limit");
-        result.Value.PageNumber.Should().Be(pageNumber, because: "Should always match the query request");
+        result.Value.Payload.PageSize.Should().Be(pageSize, because: "Should always match the query limit");
+        result.Value.Payload.PageNumber.Should().Be(pageNumber, because: "Should always match the query request");
     }
 
     [Fact]

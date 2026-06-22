@@ -1,0 +1,29 @@
+﻿@using static SchoolAccount.Web.Connect.Features.ViewAddressConstants.CalendarOfItems.Partials;
+@model SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems.CalendarOfItemsViewModel
+@{
+    ViewData["Title"] = Model.Heading;
+}
+
+@section PageHeading{
+    @if (Model.ShowPageHeading)
+    {
+        @if (Model.HasHeading)
+        {
+            <h1 class="govuk-heading govuk-heading-l govuk-!-padding-top-0">@Model.Heading</h1>
+        }
+
+        @if (Model.HasSubHeading)
+        {
+            <p class="govuk-body">@Model.SubHeading</p>
+        }
+    }
+}
+
+<partial name="@Widget" model="@Model"/>
+
+@section RightSide{
+    @if (Model.HasFilters)
+    {
+        <partial name="@Filtration" model="Model.Filters"/>
+    }
+}

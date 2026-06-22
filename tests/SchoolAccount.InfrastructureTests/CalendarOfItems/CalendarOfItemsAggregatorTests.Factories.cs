@@ -1,6 +1,6 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
@@ -45,7 +45,7 @@ public partial class CalendarOfItemsAggregatorTests
         // Assert
         var rowsInScope = factoryThatIsExpectedARows.Union(factoryThatIsExpectedBRows).Where(x => x.Name == "Included");
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo(
                 rowsInScope,
                 because: "There should be none of the rows that are outside of the range or not apart of the selected query type"
@@ -67,7 +67,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo([row], because: "the id's are the same so once unioned it will only return the one row.");
     }
 }

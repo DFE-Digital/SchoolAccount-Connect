@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
@@ -27,7 +27,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeInOrder(
                 x => x.SortDate,
                 isAscending,
@@ -52,7 +52,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeInOrder(x => x.Name, true, because: "We asked for all the rows to be in alphabetical order");
     }
 }

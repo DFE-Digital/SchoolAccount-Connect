@@ -1,6 +1,6 @@
 using AwesomeAssertions;
-using SchoolAccount.Application.Features.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.CalendarOfItems.Models;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
 using SchoolAccount.InfrastructureTests.Extensions;
 
 namespace SchoolAccount.InfrastructureTests.CalendarOfItems;
@@ -33,7 +33,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo(
                 [rowOnStartBoundary, rowOnEndBoundary],
                 because: "rows within range boundaries should be included, rows outside should not"
@@ -57,7 +57,7 @@ public partial class CalendarOfItemsAggregatorTests
 
         // Assert
         result
-            .Value.Payload.Should()
+            .Value.Payload.Items.Should()
             .BeEquivalentTo(
                 [rowWithDate],
                 because: "Has only one as the other row is not in scope as it has a missing date"
