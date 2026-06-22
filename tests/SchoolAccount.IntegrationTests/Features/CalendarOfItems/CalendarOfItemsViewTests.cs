@@ -20,7 +20,7 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
     public CalendarOfItemsViewTests(KestrelServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
-        _fixture.SetOutputHelper(outputHelper);
+        _fixture.OutputHelper = outputHelper;
         _fixture.HandlerRegistry.Clear();
         _fixture.HandlerRegistry.Register(_handler);
         _handler.Clear();

@@ -14,9 +14,10 @@ public abstract class WebApplicationFixture : IAsyncLifetime
     public TestQueryHandlerRegistry HandlerRegistry => Factory.HandlerRegistry;
     public StubFallbackProviderResolver FallbackProviderResolver => Factory.FallbackProviderResolver;
 
-    public void SetOutputHelper(ITestOutputHelper outputHelper)
+    public ITestOutputHelper? OutputHelper
     {
-        Factory.OutputHelper = outputHelper;
+        get => Factory.OutputHelper;
+        set => Factory.OutputHelper = value;
     }
 
     protected virtual HttpClient CreateClient(WebApplicationFactoryClientOptions? options = null)
