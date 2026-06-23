@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
-using SchoolAccount.Infrastructure;
 using SchoolAccount.Tests.Common.Extensions;
 using SchoolAccount.Tests.Common.Fakes;
 using Xunit;
@@ -75,7 +74,6 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
     private void ConfigureTestServices(IServiceCollection services)
     {
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
-        services.AddDistributedMemoryCache();
 
         if (_useDisabledAntiforgery)
         {

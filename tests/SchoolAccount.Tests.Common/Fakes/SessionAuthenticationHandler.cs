@@ -16,18 +16,21 @@ public class SessionAuthenticationHandler(
 {
     public const string SchemeName = "SessionAuthenticationTests";
     public const string DefaultUserId = "this-user-is-cool";
-
-    public static string CurrentUserId { get; set; } = DefaultUserId;
-    public static OrganisationClaimBuilder? OrganisationClaim { get; set; }
+    public const string UserIdHeader = "X-Test-User-Id";
+    public const string OrganisationHeader = "X-Test-Organisation";
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var organisation = (OrganisationClaim ?? OrganisationClaimBuilder.Default).Build();
+        var userId = Request.Headers[UserIdHeader].FirstOrDefault() ?? DefaultUserId;
+        var organisationJson =
+            Request.Headers[OrganisationHeader].FirstOrDefault()
+            ?? JsonSerializer.Serialize(OrganisationClaimBuilder.Default.Build(), JsonSerializerOptions.Web);
+
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, CurrentUserId),
-            new Claim(ClaimTypes.Name, CurrentUserId),
-            new Claim("organisation", JsonSerializer.Serialize(organisation, JsonSerializerOptions.Web)),
+            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim(ClaimTypes.Name, userId),
+            new Claim("organisation", organisationJson),
         };
 
         var identity = new ClaimsIdentity(claims, SchemeName);
