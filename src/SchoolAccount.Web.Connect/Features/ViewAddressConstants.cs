@@ -8,6 +8,7 @@ internal static class ViewAddressConstants
         public const string Dashboard = "~/Features/Home/Dashboard/Dashboard.cshtml";
         public const string Maintenance = "~/Features/Home/Maintenance/Maintenance.cshtml";
         public const string Support = "~/Features/Home/Support/Support.cshtml";
+        public const string About = "~/Features/Home/About/About.cshtml";
     }
 
     internal static class Tasks

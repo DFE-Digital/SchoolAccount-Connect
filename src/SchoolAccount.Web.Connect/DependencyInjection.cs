@@ -24,6 +24,7 @@ using SchoolAccount.Web.Connect.Middleware;
 using SchoolAccount.Web.Connect.Middleware.Gates;
 using SchoolAccount.Web.Connect.Middleware.Interfaces;
 using SchoolAccount.Web.Connect.Models;
+using SchoolAccount.Web.Connect.Settings;
 using SchoolAccount.Web.Connect.Telemetry;
 
 namespace SchoolAccount.Web.Connect;
@@ -52,6 +53,10 @@ internal static class DependencyInjection
         services.AddAppInsightsFilter();
 
         services.Configure<TopHeaderNavigationOptions>(configurationManager.GetSection("TopHeaderNavigation"));
+        services.Configure<CustomEnvironmentSettings>(
+            configurationManager.GetSection(CustomEnvironmentSettings.SectionName)
+        );
+
         services.AddScoped<IRequestContext, RequestContext>();
 
         services.AddControllersWithViews(options =>
