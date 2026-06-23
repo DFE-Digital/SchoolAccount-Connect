@@ -1,11 +1,11 @@
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
-using SchoolAccount.IntegrationTests.Testing;
 using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Factories;
 using SchoolAccount.Tests.Common.Fakes;
 using Xunit;
 
-namespace SchoolAccount.IntegrationTests.Fixtures;
+namespace SchoolAccount.Tests.Common.Fixtures;
 
 public abstract class WebApplicationFixture : IAsyncLifetime
 {

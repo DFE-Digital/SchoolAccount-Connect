@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 
-namespace SchoolAccount.IntegrationTests.Testing;
+namespace SchoolAccount.Tests.Common.Factories;
 
 public class TestQueryHandlerRegistry
 {

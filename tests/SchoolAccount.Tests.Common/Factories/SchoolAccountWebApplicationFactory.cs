@@ -10,12 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Infrastructure;
-using SchoolAccount.IntegrationTests.Testing;
 using SchoolAccount.Tests.Common.Extensions;
 using SchoolAccount.Tests.Common.Fakes;
 using Xunit;
 
-namespace SchoolAccount.IntegrationTests;
+namespace SchoolAccount.Tests.Common.Factories;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor

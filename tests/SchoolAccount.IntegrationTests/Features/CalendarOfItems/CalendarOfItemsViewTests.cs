@@ -1,12 +1,11 @@
-using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
-using SchoolAccount.IntegrationTests.Fixtures;
 using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Fixtures;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;

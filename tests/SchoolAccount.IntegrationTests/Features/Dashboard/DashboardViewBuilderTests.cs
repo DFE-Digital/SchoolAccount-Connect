@@ -1,8 +1,8 @@
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Dashboard;
 using SchoolAccount.IntegrationTests.Features.Dashboard.Handlers;
-using SchoolAccount.IntegrationTests.Fixtures;
 using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Fixtures;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.Dashboard;

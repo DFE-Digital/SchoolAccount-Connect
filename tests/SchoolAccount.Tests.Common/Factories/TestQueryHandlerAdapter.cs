@@ -1,7 +1,7 @@
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.IntegrationTests.Testing;
+namespace SchoolAccount.Tests.Common.Factories;
 
 public class TestQueryHandlerAdapter<TQuery, TResponse>(TestQueryHandlerRegistry registry)
     : IQueryHandler<TQuery, TResponse>
@@ -13,7 +13,7 @@ public class TestQueryHandlerAdapter<TQuery, TResponse>(TestQueryHandlerRegistry
             registry.TryGet<TQuery, TResponse>()
             ?? throw new InvalidOperationException(
                 $"No test handler registered for IQueryHandler<{typeof(TQuery).Name}, {typeof(TResponse).Name}>. "
-                    + "Call factory.HandlerRegistry.Register<TQuery, TResponse>(handler) in your test constructor."
+                    + "Call fixture.HandlerRegistry.Register(handler) in your test constructor."
             );
 
         return handler.Handle(query, cancellationToken);

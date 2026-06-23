@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace SchoolAccount.IntegrationTests.Fixtures;
+namespace SchoolAccount.Tests.Common.Fixtures;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public class KestrelServerFixture : WebApplicationFixture
