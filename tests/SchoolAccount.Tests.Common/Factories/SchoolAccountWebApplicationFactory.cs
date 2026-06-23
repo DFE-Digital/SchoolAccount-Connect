@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Infrastructure;
 using SchoolAccount.Tests.Common.Extensions;
 using SchoolAccount.Tests.Common.Fakes;
 using Xunit;
@@ -21,6 +22,7 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
     private readonly bool _useSessionAuthentication;
     private readonly bool _useFakePolicyEvaluator;
     private readonly bool _useDisabledAntiforgery;
+    private readonly bool _useInMemoryDatabase;
     private string? _baseUrl;
 
     private SchoolAccountWebApplicationFactory(Builder builder)
@@ -30,6 +32,7 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
         _useSessionAuthentication = builder.UseSessionAuthentication;
         _useFakePolicyEvaluator = builder.UseFakePolicyEvaluator;
         _useDisabledAntiforgery = builder.UseDisabledAntiforgery;
+        _useInMemoryDatabase = builder.UseInMemoryDatabase;
     }
 
     public static Builder Create()
@@ -68,6 +71,11 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
 
     private void ConfigureTestServices(IServiceCollection services)
     {
+        if (_useInMemoryDatabase)
+        {
+            services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
+        }
+
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
 
         if (_useDisabledAntiforgery)

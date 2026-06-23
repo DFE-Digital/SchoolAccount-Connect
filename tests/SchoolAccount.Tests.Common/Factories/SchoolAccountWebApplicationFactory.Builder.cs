@@ -11,6 +11,7 @@ public partial class SchoolAccountWebApplicationFactory
         internal bool UseSessionAuthentication { get; private set; }
         internal bool UseFakePolicyEvaluator { get; private set; }
         internal bool UseDisabledAntiforgery { get; private set; }
+        internal bool UseInMemoryDatabase { get; private set; }
 
         public Builder WithTestDoubles(
             TestQueryHandlerRegistry handlerRegistry,
@@ -31,6 +32,12 @@ public partial class SchoolAccountWebApplicationFactory
         public Builder WithFakePolicyEvaluator()
         {
             UseFakePolicyEvaluator = true;
+            return this;
+        }
+
+        public Builder WithInMemoryDatabase()
+        {
+            UseInMemoryDatabase = true;
             return this;
         }
 
