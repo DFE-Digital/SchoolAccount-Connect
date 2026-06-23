@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using MartinCostello.Logging.XUnit;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
@@ -17,16 +16,12 @@ using Xunit;
 
 namespace SchoolAccount.Tests.Common.Factories;
 
-[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
     private readonly bool _useSessionAuthentication;
     private readonly bool _useFakePolicyEvaluator;
     private readonly bool _useDisabledAntiforgery;
     private string? _baseUrl;
-
-    public SchoolAccountWebApplicationFactory()
-        : this(Create()) { }
 
     private SchoolAccountWebApplicationFactory(Builder builder)
     {
