@@ -8,7 +8,7 @@ using SchoolAccount.Web.Connect.Attributes;
 using SchoolAccount.Web.Connect.Settings;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.Home.About;
+namespace SchoolAccount.Web.Connect.Features.About;
 
 public sealed class AboutController(IHostEnvironment env, IOptions<CustomEnvironmentSettings> customEnvSettings)
     : Controller
@@ -27,7 +27,7 @@ public sealed class AboutController(IHostEnvironment env, IOptions<CustomEnviron
             Environment = $"{customEnvSettings.Value.Label}  {env.EnvironmentName}".Trim(),
             DeploymentDate = GetDeploymentFileSystemDate(),
         };
-        return View(ViewAddressConstants.Home.About, model);
+        return View(ViewAddressConstants.About, model);
     }
 
     [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]

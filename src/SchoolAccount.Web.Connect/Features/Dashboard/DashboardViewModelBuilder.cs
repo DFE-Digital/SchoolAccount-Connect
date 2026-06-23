@@ -3,7 +3,7 @@ using SchoolAccount.Application.Features.Dashboard;
 using SchoolAccount.Web.Connect.Features.Shared.ListItem;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.Home.Dashboard;
+namespace SchoolAccount.Web.Connect.Features.Dashboard;
 
 public sealed class DashboardViewModelBuilder
 {

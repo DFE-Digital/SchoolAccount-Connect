@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using SchoolAccount.Web.Connect.Features.Home.Dashboard;
+using SchoolAccount.Web.Connect.Features.Dashboard;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.Dashboard.GetDashboard.GetDashboardResponseBuilder;
 using static SchoolAccount.Tests.Common.Builders.Dashboard.GetDashboard.GetDashboardResponseCalendarItemBuilder;

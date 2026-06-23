@@ -1,4 +1,4 @@
-namespace SchoolAccount.Web.Connect.Features.Home.About;
+namespace SchoolAccount.Web.Connect.Features.About;
 
 public class AboutViewModel
 {
