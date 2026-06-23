@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SchoolAccount.Application.Abstractions.Data;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Infrastructure;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
@@ -27,5 +28,9 @@ public class SchoolAccountWebApplicationFactory<TStartup> : SchoolAccountBaseWeb
         services.ReplaceWithTransient<IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>>(_ =>
             TestCalendarOfItemsDirectionalQueryHandler
         );
+
+        services.ReplaceWithTransient<
+            IQueryHandler<GetSubTasksByDirectionForTabViewCalendarOfItemsQuery, CalendarOfItemsResponse>
+        >(_ => TestCalendarOfItemsDirectionalQueryHandler);
     }
 }
