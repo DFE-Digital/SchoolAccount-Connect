@@ -3,22 +3,26 @@ using AwesomeAssertions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.IntegrationTests.Features.CalendarOfItems.DataGeneration;
-using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Fixtures;
+using SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Fixtures;
 using Xunit;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
-public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
+public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
 {
-    private readonly HttpServerFixture _fixture;
+    private readonly KestrelServerFixture _fixture;
+    private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
-    public CalendarOfItemsViewTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    public CalendarOfItemsViewTests(KestrelServerFixture fixture, ITestOutputHelper outputHelper)
     {
         _fixture = fixture;
         _fixture.OutputHelper = outputHelper;
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.Clear();
+        _fixture.HandlerRegistry.Clear();
+        _fixture.HandlerRegistry.Register(_handler);
+        _handler.Clear();
     }
 
     [Fact]
@@ -93,7 +97,7 @@ public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 40);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(10);
 
         // Act
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
@@ -123,7 +127,7 @@ public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, entriesToGenerate);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(pageSize);
+        _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
         var request = await _fixture.RequestPageAsync(
@@ -141,7 +145,7 @@ public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
         var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
         var rows = _generator.GenerateCalendarOfItemsRows(filter, 5);
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(10);
+        _handler.AddRows(rows).SetPageSize(10);
 
         // Act
         var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
@@ -160,18 +164,18 @@ public class CalendarOfItemsViewTests : IClassFixture<HttpServerFixture>
         int numberToGenerate
     )
     {
-        // Arrange
-        var pageSize = 10;
-        var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = pageSize };
+        // Arrange.
+        var filter = new CalendarOfItemsCriteria { ViewModes = CalendarOfItemsViewModes.Forward, PageSize = 10 };
 
         const int numberOfNoItemsMessageRows = 0;
         const int numberOfCallToActionRows = 0;
 
+        const int pageSize = 10;
         var rows = _generator.GenerateCalendarOfItemsRows(filter, numberToGenerate);
-        var numberOfItemRows = rows.Count > pageSize ? pageSize : rows.Count;
+        var numberOfItemRows = Math.Min(rows.Count, pageSize);
         var expectedRows = numberOfItemRows + numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
-        _fixture.TestCalendarOfItemsDirectionalQueryHandler.AddRows(rows).SetPageSize(pageSize);
+        _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act.
         var request = await _fixture.RequestPageAsync("/calendar");

@@ -29,8 +29,4 @@
     <ProjectReference Include="..\..\src\SchoolAccount.Web.Connect\SchoolAccount.Web.Connect.csproj" />
     <ProjectReference Include="..\SchoolAccount.Tests.Common\SchoolAccount.Tests.Common.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Database\Resolvers\" />
-  </ItemGroup>
 </Project>
