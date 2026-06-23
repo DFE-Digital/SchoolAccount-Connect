@@ -19,21 +19,33 @@ using Xunit;
 namespace SchoolAccount.Tests.Common.Factories;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
-public class SchoolAccountWebApplicationFactory(
-    TestQueryHandlerRegistry? handlerRegistry = null,
-    StubFallbackProviderResolver? fallbackProviderResolver = null,
-    bool useSessionAuthentication = false,
-    bool useFakePolicyEvaluator = true
-) : WebApplicationFactory<Program>, ITestOutputHelperAccessor
+public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
+    private readonly bool _useSessionAuthentication;
+    private readonly bool _useFakePolicyEvaluator;
     private string? _baseUrl;
 
-    public TestQueryHandlerRegistry HandlerRegistry { get; } = handlerRegistry ?? new TestQueryHandlerRegistry();
+    public SchoolAccountWebApplicationFactory()
+        : this(Create()) { }
+
+    private SchoolAccountWebApplicationFactory(Builder builder)
+    {
+        HandlerRegistry = builder.HandlerRegistry ?? new TestQueryHandlerRegistry();
+        FallbackProviderResolver = builder.FallbackProviderResolver ?? new StubFallbackProviderResolver();
+        _useSessionAuthentication = builder.UseSessionAuthentication;
+        _useFakePolicyEvaluator = builder.UseFakePolicyEvaluator;
+    }
+
+    public static Builder Create()
+    {
+        return new Builder();
+    }
+
+    public TestQueryHandlerRegistry HandlerRegistry { get; }
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
-    public StubFallbackProviderResolver FallbackProviderResolver { get; } =
-        fallbackProviderResolver ?? new StubFallbackProviderResolver();
+    public StubFallbackProviderResolver FallbackProviderResolver { get; }
 
     public string StartKestrel()
     {
@@ -58,12 +70,11 @@ public class SchoolAccountWebApplicationFactory(
 
     private void ConfigureTestServices(IServiceCollection services)
     {
-        services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
         services.ReplaceWithSingleton<IAntiforgery, DisabledAntiforgery>();
         services.AddDistributedMemoryCache();
 
-        if (useSessionAuthentication)
+        if (_useSessionAuthentication)
         {
             services
                 .AddAuthentication(SessionAuthenticationHandler.SchemeName)
@@ -73,12 +84,11 @@ public class SchoolAccountWebApplicationFactory(
                 );
         }
 
-        if (useFakePolicyEvaluator)
+        if (_useFakePolicyEvaluator)
         {
             services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
         }
 
-        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
         services.AddSingleton(HandlerRegistry);
 
         ReplaceHandlersWithTestAdapters(services);

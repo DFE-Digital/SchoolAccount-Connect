@@ -10,28 +10,30 @@ namespace SchoolAccount.Tests.Common.Fixtures;
 
 public abstract class WebApplicationFixture : IAsyncLifetime
 {
-    private readonly TestQueryHandlerRegistry _handlerRegistry = new();
-    private readonly StubFallbackProviderResolver _fallbackProviderResolver = new();
-
     protected WebApplicationFixture()
     {
-        UnauthenticatedFactory = new SchoolAccountWebApplicationFactory(_handlerRegistry, _fallbackProviderResolver);
-        AuthenticatedFactory = new SchoolAccountWebApplicationFactory(
-            _handlerRegistry,
-            _fallbackProviderResolver,
-            useSessionAuthentication: true,
-            useFakePolicyEvaluator: false
-        );
+        UnauthenticatedFactory = SchoolAccountWebApplicationFactory
+            .Create()
+            .WithTestDoubles(HandlerRegistry, FallbackProviderResolver)
+            .Build();
+
+        AuthenticatedFactory = SchoolAccountWebApplicationFactory
+            .Create()
+            .WithTestDoubles(HandlerRegistry, FallbackProviderResolver)
+            .WithSessionAuthentication()
+            .WithRealPolicyEvaluator()
+            .Build();
     }
 
-    private SchoolAccountWebApplicationFactory UnauthenticatedFactory { get; }
+    protected SchoolAccountWebApplicationFactory UnauthenticatedFactory { get; }
 
-    private SchoolAccountWebApplicationFactory AuthenticatedFactory { get; }
+    protected SchoolAccountWebApplicationFactory AuthenticatedFactory { get; }
 
     protected abstract WebApplicationAccessMode DefaultAccessMode { get; }
 
-    public TestQueryHandlerRegistry HandlerRegistry => _handlerRegistry;
-    public StubFallbackProviderResolver FallbackProviderResolver => _fallbackProviderResolver;
+    public TestQueryHandlerRegistry HandlerRegistry { get; } = new();
+
+    public StubFallbackProviderResolver FallbackProviderResolver { get; } = new();
 
     public ITestOutputHelper? OutputHelper
     {
