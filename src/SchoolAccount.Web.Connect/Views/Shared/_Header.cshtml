@@ -1,7 +1,11 @@
+@using Microsoft.Extensions.Options
 @using SchoolAccount.Application
 @using SchoolAccount.Kernel
+@using SchoolAccount.Web.Connect.Settings
 @inject IUserContext CurrentUser
 @inject IOrganisationContext OrganisationContext
+@inject IHostEnvironment Environment
+@inject IOptions<CustomEnvironmentSettings> CustomEnvironmentSettings
 
 @{
     List<(string url, string label, string[] childNodes)> navigation =
@@ -42,6 +46,28 @@
         (IsCurrent(url) || IsActive(childNodes))
             ? "dfe-connect-header__nav-item--active"
             : string.Empty;
+}
+
+@if (!Environment.IsProduction())
+{
+    <style>
+        .environment-banner {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #0b0c0c;
+            background-color: orange;
+        }
+    </style>
+    
+    <div class="environment-banner">
+        <div class="govuk-width-container">
+            <div class="govuk-body-s govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+                <strong>ATTENTION!</strong> 
+                This is a <strong>@(CustomEnvironmentSettings.Value.Label ?? Environment.EnvironmentName)</strong> version 
+                of DfE Connect and used for development and testing purposes.
+            </div>
+        </div>
+    </div>
 }
 
 <header class="dfe-connect-header" role="banner">

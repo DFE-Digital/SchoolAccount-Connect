@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Web.Connect.Attributes;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.Home.Cookies;
+namespace SchoolAccount.Web.Connect.Features.Cookies;
 
 public sealed class CookiesController : Controller
 {
@@ -13,6 +13,6 @@ public sealed class CookiesController : Controller
     [AllowAnonymous]
     public IActionResult Cookies()
     {
-        return View(ViewAddressConstants.Home.Cookies);
+        return View(ViewAddressConstants.Cookies);
     }
 }

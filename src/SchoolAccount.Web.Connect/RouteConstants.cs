@@ -11,6 +11,7 @@ public static class RouteConstants
     public const string Root = "/";
     public const string Maintenance = Root + "maintenance";
     public const string Support = Root + "support";
+    public const string About = Root + "about";
     public const string Cookies = Root + "cookies";
     public const string Error = Root + "error/{code}";
     public const string Search = Root + "/search";

@@ -2,13 +2,11 @@ namespace SchoolAccount.Web.Connect.Features;
 
 internal static class ViewAddressConstants
 {
-    internal static class Home
-    {
-        public const string Cookies = "~/Features/Home/Cookies/Cookies.cshtml";
-        public const string Dashboard = "~/Features/Home/Dashboard/Dashboard.cshtml";
-        public const string Maintenance = "~/Features/Home/Maintenance/Maintenance.cshtml";
-        public const string Support = "~/Features/Home/Support/Support.cshtml";
-    }
+    public const string Cookies = "~/Features/Cookies/Cookies.cshtml";
+    public const string Dashboard = "~/Features/Dashboard/Dashboard.cshtml";
+    public const string Maintenance = "~/Features/Maintenance/Maintenance.cshtml";
+    public const string Support = "~/Features/Support/Support.cshtml";
+    public const string About = "~/Features/About/About.cshtml";
 
     internal static class Tasks
     {

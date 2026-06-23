@@ -39,10 +39,4 @@
       <_Parameter1>SchoolAccount.ConformanceTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Login\Index.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Category\AllTasks.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Shared\Category\CategoryHub.cshtml" />
-  </ItemGroup>
 </Project>

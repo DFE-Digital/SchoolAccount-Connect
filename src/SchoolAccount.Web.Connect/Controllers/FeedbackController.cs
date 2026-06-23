@@ -6,10 +6,7 @@ using SchoolAccount.Application.Features.Feedback.Commands;
 namespace SchoolAccount.Web.Connect.Controllers;
 
 [ApiController]
-public sealed class FeedbackController(
-    ICommandHandler<RecordPageFeedbackCommand> recordPageFeedbackHandler,
-    ICommandHandler<RecordFeedbackExitCommand> recordFeedbackExitHandler
-) : ControllerBase
+public sealed class FeedbackController(IMediator mediator) : ControllerBase
 {
     private const string FeedbackSubmittedCookieName = "page_feedback_submitted";
     private const string BannerHiddenCookieName = "connect_banner_hidden";
@@ -23,7 +20,7 @@ public sealed class FeedbackController(
         CancellationToken cancellationToken
     )
     {
-        var result = await recordPageFeedbackHandler.Handle(
+        var result = await mediator.Send(
             new RecordPageFeedbackCommand(AnalyticsEvents.CtaYesNoInteraction, pageId, ctaType, selectedAnswer),
             cancellationToken
         );
@@ -55,7 +52,7 @@ public sealed class FeedbackController(
         CancellationToken cancellationToken
     )
     {
-        var result = await recordPageFeedbackHandler.Handle(
+        var result = await mediator.Send(
             new RecordPageFeedbackCommand(
                 AnalyticsEvents.CtaCancelled,
                 pageId,
@@ -97,10 +94,7 @@ public sealed class FeedbackController(
         CancellationToken cancellationToken
     )
     {
-        var result = await recordFeedbackExitHandler.Handle(
-            new RecordFeedbackExitCommand(pageId, ctaType),
-            cancellationToken
-        );
+        var result = await mediator.Send(new RecordFeedbackExitCommand(pageId, ctaType), cancellationToken);
 
         if (result.IsFailure)
         {

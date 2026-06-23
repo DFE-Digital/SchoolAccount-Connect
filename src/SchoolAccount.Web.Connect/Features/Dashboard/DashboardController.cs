@@ -4,7 +4,7 @@ using SchoolAccount.Application.Features.Dashboard;
 using SchoolAccount.Kernel;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
-namespace SchoolAccount.Web.Connect.Features.Home.Dashboard;
+namespace SchoolAccount.Web.Connect.Features.Dashboard;
 
 public sealed class DashboardController(
     IQueryHandler<GetDashboardQuery, GetDashboardResponse> dashboardHandler,
@@ -24,6 +24,6 @@ public sealed class DashboardController(
 
         var viewModel = DashboardViewModelBuilder.Build(dashboardResult.Value);
 
-        return View(ViewAddressConstants.Home.Dashboard, viewModel);
+        return View(ViewAddressConstants.Dashboard, viewModel);
     }
 }

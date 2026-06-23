@@ -1,0 +1,32 @@
+﻿@model SchoolAccount.Web.Connect.Features.About.AboutViewModel;
+
+@{
+    ViewData["Title"] = "About";
+}
+
+@section PageHeading{
+    <h1 class="govuk-heading-l govuk-!-padding-top-0">
+        About this application
+    </h1>
+    <p class="govuk-body">
+        This page provides technical diagnostic information for the active environment. 
+    </p>
+}
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Application version</dt>
+        <dd class="govuk-summary-list__value">@Model.Version</dd>
+    </div>
+  
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Environment</dt>
+        <dd class="govuk-summary-list__value">@Model.Environment</dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Last deployed</dt>
+        <dd class="govuk-summary-list__value">@Model.DeploymentDate</dd>
+    </div>
+</dl>
+

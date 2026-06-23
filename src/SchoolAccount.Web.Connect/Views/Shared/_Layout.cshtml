@@ -1,4 +1,5 @@
-﻿@using GovUk.Frontend.AspNetCore
+﻿@using System.Reflection
+@using GovUk.Frontend.AspNetCore
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
@@ -188,6 +189,9 @@
                 </govuk-footer-meta-item>
                 <govuk-footer-meta-item href="@RouteConstants.ContactUs">
                     Contact us
+                </govuk-footer-meta-item>
+                <govuk-footer-meta-item href="@RouteConstants.About">
+                    About
                 </govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>

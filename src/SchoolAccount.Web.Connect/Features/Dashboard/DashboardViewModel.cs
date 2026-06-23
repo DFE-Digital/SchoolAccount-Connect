@@ -1,6 +1,6 @@
 using SchoolAccount.Web.Connect.Features.Shared.ListItem;
 
-namespace SchoolAccount.Web.Connect.Features.Home.Dashboard;
+namespace SchoolAccount.Web.Connect.Features.Dashboard;
 
 public sealed record DashboardViewModel
 {
