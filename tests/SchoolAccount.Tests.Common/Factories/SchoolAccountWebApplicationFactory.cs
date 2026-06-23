@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using MartinCostello.Logging.XUnit;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -17,15 +19,21 @@ using Xunit;
 namespace SchoolAccount.Tests.Common.Factories;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
-public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
+public class SchoolAccountWebApplicationFactory(
+    TestQueryHandlerRegistry? handlerRegistry = null,
+    StubFallbackProviderResolver? fallbackProviderResolver = null,
+    bool useSessionAuthentication = false,
+    bool useFakePolicyEvaluator = true
+) : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
     private string? _baseUrl;
 
-    public TestQueryHandlerRegistry HandlerRegistry { get; } = new();
+    public TestQueryHandlerRegistry HandlerRegistry { get; } = handlerRegistry ?? new TestQueryHandlerRegistry();
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
-    public StubFallbackProviderResolver FallbackProviderResolver { get; } = new();
+    public StubFallbackProviderResolver FallbackProviderResolver { get; } =
+        fallbackProviderResolver ?? new StubFallbackProviderResolver();
 
     public string StartKestrel()
     {
@@ -52,7 +60,24 @@ public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>
     {
         services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
-        services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
+        services.ReplaceWithSingleton<IAntiforgery, DisabledAntiforgery>();
+        services.AddDistributedMemoryCache();
+
+        if (useSessionAuthentication)
+        {
+            services
+                .AddAuthentication(SessionAuthenticationHandler.SchemeName)
+                .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(
+                    SessionAuthenticationHandler.SchemeName,
+                    _ => { }
+                );
+        }
+
+        if (useFakePolicyEvaluator)
+        {
+            services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
+        }
+
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
         services.AddSingleton(HandlerRegistry);
 

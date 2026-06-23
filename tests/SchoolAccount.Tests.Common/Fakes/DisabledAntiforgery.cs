@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 
-namespace SchoolAccount.IntegrationTests.Features.Authentication.Handlers;
+namespace SchoolAccount.Tests.Common.Fakes;
 
 [SuppressMessage("Naming", "CA1725:Parameter names should match base declaration")]
 public class DisabledAntiforgery : IAntiforgery

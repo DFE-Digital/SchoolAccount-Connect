@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using AwesomeAssertions;
 using SchoolAccount.IntegrationTests.Features.Authentication.Collections;
-using SchoolAccount.IntegrationTests.Features.Authentication.Fixtures;
 using SchoolAccount.Tests.Common.Builders;
+using SchoolAccount.Tests.Common.Fixtures;
 using SchoolAccount.Web.Connect;
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace SchoolAccount.IntegrationTests.Pages;
 
 [Collection(SessionTests.CollectionName)]
 [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-public class TrustAcceptanceRequestGateTests(SessionFixture fixture) : IClassFixture<SessionFixture>
+public class TrustAcceptanceRequestGateTests(TestServerFixture fixture)
 {
     [Fact]
     public async Task Ensure_if_trust_is_logged_in_that_if_navigate_to_authorised_page_they_need_to_accept_before_continuing()
