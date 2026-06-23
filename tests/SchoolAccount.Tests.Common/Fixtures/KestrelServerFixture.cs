@@ -10,7 +10,7 @@ public class KestrelServerFixture : WebApplicationFixture
 {
     protected override WebApplicationAccessMode DefaultAccessMode => Unauthenticated;
 
-    public string BaseUrl => StartServer(DefaultAccessMode);
+    public string GetBaseUrl(WebApplicationAccessMode accessMode) => StartServer(accessMode);
 
     protected override HttpClient CreateClient(
         WebApplicationAccessMode accessMode,
