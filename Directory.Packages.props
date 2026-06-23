@@ -48,10 +48,10 @@
     <PackageVersion Include="AngleSharp" Version="1.4.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.58.0" />
-    <PackageVersion Include="PlaywrightTests.DfE.Infrastructure" Version="1.0.0" />
-    <PackageVersion Include="PlaywrightTests.DfE.Browsers" Version="1.0.0" />
-    <PackageVersion Include="PlaywrightTests.GlobalConstants" Version="1.0.0" />
-    <PackageVersion Include="PlaywrightTests.Kernel" Version="1.0.0" />
+    <PackageVersion Include="PlaywrightTests.DfE.Infrastructure" Version="1.0.230636" />
+    <PackageVersion Include="PlaywrightTests.DfE.Browsers" Version="1.0.230636" />
+    <PackageVersion Include="PlaywrightTests.GlobalConstants" Version="1.0.230636" />
+    <PackageVersion Include="PlaywrightTests.Kernel" Version="1.0.230636" />
     <PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageVersion Include="NetArchTest.Rules" Version="1.3.2" />

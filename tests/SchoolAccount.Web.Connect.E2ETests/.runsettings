@@ -19,7 +19,7 @@
     <EnvironmentVariables>
       <!-- <DEBUG>pw:api</DEBUG> -->
       <!-- <PWDEBUG>1</PWDEBUG> -->
-	    <HEADED>0</HEADED> Works in Visual Studio under v1.58. Note "1", NOT "true"
+	    <HEADED>1</HEADED> Works in Visual Studio under v1.58. Note "1", NOT "true"
     </EnvironmentVariables>
   </RunConfiguration>
 </RunSettings>

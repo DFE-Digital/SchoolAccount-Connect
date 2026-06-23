@@ -10,4 +10,9 @@ public class ConnectHomePage(IPage page, IRunContext runContext) : ConnectBasePa
     public ExploreTasksComponent ExploreTasks { get; } = new ExploreTasksComponent(page, runContext);
     public TasksByDateComponent TasksByDate { get; } = new TasksByDateComponent(page, runContext);
     public FullCalendarOfTasksLink COTLink { get; } = new FullCalendarOfTasksLink(page, runContext);
+
+    public async void GoToGoogle()
+    {
+        await PageContext.GotoAsync("https://www.google.com");
+    }
 }
