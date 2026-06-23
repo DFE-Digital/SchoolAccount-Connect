@@ -9,7 +9,7 @@ public partial class SchoolAccountWebApplicationFactory
         internal TestQueryHandlerRegistry? HandlerRegistry { get; private set; }
         internal StubFallbackProviderResolver? FallbackProviderResolver { get; private set; }
         internal bool UseSessionAuthentication { get; private set; }
-        internal bool UseFakePolicyEvaluator { get; private set; } = true;
+        internal bool UseFakePolicyEvaluator { get; private set; }
         internal bool UseDisabledAntiforgery { get; private set; }
 
         public Builder WithTestDoubles(
@@ -31,12 +31,6 @@ public partial class SchoolAccountWebApplicationFactory
         public Builder WithFakePolicyEvaluator()
         {
             UseFakePolicyEvaluator = true;
-            return this;
-        }
-
-        public Builder WithRealPolicyEvaluator()
-        {
-            UseFakePolicyEvaluator = false;
             return this;
         }
 

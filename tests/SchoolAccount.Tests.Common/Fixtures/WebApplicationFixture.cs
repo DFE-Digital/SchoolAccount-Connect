@@ -15,8 +15,8 @@ public abstract class WebApplicationFixture : IAsyncLifetime
 {
     protected WebApplicationFixture()
     {
-        UnauthenticatedFactory = BuildFactory();
-        AuthenticatedFactory = BuildFactory(options => options.WithSessionAuthentication().WithRealPolicyEvaluator());
+        UnauthenticatedFactory = BuildFactory(b => b.WithFakePolicyEvaluator());
+        AuthenticatedFactory = BuildFactory(b => b.WithSessionAuthentication());
     }
 
     public TestQueryHandlerRegistry HandlerRegistry { get; } = new();
@@ -41,10 +41,8 @@ public abstract class WebApplicationFixture : IAsyncLifetime
 
     public HttpClient CreateAuthenticatedClient(string? userId = null, OrganisationClaimBuilder? organisation = null)
     {
-        var client = CreateClient(
-            Authenticated,
-            new WebApplicationFactoryClientOptions { HandleCookies = true, AllowAutoRedirect = true }
-        );
+        var options = new WebApplicationFactoryClientOptions { HandleCookies = true, AllowAutoRedirect = true };
+        var client = CreateClient(Authenticated, options);
 
         AddAuthenticationHeaders(client, userId, organisation);
 
