@@ -12,12 +12,11 @@ public abstract class WebApplicationFixture : IAsyncLifetime
 {
     private readonly TestQueryHandlerRegistry _handlerRegistry = new();
     private readonly StubFallbackProviderResolver _fallbackProviderResolver = new();
-    private readonly SchoolAccountWebApplicationFactory _authenticatedFactory;
 
     protected WebApplicationFixture()
     {
-        Factory = new SchoolAccountWebApplicationFactory(_handlerRegistry, _fallbackProviderResolver);
-        _authenticatedFactory = new SchoolAccountWebApplicationFactory(
+        UnauthenticatedFactory = new SchoolAccountWebApplicationFactory(_handlerRegistry, _fallbackProviderResolver);
+        AuthenticatedFactory = new SchoolAccountWebApplicationFactory(
             _handlerRegistry,
             _fallbackProviderResolver,
             useSessionAuthentication: true,
@@ -25,24 +24,37 @@ public abstract class WebApplicationFixture : IAsyncLifetime
         );
     }
 
-    protected SchoolAccountWebApplicationFactory Factory { get; }
+    private SchoolAccountWebApplicationFactory UnauthenticatedFactory { get; }
+
+    private SchoolAccountWebApplicationFactory AuthenticatedFactory { get; }
+
+    protected abstract WebApplicationAccessMode DefaultAccessMode { get; }
 
     public TestQueryHandlerRegistry HandlerRegistry => _handlerRegistry;
     public StubFallbackProviderResolver FallbackProviderResolver => _fallbackProviderResolver;
 
     public ITestOutputHelper? OutputHelper
     {
-        get => Factory.OutputHelper;
+        get => UnauthenticatedFactory.OutputHelper;
         set
         {
-            Factory.OutputHelper = value;
-            _authenticatedFactory.OutputHelper = value;
+            UnauthenticatedFactory.OutputHelper = value;
+            AuthenticatedFactory.OutputHelper = value;
         }
     }
 
     protected virtual HttpClient CreateClient(WebApplicationFactoryClientOptions? options = null)
     {
-        return Factory.CreateClient(options ?? Factory.ClientOptions);
+        return CreateClient(DefaultAccessMode, options);
+    }
+
+    protected virtual HttpClient CreateClient(
+        WebApplicationAccessMode accessMode,
+        WebApplicationFactoryClientOptions? options = null
+    )
+    {
+        var factory = GetFactory(accessMode);
+        return factory.CreateClient(options ?? factory.ClientOptions);
     }
 
     public HttpClient CreateAuthenticatedClient(string? userId = null, OrganisationClaimBuilder? organisation = null)
@@ -50,22 +62,42 @@ public abstract class WebApplicationFixture : IAsyncLifetime
         SessionAuthenticationHandler.CurrentUserId = userId ?? SessionAuthenticationHandler.DefaultUserId;
         SessionAuthenticationHandler.OrganisationClaim = organisation;
 
-        return _authenticatedFactory.CreateClient(
+        return CreateClient(
+            WebApplicationAccessMode.Authenticated,
             new WebApplicationFactoryClientOptions { HandleCookies = true, AllowAutoRedirect = true }
         );
     }
 
     public virtual Task<IDocument> RequestPageAsync(string uri, WebApplicationFactoryClientOptions? options = null)
     {
-        return Factory.RequestPageAsync(uri, options);
+        return RequestPageAsync(uri, DefaultAccessMode, options);
+    }
+
+    public virtual Task<IDocument> RequestPageAsync(
+        string uri,
+        WebApplicationAccessMode accessMode,
+        WebApplicationFactoryClientOptions? options = null
+    )
+    {
+        return GetFactory(accessMode).RequestPageAsync(uri, options);
     }
 
     public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
     public async ValueTask DisposeAsync()
     {
-        await _authenticatedFactory.DisposeAsync();
-        await Factory.DisposeAsync();
+        await AuthenticatedFactory.DisposeAsync();
+        await UnauthenticatedFactory.DisposeAsync();
         GC.SuppressFinalize(this);
+    }
+
+    protected SchoolAccountWebApplicationFactory GetFactory(WebApplicationAccessMode accessMode)
+    {
+        return accessMode switch
+        {
+            WebApplicationAccessMode.Unauthenticated => UnauthenticatedFactory,
+            WebApplicationAccessMode.Authenticated => AuthenticatedFactory,
+            _ => throw new ArgumentOutOfRangeException(nameof(accessMode), accessMode, null),
+        };
     }
 }

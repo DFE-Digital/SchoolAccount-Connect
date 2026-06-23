@@ -1,23 +1,38 @@
 using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
+using static SchoolAccount.Tests.Common.Fixtures.WebApplicationAccessMode;
 
 namespace SchoolAccount.Tests.Common.Fixtures;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public class KestrelServerFixture : WebApplicationFixture
 {
-    public string BaseUrl => Factory.StartKestrel();
+    protected override WebApplicationAccessMode DefaultAccessMode => Unauthenticated;
 
-    protected override HttpClient CreateClient(WebApplicationFactoryClientOptions? options = null)
+    public string BaseUrl => StartServer(DefaultAccessMode);
+
+    protected override HttpClient CreateClient(
+        WebApplicationAccessMode accessMode,
+        WebApplicationFactoryClientOptions? options = null
+    )
     {
-        _ = BaseUrl;
-        return base.CreateClient(options);
+        _ = StartServer(accessMode);
+        return base.CreateClient(accessMode, options);
     }
 
-    public override Task<IDocument> RequestPageAsync(string uri, WebApplicationFactoryClientOptions? options = null)
+    public override Task<IDocument> RequestPageAsync(
+        string uri,
+        WebApplicationAccessMode accessMode,
+        WebApplicationFactoryClientOptions? options = null
+    )
     {
-        _ = BaseUrl;
-        return base.RequestPageAsync(uri, options);
+        _ = StartServer(accessMode);
+        return base.RequestPageAsync(uri, accessMode, options);
+    }
+
+    private string StartServer(WebApplicationAccessMode accessMode)
+    {
+        return GetFactory(accessMode).StartKestrel();
     }
 }
