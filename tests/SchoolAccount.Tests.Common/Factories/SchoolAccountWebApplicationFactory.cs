@@ -23,6 +23,7 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
 {
     private readonly bool _useSessionAuthentication;
     private readonly bool _useFakePolicyEvaluator;
+    private readonly bool _useDisabledAntiforgery;
     private string? _baseUrl;
 
     public SchoolAccountWebApplicationFactory()
@@ -34,6 +35,7 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
         FallbackProviderResolver = builder.FallbackProviderResolver ?? new StubFallbackProviderResolver();
         _useSessionAuthentication = builder.UseSessionAuthentication;
         _useFakePolicyEvaluator = builder.UseFakePolicyEvaluator;
+        _useDisabledAntiforgery = builder.UseDisabledAntiforgery;
     }
 
     public static Builder Create()
@@ -55,9 +57,11 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
         UseKestrel(port: 0);
         StartServer();
 
-        var addresses = Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses;
+        var server = Services.GetRequiredService<IServer>();
+        var addresses = server.Features.Get<IServerAddressesFeature>()!.Addresses;
 
         _baseUrl = addresses.First();
+
         return _baseUrl;
     }
 
@@ -71,8 +75,12 @@ public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<
     private void ConfigureTestServices(IServiceCollection services)
     {
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
-        services.ReplaceWithSingleton<IAntiforgery, DisabledAntiforgery>();
         services.AddDistributedMemoryCache();
+
+        if (_useDisabledAntiforgery)
+        {
+            services.ReplaceWithSingleton<IAntiforgery, DisabledAntiforgery>();
+        }
 
         if (_useSessionAuthentication)
         {
