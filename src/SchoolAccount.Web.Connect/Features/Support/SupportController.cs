@@ -7,7 +7,7 @@ namespace SchoolAccount.Web.Connect.Features.Support;
 public sealed class SupportController : Controller
 {
     [Breadcrumb("Home", Root)]
-    [Breadcrumb("Support", RouteConstants.Support)]
+    [Breadcrumb("Support")]
     [HttpGet(RouteConstants.Support)]
     public IActionResult Support()
     {

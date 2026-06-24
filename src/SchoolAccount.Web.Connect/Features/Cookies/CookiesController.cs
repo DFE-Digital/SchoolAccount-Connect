@@ -8,7 +8,7 @@ namespace SchoolAccount.Web.Connect.Features.Cookies;
 public sealed class CookiesController : Controller
 {
     [Breadcrumb("Home", Root)]
-    [Breadcrumb("Cookies", RouteConstants.Cookies)]
+    [Breadcrumb("Cookies")]
     [HttpGet(RouteConstants.Cookies)]
     [AllowAnonymous]
     public IActionResult Cookies()

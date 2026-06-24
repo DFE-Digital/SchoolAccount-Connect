@@ -37,15 +37,11 @@ public sealed class GetTaskByIdController(IQueryHandler<GetTaskByIdQuery, GetTas
     private void AddTopLevelCategoryAsBreadcrumb(GetTaskByIdResponse task)
     {
         // Manage allows multiple top-level categories but for a breadcrumb
-        // we can only have one and we have no way to determine which one to use
+        // we can only have one, and we have no way to determine which one to use
         // so we just take the first one
         var taskType = task.TaskTypes.First();
 
-        ControllerExtensions.AddBreadcrumb(
-            this,
-            taskType.Name,
-            string.Format(CultureInfo.InvariantCulture, Category.Index, taskType.Id)
-        );
-        ControllerExtensions.AddBreadcrumb(this, task.Name);
+        this.AddBreadcrumb(taskType.Name, string.Format(CultureInfo.InvariantCulture, Category.Index, taskType.Id));
+        this.AddBreadcrumb(task.Name);
     }
 }

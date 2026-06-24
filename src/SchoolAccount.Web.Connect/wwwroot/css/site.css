@@ -77,8 +77,20 @@
     }
 }
 
-html {
+.govuk-width-container{
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.govuk-phase-banner__content {
+    padding-left: -3px;
+    
+}
+
+html ,body {
     position: relative;
+    max-width: 100%;
+    overflow-x: hidden; 
     min-height: 100%;
     margin: 0;
     padding: 0;
@@ -308,6 +320,7 @@ header.dfe-connect-header .dfe-connect-header__dept-image {
     max-width: 260px;
     display: block;
     object-fit: contain;
+    padding-left: 3px;
 }
 
 /* Account/actions (right) */
@@ -319,6 +332,7 @@ header.dfe-connect-header .dfe-connect-header__account {
     font-size: 16px;
     min-width: 0;
     flex: 0 0 auto;
+    padding-right: 7px;
 }
 
 header.dfe-connect-header .dfe-connect-header__school {

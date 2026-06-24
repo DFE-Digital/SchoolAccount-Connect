@@ -1,5 +1,4 @@
-﻿@using System.Reflection
-@using GovUk.Frontend.AspNetCore
+﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
@@ -90,7 +89,6 @@
         }
     }
 
-    @await RenderSectionAsync("BeforeContent", false)
 
     @if (isAuthenticated)
     {
@@ -108,50 +106,6 @@
     }
 }
 
-@await RenderSectionAsync("Header", false)
-
-@if (IsSectionDefined("SuccessBanner"))
-{
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            @await RenderSectionAsync("SuccessBanner", required: false)
-        </div>
-    </div>
-}
-
-@if (IsSectionDefined("PageHeading"))
-{
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
-            <p class="govuk-caption govuk-caption-l">@organisationName</p>
-
-            @await RenderSectionAsync("PageHeading", required: false)
-        </div>
-    </div>
-}
-
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        @RenderBody()
-    </div>
-    @if (showRightHandSide)
-    {
-        <div class="govuk-grid-column-one-third govuk-!-margin-top-0">
-            <partial name="SVG/DividerLine"></partial>
-
-            @if (IsSectionDefined("RightSide"))
-            {
-                <div class="govuk-!-margin-bottom-6">
-                    @await RenderSectionAsync("RightSide")
-                </div>
-            }
-
-            <partial name="_ContactUs"/>
-        </div>
-    }
-</div>
-
 @section BodyEnd {
     @Html.GovUkFrontendScriptImports()
 
@@ -166,7 +120,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/feedback.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
 }
 
 @section GovUkFooter {
@@ -209,3 +162,53 @@
         <govuk-footer-copyright/>
     </govuk-footer>
 }
+
+@await RenderSectionAsync("BeforeContent", false)
+
+@await RenderSectionAsync("Header", false)
+
+@if (IsSectionDefined("SuccessBanner"))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @await RenderSectionAsync("SuccessBanner", required: false)
+        </div>
+    </div>
+}
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper" id="main-content" role="main">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                @if (IsSectionDefined("PageHeading"))
+                {
+                    @if (isAuthenticated)
+                    {
+                        <p class="govuk-caption govuk-caption-l">@organisationName</p>
+                    }
+
+                    @await RenderSectionAsync("PageHeading", required: false)
+                }
+
+                @RenderBody()
+            </div>
+            @if (showRightHandSide)
+            {
+                <div class="govuk-grid-column-one-third govuk-!-margin-top-0">
+                    <partial name="SVG/DividerLine"></partial>
+
+                    @if (IsSectionDefined("RightSide"))
+                    {
+                        <div class="govuk-!-margin-bottom-6">
+                            @await RenderSectionAsync("RightSide")
+                        </div>
+                    }
+
+                    <partial name="_ContactUs"/>
+                </div>
+            }
+        </div>
+    </main>
+</div>
+
+@await RenderSectionAsync("GovUkFooter", required: false)

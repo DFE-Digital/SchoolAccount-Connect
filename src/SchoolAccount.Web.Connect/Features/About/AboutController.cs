@@ -14,6 +14,7 @@ public sealed class AboutController(IHostEnvironment env, IOptions<CustomEnviron
     : Controller
 {
     [Breadcrumb("Home", Root)]
+    [Breadcrumb("About")]
     [HttpGet(RouteConstants.About)]
     [AllowAnonymous]
     public IActionResult About()
