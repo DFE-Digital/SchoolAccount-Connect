@@ -333,20 +333,22 @@ public class GetTaskByIdProjectionTests
     }
 
     [Fact]
-    public void Related_tasks_are_mapped()
+    public void Related_tasks_are_mapped_and_only_return_related_tasks()
     {
         // Arrange
         var taskEntity = ATask().Build();
-        taskEntity.RelatedTasks.Add(ATask().WithId(10).Named("Related Task 1").Build());
-        taskEntity.RelatedTasks.Add(ATask().WithId(20).Named("Related Task 2").Build());
+        taskEntity.RelatedTasks.Add(ATask().WithId(10).Named("Related Task 1 - Published").InState(Published).Build());
+        taskEntity.RelatedTasks.Add(ATask().WithId(20).Named("Related Task 2 - Expired").InState(Expired).Build());
+        taskEntity.RelatedTasks.Add(ATask().WithId(30).Named("Related Task 3 - Archived").InState(Archived).Build());
 
         // Act
         var result = _project([])(taskEntity);
 
         // Assert
         result.RelatedTasks.Should().HaveCount(2);
-        result.RelatedTasks.Should().ContainEquivalentOf(new { Id = 10L, Name = "Related Task 1" });
-        result.RelatedTasks.Should().ContainEquivalentOf(new { Id = 20L, Name = "Related Task 2" });
+        result.RelatedTasks.Should().ContainEquivalentOf(new { Id = 10L, Name = "Related Task 1 - Published" });
+        result.RelatedTasks.Should().ContainEquivalentOf(new { Id = 20L, Name = "Related Task 2 - Expired" });
+        result.RelatedTasks.Should().NotContainEquivalentOf(new { Id = 30L, Name = "Related Task 3 - Archived" });
     }
 
     [Fact]

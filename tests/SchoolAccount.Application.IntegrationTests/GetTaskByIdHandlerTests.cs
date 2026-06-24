@@ -209,4 +209,68 @@ public class GetTaskByIdHandlerTests
                     .NotBeNullOrEmpty("due date labels should be applied to all subtasks with due dates");
             });
     }
+
+    [Fact]
+    public async Task Ensures_only_visible_related_tasks_are_present()
+    {
+        // Arrange
+        await _context.Map(
+            ctx =>
+            {
+                var taxonomyEntity = ATaxonomy()
+                    .WithId(1)
+                    .WithName("Institution_Type_Access")
+                    .WithDisplayName("Institution types")
+                    .IsMandatory()
+                    .IsMultiSelect()
+                    .WithTags(ATag().WithId((int)SchoolType.Academy).WithName(nameof(SchoolType.Academy)))
+                    .Build();
+                var taskEntity = ATask()
+                    .WithId(1)
+                    .WithSubTasks(
+                        ASubTask().WithId(1).InState(Published).WithStartDate(2026, 5, 1).WithDueDate(2026, 6, 1)
+                    )
+                    .WithRelatedTask(
+                        ATask().WithId(2).InState(Published).Named("Related Task 1 - Published"),
+                        ATask().WithId(3).InState(Expired).Named("Related Task 2 - Expired"),
+                        ATask().WithId(4).InState(Archived).Named("Related Task 3 - Archived")
+                    )
+                    .Build();
+                var subtaskSource = new SourceEntity { Id = (int)Source.Subtask, Name = nameof(Source.Subtask) };
+
+                ctx.Taxonomies.Add(taxonomyEntity);
+                ctx.SchoolTypeTagMappings.AddRange(
+                    taxonomyEntity.Tags.Select((x, i) => WithSchoolType(x, i + 1, (SchoolType)(i + 1)))
+                );
+                ctx.Tasks.Add(taskEntity);
+                ctx.TagsSourceMappings.AddRange(
+                    new TagsSourceMappingEntity
+                    {
+                        Id = 1,
+                        Tag = taxonomyEntity.Tags.ElementAt(0),
+                        TagId = taxonomyEntity.Tags.ElementAt(0).Id,
+                        SubTask = taskEntity.SubTasks.ElementAt(0),
+                        EntityId = taskEntity.SubTasks.ElementAt(0).Id,
+                        Source = subtaskSource,
+                        SourceId = subtaskSource.Id,
+                    }
+                );
+            },
+            CancellationToken.None
+        );
+
+        var query = new GetTaskByIdQuery(1);
+
+        // Act
+        var result = await _sut.Handle(query, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result
+            .Value.RelatedTasks.Should()
+            .HaveCount(2)
+            .And.ContainEquivalentOf(new { Name = "Related Task 1 - Published" })
+            .And.ContainEquivalentOf(new { Name = "Related Task 2 - Expired" })
+            .And.NotContainEquivalentOf(new { Name = "Related Task 3 - Archived" });
+    }
 }

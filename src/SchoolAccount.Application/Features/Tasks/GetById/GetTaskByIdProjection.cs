@@ -13,8 +13,9 @@ public static class GetTaskByIdProjection
         SchoolType type
     )
     {
-        var isVisible = SubTaskEntitySpecifications.IsVisible();
-        var isAccessible = SubTaskEntitySpecifications.IsAccessibleForSchoolType(schoolTypeMappings, type);
+        var isTaskVisible = TaskEntitySpecifications.IsVisible();
+        var isSubTaskVisible = SubTaskEntitySpecifications.IsVisible();
+        var isSubTaskAccessible = SubTaskEntitySpecifications.IsAccessibleForSchoolType(schoolTypeMappings, type);
         return x => new GetTaskByIdResponse
         {
             Id = x.Id,
@@ -25,8 +26,8 @@ public static class GetTaskByIdProjection
             UpdatedBy = x.UpdatedBy,
             SubTasks = x
                 .SubTasks.AsQueryable()
-                .Where(isVisible)
-                .Where(isAccessible)
+                .Where(isSubTaskVisible)
+                .Where(isSubTaskAccessible)
                 .Select(st => new GetTaskByIdResponseSubtask
                 {
                     Id = st.Id,
@@ -51,7 +52,9 @@ public static class GetTaskByIdProjection
                 .Resources.Select(r => new GetTaskByIdResponseResource { Name = r.ResourceName, Link = r.DigitalLink })
                 .ToArray(),
             RelatedTasks = x
-                .RelatedTasks.Select(rt => new GetTaskByIdResponseRelatedTask { Id = rt.Id, Name = rt.Name })
+                .RelatedTasks.AsQueryable()
+                .Where(isTaskVisible)
+                .Select(rt => new GetTaskByIdResponseRelatedTask { Id = rt.Id, Name = rt.Name })
                 .ToArray(),
             TaskTypes = x
                 .Types.Where(t => t.ParentTypeId == null && t.TypeGroupingId == 1)

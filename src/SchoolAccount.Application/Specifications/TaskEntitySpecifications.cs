@@ -27,12 +27,17 @@ public static class TaskEntitySpecifications
             );
     }
 
-    public static Expression<Func<TaskEntity, bool>> IsVisible()
+    public static Expression<Func<TaskEntity, bool>> HasVisibleSubTasks()
     {
         return t =>
             t.SubTasks.Any(sub =>
                 sub.WorkflowState == WorkflowState.Published || sub.WorkflowState == WorkflowState.Expired
             );
+    }
+
+    public static Expression<Func<TaskEntity, bool>> IsVisible()
+    {
+        return t => t.WorkflowState == WorkflowState.Published || t.WorkflowState == WorkflowState.Expired;
     }
 
     public static Expression<Func<TaskEntity, bool>> InCategory(int categoryId)

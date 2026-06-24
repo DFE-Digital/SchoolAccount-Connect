@@ -1,3 +1,4 @@
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Domain.Resources;
 using SchoolAccount.Domain.Subtasks;
@@ -10,12 +11,14 @@ public sealed class TaskBuilder
     private long _id = 1;
     private readonly List<SubTaskEntity> _subTasks = [];
     private readonly List<ResourceEntity> _resources = [];
+    private readonly List<TaskEntity> _relatedTasks = [];
     private string _name = "Test Task";
     private string? _referenceNo;
     private string? _description;
     private Requirement _requirement = Requirement.Mandatory;
     private DateTime _dateUpdated = DateTime.UtcNow;
     private string _updatedBy = "tester";
+    private WorkflowState _state = WorkflowState.None;
 
     public static TaskBuilder ATask() => new();
 
@@ -93,6 +96,22 @@ public sealed class TaskBuilder
         return this;
     }
 
+    public TaskBuilder WithRelatedTask(params TaskBuilder[] builders)
+    {
+        foreach (var builder in builders)
+        {
+            _relatedTasks.AddRange(builder.Build());
+        }
+
+        return this;
+    }
+
+    public TaskBuilder InState(WorkflowState state)
+    {
+        _state = state;
+        return this;
+    }
+
     public TaskEntity Build()
     {
         var task = new TaskEntity
@@ -105,6 +124,7 @@ public sealed class TaskBuilder
             CreatedBy = "tester",
             UpdatedBy = _updatedBy,
             DateUpdated = _dateUpdated,
+            WorkflowState = _state,
         };
 
         foreach (var subtask in _subTasks)
@@ -115,6 +135,11 @@ public sealed class TaskBuilder
         foreach (var resource in _resources)
         {
             task.Resources.Add(resource);
+        }
+
+        foreach (var relatedTask in _relatedTasks)
+        {
+            task.RelatedTasks.Add(relatedTask);
         }
 
         return task;

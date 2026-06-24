@@ -14,7 +14,7 @@ public sealed class GetAllTasksQueryHandler(IApplicationDbContext applicationDbC
     {
         var tasks = await applicationDbContext
             .Tasks.AsNoTracking()
-            .Where(TaskEntitySpecifications.IsVisible())
+            .Where(TaskEntitySpecifications.HasVisibleSubTasks())
             .AsSingleQuery()
             .Select(GetAllTasksProjection.ToGetAllTasksResponseTasks())
             .PaginateAsync(query.PageSize, query.PageNumber, cancellationToken);
