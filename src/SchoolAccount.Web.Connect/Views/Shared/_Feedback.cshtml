@@ -7,6 +7,8 @@
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
         .ToLowerInvariant();
 
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+
     var feedbackSubmitted =
         string.Equals(
             Context.Request.Cookies[feedbackSubmittedCookieName],
@@ -14,10 +16,10 @@
             StringComparison.OrdinalIgnoreCase);
 
     var redirectUrl =
-        $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
+        $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&returnUrl={Uri.EscapeDataString(returnUrl)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
 
     var cancelUrl =
-        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
+        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&returnUrl={Uri.EscapeDataString(returnUrl)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.YesNo)}";
 }
 
 <section id="page-feedback"
@@ -42,6 +44,7 @@
                             @Html.AntiForgeryToken()
 
                             <input type="hidden" name="pageId" value="@pageId" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
                             <input type="hidden" name="ctaType" value="@AnalyticsCtaTypes.YesNo" />
 
                             <button type="submit"
@@ -78,8 +81,7 @@
                         <a class="govuk-link"
                            target="_blank"
                            rel="noopener noreferrer"
-                           href="@redirectUrl"
-                           onclick="resetPageFeedbackState()">
+                           href="@redirectUrl">
                             Give your feedback (opens in a new tab)
                         </a>.
                     </p>

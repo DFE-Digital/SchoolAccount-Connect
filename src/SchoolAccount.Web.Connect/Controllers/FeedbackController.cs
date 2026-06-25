@@ -15,13 +15,18 @@ public sealed class FeedbackController(IMediator mediator) : ControllerBase
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Respond(
         [FromForm] string pageId,
+        [FromForm] string returnUrl,
         [FromForm] string ctaType,
         [FromForm] string selectedAnswer,
         CancellationToken cancellationToken
     )
     {
         var result = await mediator.Send(
-            new RecordPageFeedbackCommand(AnalyticsEvents.CtaYesNoInteraction, pageId, ctaType, selectedAnswer),
+            new RecordPageFeedbackCommand(
+                AnalyticsEvents.CtaYesNoInteraction,
+                pageId,
+                ctaType,
+                selectedAnswer),
             cancellationToken
         );
 
@@ -42,7 +47,11 @@ public sealed class FeedbackController(IMediator mediator) : ControllerBase
             }
         );
 
-        return Redirect($"{pageId}#page-feedback");
+        var safeReturnUrl = Url.IsLocalUrl(returnUrl)
+            ? returnUrl
+            : "/";
+
+        return Redirect($"{safeReturnUrl}#page-feedback");
     }
 
     [HttpGet(RouteConstants.FeedBackCancel)]
