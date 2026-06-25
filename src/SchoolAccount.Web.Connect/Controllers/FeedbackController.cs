@@ -57,6 +57,7 @@ public sealed class FeedbackController(IMediator mediator) : ControllerBase
     [HttpGet(RouteConstants.FeedBackCancel)]
     public async Task<IActionResult> Cancel(
         [FromQuery] string pageId,
+        [FromQuery] string? returnUrl,
         [FromQuery] string? ctaType,
         CancellationToken cancellationToken
     )
@@ -76,7 +77,14 @@ public sealed class FeedbackController(IMediator mediator) : ControllerBase
             return Problem(detail: result.Error.Description);
         }
 
-        Response.Cookies.Delete(FeedbackSubmittedCookieName);
+        Response.Cookies.Delete(
+            FeedbackSubmittedCookieName,
+            new CookieOptions
+            {
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
+            });
 
         if (string.Equals(ctaType, AnalyticsCtaTypes.Banner, StringComparison.OrdinalIgnoreCase))
         {
@@ -93,7 +101,12 @@ public sealed class FeedbackController(IMediator mediator) : ControllerBase
             );
         }
 
-        return Redirect($"{pageId}#page-feedback");
+        var safeReturnUrl =
+            !string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : pageId;
+
+        return Redirect($"{safeReturnUrl}#page-feedback");
     }
 
     [HttpGet(RouteConstants.FeedBackExit)]
