@@ -5,11 +5,13 @@
     var pageId = ((string?)ViewData["FeedbackPageId"] ?? Context.Request.Path.ToString())
         .ToLowerInvariant();
 
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+    
     var redirectUrl =
         $"{RouteConstants.FeedBackExit}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
 
     var cancelUrl =
-        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
+        $"{RouteConstants.FeedBackCancel}?pageId={Uri.EscapeDataString(pageId)}&returnUrl={Uri.EscapeDataString(returnUrl)}&ctaType={Uri.EscapeDataString(AnalyticsCtaTypes.Banner)}";
 
     var bannerDismissed =
         string.Equals(
