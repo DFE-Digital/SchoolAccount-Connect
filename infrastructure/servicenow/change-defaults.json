@@ -1,0 +1,11 @@
+{
+  "longDescription": "Deploying latest version of IAC and Codebase with fixes and updates.",
+  "shortDescription": "Deploy code to Production.",
+  "justification": "BAU Code Release of stories (see scope of stories being delivered in description) via DevOps pipeline to support new Business Requirements or identified Service Improvements that are considered operationally ready e.g: shippable and achieved definition of done.",
+  "implementationPlan": "Scheduled Automated Deployment and Post Verification Check of our chosen DevOps pipeline that is a self-contained incremental release to chosen Service Offering.",
+  "riskImpactAnalysis": "Very little risk, this is incremental minor changes to common components that have been fully tested, with security considerations accepted and passed in earlier Dev & Test environments via the DevOps Pipeline tooling mechanism owned by the DevOps Team (continuous integration and deployment). The chosen enhancements, fixes or stories being delivered are all self-contained and have now achieved the definition of done for them to be shippable and operationally released.",
+  "backoutPlan": "If an error occurs during the implementation we would look to investigate and fix forward, however if that was not successful, then we would roll back the change. This can be completed by: select the required component (the working previous version) and hit the deploy button. This will redeploy the application code.",
+  "testPlan": "The service has been prior fully tested and passed within an earlier DevOps owned (configuration managed) environment via the DevOps pipeline, and the automation used in deployment can demonstrate its post implementation delivery success/outcome.",
+  "communicationPlan": "As this activity is deemed minor low risk in delivering self-contained, self-explanatory incremental enhancements or fixes to an existing service - that do not require any prior comms being issued.",
+  "expectedDurationMinutes": 60
+}

@@ -1,0 +1,109 @@
+name: Close ServiceNow Change Request
+description: >-
+  Closes a ServiceNow change request via PATCH to the sn_chg_rest API, setting
+  the work start/end window, close code and close notes.
+
+inputs:
+  service-now-url:
+    description: Base URL of the ServiceNow instanc
+    required: true
+  username:
+    description: ServiceNow API username
+    required: true
+  password:
+    description: ServiceNow API password
+    required: true
+  sys-id:
+    description: sys_id of the change request to close
+    required: true
+  change-request-number:
+    description: CR number, used only for logging and the job summary
+    required: false
+    default: ""
+  work-start:
+    description: Work start datetime, yyyy-MM-dd HH:mm:ss
+    required: true
+  close-code:
+    description: ServiceNow close code (successful | successful_with_issues | unsuccessful)
+    required: false
+    default: successful
+  close-notes:
+    description: Free-text close notes
+    required: false
+    default: Automated deployment was a success
+
+runs:
+  using: composite
+  steps:
+    - id: close
+      shell: pwsh
+      env:
+        SN_URL: ${{ inputs.service-now-url }}
+        SN_USERNAME: ${{ inputs.username }}
+        SN_PASSWORD: ${{ inputs.password }}
+        SN_SYS_ID: ${{ inputs.sys-id }}
+        SN_CR_NUMBER: ${{ inputs.change-request-number }}
+        SN_WORK_START: ${{ inputs.work-start }}
+        SN_CLOSE_CODE: ${{ inputs.close-code }}
+        SN_CLOSE_NOTES: ${{ inputs.close-notes }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+
+        Write-Host "ServiceNow URL: $($env:SN_URL)"
+        Write-Host "ServiceNow user: $($env:SN_USERNAME)"
+        Write-Host "Change request: $($env:SN_CR_NUMBER)"
+        Write-Host "sys_id: $($env:SN_SYS_ID)"
+
+        if ([string]::IsNullOrWhiteSpace($env:SN_SYS_ID)) {
+            Write-Error "No sys-id supplied; cannot close the change request."
+            exit 1
+        }
+
+        # --- Basic auth header (same pattern as the create action) -------
+        $pair = "{0}:{1}" -f $env:SN_USERNAME, $env:SN_PASSWORD
+        $base64AuthInfo = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($pair))
+
+        # --- Closure payload ---------------------------------------------
+        $workEnd = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        $data = [PSCustomObject]@{
+            work_start  = $env:SN_WORK_START
+            work_end    = $workEnd
+            close_code  = $env:SN_CLOSE_CODE
+            close_notes = $env:SN_CLOSE_NOTES
+        }
+        $json = $data | ConvertTo-Json -Depth 10
+        Write-Host "Request body: $json"
+
+        try {
+            $result = Invoke-RestMethod `
+                -Headers @{ Authorization = ("Basic {0}" -f $base64AuthInfo) } `
+                -Method PATCH `
+                -Uri "$($env:SN_URL)/api/sn_chg_rest/change/$($env:SN_SYS_ID)" `
+                -Body $json `
+                -ContentType "application/json"
+        }
+        catch {
+            Write-Error "ServiceNow close call failed: $_"
+            exit 1
+        }
+
+        Write-Host "Change $($env:SN_CR_NUMBER) closed ($($env:SN_CLOSE_CODE))"
+
+        # --- Job summary -------------------------------------------------
+        $crLink = "$($env:SN_URL)/nav_to.do?uri=change_request.do?sys_id=$($env:SN_SYS_ID)"
+        $crCell = if ([string]::IsNullOrWhiteSpace($env:SN_CR_NUMBER)) {
+            "[change request]($crLink)"
+        } else {
+            "[$($env:SN_CR_NUMBER)]($crLink)"
+        }
+        $summary = @(
+            "## ServiceNow Change Request - Closed",
+            "",
+            "| Field | Value |",
+            "| --- | --- |",
+            "| Change request | $crCell |",
+            "| Close code | $($env:SN_CLOSE_CODE) |",
+            "| Close notes | $($env:SN_CLOSE_NOTES) |",
+            "| Work window | $($env:SN_WORK_START) -> $workEnd |"
+        ) -join "`n"
+        $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append

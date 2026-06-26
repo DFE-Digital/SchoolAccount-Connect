@@ -31,8 +31,42 @@
     <File Path="infrastructure/arm-templates/template.json" />
     <File Path="infrastructure/arm-templates/test-parameters.json" />
   </Folder>
+  <Folder Name="/infrastructure/github/" />
+  <Folder Name="/infrastructure/github/actions/" />
+  <Folder Name="/infrastructure/github/actions/compute-version/">
+      <File Path=".github\actions\compute-version\action.yml" />
+  </Folder>
+  <Folder Name="/infrastructure/github/actions/servicenow/" />
+  <Folder Name="/infrastructure/github/actions/servicenow/change-request/" />
+  <Folder Name="/infrastructure/github/actions/servicenow/change-request/close/">
+    <File Path=".github\actions\servicenow\change-request\close\action.yml" />
+  </Folder>
+  <Folder Name="/infrastructure/github/actions/servicenow/change-request/create/">
+      <File Path=".github\actions\servicenow\change-request\create\action.yml" />
+  </Folder>
+  <Folder Name="/infrastructure/github/workflows/">
+    <File Path=".github\workflows\build.yml" />
+    <File Path=".github\workflows\pr_health_check.yml" />
+    <File Path=".github\workflows\_deploy.yml" />
+    <File Path=".github\workflows\_test.yml" />
+  </Folder>
   <Folder Name="/infrastructure/scripts/">
     <File Path="infrastructure/scripts/Test-ArmTemplate.ps1" />
+  </Folder>
+  <Folder Name="/infrastructure/servicenow/">
+    <File Path="infrastructure\servicenow\change-defaults.json" />
+  </Folder>
+  <Folder Name="/infrastructure/terraform/">
+    <File Path="infrastructure\terraform\backend.tf" />
+    <File Path="infrastructure\terraform\main.tf" />
+    <File Path="infrastructure\terraform\outputs.tf" />
+    <File Path="infrastructure\terraform\providers.tf" />
+    <File Path="infrastructure\terraform\variables.tf" />
+  </Folder>
+  <Folder Name="/infrastructure/terraform/env/">
+    <File Path="infrastructure\terraform\env\dev.tfvars" />
+    <File Path="infrastructure\terraform\env\prod.tfvars" />
+    <File Path="infrastructure\terraform\env\test.tfvars" />
   </Folder>
   <Folder Name="/integration/">
     <Project Path="integration/SchoolAccount.Integration.DfESignIn/SchoolAccount.Integration.DfESignIn.csproj" />

@@ -1,0 +1,1 @@
+aspnetcore_enviroment = "Production"

@@ -1,0 +1,43 @@
+<svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="bo-arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+      <path d="M0,0 L6.5,3 L0,6" fill="none" stroke="#c7c7cc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="360" rx="24" fill="#ffffff"/>
+
+  <!-- source image card -->
+  <rect x="56" y="120" width="248" height="120" rx="20" fill="#ffffff" stroke="#0071e3" stroke-width="1.6"/>
+  <text x="80" y="154" font-size="11" letter-spacing="1.4" font-weight="600" fill="#86868b">CONTAINER IMAGE</text>
+  <text x="80" y="178" font-size="17" font-weight="600" fill="#1d1d1f">schoolaccount-connect</text>
+  <text x="80" y="203" font-size="14" font-family="'SF Mono', Menlo, monospace" fill="#0071e3">sha-abc12345</text>
+  <text x="80" y="222" font-size="13" fill="#6e6e73">version 2026.6.3</text>
+
+  <!-- connectors -->
+  <g stroke="#c7c7cc" stroke-width="1.4" fill="none">
+    <path d="M304,165 C400,165 440,96 560,96" marker-end="url(#bo-arrow)"/>
+    <path d="M304,180 C400,180 440,180 560,180" marker-end="url(#bo-arrow)" stroke-dasharray="2 6"/>
+    <path d="M304,200 C400,200 440,264 560,264" marker-end="url(#bo-arrow)"/>
+  </g>
+
+  <!-- environments -->
+  <rect x="560" y="64" width="300" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+  <text x="584" y="92" font-size="15" font-weight="600" fill="#1d1d1f">dev</text>
+  <text x="584" y="112" font-size="12.5" fill="#6e6e73">auto-deploys</text>
+
+  <rect x="560" y="148" width="300" height="64" rx="16" fill="#ffffff" stroke="#d2d2d7" stroke-width="1.3" stroke-dasharray="3 5"/>
+  <text x="584" y="176" font-size="15" font-weight="500" fill="#86868b">test</text>
+  <text x="584" y="196" font-size="12.5" fill="#a1a1a6">optional &#183; same reusable deploy</text>
+
+  <rect x="560" y="232" width="300" height="64" rx="16" fill="#f5f5f7" stroke="#0071e3" stroke-width="1.6"/>
+  <g transform="translate(584,250)">
+    <rect x="0" y="5" width="14" height="10" rx="2" fill="none" stroke="#0071e3" stroke-width="1.4"/>
+    <path d="M2.5,5 V3.2 a4.5,4.5 0 0 1 9,0 V5" fill="none" stroke="#0071e3" stroke-width="1.4"/>
+  </g>
+  <text x="608" y="264" font-size="15" font-weight="600" fill="#1d1d1f">prod</text>
+  <text x="608" y="284" font-size="12.5" fill="#6e6e73">manual approval gate</text>
+
+  <!-- caption -->
+  <text x="460" y="334" text-anchor="middle" font-size="14" fill="#1d1d1f">One build. The exact same artifact runs in every environment.</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 1180 320" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ph-arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+      <path d="M0,0 L6.5,3 L0,6" fill="none" stroke="#c7c7cc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="320" rx="24" fill="#ffffff"/>
+
+  <!-- eyebrows -->
+  <text x="45" y="50" text-anchor="left" font-size="11" letter-spacing="1.6" font-weight="600" fill="#86868b">ON MERGE TO MAIN</text>
+  <text x="45" y="68" text-anchor="left" font-size="10" letter-spacing="1.6" font-weight="600" fill="#86868b">This can be triggered manually, but typically on a PR creation it will only run the Tests step.</text>
+
+  <!-- divider between PR and main -->
+  <line x1="186" y1="108" x2="186" y2="244" stroke="#e5e5ea" stroke-width="1.3" stroke-dasharray="2 5" stroke-linecap="round"/>
+
+  <!-- connectors -->
+  <g stroke="#c7c7cc" stroke-width="1.3">
+    <line x1="172" y1="150" x2="198" y2="150" marker-end="url(#ph-arrow)"/>
+    <line x1="330" y1="150" x2="356" y2="150" marker-end="url(#ph-arrow)"/>
+    <line x1="488" y1="150" x2="514" y2="150" marker-end="url(#ph-arrow)"/>
+    <line x1="646" y1="150" x2="672" y2="150" marker-end="url(#ph-arrow)"/>
+    <line x1="804" y1="150" x2="830" y2="150" marker-end="url(#ph-arrow)"/>
+    <line x1="962" y1="150" x2="988" y2="150" marker-end="url(#ph-arrow)"/>
+  </g>
+
+  <!-- cards -->
+  <g>
+    <rect x="40"  y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+    <text x="106" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">PR checks</text>
+
+    <rect x="198" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+    <text x="264" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">Tests</text>
+
+    <rect x="356" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+    <text x="422" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">Build</text>
+
+    <rect x="514" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+    <text x="580" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">Deploy dev</text>
+
+    <rect x="672" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#0071e3" stroke-width="1.3"/>
+    <text x="738" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">Deploy prod</text>
+    <g transform="translate(729,98)">
+        <rect x="0" y="4" width="14" height="10" rx="2" fill="none" stroke="#0071e3" stroke-width="1.4"/>
+        <path d="M2.5,4 V2.2 a4.5,4.5 0 0 1 9,0 V4" fill="none" stroke="#0071e3" stroke-width="1.4"/>
+    </g>
+      
+    <rect x="830" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7"  stroke-width="1.6"/>
+    <text x="896" y="155" text-anchor="middle" font-size="15" font-weight="600" fill="#1d1d1f">Release</text>
+      
+    <rect x="988" y="118" width="132" height="64" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.3"/>
+    <text x="1054" y="155" text-anchor="middle" font-size="15" font-weight="500" fill="#1d1d1f">Cleanup</text>
+  </g>
+
+  <text x="738" y="206" text-anchor="middle" font-size="11.5" fill="#0071e3" font-weight="500">manual approval</text>
+
+  <line x1="422" y1="246" x2="1054" y2="246" stroke="#0071e3" stroke-width="1.4" opacity="0.5"/>
+  <line x1="422" y1="242" x2="422" y2="250" stroke="#0071e3" stroke-width="1.4" opacity="0.5"/>
+  <line x1="1054" y1="242" x2="1054" y2="250" stroke="#0071e3" stroke-width="1.4" opacity="0.5"/>
+  <text x="738" y="274" text-anchor="middle" font-size="13" fill="#1d1d1f">Build once &#183; promote the same image &#183; <tspan font-family="'SF Mono', Menlo, monospace" fill="#0071e3">sha-abc12345</tspan></text>
+</svg>

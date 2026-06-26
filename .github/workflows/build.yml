@@ -1,0 +1,125 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, 'feature/github-actions']
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: true
+  
+permissions:
+  contents: read
+  packages: read
+  checks: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  tests:
+    name: Test Image
+    uses: ./.github/workflows/_test.yml
+    with:
+      dotnet-version: '10.0.x'
+
+  build:
+    name: Build & Push Image
+    needs: tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write 
+    outputs:
+      image-tag: ${{ steps.meta.outputs.image }}
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Compute version
+        id: meta
+        uses: ./.github/actions/compute-version
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Build & Push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: src/SchoolAccount.Web.Connect/Dockerfile
+          target: final
+          secrets: |
+            personal_access_token=${{ secrets.AZURE_DEVOPS_PAT }}
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+            GIT_SHA=${{ steps.meta.outputs.sha }}
+          push: true
+          tags: |
+            ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.meta.outputs.tag }}
+            ghcr.io/dfe-digital/schoolaccount-connect:${{ steps.meta.outputs.version }}
+  
+  deploy-dev:
+    needs: build
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      environment: dev
+      image: ghcr.io/dfe-digital/schoolaccount-connect
+      tag: ${{ needs.build.outputs.tag }}
+    secrets: inherit
+
+  deploy-prod:
+    needs: [build, deploy-dev]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      environment: prod
+      image: ghcr.io/dfe-digital/schoolaccount-connect
+      tag: ${{ needs.build.outputs.tag }}
+    secrets: inherit
+    
+  release:
+    name: Create GitHub Release
+    needs: [build, deploy-prod]
+    if: github.ref == 'refs/heads/main' 
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+            
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.build.outputs.version }}
+          IMAGE_TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          TAG="v${VERSION}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists — skipping."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
+            --generate-notes
+
+      - name: Tag released image as latest
+        env:
+          IMAGE: ghcr.io/dfe-digital/schoolaccount-connect
+          TAG: ${{ needs.build.outputs.tag }}
+        run: docker buildx imagetools create -t "$IMAGE:latest" "$IMAGE:$TAG"

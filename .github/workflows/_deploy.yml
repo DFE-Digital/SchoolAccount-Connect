@@ -1,0 +1,77 @@
+name: Deploy to Environment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+    outputs:
+      app-url:
+        description: "Public URL of the deployed Container App"
+        value: ${{ jobs.deploy.outputs.app-url }}
+
+jobs:
+  deploy:
+    name: Deploy → ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+    outputs:
+      app-url: ${{ steps.tf-output.outputs.app-url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Initialise
+        working-directory: infrastructure/terraform
+        run: terraform init
+        
+      - name: Terraform Plan
+        working-directory: infrastructure/terraform
+        env:
+          TF_VAR_image_tag: ${{ inputs.tag }}
+        run: terraform plan -var-file="env/${{ inputs.environment }}.tfvars" -out=tfplan
+      
+      - name: Terraform Apply
+        id: apply
+        working-directory: infrastructure/terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Capture app URL
+        id: tf-output
+        working-directory: infrastructure/terraform
+        run: echo "app-url=$(terraform output -raw app_url)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish Test Results
+        if: always()
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          IMAGE: ${{ inputs.image }}
+          TAG: ${{ inputs.tag }}
+          APP_URL: 'https://${{ steps.tf-output.outputs.app-url }}'
+          OUTCOME: ${{ steps.apply.outcome }}
+        run: |
+          {
+            echo "## Enviroment Deployment: `$ENVIRONMENT`"
+            echo ""
+            echo "| | Value |"
+            echo "|---|---|"
+            echo "| Status | $OUTCOME |"
+            echo "| Image | \`$IMAGE:$TAG\` |"
+            [ -n "$APP_URL" ] && echo "| URL | [$APP_URL]($APP_URL) |"
+          } >> "$GITHUB_STEP_SUMMARY"
+ 

@@ -1,0 +1,27 @@
+name: Build dotnet app
+description: Builds the application of the provided solution
+
+inputs:
+  version:
+    required: true
+    type: string
+  enviroment:
+    required: true
+    type: string
+
+runs:
+  using: composite
+
+  steps:
+    - name: Set up .NET ${{ inputs.version }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.version }}
+
+    - name: Restore dependencies
+      shell: bash
+      run: dotnet restore
+
+    - name: Build
+      shell: bash
+      run: dotnet build --no-restore --configuration ${{ inputs.enviroment }}

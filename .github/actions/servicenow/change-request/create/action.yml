@@ -1,0 +1,181 @@
+name: Create ServiceNow Change Request
+description: >-
+  Creates a ServiceNow change request via the sn_chg_rest API and returns the
+  CR number, sys_id and scheduled start time as step outputs.
+
+inputs:
+  service-now-url:
+    description: ServiceNow instance
+    required: true
+  username:
+    description: ServiceNow API username
+    required: true
+  password:
+    description: ServiceNow API password
+    required: true
+  environment:
+    description: Target environment
+    required: true
+  service-offering:
+    description: ServiceNow service offering / configuration item
+    required: true
+  implementation-group:
+    description: Assignment group
+    required: true
+  implementor:
+    description: Assigned-to user
+    required: true
+  defaults-file:
+    description: Path to the change-request defaults JSON
+    required: false
+    default: infrastructure/servicenow/change-defaults.json
+  expected-duration-minutes:
+    description: Optional override; falls back to the value in the defaults file when empty
+    required: false
+    default: ""
+
+outputs:
+  change-request-number:
+    description: The created change request number (e.g. CHG0012345)
+    value: ${{ steps.create.outputs.changeRequestNumber }}
+  sys-id:
+    description: The sys_id of the created change request
+    value: ${{ steps.create.outputs.sysId }}
+  start:
+    description: The scheduled start datetime (yyyy-MM-dd HH:mm:ss)
+    value: ${{ steps.create.outputs.start }}
+
+runs:
+  using: composite
+  steps:
+    - id: create
+      shell: pwsh
+      env:
+        SN_URL: ${{ inputs.service-now-url }}
+        SN_USERNAME: ${{ inputs.username }}
+        SN_PASSWORD: ${{ inputs.password }}
+        SN_ENVIRONMENT: ${{ inputs.environment }}
+        SN_SERVICE_OFFERING: ${{ inputs.service-offering }}
+        SN_IMPLEMENTATION_GROUP: ${{ inputs.implementation-group }}
+        SN_IMPLEMENTOR: ${{ inputs.implementor }}
+        SN_DEFAULTS_FILE: ${{ inputs.defaults-file }}
+        SN_DURATION_OVERRIDE: ${{ inputs.expected-duration-minutes }}
+        SN_REPO_URI: ${{ github.server_url }}/${{ github.repository }}
+        SN_WORKFLOW: ${{ github.workflow }}
+        SN_RUN_ID: ${{ github.run_id }}
+        SN_RUN_NUMBER: ${{ github.run_number }}
+        SN_RUN_ATTEMPT: ${{ github.run_attempt }}
+        SN_JOB: ${{ github.job }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+
+        Write-Host "ServiceNow URL: $($env:SN_URL)"
+        Write-Host "ServiceNow user: $($env:SN_USERNAME)"
+
+        # --- Basic auth header -------------------------------------------
+        $pair = "{0}:{1}" -f $env:SN_USERNAME, $env:SN_PASSWORD
+        $base64AuthInfo = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($pair))
+
+        # --- Load static defaults ----------------------------------------
+        $defaultsPath = Join-Path $env:GITHUB_WORKSPACE $env:SN_DEFAULTS_FILE
+        if (-not (Test-Path $defaultsPath)) {
+            Write-Error "Defaults file not found: $defaultsPath"
+            exit 1
+        }
+        $defaults = Get-Content $defaultsPath -Raw | ConvertFrom-Json
+
+        # --- Schedule ----------------------------------------------------
+        $durationMinutes = if ([string]::IsNullOrWhiteSpace($env:SN_DURATION_OVERRIDE)) {
+            [int]$defaults.expectedDurationMinutes
+        } else {
+            [int]$env:SN_DURATION_OVERRIDE
+        }
+        # GitHub-hosted runners run in UTC.
+        $start    = Get-Date
+        $startStr = $start.ToString("yyyy-MM-dd HH:mm:ss")
+        $endStr   = $start.AddMinutes($durationMinutes).ToString("yyyy-MM-dd HH:mm:ss")
+
+        # --- Pipeline metadata (array join avoids pwsh here-string indent issues)
+        $pipelineMetadata = @(
+            "Repo Provider: GitHub",
+            "Repo Uri: $($env:SN_REPO_URI)",
+            "Workflow: $($env:SN_WORKFLOW)",
+            "Run ID: $($env:SN_RUN_ID)",
+            "Run Number: $($env:SN_RUN_NUMBER)",
+            "Run Attempt: $($env:SN_RUN_ATTEMPT)"
+        ) -join "`n"
+
+        # --- Request body ------------------------------------------------
+        $data = [PSCustomObject]@{
+            # -- Main properties
+            u_environment        = $env:SN_ENVIRONMENT
+            service_offering     = $env:SN_SERVICE_OFFERING
+            u_configuration_item = $env:SN_SERVICE_OFFERING
+            category             = "Project - Minor Incremental Release"
+            assignment_group     = $env:SN_IMPLEMENTATION_GROUP
+            assigned_to          = $env:SN_IMPLEMENTOR
+            u_wider_impact       = "no"
+            description          = $defaults.longDescription
+            short_description    = $defaults.shortDescription
+            # -- Planning
+            justification        = $defaults.justification
+            implementation_plan  = $defaults.implementationPlan
+            risk_impact_analysis = $defaults.riskImpactAnalysis
+            backout_plan         = $defaults.backoutPlan
+            test_plan            = $defaults.testPlan
+            u_communication_plan = $defaults.communicationPlan
+            # -- Schedule
+            start_date           = $startStr
+            end_date             = $endStr
+            u_expected_outage    = "No Outage"
+            # -- Pipeline metadata (ServiceNow custom fields; names kept as-is)
+            x_mioms_azpipeline_build_id          = $env:SN_RUN_ID
+            x_mioms_azpipeline_stage_id          = $env:SN_JOB
+            x_mioms_azpipeline_pipeline_metadata = $pipelineMetadata
+        }
+
+        $json = $data | ConvertTo-Json -Depth 20
+        Write-Host "Request body: $json"
+
+        try {
+            $result = Invoke-RestMethod `
+                -Headers @{ Authorization = ("Basic {0}" -f $base64AuthInfo) } `
+                -Method POST `
+                -Uri "$($env:SN_URL)/api/sn_chg_rest/change" `
+                -Body $json `
+                -ContentType "application/json"
+        }
+        catch {
+            Write-Error "ServiceNow API call failed: $_"
+            exit 1
+        }
+
+        $resultJson = $result | ConvertTo-Json -Depth 20
+        Write-Host "Response body: $resultJson"
+
+        $changeRequestNumber = $result.result.number.value
+        $sysId               = $result.result.sys_id.value
+        Write-Host "Change number: $changeRequestNumber"
+        Write-Host "sysId: $sysId"
+
+        # --- Step outputs (replaces ##vso[task.setvariable ...]) ---------
+        "changeRequestNumber=$changeRequestNumber" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        "sysId=$sysId"                             | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        "start=$startStr"                          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+        # --- Job summary (renders on the run's Summary page) -------------
+        $crLink = "$($env:SN_URL)/nav_to.do?uri=change_request.do?sys_id=$sysId"
+        $summary = @(
+            "## ServiceNow Change Request",
+            "",
+            "| Field | Value |",
+            "| --- | --- |",
+            "| Change request | [$changeRequestNumber]($crLink) |",
+            "| sys_id | ``$sysId`` |",
+            "| Environment | $($env:SN_ENVIRONMENT) |",
+            "| Service offering | $($env:SN_SERVICE_OFFERING) |",
+            "| Assignment group | $($env:SN_IMPLEMENTATION_GROUP) |",
+            "| Scheduled window | $startStr -> $endStr |",
+            "| Expected duration | $durationMinutes min |"
+        ) -join "`n"
+        $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
