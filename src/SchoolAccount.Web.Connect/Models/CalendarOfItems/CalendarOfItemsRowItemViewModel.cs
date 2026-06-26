@@ -8,4 +8,6 @@ public record CalendarOfItemsRowItemViewModel(string Name, string Url)
     public string? TagTheme { get; init; }
     public string? TagValue { get; init; }
     public bool HasTag => !string.IsNullOrEmpty(TagValue);
+    public string? Source { get; init; }
+    public bool HasSource => !string.IsNullOrEmpty(Source);
 }

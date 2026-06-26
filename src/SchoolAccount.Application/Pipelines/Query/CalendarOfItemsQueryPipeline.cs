@@ -8,12 +8,15 @@ using SchoolAccount.Kernel;
 namespace SchoolAccount.Application.Pipelines.Query;
 
 public class CalendarOfItemsQueryPipeline(
+    IHttpClientFactory clientFactory,
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext
 ) : IQueryFactoryPipeline<CalendarOfItemsRow>
 {
     public IList<IQueryFactory<CalendarOfItemsRow>> Factories { get; } =
     [
-        new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext)
+        new QueryFactoryOfSubTasksForCalendarOfItems(applicationDbContext, organisationContext),
+        new QueryFactoryForJiraIntegrationsForCalendarOfItems(clientFactory),
+        new QueryFactoryForAsanaIntegrationsForCalendarOfItems(clientFactory),
     ];
 }

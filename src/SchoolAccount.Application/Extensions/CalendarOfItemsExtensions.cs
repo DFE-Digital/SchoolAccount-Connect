@@ -9,8 +9,8 @@ namespace SchoolAccount.Application.Extensions;
 
 public static class CalendarOfItemsExtensions
 {
-    internal static IOrderedQueryable<CalendarOfItemsRow> WithSorting(
-        this IQueryable<CalendarOfItemsRow> query,
+    internal static IOrderedEnumerable<CalendarOfItemsRow> WithSorting(
+        this IList<CalendarOfItemsRow> query,
         CalendarOfItemsViewModes viewModes,
         CalendarOfItemsSortMode sortMode,
         GenericOrderFunction<CalendarOfItemsRow>? customOrderBy = null

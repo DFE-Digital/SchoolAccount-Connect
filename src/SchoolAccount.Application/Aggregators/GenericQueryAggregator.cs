@@ -33,20 +33,33 @@ public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQ
 
         ConsolidateFilters(factoryPipeline.Factories, criteria);
 
-        var query = factoryPipeline.Factories
-            .Select(f => f.Query(criteria.Filter, filterRegistry.All))
-            .Aggregate((current, next) => current.Union(next))
-            .Where(QueryRowSpecifications.IsWithinDateRange<TRow>(criteria.Range));
+        List<IEnumerable<TRow>> runs = [];
+        var total = 0;
 
-        var result = await query
+        foreach (var factory in factoryPipeline.Factories)
+        {
+            var outcome = await factory.Query(criteria, filterRegistry.All, cancellationToken);
+            var localised = outcome.Payload
+                .Where(QueryRowSpecifications.IsWithinDateRange<TRow>(criteria.Range))
+                .ToList();
+            
+            runs.Add(localised);
+            total += localised.Count;
+        }
+
+        var query = runs
+            .Aggregate((current, next) => current.Union(next))
+            .ToList();
+
+        var result = query
             .WithSorting(criteria.CustomOrderByFunction)
-            .PaginateAsync(criteria.PageSize, criteria.PageNumber, cancellationToken);
+            .Paginate(criteria.PageSize, criteria.PageNumber, total);
 
         return Result.Success(
             new GenericQueryPagedResult<TRow>(
                 criteria,
                 result,
-                await ProduceAndCorrelateFilter(filterPipeline.Factories, criteria, query)
+                await ProduceAndCorrelateFilter(filterPipeline.Factories, criteria)
             )
         );
     }
@@ -70,7 +83,7 @@ public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQ
     private static async Task<Collection<Filterable>> ProduceAndCorrelateFilter<TRow>(
         IEnumerable<IFilterableFactory> filterFactories,
         GenericQueryCriteria<TRow> criteria,
-        IQueryable<TRow> query
+        IQueryable<TRow>? query = null
     )
         where TRow : IQueryRow
     {

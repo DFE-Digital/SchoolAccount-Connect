@@ -1,3 +1,4 @@
+using System.Globalization;
 using SchoolAccount.Application;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
@@ -13,7 +14,7 @@ public class CalendarOfItemsRowViewBuilder
     {
         var url = DetermineUri(
             (CalendarOfItemsRowType)(int)row.Type,
-            row.Id,
+            row.Id!,
             row.Status?.Id == (int)WorkflowState.Expired ? "#previous" : string.Empty
         );
 
@@ -23,6 +24,7 @@ public class CalendarOfItemsRowViewBuilder
             DateText = !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)
                 ? GenerateAvailableOrDueMessage(row)
                 : null,
+            Source = row.Source?.Name
         };
     }
 
@@ -56,7 +58,7 @@ public class CalendarOfItemsRowViewBuilder
         return null;
     }
 
-    private static string DetermineUri(CalendarOfItemsRowType type, long id, string? queryExtensions)
+    private static string DetermineUri(CalendarOfItemsRowType type, string id, string? queryExtensions)
     {
         return type switch
         {
@@ -65,7 +67,7 @@ public class CalendarOfItemsRowViewBuilder
                 RouteConstants.Task.Index,
                 id
             ) + (queryExtensions ?? string.Empty),
-            _ => throw new NotSupportedException(),
+            _ => string.Empty
         };
     }
 }

@@ -34,7 +34,7 @@ public class GetAllParentCategoriesThatHaveAssociatedTasksQueryHandler(IApplicat
 
         var result = new[] { extraCategory }
             .Concat(dbCategories)
-            .PaginateForExtraItem(thatHaveAssociatedTasksQuery.PageSize, thatHaveAssociatedTasksQuery.PageNumber);
+            .Paginate(thatHaveAssociatedTasksQuery.PageSize, thatHaveAssociatedTasksQuery.PageNumber);
 
         return Result.Success(new CategoryPagedResult(result));
     }

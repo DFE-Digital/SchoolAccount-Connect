@@ -3,6 +3,8 @@ using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Domain.Subtasks;
 using SchoolAccount.Domain.Tasks;
+using SchoolAccount.Kernel;
+using static System.Globalization.CultureInfo;
 
 namespace SchoolAccount.Application.Projections;
 
@@ -12,7 +14,7 @@ public static class CalendarOfItemsRowProjection
     {
         return x => new CalendarOfItemsRow
         {
-            Id = x.Task.Id,
+            Id = x.Task.Id.ToString(InvariantCulture),
             Name = x.Task.Name,
             Description = x.Name,
             StartDate = x.StartDate,
@@ -41,7 +43,7 @@ public static class CalendarOfItemsRowProjection
                 Name = t.Type.Name,
                 DisplayValue = t.Type.Name,
                 Type = CalendarOfItemsExtensionNodeType.Type,
-            }),
+            })
         };
     }
 
@@ -49,7 +51,7 @@ public static class CalendarOfItemsRowProjection
     {
         return x => new CalendarOfItemsRow
         {
-            Id = x.Id,
+            Id = x.Id.ToString(InvariantCulture),
             Name = x.Name,
             Description = x.Description,
             SortDate = x.SubTasks.Select(sb => sb.StartDate).Min() ?? x.SubTasks.Select(sb => sb.DueDate).Max(),
@@ -60,7 +62,7 @@ public static class CalendarOfItemsRowProjection
                 Type = CalendarOfItemsRowType.WorkflowState,
                 EntityId = (int)x.WorkflowState,
             },
-            LastUpdated = x.DateUpdated,
+            LastUpdated = x.DateUpdated
         };
     }
 }

@@ -1,6 +1,21 @@
 @using SchoolAccount.Web.Connect.Features.CalendarOfItems
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
 
+<style>
+    .govuk-tag.dfe-pill {
+        max-width: unset;
+        border-radius: 5px;
+        font-size: 12px;
+        line-height: 1.6;
+        display: inline-block;
+    }
+    .dfe-pill-row {
+        margin-bottom: var(--govuk-spacing-responsive--2);
+        display: flex;
+        gap: var(--govuk-spacing-responsive--1);
+    }
+</style>
+
 @if (Model.HasTitle)
 {
     <h2 class="govuk-heading-m @(Model.HasDescription || Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Title</h2>
@@ -32,6 +47,9 @@
             {
                 <li class="govuk-task-list__item govuk-task-list__item--with-link">
                     <div class="govuk-task-list__name-and-hint">
+                        <div class="dfe-pill-row">
+                            <govuk-tag class="dfe-pill">@(row.Source ?? "School Account")</govuk-tag>
+                        </div>
                         <a class="govuk-link govuk-task-list__link" href="@row.Url">
                             @row.Name
                         </a>

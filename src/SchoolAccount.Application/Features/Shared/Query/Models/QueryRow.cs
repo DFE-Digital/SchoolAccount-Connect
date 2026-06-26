@@ -3,7 +3,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Shared.Query.Models;
 
-public class QueryRow : Node<long>, IQueryRow
+public class QueryRow : Node<string>, IQueryRow
 {
     public string? Description { get; init; }
     public DateOnly? SortDate { get; init; }

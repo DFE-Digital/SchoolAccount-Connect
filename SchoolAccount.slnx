@@ -34,6 +34,7 @@
     <Project Path="src/SchoolAccount.Application/SchoolAccount.Application.csproj" />
     <Project Path="src/SchoolAccount.Domain/SchoolAccount.Domain.csproj" />
     <Project Path="src/SchoolAccount.Infrastructure/SchoolAccount.Infrastructure.csproj" />
+    <Project Path="src/SchoolAccount.Integrations/SchoolAccount.Integrations.csproj" />
     <Project Path="src/SchoolAccount.Kernel/SchoolAccount.Kernel.csproj" />
     <Project Path="src/SchoolAccount.Web.Connect/SchoolAccount.Web.Connect.csproj" />
   </Folder>

@@ -4,7 +4,7 @@ namespace SchoolAccount.Application.Features.Shared.Query.Interfaces;
 
 public interface IQueryRow
 {
-    public long Id { get; }
+    public string? Id { get; }
     public string? Name { get; }
     public string? Description { get; }
     public DateOnly? SortDate { get; }

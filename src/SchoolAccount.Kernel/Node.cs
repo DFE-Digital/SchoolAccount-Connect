@@ -1,9 +1,8 @@
 namespace SchoolAccount.Kernel;
 
 public class Node<TId>
-    where TId : struct
 {
-    public TId Id { get; init; }
+    public TId? Id { get; init; }
     public string? Name { get; init; }
 
     protected Node() { }
@@ -35,7 +34,7 @@ public class Node<TId>
         return new Node<TId>(enumValue);
     }
 
-    public static implicit operator TId(Node<TId> node)
+    public static implicit operator TId?(Node<TId> node)
     {
         return node.Id;
     }

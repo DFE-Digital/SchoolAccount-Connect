@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAccount.Application.Abstractions.Data;
+using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Application.Features.Shared.Filtering.Models;
+using SchoolAccount.Application.Features.Shared.Query.Contracts;
 using SchoolAccount.Application.Features.Shared.Query.Interfaces;
 using SchoolAccount.Application.Projections;
 using SchoolAccount.Application.Specifications;
@@ -18,15 +20,20 @@ public class QueryFactoryOfSubTasksForCalendarOfItems(
 {
     public Type TypeBeingRegistered => typeof(SubTaskEntity);
 
-    public IQueryable<CalendarOfItemsRow> Query(IList<FilterRequest> filter, FieldSelectorMapping mappings)
+    public async Task<QueryResponse<CalendarOfItemsRow>> Query(GenericQueryCriteria<CalendarOfItemsRow> criteria, FieldSelectorMapping mappings,
+        CancellationToken cancellationToken)
     {
         var accessibleTags = applicationDbContext.SchoolTypeTagMappings.AsQueryable();
-        return applicationDbContext
+        var query = applicationDbContext
             .SubTasks.AsNoTracking()
             .Include(x => x.Task)
             .Include(x => x.TagsSourceMappings)
             .Where(SubTaskEntitySpecifications.IsAccessibleForSchoolType(accessibleTags, organisationContext.Type))
-            .Apply(filter, mappings)
+            .Apply(criteria.Filter, mappings)
             .Select(CalendarOfItemsRowProjection.FromSubTask());
+        
+        return (
+            await query.CountAsync(cancellationToken), 
+            await query.ToListAsync(cancellationToken));
     }
 }
