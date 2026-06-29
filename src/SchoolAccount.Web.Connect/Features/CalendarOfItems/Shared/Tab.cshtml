@@ -45,7 +45,7 @@
 
             foreach (var row in group)
             {
-                <li class="govuk-task-list__item govuk-task-list__item--with-link">
+                <li class="govuk-task-list__item govuk-task-list__item--with-link @(!string.IsNullOrEmpty(row.TagTheme) ? "with-status " + row.TagTheme : string.Empty) ">
                     <div class="govuk-task-list__name-and-hint">
                         <div class="dfe-pill-row">
                             <govuk-tag class="dfe-pill">@(row.Source ?? "School Account")</govuk-tag>

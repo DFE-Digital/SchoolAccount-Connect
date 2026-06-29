@@ -91,7 +91,37 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
             Description = selectedTab?.Description ?? string.Empty,
             Heading = "Calendar of tasks",
             SubHeading = "These are all of the required tasks that you must complete for your school.",
-            GroupingFunction = x => x.SortDate.ToGdsMonthString(),
+            GroupingFunction = x =>
+            {
+                if (viewModes.HasFlag(CalendarOfItemsViewModes.Kanban))
+                {
+                    if (!x.SortDate.HasValue)
+                    {
+                        return string.Empty;
+                    }
+
+                    if (x.SortDate.Value < DateOnlyExtensions.Today.StartOfMonth())
+                    {
+                        return $"Pasted ({DateOnlyExtensions.Today.StartOfMonth().ToGdsMonthString()})";
+                    }
+
+                    if (x.SortDate.Value.Year == DateTime.Today.Year && x.SortDate.Value.Month == DateTime.Today.Month)
+                    {
+                        return $"Now ({DateTime.Today.ToGdsMonthString()})";
+                    }
+
+                    if (x.SortDate.Value > DateOnlyExtensions.Today.EndOfMonth()
+                        && x.SortDate.Value <=
+                        DateOnlyExtensions.Today.StartOfMonth().AddMonths(3))
+                    {
+                        return $"Upcoming ({DateOnlyExtensions.Today.EndOfMonth().ToGdsDateString()} > < {DateOnlyExtensions.Today.StartOfMonth().AddMonths(2).ToGdsDateString()})";
+                    }
+
+                    return "Future";
+                }
+
+                return x.SortDate.ToGdsMonthString();
+            },
             NoResultsMessage = "No results found",
             LastUpdatedMessage = lastUpdatedDate is not null
                 ? $"Last updated: {lastUpdatedDate.ToGdsDateString()}"

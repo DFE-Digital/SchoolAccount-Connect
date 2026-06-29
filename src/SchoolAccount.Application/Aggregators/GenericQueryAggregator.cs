@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Pipelines;
 using SchoolAccount.Application.Extensions;
@@ -13,7 +14,10 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Aggregators;
 
-public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQueryAggregator
+public class GenericQueryAggregator(
+    ILogger<GenericQueryAggregator> logger,
+    FilterableFieldRegistry filterRegistry
+) : IQueryAggregator
 {
     public async Task<Result<GenericQueryPagedResult<TRow>>> Query<TRow>(
         IQueryFactoryPipeline<TRow> factoryPipeline,
@@ -38,13 +42,20 @@ public class GenericQueryAggregator(FilterableFieldRegistry filterRegistry) : IQ
 
         foreach (var factory in factoryPipeline.Factories)
         {
-            var outcome = await factory.Query(criteria, filterRegistry.All, cancellationToken);
-            var localised = outcome.Payload
-                .Where(QueryRowSpecifications.IsWithinDateRange<TRow>(criteria.Range))
-                .ToList();
-            
-            runs.Add(localised);
-            total += localised.Count;
+            try
+            {
+                var outcome = await factory.Query(criteria, filterRegistry.All, cancellationToken);
+                var localised = outcome.Payload
+                    .Where(QueryRowSpecifications.IsWithinDateRange<TRow>(criteria.Range))
+                    .ToList();
+
+                runs.Add(localised);
+                total += localised.Count;
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogError(ex, "Failed to query {FactoryType}", factory.TypeBeingRegistered);
+            }
         }
 
         var query = runs

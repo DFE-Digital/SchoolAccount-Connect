@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using SchoolAccount.Application.Constants;
+using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums;
 using SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
 using SchoolAccount.Web.Connect.Builders.CalendarOfItems;
 using SchoolAccount.Web.Connect.Extensions;
@@ -16,8 +18,20 @@ public sealed partial class CalendarOfItemsController
         CancellationToken cancellationToken = default
     )
     {
+        var viewModes = query.ViewModes;
+
+        if (viewModes == CalendarOfItemsViewModes.None)
+        {
+            viewModes |= CalendarOfItemsViewModes.Forward;
+        }
+
+        if (await featureManager.IsEnabledAsync(FeatureFlagConstants.CalendarOfItemsViewModesKanban))
+        {
+            viewModes |= CalendarOfItemsViewModes.Kanban;
+        }
+
         var filter = new GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery(
-            query.ViewModes,
+            viewModes,
             12,
             query.PageSize,
             query.PageNumber,

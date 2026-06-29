@@ -37,6 +37,7 @@ public class QueryFactoryForJiraIntegrationsForCalendarOfItems(IHttpClientFactor
                     Description = ct.Description,
                     Source = "Jira",
                     SortDate = ToDateOnly(ct.DueDate!.Value),
+                    DueDate = ToDateOnly(ct.DueDate!.Value),
                     Type = CalendarOfItemsRowType.Task,
                 }));
     }

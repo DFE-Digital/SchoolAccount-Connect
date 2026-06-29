@@ -54,10 +54,11 @@ public class GetCalendarOfItemsOfSubTasksByDirectionForTabViewHandler(
                 {
                     Field = "state",
                     Operator = ComparisonType.Equals,
+                    // ReSharper disable once HeapView.BoxingAllocation
                     Value = query.ViewModes switch
                     {
-                        CalendarOfItemsViewModes.Backward => WorkflowState.Expired,
-                        CalendarOfItemsViewModes.Forward => WorkflowState.Published,
+                        var t when t.HasFlag(CalendarOfItemsViewModes.Backward) => WorkflowState.Expired,
+                        var t when t.HasFlag(CalendarOfItemsViewModes.Forward) => WorkflowState.Published,
                         _ => throw new ArgumentOutOfRangeException(
                             nameof(query),
                             query.ViewModes,

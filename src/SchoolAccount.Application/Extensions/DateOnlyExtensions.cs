@@ -16,11 +16,20 @@ public static class DateOnlyExtensions
 
     public static string ToGdsDateString(this DateOnly? date)
     {
-        return date?.ToString(FormattingConstants.DateMonthYearFormat, null) ?? string.Empty;
+        return date.HasValue ? date.Value.ToGdsDateString() : string.Empty;
+    }
+    public static string ToGdsDateString(this DateOnly date)
+    {
+        return date.ToString(FormattingConstants.DateMonthYearFormat, null) ;
     }
 
     public static string ToGdsMonthString(this DateOnly? date)
     {
-        return date?.ToString(FormattingConstants.MonthYearFormat, null) ?? string.Empty;
+        return date.HasValue ? date.Value.ToGdsMonthString() : string.Empty;
+    }
+
+    public static string ToGdsMonthString(this DateOnly date)
+    {
+        return date.ToString(FormattingConstants.MonthYearFormat, null);
     }
 }

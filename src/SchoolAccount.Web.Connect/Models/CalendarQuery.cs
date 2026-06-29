@@ -6,7 +6,7 @@ public class CalendarQuery
 {
     public CalendarOfItemsViewModes ViewModes { get; init; } = CalendarOfItemsViewModes.None;
 
-    public int PageSize { get; init; } = 10;
+    public int PageSize { get; init; } = 20;
 
     public int PageNumber { get; init; } = 1;
 

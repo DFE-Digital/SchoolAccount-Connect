@@ -9,4 +9,6 @@ public enum CalendarOfItemsViewModes
     Custom = 1 << 2,
     Standalone = 1 << 3,
     Hub = 1 << 4,
+    List = 1 << 5,
+    Kanban = 1 << 6,
 }

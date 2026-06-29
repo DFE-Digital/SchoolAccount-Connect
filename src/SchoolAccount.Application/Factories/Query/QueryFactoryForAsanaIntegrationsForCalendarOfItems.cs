@@ -37,6 +37,7 @@ public class QueryFactoryForAsanaIntegrationsForCalendarOfItems(IHttpClientFacto
                     Description = ct.Description,
                     Source = "Asana",
                     SortDate = ToDateOnly(ct.DueDate!.Value),
+                    DueDate = ToDateOnly(ct.DueDate!.Value),
                     Type = CalendarOfItemsRowType.Task,
                 }));
     }

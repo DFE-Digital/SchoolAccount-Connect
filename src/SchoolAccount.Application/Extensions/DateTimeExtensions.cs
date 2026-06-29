@@ -39,6 +39,11 @@ public static class DateTimeExtensions
 
     public static string ToGdsMonthString(this DateTime? date)
     {
-        return date?.ToString(FormattingConstants.MonthYearFormat, null) ?? string.Empty;
+        return date.HasValue ? date.Value.ToString(FormattingConstants.MonthYearFormat, null) : string.Empty;
+    }
+
+    public static string ToGdsMonthString(this DateTime date)
+    {
+        return date.ToString(FormattingConstants.MonthYearFormat, null);
     }
 }

@@ -24,7 +24,12 @@ public class CalendarOfItemsRowViewBuilder
             DateText = !options.ViewMode.HasFlag(CalendarOfItemsViewModes.Hub)
                 ? GenerateAvailableOrDueMessage(row)
                 : null,
-            Source = row.Source?.Name
+            Source = row.Source?.Name,
+            TagTheme = row.Status?.DisplayValue switch
+            {
+                "Published" => "green",
+                _ => string.Empty
+            },
         };
     }
 

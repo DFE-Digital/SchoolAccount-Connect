@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Features.CalendarOfItems.Common.Models;
 using SchoolAccount.Application.Features.CalendarOfItems.GetCalendarOfItemsOfSubTasksByDirectionForTabView;
@@ -12,5 +13,6 @@ public partial class CalendarOfItemsController(
         GetCalendarOfItemsOfSubTasksByDirectionForTabViewQuery,
         GenericQueryPagedResult<CalendarOfItemsRow>
     > handler,
-    IOrganisationContext organisationContext
+    IOrganisationContext organisationContext,
+    IFeatureManager featureManager
 ) : Controller;
