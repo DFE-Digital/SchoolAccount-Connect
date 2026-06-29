@@ -4,60 +4,13 @@
 @{
     ViewData["Title"] = Model.Heading;
     var wrapperClass = string.Empty;
+    var isKanban = Model.ViewModes.HasFlag(CalendarOfItemsViewModes.Kanban);
+    ViewData["RenderFullPage"] = isKanban;
 }
 
-@if (Model.ViewModes.HasFlag(CalendarOfItemsViewModes.Kanban))
+@if (isKanban)
 {
     wrapperClass += "calendar-of-items-wrapper--kanban";
-    
-    <style>
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-
-        }
-        
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.dfe-task-list__group {
-            background-color: color(srgb 0.6964 0.7064 0.7149);
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            border: none;
-        }
-        
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link {
-            max-width: 300px;
-            width: calc(33.33% - 39px);
-            border: 1px solid color(srgb 0.6964 0.7064 0.7149);
-            border-radius: 5px;
-            padding: 15px;
-            position: relative;
-            overflow: hidden;
-            font-size: 90%;
-            align-items: flex-start;
-
-        }
-
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status {
-            padding-left: 20px !important;
-            width: calc(33.33% - 44px) !important;
-        }
-        
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 5px;
-            background-color: color(srgb 0.6964 0.7064 0.7149);
-        }
-
-        .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status.green:before {
-            background-color: var(--govuk-colour--green);
-        }
-    </style>
 }
 
 @section PageHeading{
@@ -84,9 +37,12 @@
     <partial name="@CalendarOfItemsConstants.Views.Widget" model="@Model"/>
 </div>
 
-@section RightSide{
-    @if (Model.HasFilters)
-    {
-        <partial name="_Filtration" model="Model.Filters"/>
+@if (!isKanban)
+{
+    @section RightSide{
+        @if (Model.HasFilters)
+        {
+            <partial name="_Filtration" model="Model.Filters"/>
+        }
     }
 }

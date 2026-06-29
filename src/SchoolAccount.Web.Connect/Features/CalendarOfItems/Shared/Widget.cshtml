@@ -1,6 +1,11 @@
+@using SchoolAccount.Application.Features.CalendarOfItems.Common.Enums
 @using SchoolAccount.Web.Connect.Features.CalendarOfItems
 @model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
-
+@{
+    var viewModel = Model.ViewModes.HasFlag(CalendarOfItemsViewModes.Kanban)
+    ? CalendarOfItemsConstants.Views.Kanban
+    : CalendarOfItemsConstants.Views.Tab;
+}
 <form method="get">
 
     <input type="hidden" asp-for="ViewModes"/>
@@ -25,13 +30,13 @@
             </ul>
             
             <div class="dfe-tabs__panel">
-                <partial name="@CalendarOfItemsConstants.Views.Tab" model="@Model"/>
+                <partial name="@viewModel" model="@Model"/>
             </div>
 
         </div>
     }
     else
     {
-        <partial name="@CalendarOfItemsConstants.Views.Tab" model="@Model"/>
+        <partial name="@viewModel" model="@Model"/>
     }
 </form>

@@ -13,5 +13,6 @@ internal static class CalendarOfItemsConstants
         public const string Query = "~/Features/CalendarOfItems/Query/Query.cshtml";
         public const string Widget = "~/Features/CalendarOfItems/Shared/Widget.cshtml";
         public const string Tab = "~/Features/CalendarOfItems/Shared/Tab.cshtml";
+        public const string Kanban = "~/Features/CalendarOfItems/Shared/Kanban.cshtml";
     }
 }

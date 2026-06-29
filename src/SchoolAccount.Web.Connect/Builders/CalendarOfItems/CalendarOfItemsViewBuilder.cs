@@ -102,19 +102,19 @@ public class CalendarOfItemsViewBuilder(IOrganisationContext organisationContext
 
                     if (x.SortDate.Value < DateOnlyExtensions.Today.StartOfMonth())
                     {
-                        return $"Pasted ({DateOnlyExtensions.Today.StartOfMonth().ToGdsMonthString()})";
+                        return "Pasted";
                     }
 
                     if (x.SortDate.Value.Year == DateTime.Today.Year && x.SortDate.Value.Month == DateTime.Today.Month)
                     {
-                        return $"Now ({DateTime.Today.ToGdsMonthString()})";
+                        return "Now";
                     }
 
                     if (x.SortDate.Value > DateOnlyExtensions.Today.EndOfMonth()
                         && x.SortDate.Value <=
                         DateOnlyExtensions.Today.StartOfMonth().AddMonths(3))
                     {
-                        return $"Upcoming ({DateOnlyExtensions.Today.EndOfMonth().ToGdsDateString()} > < {DateOnlyExtensions.Today.StartOfMonth().AddMonths(2).ToGdsDateString()})";
+                        return "Upcoming";
                     }
 
                     return "Future";

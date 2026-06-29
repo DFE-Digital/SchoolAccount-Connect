@@ -1,0 +1,266 @@
+@using SchoolAccount.Web.Connect.Features.CalendarOfItems
+@model SchoolAccount.Web.Connect.Models.CalendarOfItems.CalendarOfItemsViewModel
+
+<style>
+    .govuk-tag.dfe-pill {
+        max-width: unset;
+        border-radius: 5px;
+        font-size: 12px;
+        line-height: 1.6;
+        display: inline-block;
+    }
+    .dfe-pill-row {
+        margin-bottom: var(--govuk-spacing-responsive--2);
+        display: flex;
+        gap: var(--govuk-spacing-responsive--1);
+    }
+</style>
+
+@if (Model.HasTitle)
+{
+    <h2 class="govuk-heading-m @(Model.HasDescription || Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Title</h2>
+}
+@if (Model.HasDescription)
+{
+    <p class="govuk-body-m @(Model.HasLastUpdatedMessage ? "govuk-!-margin-bottom-1" : string.Empty)">@Model.Description</p>
+}
+@if (Model.HasLastUpdatedMessage)
+{
+    <h3 class="govuk-caption-m">@Model.LastUpdatedMessage</h3>
+}
+
+<style>
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+
+    }
+
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.dfe-task-list__group {
+        background-color: color(srgb 0.6964 0.7064 0.7149);
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link {
+        border: 1px solid color(srgb 0.6964 0.7064 0.7149);
+        border-radius: 5px;
+        padding: 15px;
+        position: relative;
+        overflow: hidden;
+        font-size: 90%;
+        align-items: flex-start;
+
+    }
+
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status {
+        padding-left: 20px !important;
+    }
+
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 5px;
+        background-color: color(srgb 0.6964 0.7064 0.7149);
+    }
+
+    .calendar-of-items-main.calendar-of-items-wrapper--kanban .govuk-task-list__item.govuk-task-list__item--with-link.with-status.green:before {
+        background-color: var(--govuk-colour--green);
+    }
+    
+    .dfe-kanban-board {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        padding: 0 10px;
+    }
+
+    .dfe-kanban-lane {
+        margin-bottom: 20px;
+        padding: 0 5px;
+    }
+    
+    .dfe-kanban-lane-inner {
+        background-color: #f3f2f1;
+        border-radius: 4px;
+        padding: 15px;
+        height: 100%;
+    }
+
+    .dfe-kanban-lane__header {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #b1b4b6;
+        padding-bottom: 5px;
+    }
+
+    .dfe-kanban-card-list {
+        margin-bottom: 0;
+    }
+
+    .govuk-task-list__item.dfe-kanban-card {
+        background-color: #ffffff;
+        border: 1px solid #b1b4b6;
+        border-left: 5px solid #1d70b8; 
+        padding: 15px;
+        margin-bottom: 15px;
+        flex-direction: column; 
+        align-items: flex-start;
+    }
+
+    .dfe-kanban-card .govuk-task-list__status {
+        text-align: left;
+        padding-left: 0;
+    }
+
+    .moj-filter__options {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 0 0 20px 0;
+        padding: 10px 18px;
+        background-color: color(srgb 0.9532 0.9491 0.9451);
+        border-radius: 5px;
+
+    }
+    .moj-filter__options #accordion-filter {
+        display: flex;
+        gap: 20px;
+        border: none;
+        margin: 0;
+
+    }
+    .moj-filter__options #accordion-filter .govuk-accordion__controls {
+        display: none;
+
+    }
+    .moj-filter button.govuk-accordion__section-button {
+        border-top: none !important;
+        font-size: 100%;
+
+    }
+    .moj-filter__header {
+        display: none;
+
+    }
+    .dfe-kanban-lane__header .govuk-heading-m {
+        margin: 0;
+    }
+
+    .moj-filter .govuk-accordion__section-content {
+        float: left;
+        position: absolute;
+        background: white;
+        z-index: 10;
+        padding: 10px 20px !important;
+        border-radius: 5px;
+        border: 1px solid gainsboro;
+
+    }
+    
+    .moj-filter, .moj-filter * {
+        box-shadow: none !important;
+    }
+    
+    .govuk-button-group {
+        margin-left: auto;
+    }
+
+    .govuk-accordion__section-toggle {
+        margin-bottom: 0px !important;
+        font-size: .8em !important;
+
+    }
+    .govuk-frontend-supported .govuk-accordion__section-content[hidden] {
+        display: none;
+
+    }
+</style>
+
+
+@if (Model.HasFilters)
+{
+    <partial name="_Filtration" model="Model.Filters"/>
+}
+
+@if (Model.Pagination.TotalItemCount > 0 || Model.Items.Count > 0)
+{
+    <div class="govuk-grid-row dfe-kanban-board">
+        
+        @{
+            var laneSize = Model.Items.Count switch
+            {
+                2 => "govuk-grid-column-one-half",
+                3 => "govuk-grid-column-one-third",
+                _ => "govuk-grid-column-full",
+            };
+        }
+
+        @foreach (var group in Model.Items)
+        {
+            <div class="@laneSize dfe-kanban-lane">
+                <div class="dfe-kanban-lane-inner">
+                    
+                    @if (group.HasDisplayValue)
+                    {
+                        <div class="dfe-kanban-lane__header">
+                            <h3 class="govuk-heading-m">@group.DisplayValue</h3>
+                        </div>
+                    }
+
+                    <ul class="govuk-task-list dfe-kanban-card-list">
+                        @foreach (var row in group)
+                        {
+                            <li class="govuk-task-list__item govuk-task-list__item--with-link dfe-kanban-card @(!string.IsNullOrEmpty(row.TagTheme) ? "with-status " + row.TagTheme : string.Empty)">
+                                <div class="govuk-task-list__name-and-hint">
+                                    <div class="dfe-pill-row govuk-!-margin-bottom-2">
+                                        <govuk-tag class="dfe-pill">@(row.Source ?? "School Account")</govuk-tag>
+                                    </div>
+                                    <a class="govuk-link govuk-task-list__link govuk-!-font-weight-bold" href="@row.Url">
+                                        @row.Name
+                                    </a>
+                                    <div class="govuk-task-list__hint govuk-!-margin-top-2">
+                                        @row.Description
+                                    </div>
+                                    <div class="govuk-task-list__hint govuk-!-margin-top-1">
+                                        <strong>@row.DateText</strong>
+                                    </div>
+                                </div>
+                                @if (row.ShowTag)
+                                {
+                                    <div class="govuk-task-list__status govuk-!-margin-top-2">
+                                        <govuk-tag class="@row.TagTheme">@row.TagValue</govuk-tag>
+                                    </div>
+                                }
+                            </li>
+                        }
+                    </ul>
+                    
+                </div>
+            </div>
+        }
+    </div>
+}
+else if (Model.HasNoResultsMessage)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <p class="govuk-body">@Model.NoResultsMessage</p>
+        </div>
+    </div>
+}
+
+<partial name="_Pagination" model="@Model.Pagination"/>
+
+@if (Model.ShowNavigator)
+{
+    <div class="govuk-body">
+        <a class="govuk-link" asp-controller="CalendarOfItems" asp-action="@nameof(CalendarOfItemsConstants.Routes.Query)">@Model.CallToActionMessage</a>
+        <partial name="SVG/ArrowRight"/>
+    </div>
+}
