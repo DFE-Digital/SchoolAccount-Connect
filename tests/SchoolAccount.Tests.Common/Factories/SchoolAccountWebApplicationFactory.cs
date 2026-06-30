@@ -1,5 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using MartinCostello.Logging.XUnit;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -16,16 +17,34 @@ using Xunit;
 
 namespace SchoolAccount.Tests.Common.Factories;
 
-[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
-public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
+public partial class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
+    private readonly bool _useAuthentication;
+    private readonly bool _useNoAuthentication;
+    private readonly bool _useDisabledAntiforgery;
+    private readonly bool _useInMemoryDatabase;
     private string? _baseUrl;
 
-    public TestQueryHandlerRegistry HandlerRegistry { get; } = new();
+    private SchoolAccountWebApplicationFactory(Builder builder)
+    {
+        HandlerRegistry = builder.HandlerRegistry ?? new TestQueryHandlerRegistry();
+        FallbackProviderResolver = builder.FallbackProviderResolver ?? new StubFallbackProviderResolver();
+        _useAuthentication = builder.UseAuthentication;
+        _useNoAuthentication = builder.UseNoAuthentication;
+        _useDisabledAntiforgery = builder.UseDisabledAntiforgery;
+        _useInMemoryDatabase = builder.UseInMemoryDatabase;
+    }
+
+    public static Builder Create()
+    {
+        return new Builder();
+    }
+
+    public TestQueryHandlerRegistry HandlerRegistry { get; }
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
-    public StubFallbackProviderResolver FallbackProviderResolver { get; } = new();
+    public StubFallbackProviderResolver FallbackProviderResolver { get; }
 
     public string StartKestrel()
     {
@@ -35,9 +54,11 @@ public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>
         UseKestrel(port: 0);
         StartServer();
 
-        var addresses = Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses;
+        var server = Services.GetRequiredService<IServer>();
+        var addresses = server.Features.Get<IServerAddressesFeature>()!.Addresses;
 
         _baseUrl = addresses.First();
+
         return _baseUrl;
     }
 
@@ -50,10 +71,33 @@ public class SchoolAccountWebApplicationFactory : WebApplicationFactory<Program>
 
     private void ConfigureTestServices(IServiceCollection services)
     {
-        services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
+        if (_useInMemoryDatabase)
+        {
+            services.ReplaceWithInMemory<IApplicationDbContext, ApplicationDbContext>();
+        }
+
         services.ReplaceWithSingleton<IFallbackProviderResolver>(_ => FallbackProviderResolver);
-        services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
-        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
+
+        if (_useDisabledAntiforgery)
+        {
+            services.ReplaceWithSingleton<IAntiforgery, DisabledAntiforgery>();
+        }
+
+        if (_useAuthentication)
+        {
+            services
+                .AddAuthentication(SessionAuthenticationHandler.SchemeName)
+                .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(
+                    SessionAuthenticationHandler.SchemeName,
+                    _ => { }
+                );
+        }
+
+        if (_useNoAuthentication)
+        {
+            services.AddTransient<IPolicyEvaluator, FakePolicyEvaluator>();
+        }
+
         services.AddSingleton(HandlerRegistry);
 
         ReplaceHandlersWithTestAdapters(services);

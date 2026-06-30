@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using SchoolAccount.AuthenticationTests.Extensions;
 using SchoolAccount.AuthenticationTests.Models;
-using SchoolAccount.Tests.Common;
 using SchoolAccount.Web.Connect;
 using Xunit;
 
@@ -18,15 +17,13 @@ namespace SchoolAccount.AuthenticationTests;
 [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]
 [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity")]
 [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-public class RoutingAuthenticationSmokeTests : IClassFixture<SchoolAccountBaseWebApplicationFactory<Program>>
+public class RoutingAuthenticationSmokeTests : IClassFixture<RoutingTestFixture>
 {
-    private readonly SchoolAccountBaseWebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
-    public RoutingAuthenticationSmokeTests(SchoolAccountBaseWebApplicationFactory<Program> factory)
+    public RoutingAuthenticationSmokeTests(RoutingTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        _client = fixture.CreateAnonymousClient(options => options.AllowAutoRedirect = false);
     }
 
     [Theory]

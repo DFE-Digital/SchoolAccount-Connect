@@ -12,24 +12,24 @@ namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 
 public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
 {
-    private readonly KestrelServerFixture _fixture;
+    private readonly HttpClient _client;
     private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
     public CalendarOfItemsViewTests(KestrelServerFixture fixture, ITestOutputHelper outputHelper)
     {
-        _fixture = fixture;
-        _fixture.OutputHelper = outputHelper;
-        _fixture.HandlerRegistry.Clear();
-        _fixture.HandlerRegistry.Register(_handler);
+        fixture.SetOutputHelper(outputHelper);
+        fixture.HandlerRegistry.Clear();
+        fixture.HandlerRegistry.Register(_handler);
         _handler.Clear();
+        _client = fixture.CreateAnonymousClient();
     }
 
     [Fact]
     public async Task Calendar_endpoint_returns_success_page()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _client.GetAsync("/calendar", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         request.Should().NotBeNull();
@@ -44,7 +44,7 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
     public async Task Calendar_endpoint_returns_expected_title()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _client.GetAsync("/calendar", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         request.Should().NotBeNull();
@@ -55,7 +55,7 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
     public async Task Calendar_contains_upcoming_and_previous_task_tabs()
     {
         // Act
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _client.GetAsync("/calendar", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         request.QuerySelectorAll(".govuk-tabs__tab").Should().HaveCount(2);
@@ -69,7 +69,9 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
     public async Task Correct_tab_selected_based_on_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _client
+            .GetAsync($"/calendar?ViewModes={mode}", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         // Assert
         request
@@ -84,7 +86,9 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
     public async Task Page_heading_matches_selected_view_mode(CalendarOfItemsViewModes mode, string expectedTitle)
     {
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={mode}");
+        var request = await _client
+            .GetAsync($"/calendar?ViewModes={mode}", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         // Assert
         request.QuerySelector(".dfe-tabs__panel .govuk-heading-m").Should().HaveTextContent(expectedTitle);
@@ -100,7 +104,9 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _client
+            .GetAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BePaginationWithLabels("1", "2", "3", "4", "Next page");
@@ -130,9 +136,12 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act
-        var request = await _fixture.RequestPageAsync(
-            $"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}&pageNumber={pageNumber}"
-        );
+        var request = await _client
+            .GetAsync(
+                $"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}&pageNumber={pageNumber}",
+                TestContext.Current.CancellationToken
+            )
+            .ReadAsPageAsync();
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BePaginationWithLabels(expectedLabels);
@@ -148,7 +157,9 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         _handler.AddRows(rows).SetPageSize(10);
 
         // Act
-        var request = await _fixture.RequestPageAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}");
+        var request = await _client
+            .GetAsync($"/calendar?ViewModes={CalendarOfItemsViewModes.Forward}", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         // Assert
         request.QuerySelector(".govuk-pagination").Should().BeNull();
@@ -178,7 +189,7 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         _handler.AddRows(rows).SetPageSize(pageSize);
 
         // Act.
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _client.GetAsync("/calendar", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert.
         request.Should().NotBeNull();
@@ -195,7 +206,7 @@ public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
         const int expectedRows = numberOfNoItemsMessageRows + numberOfCallToActionRows;
 
         // Act.
-        var request = await _fixture.RequestPageAsync("/calendar");
+        var request = await _client.GetAsync("/calendar", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert.
         request.Should().NotBeNull();

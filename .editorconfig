@@ -63,3 +63,6 @@ dotnet_diagnostic.CA1054.severity = none
 
 # CA1055: Change the return type of method 'FiltrationViewModel.BaseUrl()' from 'string' to 'System.Uri'
 dotnet_diagnostic.CA1055.severity = none
+
+# CA2234: Pass System.Uri objects instead of strings
+dotnet_diagnostic.CA2234.severity = none

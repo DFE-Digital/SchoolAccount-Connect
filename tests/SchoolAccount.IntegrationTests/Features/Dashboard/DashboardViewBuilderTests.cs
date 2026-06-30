@@ -9,23 +9,23 @@ namespace SchoolAccount.IntegrationTests.Features.Dashboard;
 
 public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
 {
-    private readonly TestServerFixture _fixture;
+    private readonly HttpClient _client;
     private readonly TestGetDashboardQueryHandler _handler = new();
 
     public DashboardViewBuilderTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     {
-        _fixture = fixture;
-        _fixture.OutputHelper = outputHelper;
-        _fixture.HandlerRegistry.Clear();
-        _fixture.HandlerRegistry.Register(_handler);
+        fixture.SetOutputHelper(outputHelper);
+        fixture.HandlerRegistry.Clear();
+        fixture.HandlerRegistry.Register(_handler);
         _handler.Clear();
+        _client = fixture.CreateAnonymousClient();
     }
 
     [Fact]
     public async Task Dashboard_endpoint_returns_success_page()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.Should().NotBeNull();
@@ -41,7 +41,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
     public async Task Dashboard_endpoint_returns_expected_page_heading()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelector(".govuk-heading-xl").Should().NotBeNull().And.HaveTextContent("Welcome to DfE Connect");
@@ -51,7 +51,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
     public async Task Dashboard_shows_upcoming_tasks_section_heading()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll(".govuk-heading-m").Should().Contain(e => e.TextContent.Contains("Upcoming tasks"));
@@ -61,7 +61,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
     public async Task Dashboard_shows_no_results_message_when_no_calendar_items()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item")
@@ -82,7 +82,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item--with-link").Should().HaveCount(count);
@@ -92,7 +92,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
     public async Task Dashboard_shows_explore_categories_section_heading()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll(".govuk-heading-m").Should().Contain(e => e.TextContent.Contains("Explore categories"));
@@ -102,7 +102,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
     public async Task Dashboard_shows_no_categories_message_when_no_categories()
     {
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelector("body")
@@ -124,7 +124,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         var categoryListItems = page.QuerySelectorAll(".govuk-task-list__item");
@@ -141,7 +141,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll("a").Should().NotContain(e => e.TextContent.Contains("See the full list of categories"));
@@ -157,7 +157,7 @@ public class DashboardViewBuilderTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _fixture.RequestPageAsync("/");
+        var page = await _client.GetAsync("/", TestContext.Current.CancellationToken).ReadAsPageAsync();
 
         // Assert
         page.QuerySelectorAll("a").Should().Contain(e => e.TextContent.Contains("See the full list of categories"));

@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using SchoolAccount.Tests.Common.Builders;
 
-namespace SchoolAccount.IntegrationTests.Features.Authentication.Handlers;
+namespace SchoolAccount.Tests.Common.Fakes;
 
 public class SessionAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -15,17 +15,22 @@ public class SessionAuthenticationHandler(
 ) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     public const string SchemeName = "SessionAuthenticationTests";
-    public static string CurrentUserId { get; set; } = "this-user-is-cool";
-    public static OrganisationClaimBuilder? OrganisationClaim { get; set; }
+    public const string DefaultUserId = "this-user-is-cool";
+    public const string UserIdHeader = "X-Test-User-Id";
+    public const string OrganisationHeader = "X-Test-Organisation";
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var organisation = (OrganisationClaim ?? OrganisationClaimBuilder.Default).Build();
+        var userId = Request.Headers[UserIdHeader].FirstOrDefault() ?? DefaultUserId;
+        var organisationJson =
+            Request.Headers[OrganisationHeader].FirstOrDefault()
+            ?? JsonSerializer.Serialize(OrganisationClaimBuilder.Default.Build(), JsonSerializerOptions.Web);
+
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, CurrentUserId),
-            new Claim(ClaimTypes.Name, CurrentUserId),
-            new Claim("organisation", JsonConvert.SerializeObject(organisation)),
+            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim(ClaimTypes.Name, userId),
+            new Claim("organisation", organisationJson),
         };
 
         var identity = new ClaimsIdentity(claims, SchemeName);

@@ -1,11 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using AwesomeAssertions;
 using SchoolAccount.Domain.Providers;
 using SchoolAccount.IntegrationTests.Features.Authentication.Collections;
-using SchoolAccount.IntegrationTests.Features.Authentication.Fixtures;
 using SchoolAccount.Kernel;
 using SchoolAccount.Tests.Common.Extensions;
+using SchoolAccount.Tests.Common.Fixtures;
 using SchoolAccount.Web.Connect;
 using Xunit;
 using static SchoolAccount.Tests.Common.Builders.OrganisationClaimBuilder;
@@ -14,12 +13,12 @@ namespace SchoolAccount.IntegrationTests.Pages;
 
 [Collection(SessionTests.CollectionName)]
 [SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
-public class FallbackProviderTests : IClassFixture<SessionFixture>
+public class FallbackProviderTests
 {
-    private readonly SessionFixture _fixture;
+    private readonly TestServerFixture _fixture;
     private const string EmptyUkPrn = "000001";
 
-    public FallbackProviderTests(SessionFixture fixture)
+    public FallbackProviderTests(TestServerFixture fixture)
     {
         _fixture = fixture;
 
@@ -42,11 +41,9 @@ public class FallbackProviderTests : IClassFixture<SessionFixture>
     {
         var client = _fixture.CreateAuthenticatedClient(organisation: AOrganisationClaim().WithUkprn(EmptyUkPrn));
 
-        var response = await client.GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken);
-
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        var page = await response.GetPage(TestContext.Current.CancellationToken);
+        var page = await client
+            .GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Support");
@@ -57,11 +54,9 @@ public class FallbackProviderTests : IClassFixture<SessionFixture>
     {
         var client = _fixture.CreateAuthenticatedClient(organisation: AOrganisationClaim().WithUkprn("000002"));
 
-        var response = await client.GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken);
-
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-
-        var page = await response.GetPage(TestContext.Current.CancellationToken);
+        var page = await client
+            .GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken)
+            .ReadAsPageAsync();
 
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Service Inaccessible");

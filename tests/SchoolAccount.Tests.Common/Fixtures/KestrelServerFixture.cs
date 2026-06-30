@@ -1,23 +1,39 @@
 using System.Diagnostics.CodeAnalysis;
-using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
+using SchoolAccount.Tests.Common.Builders;
+using static SchoolAccount.Tests.Common.Factories.SchoolAccountWebApplicationFactory;
 
 namespace SchoolAccount.Tests.Common.Fixtures;
 
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
 public class KestrelServerFixture : WebApplicationFixture
 {
-    public string BaseUrl => Factory.StartKestrel();
+    public KestrelServerFixture()
+        : base() { }
 
-    protected override HttpClient CreateClient(WebApplicationFactoryClientOptions? options = null)
+    protected KestrelServerFixture(
+        Func<Builder, Builder>? configureAnonymous,
+        Func<Builder, Builder>? configureAuthenticated
+    )
+        : base(configureAnonymous, configureAuthenticated) { }
+
+    public string GetAnonymousBaseUrl() => AnonymousFactory.StartKestrel();
+
+    public string GetAuthenticatedBaseUrl() => AuthenticatedFactory.StartKestrel();
+
+    public override HttpClient CreateAnonymousClient(Action<WebApplicationFactoryClientOptions>? configure = null)
     {
-        _ = BaseUrl;
-        return base.CreateClient(options);
+        _ = AnonymousFactory.StartKestrel();
+        return base.CreateAnonymousClient(configure);
     }
 
-    public override Task<IDocument> RequestPageAsync(string uri, WebApplicationFactoryClientOptions? options = null)
+    public override HttpClient CreateAuthenticatedClient(
+        string? userId = null,
+        OrganisationClaimBuilder? organisation = null,
+        Action<WebApplicationFactoryClientOptions>? configure = null
+    )
     {
-        _ = BaseUrl;
-        return base.RequestPageAsync(uri, options);
+        _ = AuthenticatedFactory.StartKestrel();
+        return base.CreateAuthenticatedClient(userId, organisation, configure);
     }
 }
