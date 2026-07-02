@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using SchoolAccount.Application.Abstractions.Aggregators;
 using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
@@ -7,17 +8,18 @@ using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Domain.Common;
 using SchoolAccount.Kernel;
 
-namespace SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
+namespace SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
 
-public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator aggregator)
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.AllConstructors)]
+public sealed class CalendarOfItemsQueryHandler(ICalendarOfItemsAggregator aggregator)
+    : IQueryHandler<CalendarOfItemsQuery, CalendarOfItemsResponse>
 {
     public async Task<Result<CalendarOfItemsResponse>> Handle(
-        CalendarOfItemsDirectionalQuery query,
+        CalendarOfItemsQuery query,
         CancellationToken cancellationToken
     )
     {
-        var filter = query.Filter ?? new([]);
+        var filter = query.Filter;
 
         if (query.ViewModes.HasFlags(CalendarOfItemsViewModes.Forward, CalendarOfItemsViewModes.Backward))
         {
@@ -43,7 +45,7 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
         var model = new CalendarOfItemsCriteria
         {
             ToQuery = query.ToQuery,
-            Range = DetermineDateRange(query),
+            Range = DetermineDateRange(query.ViewModes, query.ViewPeriodInMonths, query.QueryFromDate),
             ViewModes = query.ViewModes,
             PageNumber = query.PageNumber,
             PageSize = query.PageSize,
@@ -55,30 +57,24 @@ public class CalendarOfItemsDirectionalQueryHandler(ICalendarOfItemsAggregator a
         return await aggregator.Query(model, cancellationToken);
     }
 
-    public static DateOnlyRange DetermineDateRange(CalendarOfItemsDirectionalQuery filter)
+    public static DateOnlyRange DetermineDateRange(
+        CalendarOfItemsViewModes viewModes,
+        int viewPeriodInMonths,
+        DateOnly queryFromDate
+    )
     {
-        var bothSet = CalendarOfItemsViewModes.Forward | CalendarOfItemsViewModes.Backward;
-        if ((filter.ViewModes & bothSet) == bothSet)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(filter),
-                filter.ViewModes,
-                "ViewModes cannot have both Forward and Backward set simultaneously."
-            );
-        }
-
         DateOnly rangeStart;
         DateOnly rangeEnd;
 
-        if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Backward))
+        if (viewModes.HasFlag(CalendarOfItemsViewModes.Backward))
         {
-            rangeStart = filter.QueryFromDate.AddMonths(-filter.ViewPeriodInMonths).StartOfMonth();
-            rangeEnd = filter.QueryFromDate.EndOfMonth();
+            rangeStart = queryFromDate.AddMonths(-viewPeriodInMonths).StartOfMonth();
+            rangeEnd = queryFromDate.EndOfMonth();
         }
-        else if (filter.ViewModes.HasFlag(CalendarOfItemsViewModes.Forward))
+        else if (viewModes.HasFlag(CalendarOfItemsViewModes.Forward))
         {
-            rangeStart = filter.QueryFromDate.StartOfMonth();
-            rangeEnd = filter.QueryFromDate.AddMonths(filter.ViewPeriodInMonths).EndOfMonth();
+            rangeStart = queryFromDate.StartOfMonth();
+            rangeEnd = queryFromDate.AddMonths(viewPeriodInMonths).EndOfMonth();
         }
         else
         {

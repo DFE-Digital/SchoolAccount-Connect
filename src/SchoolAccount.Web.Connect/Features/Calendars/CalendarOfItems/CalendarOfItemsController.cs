@@ -19,7 +19,7 @@ public class CalendarOfItemsController(IMediator mediator, IOrganisationContext 
             return BadRequest(ModelState);
         }
 
-        var filter = new GetSubTasksByDirectionForTabViewCalendarOfItemsQuery(
+        var filter = new CalendarOfItemsQuery(
             request.ViewModes,
             request.PageSize,
             request.PageNumber,

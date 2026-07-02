@@ -3,20 +3,19 @@ using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Common;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
 using SchoolAccount.Application.Features.Shared.Filtering;
 using SchoolAccount.Kernel;
 
 namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems.Handlers;
 
-public class TestCalendarOfItemsDirectionalQueryHandler
-    : IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse>
+public class TestCalendarOfItemsQueryHandler : IQueryHandler<CalendarOfItemsQuery, CalendarOfItemsResponse>
 {
     private readonly List<CalendarOfItemsRow> _rows = [];
     private int _pageSize = 10;
 
     public async Task<Result<CalendarOfItemsResponse>> Handle(
-        CalendarOfItemsDirectionalQuery query,
+        CalendarOfItemsQuery query,
         CancellationToken cancellationToken
     )
     {
@@ -31,14 +30,14 @@ public class TestCalendarOfItemsDirectionalQueryHandler
         return await Task.FromResult(result);
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler AddRow(CalendarOfItemsRow row)
+    public TestCalendarOfItemsQueryHandler AddRow(CalendarOfItemsRow row)
     {
         _rows.Add(row);
 
         return this;
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
+    public TestCalendarOfItemsQueryHandler AddRows(IEnumerable<CalendarOfItemsRow> rows)
     {
         foreach (var row in rows)
         {
@@ -53,7 +52,7 @@ public class TestCalendarOfItemsDirectionalQueryHandler
         _rows.Clear();
     }
 
-    public TestCalendarOfItemsDirectionalQueryHandler SetPageSize(int pageSize)
+    public TestCalendarOfItemsQueryHandler SetPageSize(int pageSize)
     {
         _pageSize = pageSize;
 

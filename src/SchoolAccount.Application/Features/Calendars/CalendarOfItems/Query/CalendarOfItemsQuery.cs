@@ -1,14 +1,15 @@
+using SchoolAccount.Application.Abstractions.Messaging;
 using SchoolAccount.Application.Extensions;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Models;
-using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Application.Features.Shared.Filtering;
 
 namespace SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
 
-public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfItemsDirectionalQuery
+public sealed record CalendarOfItemsQuery : IQuery<CalendarOfItemsResponse>
 {
-    public GetSubTasksByDirectionForTabViewCalendarOfItemsQuery(
+    public CalendarOfItemsQuery(
         CalendarOfItemsViewModes viewModes,
         int pageSize = 10,
         int pageNumber = 1,
@@ -16,16 +17,32 @@ public record GetSubTasksByDirectionForTabViewCalendarOfItemsQuery : CalendarOfI
         CalendarOfItemsSortMode sortMode = CalendarOfItemsSortMode.NotSpecified,
         DateOnly? date = null
     )
-        : base(
-            CalendarOfItemsQueryTypes.SubTask,
-            viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes,
-            12,
-            date ?? DateOnlyExtensions.Today,
-            pageSize <= 0 ? 10 : pageSize,
-            pageNumber <= 0 ? 1 : pageNumber,
-            sortMode,
-            BuildFilter(filters ?? [])
-        ) { }
+    {
+        ViewModes = viewModes == CalendarOfItemsViewModes.None ? CalendarOfItemsViewModes.Forward : viewModes;
+        QueryFromDate = date ?? DateOnlyExtensions.Today;
+        PageSize = pageSize <= 0 ? 10 : pageSize;
+        PageNumber = pageNumber <= 0 ? 1 : pageNumber;
+        SortMode = sortMode;
+        Filter = BuildFilter(filters ?? []);
+    }
+
+    public CalendarOfItemsQueryTypes ToQuery { get; } = CalendarOfItemsQueryTypes.SubTask;
+
+    public CalendarOfItemsViewModes ViewModes { get; }
+
+    public int ViewPeriodInMonths { get; } = 12;
+
+    public DateOnly QueryFromDate { get; }
+
+    public int PageSize { get; }
+
+    public int PageNumber { get; }
+
+    public CalendarOfItemsSortMode SortMode { get; }
+
+    public CalendarOfItemsFilter Filter { get; }
+
+    public CalendarOfItemsOrderFunction? CustomOrderBy { get; }
 
     private static CalendarOfItemsFilter BuildFilter(Dictionary<string, List<string>> filters)
     {

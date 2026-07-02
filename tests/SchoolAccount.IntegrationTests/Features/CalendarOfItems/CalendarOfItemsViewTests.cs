@@ -13,7 +13,7 @@ namespace SchoolAccount.IntegrationTests.Features.CalendarOfItems;
 public class CalendarOfItemsViewTests : IClassFixture<KestrelServerFixture>
 {
     private readonly HttpClient _client;
-    private readonly TestCalendarOfItemsDirectionalQueryHandler _handler = new();
+    private readonly TestCalendarOfItemsQueryHandler _handler = new();
     private readonly CalendarOfItemsDataGenerator _generator = new();
 
     public CalendarOfItemsViewTests(KestrelServerFixture fixture, ITestOutputHelper outputHelper)

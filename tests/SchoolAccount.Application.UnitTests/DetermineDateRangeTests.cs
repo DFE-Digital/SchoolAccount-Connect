@@ -1,7 +1,7 @@
 using System.Globalization;
 using AwesomeAssertions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
-using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
+using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
 using SchoolAccount.Kernel;
 using Xunit;
 
@@ -33,13 +33,11 @@ public class DetermineDateRangeTests
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
 
-        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
+        var result = CalendarOfItemsQueryHandler.DetermineDateRange(
             CalendarOfItemsViewModes.Backward,
             monthPeriod,
             fromDate
         );
-
-        var result = CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery);
 
         var expectedResult = new DateOnlyRange(expectedStartDate, expectedEndDate);
 
@@ -70,13 +68,11 @@ public class DetermineDateRangeTests
 
         var fromDate = DateOnly.FromDateTime(DateTime.ParseExact(from, "dd/MM/yyyy", CultureInfo.InvariantCulture));
 
-        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
+        var result = CalendarOfItemsQueryHandler.DetermineDateRange(
             CalendarOfItemsViewModes.Forward,
             monthPeriod,
             fromDate
         );
-
-        var result = CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery);
 
         var expectedResult = new DateOnlyRange(expectedStartDate, expectedEndDate);
 
@@ -90,44 +86,12 @@ public class DetermineDateRangeTests
     [InlineData(CalendarOfItemsViewModes.Custom)]
     public void CheckExceptionThrownWhenUnsupportedViewMode(CalendarOfItemsViewModes calendarOfItemsViewModes)
     {
-        var expectedStartDate = DateOnly.FromDateTime(
-            DateTime.ParseExact("01/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
-        );
-
-        var expectedEndDate = DateOnly.FromDateTime(
-            DateTime.ParseExact("30/04/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
-        );
-
         var fromDate = DateOnly.FromDateTime(
             DateTime.ParseExact("11/03/2026", "dd/MM/yyyy", CultureInfo.InvariantCulture)
         );
 
-        var calendarOfItemsDirectionalQuery = new DetermineDateRangeTestCalendarOfItemQuery(
-            calendarOfItemsViewModes,
-            1,
-            fromDate
-        );
-
         Assert.Throws<InvalidOperationException>(() =>
-            CalendarOfItemsDirectionalQueryHandler.DetermineDateRange(calendarOfItemsDirectionalQuery)
+            CalendarOfItemsQueryHandler.DetermineDateRange(calendarOfItemsViewModes, 1, fromDate)
         );
-    }
-
-    private sealed record DetermineDateRangeTestCalendarOfItemQuery : CalendarOfItemsDirectionalQuery
-    {
-        public DetermineDateRangeTestCalendarOfItemQuery(
-            CalendarOfItemsViewModes viewModes,
-            int viewPeriod,
-            DateOnly date
-        )
-            : base(
-                CalendarOfItemsQueryTypes.None,
-                viewModes,
-                viewPeriod,
-                date,
-                1,
-                1,
-                CalendarOfItemsSortMode.NotSpecified
-            ) { }
     }
 }
