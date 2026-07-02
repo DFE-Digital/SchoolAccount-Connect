@@ -25,6 +25,6 @@ public sealed class SearchTasksController(IQueryHandler<SearchTasksQuery, Search
 
         var searchTasksViewModel = SearchTasksViewModelBuilder.Build(searchTasksResult.Value, request.Term);
 
-        return View(ViewAddressConstants.Tasks.Search, searchTasksViewModel);
+        return View(searchTasksViewModel);
     }
 }

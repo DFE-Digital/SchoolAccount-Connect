@@ -1,4 +1,4 @@
-using SchoolAccount.Web.Connect.Features.Shared.ListItem;
+using SchoolAccount.Web.Connect.Features.Shared.List;
 
 namespace SchoolAccount.Web.Connect.Features.Dashboard;
 

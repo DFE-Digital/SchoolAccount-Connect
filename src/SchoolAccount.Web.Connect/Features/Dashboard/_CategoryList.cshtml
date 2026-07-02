@@ -1,5 +1,5 @@
 @using SchoolAccount.Web.Connect
-@using SchoolAccount.Web.Connect.Features.Shared.ListItem
+@using SchoolAccount.Web.Connect.Features.Shared.List
 @model SchoolAccount.Web.Connect.Features.Dashboard.DashboardViewModel
 
 <h2 class="govuk-heading-m govuk-!-padding-top-0 govuk-!-margin-bottom-1">Explore categories</h2>
@@ -14,11 +14,11 @@
 else
 {
     <ul class="govuk-task-list">
-        <partial name="@ListItem"
+        <partial name="List/_ListItem"
                  model="@(new ListItemViewModel("All tasks", RouteConstants.Task.AllTasks))"/>
         @foreach (var category in Model.Categories)
         {
-            <partial name="@ListItem" model=@category/>
+            <partial name="List/_ListItem" model=@category/>
         }
     </ul>
 }
@@ -27,6 +27,6 @@ else
 {
     <div class="govuk-body">
         <a class="govuk-link" asp-controller="CategoryList" asp-action="GetParentCategories">See the full list of categories</a>
-        <partial name="@Arrow"/>
+        <partial name="Images/ArrowRight"/>
     </div>
 }

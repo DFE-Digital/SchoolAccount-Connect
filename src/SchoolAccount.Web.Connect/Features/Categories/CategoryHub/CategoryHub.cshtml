@@ -9,7 +9,7 @@
     <p class="govuk-body">@Model.HubViewDescription</p>
 }
 
-<partial name="@PaginatedList" model="@Model.Tasks"/>
+<partial name="Pagination/_PaginatedList" model="@Model.Tasks"/>
 
 @if (Model.IsAcademyTrustHandbookCategory)
 {

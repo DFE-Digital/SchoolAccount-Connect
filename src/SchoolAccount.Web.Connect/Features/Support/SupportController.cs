@@ -11,6 +11,6 @@ public sealed class SupportController : Controller
     [HttpGet(RouteConstants.Support)]
     public IActionResult Support()
     {
-        return View(ViewAddressConstants.Support);
+        return View();
     }
 }

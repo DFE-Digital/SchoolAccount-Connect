@@ -1,4 +1,4 @@
-using SchoolAccount.Web.Connect.Features.Shared.ListItem;
+using SchoolAccount.Web.Connect.Features.Shared.Pagination;
 
 namespace SchoolAccount.Web.Connect.Features.Tasks.Search;
 

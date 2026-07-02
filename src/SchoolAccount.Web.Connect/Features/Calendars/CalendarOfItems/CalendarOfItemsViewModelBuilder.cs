@@ -5,7 +5,7 @@ using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Models.Shared;
+using SchoolAccount.Web.Connect.Features.Shared.Filter;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 

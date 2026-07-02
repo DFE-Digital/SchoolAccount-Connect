@@ -22,6 +22,6 @@ public sealed class GetAllTasksController(IQueryHandler<GetAllTasksQuery, GetAll
 
         var tasksViewModel = GetAllTasksViewModelBuilder.Build(tasksResult.Value);
 
-        return View(ViewAddressConstants.Tasks.GetAll, tasksViewModel);
+        return View("AllTasks", tasksViewModel);
     }
 }

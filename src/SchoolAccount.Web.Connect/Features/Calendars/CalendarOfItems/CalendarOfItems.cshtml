@@ -1,5 +1,4 @@
-﻿@using static SchoolAccount.Web.Connect.Features.ViewAddressConstants.CalendarOfItems.Partials;
-@model SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems.CalendarOfItemsViewModel
+﻿@model SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems.CalendarOfItemsViewModel
 @{
     ViewData["Title"] = Model.Heading;
 }
@@ -19,11 +18,11 @@
     }
 }
 
-<partial name="@Widget" model="@Model"/>
+<partial name="_Widget" model="@Model"/>
 
 @section RightSide{
     @if (Model.HasFilters)
     {
-        <partial name="@Filtration" model="Model.Filters"/>
+        <partial name="Filter/_Filtration" model="Model.Filters"/>
     }
 }

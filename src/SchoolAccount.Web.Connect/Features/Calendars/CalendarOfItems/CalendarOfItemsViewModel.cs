@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Enums;
-using SchoolAccount.Web.Connect.Models.Shared;
+using SchoolAccount.Web.Connect.Features.Shared.Filter;
 using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;

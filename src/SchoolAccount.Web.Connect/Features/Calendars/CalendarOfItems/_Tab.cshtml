@@ -59,12 +59,12 @@
     }
 </ul>
 
-<partial name="@Pagination" model="@Model.Items"/>
+<partial name="Pagination/_Pagination" model="@Model.Items"/>
 
 @if (Model.ShowNavigator)
 {
     <div class="govuk-body">
         <a class="govuk-link" asp-controller="CalendarOfItems" asp-action="GetCalendarOfItems">@Model.CallToActionMessage</a>
-        <partial name="SVG/ArrowRight"/>
+        <partial name="Images/ArrowRight"/>
     </div>
 }

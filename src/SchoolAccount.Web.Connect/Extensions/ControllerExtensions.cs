@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SchoolAccount.Web.Connect.Models.Breadcrumb;
+using SchoolAccount.Web.Connect.Features.Shared.Breadcrumb;
 
 namespace SchoolAccount.Web.Connect.Extensions;
 

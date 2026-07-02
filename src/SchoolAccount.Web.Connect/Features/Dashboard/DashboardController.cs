@@ -24,6 +24,6 @@ public sealed class DashboardController(
 
         var viewModel = DashboardViewModelBuilder.Build(dashboardResult.Value);
 
-        return View(ViewAddressConstants.Dashboard, viewModel);
+        return View(viewModel);
     }
 }

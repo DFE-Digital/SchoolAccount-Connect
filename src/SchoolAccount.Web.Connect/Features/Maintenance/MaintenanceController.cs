@@ -12,6 +12,6 @@ public sealed class MaintenanceController : Controller
     [AllowAnonymous]
     public IActionResult Maintenance()
     {
-        return View(ViewAddressConstants.Maintenance);
+        return View();
     }
 }

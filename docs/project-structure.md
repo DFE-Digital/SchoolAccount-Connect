@@ -94,27 +94,38 @@ SchoolAccount.Application/
 ## Web.Connect - Feature Organisation
 
 Features are organised by domain area under `SchoolAccount.Web.Connect/Features/`, then by a use case inside each area.
-Each use case gets its own subfolder containing all related classes.
+Each use case gets its own subfolder containing all related classes. Cross-feature UI lives under `Features/Shared/`.
 
 ```
 SchoolAccount.Web.Connect/
+├── Infrastructure/
+│   ├── FeatureConvention.cs                # Tags each controller with its feature folder path
+│   └── FeatureViewLocationExpander.cs      # Resolves views from /Features/{feature}/
+│
 └── Features/
     ├── _ViewImports.cshtml                 # Shared using directives for all feature views
     ├── _ViewStart.cshtml                   # Layout declaration for all feature views
     │
+    ├── Shared/                             # Cross-feature UI components
+    │   ├── Breadcrumb/                     # Breadcrumb model, action filter and _Breadcrumbs partial
+    │   ├── Feedback/                       # Feedback controller + _Feedback partial rendered by the layout
+    │   ├── Filter/                         # Filter view models, _Filtration and _Checkbox partials
+    │   ├── Images/                         # SVG partials (ArrowRight, ChevronRight, DividerLine)
+    │   ├── Layout/                         # _Layout.cshtml and layout partials
+    │   ├── List/                           # ListItemViewModel + _ListItem partial
+    │   └── Pagination/                     # PaginatedListViewModel, _PaginatedList and _Pagination partials
+    │
     └── Tasks/
-        ├── TasksController.cs              # Partial class root declares the controller and the mediator
-        ├── ViewAddressConstants.cs         # Typed constants for all view paths in this feature
-        │
         ├── GetAll/
-        │   ├── TasksController.GetAll.cs   # Partial controller - the GetAll use case only
+        │   ├── GetAllTasksController.cs    # Controller - the GetAll use case only
         │   ├── GetAllTasksViewModel.cs     # View model for the list view
+        │   ├── GetAllTasksViewModelBuilder.cs
         │   ├── GetAllTasksRequest.cs       # Request binding model to pass parameters
         │   └── AllTasks.cshtml             # Razor view
         │
         └── GetById/
-            ├── TasksController.GetById.cs  # Partial controller - the GetById use case only
-            ├── TaskViewModel.cs            # View model (wraps Application response, adds display logic)
+            ├── GetTaskByIdController.cs    # Controller - the GetById use case only
+            ├── GetTaskByIdViewModel.cs     # View model (wraps Application response, adds display logic)
             ├── Task.cshtml                 # Razor view
             ├── _Tabs.cshtml                # Partial view
             ├── _Guidance.cshtml            # Partial view
@@ -124,47 +135,50 @@ SchoolAccount.Web.Connect/
 
 ### How the pieces fit together
 
-**Controller split with `partial class`**
+**One controller per use case**
 
-The controller is declared once at the feature root with a primary constructor for mediator injection. Each use case
-lives in its own file as a partial extension of that class. This keeps each file focused on a single use case while 
-the DI declaration stays in one place.
+Each use case folder has its own sealed controller with a primary constructor for handler injection and attribute
+routing via `RouteConstants`. This keeps each file focused on a single use case.
 
 ```
-TasksController.cs          → public partial class TasksController(...) : Controller;
-TasksController.GetAll.cs   → public sealed partial class TasksController { [HttpGet] GetAll() }
-TasksController.GetById.cs  → public sealed partial class TasksController { [HttpGet] GetById() }
+GetAll/GetAllTasksController.cs    → public sealed class GetAllTasksController(...) { [HttpGet] GetAll() }
+GetById/GetTaskByIdController.cs   → public sealed class GetTaskByIdController(...) { [HttpGet] GetById() }
 ```
 
-**ViewAddressConstants**
+**View resolution by convention**
 
-View paths are never written as magic strings inside actions. Each feature has a `ViewAddressConstants.cs` that collects
-all paths for that feature:
+Views are never referenced by full `~/Features/...` paths. `FeatureConvention` derives each controller's feature
+folder from its namespace (the segments after `Features`, e.g. `Features.Tasks.GetAll` → `Tasks/GetAll`), and
+`FeatureViewLocationExpander` substitutes it into the view location formats registered in `DependencyInjection.cs`:
+
+```
+/Features/{feature}/{view}.cshtml           # The controller's own feature folder
+/Features/Shared/Layout/{view}.cshtml
+/Features/Shared/{view}.cshtml
+```
+
+Actions return `View()` when the view file matches the action name, or a short view name when it differs:
 
 ```csharp
-internal static class Tasks
-{
-    public const string GetAll  = "~/Features/Tasks/GetAll/AllTasks.cshtml";
-    public const string GetById = "~/Features/Tasks/GetById/Task.cshtml";
-
-    internal static class Partials
-    {
-        public const string Tabs        = "~/Features/Tasks/GetById/_Tabs.cshtml";
-        public const string Subtasks    = "~/Features/Tasks/GetById/_Subtasks.cshtml";
-    }
-}
+return View(viewModel);                 // DashboardController.Dashboard → Dashboard.cshtml
+return View("AllTasks", tasksViewModel); // GetAllTasksController.GetAll → AllTasks.cshtml
 ```
+
+**Partial views**
+
+Partial views are prefixed with `_` and referenced by name, never by path:
+
+- Partials in the same use case folder use the bare name: `<partial name="_Tabs"/>`
+- Shared partials use their subfolder-qualified name, resolved via `/Features/Shared/{view}.cshtml`:
+  `<partial name="List/_ListItem"/>`, `<partial name="Pagination/_PaginatedList"/>`
 
 **View models**
 
 Each use case's view model lives in its sub-folder alongside the view. View models convert the Application response and 
-add display-specific logic i.e. computed properties, formatting, conditional flags.
+add display-specific logic i.e. computed properties, formatting, conditional flags. A `*ViewModelBuilder.cs` maps the
+Application response to the view model.
 
 **Request binding models**
 
-`*Request.cs` files within a use case folder bind thr request parameters. These values are mapped from the request 
+`*Request.cs` files within a use case folder bind the request parameters. These values are mapped from the request 
 into an application layer query record i.e. `GetAllTasksQuery`.
-
-**Partial views**
-
-Partial views within an use case folder are prefixed with `_` and referenced via `ViewAddressConstants`

@@ -31,7 +31,7 @@ public sealed class GetTaskByIdController(IQueryHandler<GetTaskByIdQuery, GetTas
 
         var taskViewModel = new GetTaskByIdViewModel(taskResult.Value, viewMode);
 
-        return View(ViewAddressConstants.Tasks.GetById, taskViewModel);
+        return View("Task", taskViewModel);
     }
 
     private void AddTopLevelCategoryAsBreadcrumb(GetTaskByIdResponse task)

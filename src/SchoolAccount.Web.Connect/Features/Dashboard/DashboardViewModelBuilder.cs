@@ -1,6 +1,6 @@
 using SchoolAccount.Application.Extensions;
 using SchoolAccount.Application.Features.Dashboard;
-using SchoolAccount.Web.Connect.Features.Shared.ListItem;
+using SchoolAccount.Web.Connect.Features.Shared.List;
 using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Dashboard;

@@ -25,6 +25,6 @@ public sealed class CategoryListController(
 
         var categoryListViewModel = CategoryListViewModelBuilder.Build(categoriesResult.Value);
 
-        return View(ViewAddressConstants.Categories.List, categoryListViewModel);
+        return View("CategoryList", categoryListViewModel);
     }
 }

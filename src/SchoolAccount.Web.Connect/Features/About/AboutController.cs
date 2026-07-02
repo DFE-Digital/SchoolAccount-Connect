@@ -28,7 +28,7 @@ public sealed class AboutController(IHostEnvironment env, IOptions<CustomEnviron
             Environment = $"{customEnvSettings.Value.Label}  {env.EnvironmentName}".Trim(),
             DeploymentDate = GetDeploymentFileSystemDate(),
         };
-        return View(ViewAddressConstants.About, model);
+        return View(model);
     }
 
     [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]

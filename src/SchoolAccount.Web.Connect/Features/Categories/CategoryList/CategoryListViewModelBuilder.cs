@@ -2,7 +2,8 @@ using System.Globalization;
 using SchoolAccount.Application.Common;
 using SchoolAccount.Application.Features.Categories.GetParentCategories;
 using SchoolAccount.Web.Connect.Extensions;
-using SchoolAccount.Web.Connect.Features.Shared.ListItem;
+using SchoolAccount.Web.Connect.Features.Shared.List;
+using SchoolAccount.Web.Connect.Features.Shared.Pagination;
 using X.PagedList;
 
 namespace SchoolAccount.Web.Connect.Features.Categories.CategoryList;

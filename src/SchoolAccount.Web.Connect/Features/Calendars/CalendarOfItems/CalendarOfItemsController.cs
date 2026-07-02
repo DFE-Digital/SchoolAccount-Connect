@@ -43,6 +43,6 @@ public class CalendarOfItemsController(
         var viewBuilder = new CalendarOfItemsViewModelBuilder(organisationContext);
         var viewModel = viewBuilder.BuildForPage(result.Value, filter.ViewModes, currentUri);
 
-        return View(ViewAddressConstants.CalendarOfItems.Index, viewModel);
+        return View("CalendarOfItems", viewModel);
     }
 }

@@ -1,0 +1,22 @@
+@model SchoolAccount.Web.Connect.Features.Shared.Pagination.PaginatedListViewModel
+
+<ul class="govuk-task-list">
+    @if (Model.PaginatedItems.TotalItemCount > 0)
+    {
+        foreach (var item in Model.PaginatedItems)
+        {
+            <partial name="List/_ListItem" model="item"/>
+        }
+    }
+    else if (Model.PaginatedItems.TotalItemCount == 0)
+    {
+        <li class="govuk-task-list__item">
+            <p class="govuk-body">@Model.NoResultsMessage</p>
+        </li>
+    }
+</ul>
+
+@if (Model.PaginatedItems.PageCount > 1)
+{
+    <partial name="Pagination/_Pagination" model="@(Model.PaginatedItems)"/>
+}
