@@ -8,11 +8,18 @@ $ErrorActionPreference = 'Stop'
 ###############################################################################
 
 $ScriptRoot = $PSScriptRoot
+$EnvFile = Join-Path $ScriptRoot '.env'
 
 if ($PSVersionTable.PSEdition -ne 'Core')
 {
     Write-Error "This script requires PowerShell Core (pwsh). You are running Windows PowerShell."
     exit 1
+}
+
+if (-not (Test-Path -Path $EnvFile))
+{
+    Write-Error "No .env file found at $EnvFile"
+    exit 1;
 }
 
 ###############################################################################
@@ -148,10 +155,20 @@ else
 ###############################################################################
 
 $CertsDirectory = Join-Path $ScriptRoot './certs'
+$TSIDomainCertsDirectory = Join-Path $ScriptRoot '../TSI-DomainService/Certs'
+$TSIBackendCertsDirectory = Join-Path $ScriptRoot '../TSI-Backend/Certs'
+$TSIFrontendCertsDirectory = Join-Path $ScriptRoot '../TSI-Frontend/ClientApp/Certs'
+$SchoolAccountFrontendCertsDirectory = Join-Path $ScriptRoot '../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates'
+$SchoolAccountFrontendKeysDirectory = Join-Path $SchoolAccountFrontendCertsDirectory 'Keys'
 
 if (-not (Test-Path -Path $CertsDirectory))
 {
     New-Item -ItemType Directory -Path $CertsDirectory | Out-Null
+}
+
+if (-not (Test-Path -Path $SchoolAccountFrontendKeysDirectory))
+{
+    New-Item -ItemType Directory -Path $SchoolAccountFrontendKeysDirectory | Out-Null
 }
 
 ###############################################################################
@@ -237,6 +254,7 @@ else
 ###############################################################################
 # Download mkcert for creating SSL Certs
 ###############################################################################
+
 $FilippoUrl = "https://dl.filippo.io/mkcert/latest?for="
 $MkcertBinary = Join-Path $CertsDirectory $(if ($IsWindows) { 'mkcert.exe' } else { 'mkcert' })
 
@@ -266,23 +284,6 @@ else
 & $MkcertBinary --install
 
 ###############################################################################
-# Generate SSL certs
-###############################################################################
-
-$SchoolAccountConnectCert = Join-Path $CertsDirectory 'connect.pem'
-$SchoolAccountConnectKey = Join-Path $CertsDirectory 'connect-key.pem'
-
-if (-not (Test-Path -Path $SchoolAccountConnectCert))
-{
-    Write-Output "Generating $SchoolAccountConnectCert certificate"
-    & $MkcertBinary -cert-file $SchoolAccountConnectCert -key-file $SchoolAccountConnectKey localhost 127.0.0.1 schoolaccount-connect
-}
-else
-{
-    Write-Output "$SchoolAccountConnectCert already exists"
-}
-
-###############################################################################
 # Copy root CA cert to certs directory
 ###############################################################################
 
@@ -301,12 +302,107 @@ else
 }
 
 ###############################################################################
+# Copy root CA to project folders
+###############################################################################
+
+$TargetDirs = @(
+    $TSIDomainCertsDirectory
+    $TSIBackendCertsDirectory
+    $TSIFrontendCertsDirectory
+    $SchoolAccountFrontendCertsDirectory
+)
+
+foreach ($Dest in $TargetDirs)
+{
+    if (-not (Test-Path -Path $Dest))
+    {
+        New-Item -Path $Dest -ItemType Directory | Out-Null
+    }
+    Copy-Item -Path $RootCaCert -Destination "$Dest/" -Force | Out-Null
+}
+
+###############################################################################
+# Generate SSL certs
+###############################################################################
+
+$TSIBackendCert = Join-Path $TSIBackendCertsDirectory 'backend.pfx'
+$TSIFrontendCert = Join-Path $TSIFrontendCertsDirectory 'frontend.crt'
+$TSIFrontendKey = Join-Path $TSIFrontendCertsDirectory 'frontend.key'
+$TSIDomainServiceCert = Join-Path $TSIDomainCertsDirectory 'domain-service.pfx'
+$SchoolAccountFrontendCert = Join-Path $SchoolAccountFrontendKeysDirectory 'SchoolAccount.FrontEnd.pem'
+$SchoolAccountFrontendKey = Join-Path $SchoolAccountFrontendKeysDirectory 'SchoolAccount.FrontEnd-key.pem'
+$SchoolAccountConnectCert = Join-Path $CertsDirectory 'connect.pem'
+$SchoolAccountConnectKey = Join-Path $CertsDirectory 'connect-key.pem'
+
+if (-not (Test-Path -Path $TSIBackendCert))
+{
+    Write-Output "Generating $TSIBackendCert certificate"
+    & $MkcertBinary -p12-file $TSIBackendCert -pkcs12 localhost tsi-backend
+}
+else
+{
+    Write-Output "$TSIBackendCert already exists"
+}
+
+if (-not (Test-Path -Path $TSIFrontendCert))
+{
+    Write-Output "Generating $TSIFrontendCert certificate"
+    & $MkcertBinary -cert-file $TSIFrontendCert -key-file $TSIFrontendKey localhost tsi-frontend
+}
+else
+{
+    Write-Output "$TSIFrontendCert already exists"
+}
+
+if (-not (Test-Path -Path $TSIDomainServiceCert))
+{
+    Write-Output "Generating $TSIDomainServiceCert certificate"
+    & $MkcertBinary -p12-file $TSIDomainServiceCert -pkcs12 localhost tsi-domain-service
+}
+else
+{
+    Write-Output "$TSIDomainServiceCert already exists"
+}
+
+if (-not (Test-Path -Path $SchoolAccountFrontendCert))
+{
+    Write-Output "Generating $SchoolAccountFrontendCert certificate"
+    & $MkcertBinary -cert-file $SchoolAccountFrontendCert -key-file $SchoolAccountFrontendKey localhost 127.0.0.1 schoolaccount-frontend
+}
+else
+{
+    Write-Output "$SchoolAccountFrontendCert already exists"
+}
+
+if (-not (Test-Path -Path $SchoolAccountConnectCert))
+{
+    Write-Output "Generating $SchoolAccountConnectCert certificate"
+    & $MkcertBinary -cert-file $SchoolAccountConnectCert -key-file $SchoolAccountConnectKey localhost 127.0.0.1 schoolaccount-connect
+}
+else
+{
+    Write-Output "$SchoolAccountConnectCert already exists"
+}
+
+###############################################################################
 # Fix permissions for Docker (mkcert creates keys with 600; Docker needs 644)
 ###############################################################################
 
 if (-not $IsWindows)
 {
     Write-Output "Adjusting certificate permissions for Docker compatibility..."
+    if (Test-Path $TSIFrontendKey)
+    {
+        chmod 644 $TSIFrontendKey
+    }
+    if (Test-Path $TSIBackendCert)
+    {
+        chmod 644 $TSIBackendCert
+    }
+    if (Test-Path $TSIDomainServiceCert)
+    {
+        chmod 644 $TSIDomainServiceCert
+    }
     if (Test-Path $SchoolAccountConnectCert)
     {
         chmod 644 $SchoolAccountConnectCert
@@ -318,4 +414,18 @@ if (-not $IsWindows)
 ###############################################################################
 Write-Host ""
 Write-Host "Initialization script completed successfully." -ForegroundColor Green
+Write-Host ""
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+Write-Host "  Docker" -ForegroundColor Cyan
+Write-Host "  Run with:  docker compose up -d --build or with one of the run configurations" -ForegroundColor White
+Write-Host ""
+Write-Host "  Service URLs:" -ForegroundColor Gray
+Write-Host "    Domain Service          https://localhost:5186/swagger" -ForegroundColor White
+Write-Host "    API Service             https://localhost:5080/swagger" -ForegroundColor White
+Write-Host "    Manage App              https://localhost:4200/dashboard" -ForegroundColor White
+Write-Host "    SA-Frontend-Connect App https://127.0.0.1:7033/home" -ForegroundColor White
+Write-Host "    Connect App             https://127.0.0.1:7034/home" -ForegroundColor White
+Write-Host "    AppConfig Emulator      http://localhost:8483" -ForegroundColor White
+Write-Host "    Seq Log Viewer:         http://localhost:5341" -ForegroundColor White
 Write-Host ""

@@ -5,6 +5,12 @@
 ###############################################################################
 
 script_root=$(dirname "${BASH_SOURCE[0]:-$0}")
+env_file="$script_root/.env"
+
+if [ ! -f "$env_file" ]; then
+    echo "Error: No .env file found at $env_file" >&2
+    return 1 2>/dev/null || exit 1
+fi
 
 ###############################################################################
 # Tools
@@ -115,9 +121,15 @@ echo "DEV_PAT set in current session."
 ###############################################################################
 
 certs_directory="$script_root/certs"
+tsi_domain_certs_directory="$script_root/../TSI-DomainService/Certs"
+tsi_backend_certs_directory="$script_root/../TSI-Backend/Certs"
+tsi_frontend_certs_directory="$script_root/../TSI-Frontend/ClientApp/Certs"
+schoolaccount_frontend_certs_directory="$script_root/../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates"
+schoolaccount_frontend_keys_directory="$schoolaccount_frontend_certs_directory/Keys"
 mkcert_binary="$certs_directory/mkcert"
 
 mkdir -p "$certs_directory"
+mkdir -p "$keys_directory"
 
 ###############################################################################
 # Azure CLI
@@ -199,21 +211,6 @@ fi
 "$mkcert_binary" --install
 
 ###############################################################################
-# Generate SSL certs
-###############################################################################
-
-schoolaccount_connect_cert="$certs_directory/connect.pem"
-schoolaccount_connect_key="$certs_directory/connect-key.pem"
-root_ca_cert="$certs_directory/rootCA.crt"
-
-if [ ! -f "$schoolaccount_connect_cert" ]; then
-    echo "Generating $schoolaccount_connect_cert certificate"
-    "$mkcert_binary" -cert-file "$schoolaccount_connect_cert" -key-file "$schoolaccount_connect_key" localhost 127.0.0.1 schoolaccount-connect
-else
-    echo "$schoolaccount_connect_cert already exists"
-fi
-
-###############################################################################
 # Copy root CA cert to certs directory
 ###############################################################################
 
@@ -227,10 +224,76 @@ else
 fi
 
 ###############################################################################
+# Copy root CA to project folders
+###############################################################################
+
+target_dirs=(
+    "$tsi_domain_certs_directory"
+    "$tsi_backend_certs_directory"
+    "$tsi_frontend_certs_directory"
+    "$schoolaccount_frontend_certs_directory"
+)
+
+for dest in "${target_dirs[@]}"; do
+    mkdir -p "$dest" && cp "$root_ca_cert" "$dest/"
+done
+
+###############################################################################
+# Generate SSL certs
+###############################################################################
+
+tsi_backend_cert="$tsi_backend_certs_directory/backend.pfx"
+tsi_frontend_cert="$tsi_frontend_certs_directory/frontend.crt"
+tsi_frontend_key="$tsi_frontend_certs_directory/frontend.key"
+tsi_domain_service_cert="$tsi_domain_certs_directory/domain-service.pfx"
+schoolaccount_frontend_cert="$schoolaccount_frontend_keys_directory/SchoolAccount.FrontEnd.pem"
+schoolaccount_frontend_key="$schoolaccount_frontend_keys_directory/SchoolAccount.FrontEnd-key.pem"
+schoolaccount_connect_cert="$certs_directory/connect.pem"
+schoolaccount_connect_key="$certs_directory/connect-key.pem"
+
+if [ ! -f "$tsi_backend_cert" ]; then
+    echo "Generating $tsi_backend_cert certificate"
+    "$mkcert_binary" -p12-file "$tsi_backend_cert" -pkcs12 localhost tsi-backend
+else
+    echo "$tsi_backend_cert already exists"
+fi
+
+if [ ! -f "$tsi_frontend_cert" ]; then
+    echo "Generating $tsi_frontend_cert certificate"
+    "$mkcert_binary" -cert-file "$tsi_frontend_cert" -key-file "$tsi_frontend_key" localhost tsi-frontend
+else
+    echo "$tsi_frontend_cert already exists"
+fi
+
+if [ ! -f "$tsi_domain_service_cert" ]; then
+    echo "Generating $tsi_domain_service_cert certificate"
+    "$mkcert_binary" -p12-file "$tsi_domain_service_cert" -pkcs12 localhost tsi-domain-service
+else
+    echo "$tsi_domain_service_cert already exists"
+fi
+
+if [ ! -f "$schoolaccount_frontend_cert" ]; then
+    echo "Generating $schoolaccount_frontend_cert certificate"
+    "$mkcert_binary" -cert-file "$schoolaccount_frontend_cert" -key-file "$schoolaccount_frontend_key" localhost 127.0.0.1 schoolaccount-frontend
+else
+    echo "$schoolaccount_frontend_cert already exists"
+fi
+
+if [ ! -f "$schoolaccount_connect_cert" ]; then
+    echo "Generating $schoolaccount_connect_cert certificate"
+    "$mkcert_binary" -cert-file "$schoolaccount_connect_cert" -key-file "$schoolaccount_connect_key" localhost 127.0.0.1 schoolaccount-connect
+else
+    echo "$schoolaccount_connect_cert already exists"
+fi
+
+###############################################################################
 # Fix permissions for Docker (mkcert creates keys with 600; Docker needs 644)
 ###############################################################################
 
 echo "Adjusting certificate permissions for Docker compatibility..."
+[ -f "$tsi_frontend_key" ]        && chmod 644 "$tsi_frontend_key"
+[ -f "$tsi_backend_cert" ]        && chmod 644 "$tsi_backend_cert"
+[ -f "$tsi_domain_service_cert" ] && chmod 644 "$tsi_domain_service_cert"
 [ -f "$schoolaccount_connect_cert" ] && chmod 644 "$schoolaccount_connect_cert"
 
 ###############################################################################
@@ -239,5 +302,19 @@ echo "Adjusting certificate permissions for Docker compatibility..."
 
 echo ""
 echo "Initialization script completed successfully."
+echo ""
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+echo "  Docker"
+echo "  Run with:  docker compose up -d --build or with one of the run configurations"
+echo ""
+echo "  Service URLs:"
+echo "    Domain Service          https://localhost:5186/swagger"
+echo "    API Service             https://localhost:5080/swagger"
+echo "    Manage App              https://localhost:4200/dashboard"
+echo "    SA-Frontend-Connect App https://127.0.0.1:7033/home"
+echo "    Connect App             https://127.0.0.1:7034/home"
+echo "    AppConfig Emulator      http://localhost:8483"
+echo "    Seq Log Viewer:         http://localhost:5341"
 echo ""
 

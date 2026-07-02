@@ -69,6 +69,88 @@ services:
     networks:
       - default
   
+  tsi-frontend:
+    hostname: tsi-frontend
+    build:
+      context: ../TSI-Frontend/ClientApp
+      dockerfile: ./Dockerfile
+    depends_on:
+      - tsi-backend
+    ports:
+      - "4200:8443"
+    networks:
+      - default
+    volumes:
+      - ../TSI-Frontend/ClientApp/Certs:/https:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  
+  tsi-backend:
+    hostname: tsi-backend
+    environment:
+      TSI_DomainService_url: "https://tsi-domain-service:5186/api"
+      ASPNETCORE_URLS: "https://0.0.0.0:5080"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/backend.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "changeit"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    build:
+      context: ../TSI-Backend
+      dockerfile: ./TSI.Api/Dockerfile
+    depends_on:
+      - tsi-domain-service
+    ports:
+      - "5080:5080"
+    networks:
+      - default
+    volumes:
+      - ../TSI-Backend/Certs:/https:ro
+  
+  tsi-domain-service:
+    hostname: tsi-domain-service
+    environment:
+      saSQLConnectionString: "Server=schoolaccount-database,1433;Initial Catalog=sa-sql-db-dev;User ID=sa;Password=MyStrongPassword123!;TrustServerCertificate=True;Connection Timeout=30;"
+      ASPNETCORE_URLS: "https://0.0.0.0:5186"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/domain-service.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "changeit"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      AzureAppConfiguration__Endpoint: "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890"
+    build:
+      context: ../TSI-DomainService
+      dockerfile: ./TSI.DomainService/Dockerfile
+    depends_on:
+      - migrations
+      - app-config-emulator
+    ports:
+      - "5186:5186"
+    networks:
+      - default
+    volumes:
+      - ../TSI-DomainService/Certs:/https:ro
+
+  sa-frontend-connect:
+    hostname: sa-frontend-connect
+    build:
+      context: ../SchoolAccount-Frontend
+      dockerfile: SchoolAccount/SchoolAccount.FrontEnd/Dockerfile
+      secrets:
+        - personal_access_token
+    environment:
+      Kestrel__Endpoints__Https__Url: "https://0.0.0.0:7033"
+      Kestrel__Endpoints__Https__Certificate__Path: "/https/SchoolAccount.FrontEnd.pem"
+      Kestrel__Endpoints__Https__Certificate__KeyPath: "/https/SchoolAccount.FrontEnd-key.pem"
+      TSI_Pre16APIURL: "https://tsi-domain-service:5186/api"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      AzureAppConfiguration__Endpoint: "Endpoint=http://app-config-emulator:8483;Id=emulator-test-id;Secret=abcdefghijklmnopqrstuvwxyz1234567890"
+    depends_on:
+      - tsi-domain-service
+      - app-config-emulator
+    ports:
+      - "7033:7033"
+    networks:
+      - default
+    volumes:
+      - ../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates:/https:ro
+      - ../SchoolAccount-Frontend/SchoolAccount/SchoolAccount.FrontEnd/Certificates/Keys:/https:ro
+  
   app-config-emulator:
     hostname: app-config-emulator
     platform: linux/amd64
@@ -84,7 +166,7 @@ services:
     networks:
       - default
     volumes:
-      - ../SchoolAccount-LocalDevTools/config/azure-app-config:/app/.aace
+      - ./config/azure-app-config:/app/.aace
   
   seq:
     hostname: seq
