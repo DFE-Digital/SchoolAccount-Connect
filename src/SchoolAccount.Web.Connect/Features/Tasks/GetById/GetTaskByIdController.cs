@@ -8,7 +8,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Tasks.GetById;
 
-public sealed class GetTaskByIdController(IQueryHandler<GetTaskByIdQuery, GetTaskByIdResponse> taskHandler) : Controller
+public sealed class GetTaskByIdController(IMediator mediator) : Controller
 {
     [Breadcrumb("Home", Root)]
     [Breadcrumb("Tasks", RouteConstants.Task.AllTasks)]
@@ -20,7 +20,7 @@ public sealed class GetTaskByIdController(IQueryHandler<GetTaskByIdQuery, GetTas
     )
     {
         var taskQuery = new GetTaskByIdQuery(id);
-        var taskResult = await taskHandler.Handle(taskQuery, cancellationToken);
+        var taskResult = await mediator.Query(taskQuery, cancellationToken);
 
         if (taskResult.IsFailure)
         {

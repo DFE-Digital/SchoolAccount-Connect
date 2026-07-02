@@ -7,8 +7,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Categories.CategoryHub;
 
-public sealed class CategoryHubController(IQueryHandler<GetCategoryHubQuery, GetCategoryHubResponse> categoryHubHandler)
-    : Controller
+public sealed class CategoryHubController(IMediator mediator) : Controller
 {
     [Breadcrumb("Home", Root)]
     [Breadcrumb("Tasks", RouteConstants.Task.AllTasks)]
@@ -20,7 +19,7 @@ public sealed class CategoryHubController(IQueryHandler<GetCategoryHubQuery, Get
     )
     {
         var categoryHubQuery = new GetCategoryHubQuery(id, request.PageNumber, request.PageSize);
-        var categoryHubResult = await categoryHubHandler.Handle(categoryHubQuery, cancellationToken);
+        var categoryHubResult = await mediator.Query(categoryHubQuery, cancellationToken);
 
         if (categoryHubResult.IsFailure)
         {

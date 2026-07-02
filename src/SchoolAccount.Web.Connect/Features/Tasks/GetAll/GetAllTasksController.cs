@@ -6,8 +6,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Tasks.GetAll;
 
-public sealed class GetAllTasksController(IQueryHandler<GetAllTasksQuery, GetAllTasksResponse> allTasksHandler)
-    : Controller
+public sealed class GetAllTasksController(IMediator mediator) : Controller
 {
     [Breadcrumb("Home", Root)]
     [Breadcrumb("Tasks")]
@@ -18,7 +17,7 @@ public sealed class GetAllTasksController(IQueryHandler<GetAllTasksQuery, GetAll
     )
     {
         var tasksQuery = new GetAllTasksQuery(request.PageNumber, request.PageSize);
-        var tasksResult = await allTasksHandler.Handle(tasksQuery, cancellationToken);
+        var tasksResult = await mediator.Query(tasksQuery, cancellationToken);
 
         var tasksViewModel = GetAllTasksViewModelBuilder.Build(tasksResult.Value);
 

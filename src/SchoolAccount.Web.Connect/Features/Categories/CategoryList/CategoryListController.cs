@@ -5,9 +5,7 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Categories.CategoryList;
 
-public sealed class CategoryListController(
-    IQueryHandler<GetParentCategoriesQuery, GetParentCategoriesResponse> categoryListHandler
-) : Controller
+public sealed class CategoryListController(IMediator mediator) : Controller
 {
     [HttpGet(Category.List)]
     public async Task<ActionResult<GetParentCategoriesResponse>> GetParentCategories(
@@ -16,7 +14,7 @@ public sealed class CategoryListController(
     )
     {
         var categoriesQuery = new GetParentCategoriesQuery(query.PageNumber, query.PageSize);
-        var categoriesResult = await categoryListHandler.Handle(categoriesQuery, cancellationToken);
+        var categoriesResult = await mediator.Query(categoriesQuery, cancellationToken);
 
         if (categoriesResult.IsFailure)
         {

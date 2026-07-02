@@ -1,17 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolAccount.Application.Abstractions.Messaging;
-using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Contracts;
 using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query;
-using SchoolAccount.Application.Features.Calendars.CalendarOfItems.Query.Operational;
 using SchoolAccount.Kernel;
 using SchoolAccount.Web.Connect.Extensions;
 
 namespace SchoolAccount.Web.Connect.Features.Calendars.CalendarOfItems;
 
-public class CalendarOfItemsController(
-    IQueryHandler<CalendarOfItemsDirectionalQuery, CalendarOfItemsResponse> handler,
-    IOrganisationContext organisationContext
-) : Controller
+public class CalendarOfItemsController(IMediator mediator, IOrganisationContext organisationContext) : Controller
 {
     [HttpGet(RouteConstants.Calendar.CalendarOfItems)]
     public async Task<IActionResult> GetCalendarOfItems(
@@ -32,7 +27,7 @@ public class CalendarOfItemsController(
             request.SortMode
         );
 
-        var result = await handler.Handle(filter, cancellationToken);
+        var result = await mediator.Query(filter, cancellationToken);
 
         if (result.IsFailure)
         {

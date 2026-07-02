@@ -4,8 +4,7 @@ using SchoolAccount.Application.Features.Tasks.Search;
 
 namespace SchoolAccount.Web.Connect.Features.Tasks.Search;
 
-public sealed class SearchTasksController(IQueryHandler<SearchTasksQuery, SearchTasksResponse> taskSearchHandler)
-    : Controller
+public sealed class SearchTasksController(IMediator mediator) : Controller
 {
     [HttpGet(RouteConstants.Search)]
     public async Task<IActionResult> SearchTasks(SearchTasksRequest request, CancellationToken cancellationToken)
@@ -16,7 +15,7 @@ public sealed class SearchTasksController(IQueryHandler<SearchTasksQuery, Search
         }
 
         var searchTasksQuery = new SearchTasksQuery(request.Term, request.PageNumber, request.PageSize);
-        var searchTasksResult = await taskSearchHandler.Handle(searchTasksQuery, cancellationToken);
+        var searchTasksResult = await mediator.Query(searchTasksQuery, cancellationToken);
 
         if (searchTasksResult.IsFailure)
         {

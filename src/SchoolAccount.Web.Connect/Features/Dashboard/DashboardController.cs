@@ -6,16 +6,13 @@ using static SchoolAccount.Web.Connect.RouteConstants;
 
 namespace SchoolAccount.Web.Connect.Features.Dashboard;
 
-public sealed class DashboardController(
-    IQueryHandler<GetDashboardQuery, GetDashboardResponse> dashboardHandler,
-    IDateTimeProvider dateTimeProvider
-) : Controller
+public sealed class DashboardController(IMediator mediator, IDateTimeProvider dateTimeProvider) : Controller
 {
     [HttpGet(Root)]
     public async Task<IActionResult> Dashboard(CancellationToken cancellationToken)
     {
         var query = new GetDashboardQuery(dateTimeProvider.Today);
-        var dashboardResult = await dashboardHandler.Handle(query, cancellationToken);
+        var dashboardResult = await mediator.Query(query, cancellationToken);
 
         if (dashboardResult.IsFailure)
         {
