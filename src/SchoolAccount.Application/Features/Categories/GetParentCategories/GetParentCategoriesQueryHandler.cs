@@ -8,7 +8,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Categories.GetParentCategories;
 
-public sealed class GetParentCategoriesHandler(IApplicationDbContext applicationDbContext)
+public sealed class GetParentCategoriesQueryHandler(IApplicationDbContext applicationDbContext)
     : IQueryHandler<GetParentCategoriesQuery, GetParentCategoriesResponse>
 {
     public async Task<Result<GetParentCategoriesResponse>> Handle(

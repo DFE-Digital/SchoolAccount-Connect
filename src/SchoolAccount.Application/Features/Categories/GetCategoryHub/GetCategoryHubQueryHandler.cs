@@ -5,7 +5,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Categories.GetCategoryHub;
 
-public sealed class GetCategoryHubHandler(IApplicationDbContext applicationDbContext)
+public sealed class GetCategoryHubQueryHandler(IApplicationDbContext applicationDbContext)
     : IQueryHandler<GetCategoryHubQuery, GetCategoryHubResponse>
 {
     public async Task<Result<GetCategoryHubResponse>> Handle(

@@ -6,7 +6,7 @@ using SchoolAccount.Kernel;
 
 namespace SchoolAccount.Application.Features.Tasks.GetById;
 
-public sealed class GetTaskByIdHandler(
+public sealed class GetTaskByIdQueryHandler(
     IApplicationDbContext applicationDbContext,
     IDateTimeProvider dateTimeProvider,
     IOrganisationContext organisationContext

@@ -16,12 +16,12 @@ using static SchoolAccount.Tests.Common.Builders.TaxonomyBuilder;
 
 namespace SchoolAccount.Application.IntegrationTests;
 
-public class GetTaskByIdHandlerTests
+public class GetTaskByIdQueryHandlerTests
 {
     private readonly IApplicationDbContext _context;
-    private readonly GetTaskByIdHandler _sut;
+    private readonly GetTaskByIdQueryHandler _sut;
 
-    public GetTaskByIdHandlerTests()
+    public GetTaskByIdQueryHandlerTests()
     {
         var dateTimeProvider = Substitute.For<IDateTimeProvider>();
         dateTimeProvider.UtcNow.Returns(new DateTime(2026, 4, 21, 10, 0, 0, DateTimeKind.Utc));
@@ -29,7 +29,7 @@ public class GetTaskByIdHandlerTests
         var organisationContext = AOrganisationContext().WithSchoolType(SchoolType.Academy).Build();
 
         _context = DatabaseContext.Build();
-        _sut = new GetTaskByIdHandler(_context, dateTimeProvider, organisationContext);
+        _sut = new GetTaskByIdQueryHandler(_context, dateTimeProvider, organisationContext);
     }
 
     [Fact]

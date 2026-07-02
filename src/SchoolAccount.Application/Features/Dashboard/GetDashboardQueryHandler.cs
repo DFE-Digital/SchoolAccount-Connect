@@ -8,7 +8,7 @@ using static SchoolAccount.Application.Specifications.TypeEntitySpecifications;
 
 namespace SchoolAccount.Application.Features.Dashboard;
 
-public sealed class GetDashboardHandler(
+public sealed class GetDashboardQueryHandler(
     IApplicationDbContext applicationDbContext,
     IOrganisationContext organisationContext,
     IDateTimeProvider dateTimeProvider

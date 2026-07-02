@@ -6,15 +6,15 @@ using SchoolAccount.Tests.Common.Fakes;
 
 namespace SchoolAccount.Application.IntegrationTests;
 
-public class GetCategoryHubHandlerTests
+public class GetCategoryHubQueryHandlerTests
 {
     private readonly IApplicationDbContext _context;
-    private readonly GetCategoryHubHandler _sut;
+    private readonly GetCategoryHubQueryHandler _sut;
 
-    public GetCategoryHubHandlerTests()
+    public GetCategoryHubQueryHandlerTests()
     {
         _context = DatabaseContext.Build();
-        _sut = new GetCategoryHubHandler(_context);
+        _sut = new GetCategoryHubQueryHandler(_context);
     }
 
     [Fact]
