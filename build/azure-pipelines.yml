@@ -8,8 +8,6 @@ trigger:
 
 variables:
   - group: 'Shared Resources - S268Dev'
-  - group: 'Shared Resources - S268Test'
-  - group: 'Shared Resources - S268UAT'
   - group: 'Shared Resources - S268PreProd'
   - group: 'Shared Resources - S268Prod'
 
@@ -30,36 +28,6 @@ stages:
         parameters:
           Environment: dev
           EnvironmentDisplayName: Dev
-
-  - stage: DeployToTest
-    displayName: Deploy to Test
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268Test'
-      - group: 'Alert Thresholds - Test'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: test
-          EnvironmentDisplayName: Test
-
-  - stage: DeployToUAT
-    displayName: Deploy to UAT
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    variables:
-      - group: 'Shared Resources - S268UAT'
-      - group: 'Alert Thresholds - UAT'
-    jobs:
-      - template: job-templates/deploy.yml
-        parameters:
-          Environment: uat
-          EnvironmentDisplayName: UAT
 
   - stage: DeployToPreProd
     displayName: Deploy to PreProd
