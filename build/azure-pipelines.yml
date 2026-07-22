@@ -6,6 +6,13 @@ trigger:
     include:
       - main
 
+resources:
+  repositories:
+    - repository: ServiceNowScripts
+      type: git
+      name: SchoolAccount-ServiceNow
+      ref: refs/heads/main
+
 variables:
   - group: 'Shared Resources - S268Dev'
   - group: 'Shared Resources - S268PreProd'
@@ -16,10 +23,7 @@ stages:
 
   - stage: DeployToDev
     displayName: Deploy to Dev
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Shared Resources - S268Dev'
       - group: 'Alert Thresholds - Dev'
@@ -31,10 +35,7 @@ stages:
 
   - stage: DeployToPreProd
     displayName: Deploy to PreProd
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Shared Resources - S268PreProd'
       - group: 'Alert Thresholds - PreProd'
@@ -46,15 +47,13 @@ stages:
 
   - stage: DeployToProd
     displayName: Deploy to Prod
-    condition: and(
-      succeeded(),
-      ne(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     variables:
       - group: 'Shared Resources - S268Prod'
       - group: 'Alert Thresholds - Prod'
+      - group: 'Service Now - Production'
     jobs:
-      - template: job-templates/deploy.yml
+      - template: job-templates/deploy-with-servicenow.yml
         parameters:
           Environment: pd
           EnvironmentDisplayName: Prod

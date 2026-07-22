@@ -3,10 +3,14 @@ parameters:
     type: string
   - name: EnvironmentDisplayName
     type: string
+  - name: dependsOn
+    type: object
+    default: []
 
 jobs:
   - deployment: Deploy_to_${{ parameters.Environment }}
     displayName: "Deploy To ${{ parameters.EnvironmentDisplayName }}"
+    dependsOn: ${{ parameters.dependsOn }}
     environment: ${{ parameters.Environment }}
     strategy:
       runOnce:

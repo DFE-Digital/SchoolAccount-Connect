@@ -10,10 +10,10 @@ stages:
           - task: AzurePowerShell@5
             displayName: 'Test ARM templates'
             inputs:
-              azureSubscription: 'SchoolAccount-CDS-Dev'
+              azureSubscription: 's268d.azdo.deployment'
               ScriptType: 'FilePath'
               ScriptPath: '$(System.DefaultWorkingDirectory)/infrastructure/scripts/Test-ArmTemplate.ps1'
-              ScriptArguments: '-ResourceGroup ''sa-tpltest01-rg'' -BaseDirectory ''$(System.DefaultWorkingDirectory)/infrastructure/arm-templates'' -Verbose'
+              ScriptArguments: -ResourceGroup 's268d01rg-uks-sa-tpltest01' -BaseDirectory '$(System.DefaultWorkingDirectory)/infrastructure/arm-templates' -Verbose
               azurePowerShellVersion: 'LatestVersion'
 
           - task: UseDotNet@2

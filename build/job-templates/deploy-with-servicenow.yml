@@ -1,0 +1,37 @@
+parameters:
+- name: Environment
+  type: string
+- name: EnvironmentDisplayName
+  type: string
+
+# This template wraps deploy.yml with ServiceNow change management
+# If you use this template, you MUST provide the appropriate
+# Service Now library group at the stage level
+
+jobs:
+- job: ServiceNow_Create
+  displayName: Create ServiceNow Change
+  variables:
+    - template: VariableTemplates/service-now-details.yaml@ServiceNowScripts
+  steps:
+    - template: service-now-create-change-request.yaml@ServiceNowScripts
+
+- template: deploy.yml
+  parameters:
+    Environment: ${{ parameters.Environment }}
+    EnvironmentDisplayName: ${{ parameters.EnvironmentDisplayName }}
+    dependsOn:
+      - ServiceNow_Create
+
+- job: ServiceNow_Close
+  displayName: Close ServiceNow Change
+  condition: always()
+  dependsOn:
+    - ServiceNow_Create
+    - Deploy_to_${{ parameters.Environment }}
+  variables:
+    sysId: $[ dependencies.ServiceNow_Create.outputs['createServiceNowChangeRequest.sysId'] ]
+    changeRequestNumber: $[ dependencies.ServiceNow_Create.outputs['createServiceNowChangeRequest.changeRequestNumber'] ]
+    changeRequestStart: $[ dependencies.ServiceNow_Create.outputs['createServiceNowChangeRequest.start'] ]
+  steps:
+    - template: service-now-close-change-request.yaml@ServiceNowScripts
