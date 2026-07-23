@@ -26,7 +26,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
     public async Task Endpoint_returns_success_page()
     {
         // Act
-        var page = await _client.GetAsync("/categories/2", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/2", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.Should().NotBeNull();
@@ -43,7 +45,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
         _handler.WithDisplayName("Finance");
 
         // Act
-        var page = await _client.GetAsync("/categories/2", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/2", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector(".govuk-heading-l").Should().NotBeNull().And.HaveTextContent("Finance");
@@ -56,7 +60,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
         _handler.WithDisplayName("Finance");
 
         // Act
-        var page = await _client.GetAsync("/categories/2", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/2", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item")
@@ -76,7 +82,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _client.GetAsync("/categories/2", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/2", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item--with-link").Should().HaveCount(count);
@@ -89,7 +97,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
         _handler.WithId(1);
 
         // Act
-        var page = await _client.GetAsync("/categories/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll("a").Should().Contain(e => e.TextContent.Contains("Academy trust handbook"));
@@ -99,7 +109,9 @@ public class CategoryHubViewTests : IClassFixture<TestServerFixture>
     public async Task Does_not_show_academy_trust_handbook_link_for_other_categories()
     {
         // Act
-        var page = await _client.GetAsync("/categories/2", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories/2", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll("a").Should().NotContain(e => e.TextContent.Contains("Academy trust handbook"));

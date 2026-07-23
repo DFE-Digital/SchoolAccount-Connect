@@ -1,4 +1,5 @@
-﻿@using GovUk.Frontend.AspNetCore
+﻿@using Azure.Core
+@using GovUk.Frontend.AspNetCore
 @using Microsoft.FeatureManagement
 @using SchoolAccount.Application
 @using SchoolAccount.Application.Constants
@@ -6,6 +7,7 @@
 @using SchoolAccount.Kernel.Cookie
 @using SchoolAccount.Web.Connect
 @using SchoolAccount.Web.Connect.Extensions
+@using SchoolAccount.Web.Connect.Features.Cookies
 @using SchoolAccount.Web.Connect.Features.Shared.Breadcrumb
 @inject IFeatureManager FeatureManager
 @inject ICookieConsentContext CookieConsent
@@ -26,51 +28,63 @@
     var organisationName = OrganisationContext?.Organisation.Name;
 }
 
-@section Head {
+@section Head 
+{
     @Html.GovUkFrontendStyleImports()
     @Html.MojFrontendStyleImports()
     @Html.DfeFrontendStyleImports()
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 }
 
-@section BodyStart {
+@section BodyStart 
+{
     @if (!CookieConsent.IsSet)
     {
-        <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
-            <govuk-cookie-banner-message>
-                <govuk-cookie-banner-message-heading>
-                    Cookies on @ApplicationConstants.DfeConnect
-                </govuk-cookie-banner-message-heading>
-                <govuk-cookie-banner-message-content>
-                    <p class="govuk-body">We use some essential cookies to make this service work.</p>
-                    <p class="govuk-body">
-                        We’d also like to use analytics cookies so we can understand how you use the
-                        service and make improvements.
-                    </p>
-                </govuk-cookie-banner-message-content>
-                <govuk-cookie-banner-message-actions>
-                    <govuk-cookie-banner-message-action
-                        text="Accept analytics cookies"
-                        type="button"
-                        id="dfe-cta-acceptCookies"/>
-                    <govuk-cookie-banner-message-action
-                        text="Reject analytics cookies"
-                        type="button"
-                        id="dfe-cta-declineCookies"/>
-                    <govuk-cookie-banner-message-action-link
-                        text="View cookies"
-                        href="@RouteConstants.Cookies"/>
-                </govuk-cookie-banner-message-actions>
-            </govuk-cookie-banner-message>
-        </govuk-cookie-banner>
+        using (Html.BeginForm("SetConsent", "Cookies", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="@nameof(CookieConsentRequest.ReturnUrl)" value="@Context.Request.Path" />
+            
+            <govuk-cookie-banner aria-label="Cookies on serviceName" id="dfe-cookie-banner">
+                <govuk-cookie-banner-message>
+                    <govuk-cookie-banner-message-heading>
+                        Cookies on @ApplicationConstants.DfeConnect
+                    </govuk-cookie-banner-message-heading>
+                    <govuk-cookie-banner-message-content>
+                        <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                        <p class="govuk-body">
+                            We’d also like to use analytics cookies so we can understand how you use the
+                            service and make improvements.
+                        </p>
+                    </govuk-cookie-banner-message-content>
+                    <govuk-cookie-banner-message-actions>
+                        <govuk-cookie-banner-message-action
+                            text="Accept analytics cookies"
+                            type="submit"
+                            name="@nameof(CookieConsentRequest.Value)"
+                            value="@CookieConsentConstants.IdValues.Accepted" />
+                        <govuk-cookie-banner-message-action
+                            text="Reject analytics cookies"
+                            type="submit"
+                            name="@nameof(CookieConsentRequest.Value)"
+                            value="@CookieConsentConstants.IdValues.Rejected" />
+                        <govuk-cookie-banner-message-action-link
+                            text="View cookies"
+                            href="@RouteConstants.Cookies" />
+                    </govuk-cookie-banner-message-actions>
+                </govuk-cookie-banner-message>
+            </govuk-cookie-banner>
+        }
     }
 }
 
-@section GovUkHeader {
+@section GovUkHeader 
+{
     <partial name="_Header"/>
 }
 
-@section BeforeContent {
+@section BeforeContent 
+{
     <govuk-phase-banner>
         <govuk-phase-banner-tag>Beta</govuk-phase-banner-tag>
         This is a new service. Help us improve it and
@@ -106,23 +120,17 @@
     }
 }
 
-@section BodyEnd {
+@section BodyEnd 
+{
     @Html.GovUkFrontendScriptImports()
-
-    <script>
-        window.cookieConsentConfig = {
-            cookieName: "@CookieConsentConstants.CookieName",
-            acceptedValue: "@CookieConsentConstants.IdValues.Accepted",
-            rejectedValue: "@CookieConsentConstants.IdValues.Rejected"
-        };
-    </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/feedback.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 }
 
-@section GovUkFooter {
+@section GovUkFooter 
+{
     @if (isAuthenticated)
     {
         <partial name="Feedback/_Feedback"/>

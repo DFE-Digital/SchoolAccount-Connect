@@ -6,8 +6,10 @@
 
 <form method="post">
     
-    <input type="hidden" for="@Model.LocalReturnAddress" />
-    
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" for="@Model.LocalReturnAddress"/>
+
     <h1 class="govuk-heading">
         You’ve signed in as a trust
     </h1>
@@ -30,5 +32,5 @@
     <p class="govuk-body">
         If you’d like to help us, email <a class="govuk-link" href="mailto:dfe.connectuserresearch@education.gov.uk" target="_blank42">dfe.connectuserresearch@education.gov.uk</a> so we can arrange a session for you.
     </p>
-        
+
 </form>

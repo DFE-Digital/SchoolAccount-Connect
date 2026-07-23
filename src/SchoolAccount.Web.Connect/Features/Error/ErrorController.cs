@@ -10,7 +10,7 @@ namespace SchoolAccount.Web.Connect.Features.Error;
 [AllowAnonymous]
 public partial class ErrorController(ILogger<ErrorController> logger, IWebHostEnvironment environment) : Controller
 {
-    [Route(RouteConstants.Error)]
+    [Route(RouteConstants.Error), HttpGet]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(int? code)
     {

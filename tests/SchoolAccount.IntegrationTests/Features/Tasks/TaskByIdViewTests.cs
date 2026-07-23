@@ -27,7 +27,9 @@ public class TaskByIdViewTests : IClassFixture<TestServerFixture>
     public async Task Endpoint_returns_success_page()
     {
         // Act
-        var page = await _client.GetAsync("/tasks/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/tasks/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.Should().NotBeNull();
@@ -41,7 +43,9 @@ public class TaskByIdViewTests : IClassFixture<TestServerFixture>
     public async Task Shows_task_name_as_heading()
     {
         // Act
-        var page = await _client.GetAsync("/tasks/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/tasks/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector(".govuk-heading-l").Should().NotBeNull().And.HaveTextContent("School attendance");
@@ -51,7 +55,9 @@ public class TaskByIdViewTests : IClassFixture<TestServerFixture>
     public async Task Shows_no_upcoming_tasks_message_when_no_subtasks()
     {
         // Act
-        var page = await _client.GetAsync("/tasks/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/tasks/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector("body")
@@ -84,7 +90,9 @@ public class TaskByIdViewTests : IClassFixture<TestServerFixture>
         };
 
         // Act
-        var page = await _client.GetAsync("/tasks/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/tasks/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         var body = page.QuerySelector("body");
@@ -102,7 +110,9 @@ public class TaskByIdViewTests : IClassFixture<TestServerFixture>
         };
 
         // Act
-        var page = await _client.GetAsync("/tasks/1", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/tasks/1", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector("body")

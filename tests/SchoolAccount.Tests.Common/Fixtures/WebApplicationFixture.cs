@@ -17,12 +17,22 @@ public abstract class WebApplicationFixture : IAsyncLifetime
     {
         AnonymousFactory = BuildFactory(
             configureAnonymous
-                ?? (b => b.WithTestDoubles(HandlerRegistry, FallbackProviderResolver).WithoutAuthentication())
+                ?? (
+                    b =>
+                        b.WithTestDoubles(HandlerRegistry, FallbackProviderResolver)
+                            .WithoutAuthentication()
+                            .WithDisabledAntiforgery()
+                )
         );
 
         AuthenticatedFactory = BuildFactory(
             configureAuthenticated
-                ?? (b => b.WithTestDoubles(HandlerRegistry, FallbackProviderResolver).WithAuthentication())
+                ?? (
+                    b =>
+                        b.WithTestDoubles(HandlerRegistry, FallbackProviderResolver)
+                            .WithAuthentication()
+                            .WithDisabledAntiforgery()
+                )
         );
     }
 

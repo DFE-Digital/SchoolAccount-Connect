@@ -22,7 +22,7 @@ public class ErrorPageTests : IClassFixture<TestServerFixture>
     {
         // Act
         var response = await _client.GetAsync("/this-page-does-not-exist", TestContext.Current.CancellationToken);
-        var page = await Task.FromResult(response).ReadAsPageAsync();
+        var page = await Task.FromResult(response).ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);

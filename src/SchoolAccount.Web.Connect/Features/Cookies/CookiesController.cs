@@ -20,8 +20,8 @@ public sealed class CookiesController(IDataProtectionProvider dataProtectionProv
         return View();
     }
 
-    [HttpPost("cookies/consent")]
-    public IActionResult SetConsent([FromBody] CookieConsentRequest request)
+    [HttpPost("cookies/consent"), ValidateAntiForgeryToken]
+    public IActionResult SetConsent([FromForm] CookieConsentRequest request)
     {
         if (
             request.Value
@@ -48,6 +48,11 @@ public sealed class CookiesController(IDataProtectionProvider dataProtectionProv
             }
         );
 
+        if (!string.IsNullOrEmpty(request.ReturnUrl) && Url.IsLocalUrl(request.ReturnUrl))
+        {
+            return Redirect(request.ReturnUrl);
+        }
+
         return NoContent();
     }
 }
@@ -55,4 +60,5 @@ public sealed class CookiesController(IDataProtectionProvider dataProtectionProv
 public sealed class CookieConsentRequest
 {
     public string? Value { get; set; }
+    public string? ReturnUrl { get; set; }
 }

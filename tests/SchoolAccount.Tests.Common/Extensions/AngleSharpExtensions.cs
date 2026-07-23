@@ -57,4 +57,9 @@ public static class AngleSharpExtensions
             .QuerySelectorAll(selector)
             .FirstOrDefault(el => el.TextContent.Trim().Equals(text, StringComparison.OrdinalIgnoreCase));
     }
+
+    public static string? GetExceptionMessage(this IParentNode document)
+    {
+        return document.QuerySelector(".govuk-error-summary")?.TextContent.Trim();
+    }
 }

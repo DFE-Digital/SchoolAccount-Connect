@@ -28,7 +28,7 @@ public class SearchTasksViewTests : IClassFixture<TestServerFixture>
         // Act
         var page = await _client
             .GetAsync("/search?Term=policy", TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.Should().NotBeNull();
@@ -44,7 +44,7 @@ public class SearchTasksViewTests : IClassFixture<TestServerFixture>
         // Act
         var page = await _client
             .GetAsync("/search?Term=policy", TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector(".govuk-heading-l").Should().NotBeNull().And.HaveTextContent("Search results");
@@ -56,7 +56,7 @@ public class SearchTasksViewTests : IClassFixture<TestServerFixture>
         // Act
         var page = await _client
             .GetAsync("/search?Term=policy", TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector("body")
@@ -71,7 +71,7 @@ public class SearchTasksViewTests : IClassFixture<TestServerFixture>
         // Act
         var page = await _client
             .GetAsync("/search?Term=policy", TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item")
@@ -94,7 +94,7 @@ public class SearchTasksViewTests : IClassFixture<TestServerFixture>
         // Act
         var page = await _client
             .GetAsync("/search?Term=policy", TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item--with-link").Should().HaveCount(count);

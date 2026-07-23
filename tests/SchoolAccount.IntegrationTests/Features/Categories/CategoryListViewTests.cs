@@ -26,7 +26,9 @@ public class CategoryListViewTests : IClassFixture<TestServerFixture>
     public async Task Endpoint_returns_success_page()
     {
         // Act
-        var page = await _client.GetAsync("/categories", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.Should().NotBeNull();
@@ -40,7 +42,9 @@ public class CategoryListViewTests : IClassFixture<TestServerFixture>
     public async Task Endpoint_returns_expected_page_heading()
     {
         // Act
-        var page = await _client.GetAsync("/categories", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelector(".govuk-heading-l").Should().NotBeNull().And.HaveTextContent("Explore categories");
@@ -50,7 +54,9 @@ public class CategoryListViewTests : IClassFixture<TestServerFixture>
     public async Task Shows_no_results_message_when_no_categories()
     {
         // Act
-        var page = await _client.GetAsync("/categories", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         page.QuerySelectorAll(".govuk-task-list__item")
@@ -71,7 +77,9 @@ public class CategoryListViewTests : IClassFixture<TestServerFixture>
         }
 
         // Act
-        var page = await _client.GetAsync("/categories", TestContext.Current.CancellationToken).ReadAsPageAsync();
+        var page = await _client
+            .GetAsync("/categories", TestContext.Current.CancellationToken)
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         // The list prepends an "All tasks" link ahead of the categories

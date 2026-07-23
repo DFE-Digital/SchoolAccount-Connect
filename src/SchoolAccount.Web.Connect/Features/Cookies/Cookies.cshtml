@@ -1,4 +1,5 @@
 ﻿@using SchoolAccount.Kernel.Cookie
+@using SchoolAccount.Web.Connect.Features.Cookies
 @inject ICookieConsentContext CookieConsent
 @{
     ViewData["Title"] = "Cookies";
@@ -60,7 +61,7 @@
                 <td class="govuk-table__cell">End of session</td>
             </tr>
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell">cookie_policy</td>
+                <td class="govuk-table__cell">@CookieConsentConstants.CookieName</td>
                 <td class="govuk-table__cell">Saves your cookie consent settings</td>
                 <td class="govuk-table__cell">1 year</td>
             </tr>
@@ -153,22 +154,30 @@
     </div>
 </div>
 
-<form id="dfe-cookies-form">
-    <govuk-radios name="analytics-cookies">
+@using (Html.BeginForm("SetConsent", "Cookies", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="@nameof(CookieConsentRequest.ReturnUrl)" value="@Context.Request.Path" />
+    
+    <govuk-radios name="@nameof(CookieConsentRequest.Value)">
         <govuk-radios-fieldset>
             <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
                 <b>Do you want to accept analytics cookies?</b>
             </govuk-radios-fieldset-legend>
 
-            <govuk-radios-item value="yes" checked="@(CookieConsent.State == CookieConsentState.Accepted)">
+            <govuk-radios-item 
+                value="@CookieConsentConstants.IdValues.Accepted" 
+                checked="@(CookieConsent.State == CookieConsentState.Accepted)">
                 Yes
             </govuk-radios-item>
 
-            <govuk-radios-item value="no" checked="@(CookieConsent.State == CookieConsentState.Rejected)">
+            <govuk-radios-item 
+                value="@CookieConsentConstants.IdValues.Rejected" 
+                checked="@(CookieConsent.State == CookieConsentState.Rejected)">
                 No
             </govuk-radios-item>
         </govuk-radios-fieldset>
     </govuk-radios>
 
     <govuk-button type="submit">Save cookie settings</govuk-button>
-</form>
+}

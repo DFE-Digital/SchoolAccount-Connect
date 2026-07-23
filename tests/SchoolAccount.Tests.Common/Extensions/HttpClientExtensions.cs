@@ -23,11 +23,22 @@ public static class HttpClientExtensions
         return client;
     }
 
-    public static async Task<IDocument> ReadAsPageAsync(this Task<HttpResponseMessage> responseTask)
+    public static async Task<IDocument> ReadAsPageAsync(
+        this Task<HttpResponseMessage> responseTask,
+        CancellationToken cancellationToken = default
+    )
     {
         var response = await responseTask;
-        var html = await response.Content.ReadAsStringAsync();
+        return await response.ReadAsPageAsync(cancellationToken);
+    }
+
+    public static async Task<IDocument> ReadAsPageAsync(
+        this HttpResponseMessage response,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var html = await response.Content.ReadAsStringAsync(cancellationToken);
         var context = BrowsingContext.New(Configuration.Default);
-        return (await context.OpenAsync(req => req.Content(html)))!;
+        return (await context.OpenAsync(req => req.Content(html), cancellationToken))!;
     }
 }

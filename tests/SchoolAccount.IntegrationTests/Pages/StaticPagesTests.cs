@@ -25,7 +25,7 @@ public class StaticPagesTests : IClassFixture<TestServerFixture>
     {
         // Act
         var response = await _client.GetAsync(url, TestContext.Current.CancellationToken);
-        var page = await Task.FromResult(response).ReadAsPageAsync();
+        var page = await Task.FromResult(response).ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         // Assert
         response.IsSuccessStatusCode.Should().BeTrue($"the {url} page should render successfully");

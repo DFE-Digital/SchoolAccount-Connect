@@ -9,13 +9,18 @@ using Xunit;
 namespace SchoolAccount.IntegrationTests.Pages;
 
 [Collection(SessionTests.CollectionName)]
-[SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings")]
 public class TrustAcceptanceRequestGateTests(TestServerFixture fixture)
 {
     [Fact]
     public async Task Ensure_if_trust_is_logged_in_that_if_navigate_to_authorised_page_they_need_to_accept_before_continuing()
     {
-        var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Trust);
+        var client = fixture.CreateAuthenticatedClient(
+            organisation: OrganisationClaimBuilder.Trust,
+            configure: options =>
+            {
+                options.AllowAutoRedirect = true;
+            }
+        );
 
         var response = await client.GetAsync(
             RouteConstants.Calendar.CalendarOfItems,
@@ -30,7 +35,13 @@ public class TrustAcceptanceRequestGateTests(TestServerFixture fixture)
     [Fact]
     public async Task Ensure_once_accepted_that_they_are_allowed_to_continue_their_journey()
     {
-        var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Trust);
+        var client = fixture.CreateAuthenticatedClient(
+            organisation: OrganisationClaimBuilder.Trust,
+            configure: options =>
+            {
+                options.AllowAutoRedirect = true;
+            }
+        );
 
         using var content = new StringContent(string.Empty);
         await client.PostAsync(RouteConstants.Start.MatAcceptance, content, TestContext.Current.CancellationToken);
@@ -48,7 +59,13 @@ public class TrustAcceptanceRequestGateTests(TestServerFixture fixture)
     [Fact]
     public async Task Ensure_once_logged_out_that_session_state_has_been_cleared()
     {
-        var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Trust);
+        var client = fixture.CreateAuthenticatedClient(
+            organisation: OrganisationClaimBuilder.Trust,
+            configure: options =>
+            {
+                options.AllowAutoRedirect = true;
+            }
+        );
 
         using var content = new StringContent(string.Empty);
         await client.PostAsync(RouteConstants.Start.MatAcceptance, content, TestContext.Current.CancellationToken);
@@ -68,7 +85,13 @@ public class TrustAcceptanceRequestGateTests(TestServerFixture fixture)
     [Fact]
     public async Task Ensure_if_not_trust_that_they_bypass_the_trust_acceptance_screen()
     {
-        var client = fixture.CreateAuthenticatedClient(organisation: OrganisationClaimBuilder.Academy);
+        var client = fixture.CreateAuthenticatedClient(
+            organisation: OrganisationClaimBuilder.Academy,
+            configure: options =>
+            {
+                options.AllowAutoRedirect = true;
+            }
+        );
 
         var response = await client.GetAsync(
             RouteConstants.Calendar.CalendarOfItems,

@@ -13,7 +13,7 @@ public class StartController(IUserContext userContext) : Controller
     public IActionResult Index([FromQuery] string? returnUrl)
     {
         return !userContext.IsAuthenticated
-            ? View(new StartIntroductionViewModel(returnUrl))
+            ? View(new StartIntroductionViewModel(ToLocalUrl(returnUrl)))
             : Redirect(RouteConstants.Root);
     }
 
@@ -21,13 +21,18 @@ public class StartController(IUserContext userContext) : Controller
     [RestrictOrganisationType(typeof(TrustOrganisation))]
     public IActionResult MatAcceptance([FromQuery] string? returnAddress)
     {
-        return View(new MatAcceptanceViewModel { LocalReturnAddress = returnAddress });
+        return View(new MatAcceptanceViewModel { LocalReturnAddress = ToLocalUrl(returnAddress) });
     }
 
-    [HttpPost(RouteConstants.Start.MatAcceptance)]
+    [HttpPost(RouteConstants.Start.MatAcceptance), ValidateAntiForgeryToken]
     public IActionResult MatAcceptanceApprove([FromQuery] string? returnAddress)
     {
         HttpContext.Session.SetString(SessionKeyConstants.MatAccepted, bool.TrueString);
-        return Redirect(returnAddress ?? RouteConstants.Root);
+        return Redirect(ToLocalUrl(returnAddress) ?? RouteConstants.Root);
+    }
+
+    private string? ToLocalUrl(string? url)
+    {
+        return !string.IsNullOrWhiteSpace(url) && Url.IsLocalUrl(url) ? url : null;
     }
 }

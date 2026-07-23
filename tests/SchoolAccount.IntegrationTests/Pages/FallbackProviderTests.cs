@@ -43,7 +43,7 @@ public class FallbackProviderTests
 
         var page = await client
             .GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Support");
@@ -56,7 +56,7 @@ public class FallbackProviderTests
 
         var page = await client
             .GetAsync(RouteConstants.Support, TestContext.Current.CancellationToken)
-            .ReadAsPageAsync();
+            .ReadAsPageAsync(TestContext.Current.CancellationToken);
 
         page.Should().NotBeNull();
         page.Title.Should().StartWith("Service Inaccessible");
